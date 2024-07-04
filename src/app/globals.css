@@ -1,13 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 
+.project-content {
+  position: relative;
+  z-index: 99;
+  overflow: visible;
+}
+
+.project-content::after {
+  background-color: red;
+  display: block;
+  content: '';
+  border-radius: none;
+  position: absolute;
+  top: 0px;
+  right: 0;
+  width: 8px;
+  bottom: 0px;
+  border-radius: 0 0 100px 0;
+  box-shadow: 3px 0px 15px red;
+  z-index: 100;
+}
+
+
+body {
+  font-family: 'PT Sans', sans-serif;
+  letter-spacing: .5px;
+}
+
 :root {
-  --hubfolio-primary: #222325;
-  --hubfolio-secondary: #F6F8FF;
-  --hubfolio-primary-light: #36373A;
-  --hubfolio-secondary-dark: #E9EBF2;
+  --hubfolio-primary: 34 35 37;
+  --hubfolio-primary-01: 26 27 28;
+  --hubfolio-primary-02: 15 15 16;
+  --hubfolio-primary-03: 56 58 61;
+  --hubfolio-accent: 33 41 240;
+  --hubfolio-border: 55 57 62;
+  --hubfolio-subtext: 205 205 205;
+  --hubfolio-subtext-darker: 195 195 195;
+  --hubfolio-text: 242 245 251;
+  --hubfolio-text-header: 239 239 239;
+  --hubfolio-bg: 195 196 204;
+  --hubfolio-bg-content: 246 246 251;
+
+
+  /* --hubfolio-primary-01: #1A1B1C;
+  --hubfolio-primary-02: #0F0F10;
+  --hubfolio-primary-03: #383A3D;
+  --hubfolio-accent: #2129F0;
+  --hubfolio-border: #5A5B5E;
+  --hubfolio-subtext: #CDCDCD;
+  --hubfolio-text: #F2F5FB;
+  --hubfolio-text-header: #EFEFEF;
+  --hubfolio-bg: #C3C4CC;
+  --hubfolio-bg-content: #F6F6FB; */
 }
 
 
