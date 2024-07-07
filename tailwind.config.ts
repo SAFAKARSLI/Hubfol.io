@@ -13,14 +13,17 @@ const config: Config = {
         sans: ['PT Sans', 'sans-serif'],
       },
       fontSize: {
-        'xs': '6px',
-        'sm': '0.8rem',
-        'base': '.9rem',
-        'lg': '1rem',
+        'xs': '0.8rem',
+        'sm': '0.85rem',
+        'base': '1rem',
+        'lg': '1.05rem',
       },
       borderRadius: {
         DEFAULT: '.6rem', // This sets the default 'rounded' class to 10px
       },
+      // letterSpacing: {
+      //   DEFAULT: '0.05em', // Add this line for default letter spacing
+      // },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

@@ -13,8 +13,6 @@ const TopBar: React.FC<Props> = ({}) => {
             location='San Francisco, CA, USA' 
             contactInfo='johndoe@hubfol.io'
         />
-
-        <div>Hello world</div>
     </div>
   )
 }

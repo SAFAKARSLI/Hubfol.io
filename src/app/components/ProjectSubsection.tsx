@@ -23,8 +23,8 @@ const ProjectSubsection: React.FC<Props> = ({ title, content, width="w-full", co
     
     return (
         <div className='py-6'>
-            <h3 className='text-base font-bold text-hubfolio-text mb-4'>{title}</h3>
-            <div className={`${width}`}>{renderContent()}</div>
+            <h3 className='text-base font-bold text-hubfolio-text mb-4 tracking-wider'>{title}</h3>
+            <div className={`${width} tracking-wider`}>{renderContent()}</div>
         </div>
     )
 }

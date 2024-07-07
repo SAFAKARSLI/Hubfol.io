@@ -20,7 +20,7 @@ const ProfileOverview: React.FC<ProfileOverviewProps> = ({userName, title, locat
             <p className='text-sm text-hubfolio-text'>{title}</p>
           </div>
           <div>
-            <p className='text-hubfolio-subtext text-sm'>{location}</p>
+            <p className='text-hubfolio-subtext text-sm tracking-wide'>{location}</p>
             <p className='text-hubfolio-subtext text-sm'>{contactInfo}</p>
           </div>
         </div>

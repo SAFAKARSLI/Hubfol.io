@@ -1,4 +1,3 @@
-'use client'
 import React from 'react';
 
 import * as Accordion from '@radix-ui/react-accordion';
@@ -18,9 +17,10 @@ interface ProjectCardProps {
 const ProjectCard: React.FC<ProjectCardProps> = ({ title, tagline, description, techStack, tags, iconLink, accordId}) => {
 
   return (
-    <Accordion.Item value={accordId} className='m-4' asChild>
+    <Accordion.Item value={accordId} className='my-4' asChild>
       <div className='border-hubfolio-border  rounded 
       border
+      overflow-hidden
       data-[state=open]:shadow-custom-active-project 
       shadow-custom-default-project
       hover:shadow-custom-active-project' >
@@ -31,22 +31,19 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, tagline, description, 
           >
             <img height="30" width="30" src={iconLink}/>
             <div className="basis-10/12 gap-y-2 flex flex-col ">
-              <h2 className="text-lg font-bold">{title}</h2>
-              <p className="text-sm text-hubfolio-subtext-darker ">{tagline}</p>
+              <h2 className="text-lg font-bold tracking-wider">{title}</h2>
+              <p className="text-xs text-hubfolio-subtext-darker ">{tagline}</p>
             </div>
             <div className='basis-1/12'></div>
           </div>
         </Accordion.Trigger>
 
         <Accordion.Content asChild>
-          <div>
-            <div className='project-content w-full data-[state=closed]:rounded bg-hubfolio-primary-02 text-hubfolio-subtext rounded-b data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden px-6 '>
-              <ProjectSubsection title='Project Description:' contentType='text' content={description} />
-              <Divider />
-              <ProjectSubsection title='Tech Stack:' contentType='techStack' content={techStack}/>
-            </div>
-            <span className='active-bar'></span>
-          </div> 
+          <div className='project-content w-full data-[state=closed]:rounded bg-hubfolio-primary-02 text-hubfolio-subtext rounded-b data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden px-6 '>
+            <ProjectSubsection title='Project Description:' contentType='text' content={description} />
+            <Divider />
+            <ProjectSubsection title='Tech Stack:' contentType='techStack' content={techStack}/>
+          </div>
         </Accordion.Content>
         
       </div>
