@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import TopBar from "./components/TopBar";
+import Sidebar from "./components/Sidebar";
 
 export const metadata: Metadata = {
   title: "Hubfol.io",
@@ -17,7 +19,13 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet" />
       </head>
       <body >
-        {children}
+      <div className="min-h-screen flex flex-col">
+        <TopBar />
+        <div className="flex flex-1">
+          <Sidebar />
+          {children}
+        </div>
+    </div>
         </body>
     </html>
   );
