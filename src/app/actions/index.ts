@@ -2,8 +2,6 @@
 
 import {client} from '../db';
 
-
-
 export const fetchProjects = async () => {
     await client.connect();
     // Change this for dynamic userId

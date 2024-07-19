@@ -22,7 +22,6 @@ export default function RootLayout({
       <div className="min-h-screen flex flex-col">
         <TopBar />
         <div className="flex flex-1">
-          <Sidebar />
           {children}
         </div>
     </div>
