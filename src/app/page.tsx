@@ -1,5 +1,5 @@
-import ProjectViewer from '@/components/ProjectViewer'
+import Projects from '@/components/Projects'
 
 export default function Home() {
-  return <ProjectViewer />
+  return <Projects />
 }

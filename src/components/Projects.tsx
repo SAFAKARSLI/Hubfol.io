@@ -3,17 +3,14 @@ import React from 'react';
 import { headers } from "next/headers";
 import ProjectList from './ProjectList';
 
-import ProjectCard from './ProjectCard';
 import Project from '@/models/project';
+import ProjectFrame from './ProjectFrame';
 
 
-type ProjectViewerProps = {
+type ProjectsProps = {
 };
 
-const ProjectViewer = ({}: ProjectViewerProps) => {
-
-  const header = headers().get("x-current-path");
-  const pathname = header?.substring(header.lastIndexOf("/")+1);
+const Projects = ({}: ProjectsProps) => {
 
   async function render() {
     const fetchProjects = (
@@ -28,10 +25,10 @@ const ProjectViewer = ({}: ProjectViewerProps) => {
     <div className='flex flex-1'>
       {render()}
       <div className="flex w-full items-center justify-center bg-hubfolio-bg text-center p-6">
-        <iframe src="https://tureng.com" className="w-full h-full" />
+        <ProjectFrame />
       </div>
     </div>
   );
 };
 
-export default ProjectViewer;
+export default Projects;

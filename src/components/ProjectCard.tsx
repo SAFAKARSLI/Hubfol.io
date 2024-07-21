@@ -58,7 +58,6 @@ const ProjectCard = ({_id, title, tagline, iconLink, content}: ProjectCardProps)
         <Accordion.Content asChild>
           <div className='project-content w-full bg-hubfolio-primary-02 text-hubfolio-subtext rounded-b data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden px-6 '>
             {content && content?.map((s, i) => {
-              console.log(s)
               return (
                 <div key={i}>
                   <ProjectSubsection title={s.title} contentType={s.contentType} content={s.content} />

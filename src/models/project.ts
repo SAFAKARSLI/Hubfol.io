@@ -6,7 +6,7 @@ export default interface Project {
     tagline: string,
     iconLink: string,
     content: Content[]
-    userId?: number // CHNAGE THIS TO REQUIRED.
+    userId?: number // CHANGE THIS TO REQUIRED
 }
 
 

@@ -1,11 +1,11 @@
 import React from 'react'
 
-import ProjectViewer from '@/components/ProjectViewer'
+import Projects from '@/components/Projects'
 
 type Props = {}
 
-function Projects({}: Props) {
-  return <ProjectViewer />
+function page({}: Props) {
+  return <Projects />
 }
 
 export default Projects;

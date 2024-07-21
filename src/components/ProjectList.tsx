@@ -1,9 +1,11 @@
 "use client"
 
-import React, {useState, useEffect, useReducer, useRef} from 'react'
+import React, {useState, useLayoutEffect, useRef} from 'react'
 import * as Accordion  from '@radix-ui/react-accordion';
 import Project from '@/models/project';
 import ProjectCard from './ProjectCard';
+import { useRouter } from 'next/navigation';
+
 
 type Props = {
   initialProjects: Project[]
@@ -11,8 +13,11 @@ type Props = {
 
 function ProjectList({initialProjects}: Props) {
 
+  const router = useRouter();
   const [projects, setProjects] = useState<Project[]>(initialProjects);
+  const activeAccordion = useRef("")
   const activeProject = useRef("")
+
 
   function renderProjects() {
     return projects.map((p, i) => {
@@ -40,6 +45,9 @@ function ProjectList({initialProjects}: Props) {
     ));
 
     activeProject.current = _id
+
+    // window.history.pushState({}, "", "/projects/"+_id)
+    router.push("/projects/"+_id, {})
   }
 
   return (
@@ -47,7 +55,7 @@ function ProjectList({initialProjects}: Props) {
         <Accordion.Root
         type="single"
         onValueChange={onChangeActiveProject}
-        value={activeProject.current}
+        value={activeAccordion.current}
         >
           {renderProjects()}
         </Accordion.Root>

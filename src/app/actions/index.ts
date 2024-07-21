@@ -10,10 +10,15 @@ export const fetchPartialProjects = async () => {
   return projects;
 }
 
-export const fetchContent = async (_id: string) => {
+export const fetchPartial = async (_id: string, query: string[]) => {
     await client.connect();
-    // Change this for dynamic userId
-    const content = await client.db('projects').collection('dev').findOne({_id: new ObjectId(_id)}, {projection: {content: 1}});
+    const queryObject: Record<string, number> = {};
+
+    query.forEach((element) => {
+      queryObject[element] = 1;
+    });
+
+    const content = await client.db('projects').collection('dev').findOne({_id: new ObjectId(_id)}, {projection: queryObject});
     content && client.close();
     return content;
   }

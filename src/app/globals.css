@@ -5,7 +5,6 @@
 
 .project-content {
   position: relative;
-  overflow: visible;
 }
 
 .project-content::after {
