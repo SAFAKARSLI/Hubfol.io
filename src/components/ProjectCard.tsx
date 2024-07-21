@@ -35,7 +35,7 @@ const ProjectCard = ({_id, title, tagline, iconLink, content}: ProjectCardProps)
 
   return (
     <Accordion.Item value={_id} className='my-4' asChild> 
-      <div className='border-hubfolio-border  rounded 
+      <div className='border-hubfolio-border rounded
       border
       overflow-hidden
       data-[state=open]:shadow-custom-active-project 
@@ -44,7 +44,7 @@ const ProjectCard = ({_id, title, tagline, iconLink, content}: ProjectCardProps)
 
         <Accordion.Trigger asChild>
           <div className={`flex gap-x-6 items-center leading-none text-hubfolio-text bg-hubfolio-primary-01 px-6 py-4 data-[state=closed]:cursor-pointer
-          data-[state=closed]:rounded rounded-t `}
+           rounded-t `}
           >
             <img height="30" width="30" src={iconLink}/>
             <div className="basis-10/12 gap-y-2 flex flex-col ">
@@ -56,7 +56,7 @@ const ProjectCard = ({_id, title, tagline, iconLink, content}: ProjectCardProps)
         </Accordion.Trigger>
 
         <Accordion.Content asChild>
-          <div className='project-content w-full data-[state=closed]:rounded bg-hubfolio-primary-02 text-hubfolio-subtext rounded-b data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden px-6 '>
+          <div className='project-content w-full bg-hubfolio-primary-02 text-hubfolio-subtext rounded-b data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden px-6 '>
             {content && content?.map((s, i) => {
               console.log(s)
               return (
