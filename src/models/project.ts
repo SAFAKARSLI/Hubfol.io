@@ -5,8 +5,13 @@ export default interface Project {
     title: string,
     tagline: string,
     iconLink: string,
-    description: string,
-    techStack: string[],
-    tags: string[],
+    sections: Section[]
     userId?: number // CHNAGE THIS TO REQUIRED.
+}
+
+
+export interface Section {
+    title: string,
+    contentType: string,
+    content: string | string[] | object[]
 }

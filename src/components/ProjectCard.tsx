@@ -1,23 +1,31 @@
-import React from 'react';
+
+import React, {useEffect, useState} from 'react';
 
 import * as Accordion from '@radix-ui/react-accordion';
 import ProjectSubsection from './ProjectSubsection';
 import Divider from './subsections/Divider';
 
 interface ProjectCardProps {
+  _id: string,
   title: string;
   tagline: string;
-  description: any;
-  techStack: string[];
-  tags: string[];
   iconLink: string;
-  accordId: string;
+  sections?: Section[] | null
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ title, tagline, description, techStack, tags, iconLink, accordId}) => {
+interface Section{
+  title: string;
+  contentType: string;
+  content: string | Array<string> | Array<object>;
+}
+
+const ProjectCard = ({_id, title, tagline, iconLink, sections = null}: ProjectCardProps) => {
+
+  const [isLoading, setIsLoading] = useState(false);
+  
 
   return (
-    <Accordion.Item value={accordId} className='my-4' asChild>
+    <Accordion.Item value={_id} className='my-4' asChild > 
       <div className='border-hubfolio-border  rounded 
       border
       overflow-hidden
@@ -40,9 +48,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ title, tagline, description, 
 
         <Accordion.Content asChild>
           <div className='project-content w-full data-[state=closed]:rounded bg-hubfolio-primary-02 text-hubfolio-subtext rounded-b data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden px-6 '>
-            <ProjectSubsection title='Project Description:' contentType='text' content={description} />
-            <Divider />
-            <ProjectSubsection title='Tech Stack:' contentType='techStack' content={techStack}/>
+            {sections && sections.map((s, i) => {
+              return (
+                <div key={i}>
+                  <ProjectSubsection title={s.title} contentType={s.contentType} content={s.content} />
+                  {i == sections.length - 1 ? null : <Divider />}
+                </div>
+              )})
+            }
           </div>
         </Accordion.Content>
         

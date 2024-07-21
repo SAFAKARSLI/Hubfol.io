@@ -16,7 +16,7 @@ const ProjectSubsection: React.FC<Props> = ({ title, content, width="w-full", co
         switch(contentType) {
             case 'text':
                 return <Text text={content}/>
-            case 'techStack':
+            case 'stack':
                 return <TechStack techStack={content}/>
         }
     }
