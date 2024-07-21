@@ -1,4 +1,4 @@
-import ProjectViewer from '@/app/components/ProjectViewer'
+import ProjectViewer from '@/components/ProjectViewer'
 import React from 'react'
 
 type Props = {}

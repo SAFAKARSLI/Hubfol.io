@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import TopBar from "./components/TopBar";
-import Sidebar from "./components/Sidebar";
+import TopBar from "@/components/TopBar";
 
 export const metadata: Metadata = {
   title: "Hubfol.io",

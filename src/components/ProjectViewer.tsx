@@ -3,13 +3,16 @@ import * as Accordion  from '@radix-ui/react-accordion';
 import ProjectCard from './ProjectCard';
 import Project from '@/models/project';
 
-type SidebarProps = {
+type ProjectViewerProps = {
 };
 
-const ProjectViewer = ({}: SidebarProps) => {
+const ProjectViewer = ({}: ProjectViewerProps) => {
   
   const renderProjects = async () => {
-    const projects = (await fetch("http://localhost:3000/api/projects", {cache: "force-cache"}).then((projects) => projects.json())) as Project[];
+    const projects = (
+      await fetch("http://localhost:3000/api/projects", {cache: "force-cache"})
+      .then((projects) => projects.json())
+  ) as Project[];
 
     return projects.map((project: Project) => (
       <ProjectCard

@@ -2,7 +2,7 @@ import React from 'react';
 
 import * as Accordion from '@radix-ui/react-accordion';
 import ProjectSubsection from './ProjectSubsection';
-import Divider from './Divider';
+import Divider from './subsections/Divider';
 
 interface ProjectCardProps {
   title: string;

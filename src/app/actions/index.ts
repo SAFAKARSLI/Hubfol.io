@@ -1,6 +1,6 @@
 "use server"
 
-import {client} from '../db';
+import {client} from '@/db';
 
 export const fetchProjects = async () => {
     await client.connect();
