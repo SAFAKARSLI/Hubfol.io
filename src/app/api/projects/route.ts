@@ -1,15 +1,12 @@
 import { NextResponse, NextRequest } from 'next/server'
-import { fetchProjects, fetchPartialProjects } from '@/app/actions';
+import { fetchPartialProjects } from '@/app/actions';
 
 
 export async function GET(req: NextRequest) {
-  const query = req.nextUrl.searchParams
-  const sections = query.get('sections')
+  // const query = req.nextUrl.searchParams
+  // const sections = query.get('sections')
 
-  if (sections === 'initial') {
-    var projects = await fetchPartialProjects();
-  } else{
-    projects = await fetchProjects();
-  }
+  var projects = await fetchPartialProjects();
+  
   return NextResponse.json(projects, {status: 200})
 }

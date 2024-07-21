@@ -5,12 +5,12 @@ export default interface Project {
     title: string,
     tagline: string,
     iconLink: string,
-    sections: Section[]
+    content: Content[]
     userId?: number // CHNAGE THIS TO REQUIRED.
 }
 
 
-export interface Section {
+export interface Content {
     title: string,
     contentType: string,
     content: string | string[] | object[]

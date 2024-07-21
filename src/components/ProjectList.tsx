@@ -1,58 +1,55 @@
 "use client"
 
-import React, {useEffect, useState} from 'react'
+import React, {useState, useEffect, useReducer, useRef} from 'react'
 import * as Accordion  from '@radix-ui/react-accordion';
 import Project from '@/models/project';
 import ProjectCard from './ProjectCard';
 
-type Props = {}
+type Props = {
+  initialProjects: Project[]
+}
 
-function ProjectList({}: Props) {
+function ProjectList({initialProjects}: Props) {
 
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [activeProject, setActiveProject] = useState<string>("");
+  const [projects, setProjects] = useState<Project[]>(initialProjects);
+  const activeProject = useRef("")
 
-
-  useEffect(() => {
-    const fetchInitialProjects = async () => {
-      const fetchProjects = (
-        await fetch("http://localhost:3000/api/projects?sections=initial", {cache: "no-cache"}).then((projects) => projects.json())
-        
-      ) as Project[];
-  
-      console.log(fetchProjects)
-      setProjects(fetchProjects);
-    };
-    fetchInitialProjects();
-  }, [])
+  function renderProjects() {
+    return projects.map((p, i) => {
+      return (
+        <ProjectCard 
+          key={i}
+          _id={String(p._id)}
+          title={p.title}
+          tagline={p.tagline}
+          iconLink={p.iconLink}
+          content={p.content}
+        />
+      )
+    })
+  }
 
   async function onChangeActiveProject(_id: string) {
-    const fullFetchProject = (await fetch("http://localhost:3000/api/projects/"+_id).then((project) => project.json())) as Project
-    console.log(fullFetchProject)
-    setProjects(projects.map(p => 
+    const fullFetchProject = (
+      await fetch("http://localhost:3000/api/projects/"+_id+"/content", 
+        {cache: "force-cache"}).then((p) => p.json())
+    ) as Project
+
+    setProjects(prevProjects => prevProjects.map(p => 
       String(p._id) === _id ? { ...p, ...fullFetchProject } : p
     ));
-    setActiveProject(_id)
+
+    activeProject.current = _id
   }
 
   return (
     <div className="bg-hubfolio-primary w-[22rem] min-w-[22rem] p-4 pt-8">
         <Accordion.Root
         type="single"
-        value={activeProject}
         onValueChange={onChangeActiveProject}
+        value={activeProject.current}
         >
-          {projects.map((p) => {
-            return (
-              <ProjectCard
-                _id={String(p._id)}
-                title={p.title}
-                tagline={p.tagline}
-                iconLink={p.iconLink} 
-                sections={p.sections}
-              />
-            )})
-          }
+          {renderProjects()}
         </Accordion.Root>
     </div>
   )

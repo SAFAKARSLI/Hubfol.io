@@ -1,4 +1,4 @@
-
+"use client"
 import React, {useEffect, useState} from 'react';
 
 import * as Accordion from '@radix-ui/react-accordion';
@@ -10,22 +10,31 @@ interface ProjectCardProps {
   title: string;
   tagline: string;
   iconLink: string;
-  sections?: Section[] | null
+  content: Content[] | null
 }
 
-interface Section{
+interface Content {
   title: string;
   contentType: string;
   content: string | Array<string> | Array<object>;
 }
 
-const ProjectCard = ({_id, title, tagline, iconLink, sections = null}: ProjectCardProps) => {
+const ProjectCard = ({_id, title, tagline, iconLink, content}: ProjectCardProps) => {
 
-  const [isLoading, setIsLoading] = useState(false);
+  // const [sections, setSections] = useState<Section[]>();
+  // const [isLoading, setIsLoading] = useState(false);
   
+  // // const fetchFullProject = async () => {
+  // //   const projectSections = (
+  // //     await fetch("http://localhost:3000/api/projects/"+_id+"/content", {cache: "no-cache"}).then((project) => project.json())
+  // //   ) as {_id: string, content: Section[]}
+    
+  // //   setSections(projectSections.content)
+  // // }
+
 
   return (
-    <Accordion.Item value={_id} className='my-4' asChild > 
+    <Accordion.Item value={_id} className='my-4' asChild> 
       <div className='border-hubfolio-border  rounded 
       border
       overflow-hidden
@@ -48,11 +57,12 @@ const ProjectCard = ({_id, title, tagline, iconLink, sections = null}: ProjectCa
 
         <Accordion.Content asChild>
           <div className='project-content w-full data-[state=closed]:rounded bg-hubfolio-primary-02 text-hubfolio-subtext rounded-b data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden px-6 '>
-            {sections && sections.map((s, i) => {
+            {content && content?.map((s, i) => {
+              console.log(s)
               return (
                 <div key={i}>
                   <ProjectSubsection title={s.title} contentType={s.contentType} content={s.content} />
-                  {i == sections.length - 1 ? null : <Divider />}
+                  {i == content.length - 1 ? null : <Divider />}
                 </div>
               )})
             }
