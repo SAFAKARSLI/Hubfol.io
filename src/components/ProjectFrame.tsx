@@ -4,7 +4,10 @@ import { headers } from "next/headers";
 
 type Props = {}
 
+
 function ProjectFrame({}: Props) {
+
+  
 
   async function renderFrame() {
 
@@ -16,8 +19,7 @@ function ProjectFrame({}: Props) {
         <div>Hello world</div>
       )
     } else {
-      const projectId = await fetch("http://localhost:3000/api/projects/"+param+"/url", {cache: "force-cache"}).then((p) => p.json());
-
+      const projectId = await fetch("http://localhost:3000/api/projects/"+param+"/url", {cache: "force-cache"}).then((project) => project.json());
       return <iframe src={projectId.url} className='w-full h-full'/>
     }
 

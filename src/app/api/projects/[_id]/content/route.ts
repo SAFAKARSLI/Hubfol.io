@@ -4,6 +4,8 @@ import { fetchPartial } from '@/app/actions';
 
 export async function GET(req: NextRequest, {params}: { params: { _id: string}}) {
   const _id = params._id;
-  const project = await fetchPartial(_id, ['title', 'tagline', 'iconLink']);
+  const project = await fetchPartial(_id, ['content']);
+  console.log("Fetching the content")
+  // console.log(project)
   return NextResponse.json(project, {status: 200})
 }

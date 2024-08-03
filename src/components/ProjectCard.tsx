@@ -1,4 +1,3 @@
-"use client"
 import React, {useEffect, useState} from 'react';
 
 import * as Accordion from '@radix-ui/react-accordion';
@@ -34,7 +33,7 @@ const ProjectCard = ({_id, title, tagline, iconLink, content}: ProjectCardProps)
 
 
   return (
-    <Accordion.Item value={_id} className='my-4' asChild> 
+    <Accordion.Item value={_id} className='my-4' asChild onClick={() => console.log("Card is clicked")}> 
       <div className='border-hubfolio-border rounded
       border
       overflow-hidden
@@ -57,7 +56,7 @@ const ProjectCard = ({_id, title, tagline, iconLink, content}: ProjectCardProps)
 
         <Accordion.Content asChild>
           <div className='project-content w-full bg-hubfolio-primary-02 text-hubfolio-subtext rounded-b data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden px-6 '>
-            {content && content?.map((s, i) => {
+            {content?.map((s, i) => {
               return (
                 <div key={i}>
                   <ProjectSubsection title={s.title} contentType={s.contentType} content={s.content} />

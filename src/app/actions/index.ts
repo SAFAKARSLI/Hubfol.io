@@ -3,9 +3,9 @@
 import { client } from '@/db';
 import { ObjectId } from 'mongodb';
 
-export const fetchPartialProjects = async () => {
+export const fetchProjects = async () => {
   await client.connect()
-  const projects = await client.db('projects').collection('dev').find({userId: 123}, {projection: {title: 1, tagline: 1, iconLink: 1}}).toArray();
+  const projects = await client.db('projects').collection('dev').find({userId: 123}).toArray();
   projects && client.close();
   return projects;
 }

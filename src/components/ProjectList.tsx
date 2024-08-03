@@ -1,23 +1,22 @@
 "use client"
 
-import React, {useState, useLayoutEffect, useRef} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import * as Accordion  from '@radix-ui/react-accordion';
 import Project from '@/models/project';
 import ProjectCard from './ProjectCard';
-import { useRouter } from 'next/navigation';
-
+import { useParams, useRouter  } from 'next/navigation';
 
 type Props = {
-  initialProjects: Project[]
+  projects: Project[]
+  activeProject?: string
 }
 
-function ProjectList({initialProjects}: Props) {
+function ProjectList({projects, activeProject}: Props) {
+
+  const [accordionValue, setAccordionValue] = useState<string | undefined>(activeProject);
 
   const router = useRouter();
-  const [projects, setProjects] = useState<Project[]>(initialProjects);
-  const activeAccordion = useRef("")
-  const activeProject = useRef("")
-
+  // const [projects, setProjects] = useState<Project[]>(initialProjects);  
 
   function renderProjects() {
     return projects.map((p, i) => {
@@ -35,19 +34,8 @@ function ProjectList({initialProjects}: Props) {
   }
 
   async function onChangeActiveProject(_id: string) {
-    const fullFetchProject = (
-      await fetch("http://localhost:3000/api/projects/"+_id+"/content", 
-        {cache: "force-cache"}).then((p) => p.json())
-    ) as Project
-
-    setProjects(prevProjects => prevProjects.map(p => 
-      String(p._id) === _id ? { ...p, ...fullFetchProject } : p
-    ));
-
-    activeProject.current = _id
-
-    // window.history.pushState({}, "", "/projects/"+_id)
-    router.push("/projects/"+_id, {})
+    setAccordionValue(_id)
+    router.replace("/projects/"+_id, {})
   }
 
   return (
@@ -55,7 +43,7 @@ function ProjectList({initialProjects}: Props) {
         <Accordion.Root
         type="single"
         onValueChange={onChangeActiveProject}
-        value={activeAccordion.current}
+        value={accordionValue}
         >
           {renderProjects()}
         </Accordion.Root>

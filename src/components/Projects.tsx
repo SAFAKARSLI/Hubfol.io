@@ -8,16 +8,19 @@ import ProjectFrame from './ProjectFrame';
 
 
 type ProjectsProps = {
+  activeProject?: string;
 };
 
-const Projects = ({}: ProjectsProps) => {
+const Projects = ({activeProject}: ProjectsProps) => {
 
   async function render() {
     const fetchProjects = (
-      await fetch("http://localhost:3000/api/projects?sections=initial", {cache: "force-cache"}).then((projects) => projects.json())
-    ) as Project[];
+        await fetch("http://localhost:3000/api/projects", {cache: "no-cache"}).then((projects) => projects.json())
+      ) as Project[];
 
-    return <ProjectList initialProjects={fetchProjects} />;
+    
+
+    return <ProjectList projects={fetchProjects} activeProject={activeProject}/>;
   }
   
 
