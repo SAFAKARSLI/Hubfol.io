@@ -18,8 +18,6 @@ const Projects = ({activeProject}: ProjectsProps) => {
         await fetch("http://localhost:3000/api/projects", {cache: "no-cache"}).then((projects) => projects.json())
       ) as Project[];
 
-    
-
     return <ProjectList projects={fetchProjects} activeProject={activeProject}/>;
   }
   

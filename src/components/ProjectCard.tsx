@@ -33,7 +33,7 @@ const ProjectCard = ({_id, title, tagline, iconLink, content}: ProjectCardProps)
 
 
   return (
-    <Accordion.Item value={_id} className='my-4' asChild onClick={() => console.log("Card is clicked")}> 
+    <Accordion.Item value={_id} className='m-4' asChild> 
       <div className='border-hubfolio-border rounded
       border
       overflow-hidden
@@ -42,11 +42,10 @@ const ProjectCard = ({_id, title, tagline, iconLink, content}: ProjectCardProps)
       hover:shadow-custom-active-project' >
 
         <Accordion.Trigger asChild>
-          <div className={`flex gap-x-6 items-center leading-none text-hubfolio-text bg-hubfolio-primary-01 px-6 py-4 data-[state=closed]:cursor-pointer
-           rounded-t `}
+          <div className={`flex p-6 gap-x-6 items-center leading-none text-hubfolio-text bg-hubfolio-primary-01  data-[state=closed]:cursor-pointer`}
           >
             <img height="30" width="30" src={iconLink}/>
-            <div className="basis-10/12 gap-y-2 flex flex-col ">
+            <div className="basis-10/12 gap-y-3 flex flex-col ">
               <h2 className="text-lg font-bold tracking-wider">{title}</h2>
               <p className="text-xs text-hubfolio-subtext-darker ">{tagline}</p>
             </div>

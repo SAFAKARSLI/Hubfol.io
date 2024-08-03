@@ -39,7 +39,7 @@ function ProjectList({projects, activeProject}: Props) {
   }
 
   return (
-    <div className="bg-hubfolio-primary w-[22rem] min-w-[22rem] p-4 pt-8">
+    <div className="bg-hubfolio-primary w-[24rem] min-w-[24rem] h-[calc(100vh-8rem)] p-4 pt-8 overflow-y-scroll">
         <Accordion.Root
         type="single"
         onValueChange={onChangeActiveProject}

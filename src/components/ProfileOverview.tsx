@@ -10,8 +10,8 @@ interface ProfileOverviewProps {
  
 const ProfileOverview: React.FC<ProfileOverviewProps> = ({userName, title, location, contactInfo}) => {
   return (
-    <div className="bg-hubfolio-primary p-4 flex shadow-custom z-50
-    w-[22rem]">
+    <div className="bg-hubfolio-primary p-4 flex shadow-custom z-50 h-[8rem]
+    w-[24rem]">
       <div className="flex items-center">
         <div className="w-16 h-16 rounded-full bg-gray-600"></div>
         <div className="ml-6">

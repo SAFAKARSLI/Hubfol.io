@@ -13,16 +13,16 @@ const config: Config = {
         sans: ['PT Sans', 'sans-serif'],
       },
       fontSize: {
-        'xs': '0.8rem',
-        'sm': '0.85rem',
+        'xs': '.8rem',
+        'sm': '.9rem',
         'base': '1rem',
-        'lg': '1.05rem',
+        'lg': '1.1rem',
       },
       borderRadius: {
-        DEFAULT: '.6rem', // This sets the default 'rounded' class to 10px
+        DEFAULT: '.6rem',
       },
       // letterSpacing: {
-      //   DEFAULT: '0.05em', // Add this line for default letter spacing
+      //   DEFAULT: '15em', // Add this line for default letter spacing
       // },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
@@ -32,7 +32,6 @@ const config: Config = {
       boxShadow: {
         'custom': '0 4px 4px 3px rgba(0, 0, 0, 0.25)',
         'custom-active-project': '0 0 .25rem .10rem rgba(103, 103, 103, .40)',
-        // 'custom-default-project': '0 .10rem .5rem .05rem rgba(0, 0, 0, .75)',
       },
       colors: {
         "hubfolio-primary": "rgb(var(--hubfolio-primary))",
