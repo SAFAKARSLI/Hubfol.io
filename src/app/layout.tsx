@@ -19,7 +19,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet" />
       </head>
       <body >
-        <Theme accentColor="teal" appearance="dark">
+        <Theme appearance="dark">
           <div className="min-h-screen flex flex-col">
             <TopBar />
             <div className="flex flex-1">

@@ -7,6 +7,7 @@ import * as Accordion  from '@radix-ui/react-accordion';
 
 import Project from '@/models/project';
 import ProjectCard from './ProjectCard';
+import { Box, Flex } from '@radix-ui/themes';
 
 type Props = {
   initialProjects: Project[]
@@ -36,6 +37,7 @@ function ProjectList({initialProjects}: Props) {
           tagline={p.tagline}
           iconLink={p.iconLink}
           content={p.content}
+          activeProjectId={_id}
         />
       )
     })
@@ -47,15 +49,17 @@ function ProjectList({initialProjects}: Props) {
   }
 
   return (
-    <div className="w-[24rem] min-w-[24rem] h-[calc(100vh-8rem)] p-4 pt-8 overflow-y-scroll">
+    <Box width={"24rem"} minWidth={"24rem"} py={"4"} overflowY={"auto"} className="h-[calc(100vh-8rem)] bg-gray-1 border-x border-b border-gray-6">
         <Accordion.Root
         type="single"
         onValueChange={onChangeActiveProject}
         value={accordionValue}
         >
+          <Flex direction={"column"}>
           {renderProjects()}
+          </Flex>
         </Accordion.Root>
-    </div>
+    </Box>
   )
 }
 

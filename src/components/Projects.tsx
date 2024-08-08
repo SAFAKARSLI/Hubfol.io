@@ -3,6 +3,7 @@ import React from 'react';
 import ProjectList from './ProjectList';
 import Project from '@/models/project';
 import ProjectFrame from './ProjectFrame';
+import { Box, Flex, Container } from '@radix-ui/themes';
 
 type ProjectsProps = {
   activeProject?: string;
@@ -20,12 +21,12 @@ const Projects = ({activeProject}: ProjectsProps) => {
   
 
   return (
-    <div className='flex flex-1'>
+    <Flex flexGrow={"1"}>
       {render()}
-      <div className="flex w-full items-center justify-center bg-hubfolio-bg text-center p-6">
+      <Box width={"100%"} height={"100%"} p={"6"}>
         <ProjectFrame />
-      </div>
-    </div>
+      </Box>
+    </Flex>
   );
 };
 

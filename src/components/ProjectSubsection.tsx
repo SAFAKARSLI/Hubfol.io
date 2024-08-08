@@ -1,7 +1,9 @@
 import React from 'react'
 
-import Text from './subsections/Text'
+import TextSection from './subsections/Text'
 import TechStack from './subsections/TechStack'
+
+import { Box, Heading, Text } from '@radix-ui/themes'
 
 type Props = {
     title: string;
@@ -15,7 +17,7 @@ const ProjectSubsection: React.FC<Props> = ({ title, content, width="w-full", co
     const renderContent = () => {
         switch(contentType) {
             case 'text':
-                return <Text text={content}/>
+                return <TextSection text={content}/>
             case 'stack':
                 return <TechStack techStack={content}/>
         }
@@ -23,8 +25,8 @@ const ProjectSubsection: React.FC<Props> = ({ title, content, width="w-full", co
     
     return (
         <div className='pb-8'>
-            <h3 className='text-base font-bold text-hubfolio-text my-6 tracking-wider'>{title}</h3>
-            <div className={`${width} tracking-wider`}>{renderContent()}</div>
+            <Heading  size={"2"} my={"5"}>{title}</Heading>
+            <div className={`${width}`}>{renderContent()}</div>
         </div>
     )
 }

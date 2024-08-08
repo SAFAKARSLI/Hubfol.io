@@ -1,20 +1,21 @@
+import { Text } from '@radix-ui/themes';
 import React from 'react'
 
 type Props = {
     text: string;
 }
 
-const Text: React.FC<Props> = ({ text }) => {
+const TextSection: React.FC<Props> = ({ text }) => {
     return (
-        <p className='text-sm'>
+        <Text as='p' size={"1"} className='tracking-wider'>
             {text.split('\n').map((line, index) => (
                 <React.Fragment key={index}>
                     {line}
                     <br />
                 </React.Fragment>
             ))}
-        </p>
+        </Text>
     )
 }
 
-export default Text;
+export default TextSection;

@@ -4,6 +4,8 @@ import * as Accordion from '@radix-ui/react-accordion';
 import ProjectSubsection from './ProjectSubsection';
 import Divider from './subsections/Divider';
 import Project from '@/models/project';
+import { Box, DropdownMenu, IconButton, Text } from '@radix-ui/themes';
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 
 interface ProjectCardProps {
   _id: string,
@@ -11,6 +13,7 @@ interface ProjectCardProps {
   tagline: string;
   iconLink: string;
   content: Content[] | null
+  activeProjectId: string;
 }
 
 interface Content {
@@ -19,7 +22,7 @@ interface Content {
   content: string | Array<string> | Array<object>;
 }
 
-const ProjectCard = ({_id, title, tagline, iconLink, content}: ProjectCardProps) => {
+const ProjectCard = ({_id, title, tagline, iconLink, content, activeProjectId}: ProjectCardProps) => {
 
   // const [properties, setProperties] = useState<any>({ _id: _id, title: title, tagline: tagline, iconLink: iconLink, content: content });
 
@@ -29,28 +32,48 @@ const ProjectCard = ({_id, title, tagline, iconLink, content}: ProjectCardProps)
   // }
 
   return (
-    <Accordion.Item value={_id} className='m-4' asChild> 
-      <div className='border-hubfolio-border rounded
+    <Accordion.Item value={_id} asChild> 
+      <Box 
+
+      className='
+      mx-4
+      mb-4
+      rounded
       border
+      border-gray-6
       overflow-hidden
-      data-[state=open]:shadow-custom-active-project 
-      shadow-custom-default-project
-      hover:shadow-custom-active-project' >
+      data-[state=open]:bg-gray-3 
+      hover:bg-gray-4' >
 
         <Accordion.Trigger asChild>
-          <div className={`flex p-6 gap-x-6 items-center leading-none text-hubfolio-text bg-hubfolio-primary-01  data-[state=closed]:cursor-pointer`}
+          <div className={`flex p-4 px-6  leading-none text-hubfolio-text bg-gray-2  data-[state=closed]:cursor-pointer shadow-xl`}
           >
-            <img height="30" width="30" src={iconLink}/>
-            <div className="basis-10/12 gap-y-2 flex flex-col ">
-              <h2 className="text-lg font-bold tracking-wider">{title}</h2>
-              <p className="text-xs text-hubfolio-subtext-darker ">{tagline}</p>
+            <div className='flex-1 flex gap-x-6'>
+              <img height="30" width="30" src={iconLink}/>
+              <div className="gap-y-1 flex flex-col">
+                <Text weight={"bold"} size={"3"}>{title}</Text>
+                <Text size={"1"} >{tagline}</Text>
+              </div>
             </div>
-            <div className='basis-1/12'></div>
+            {_id === activeProjectId && <div className='h-full'>
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                  <IconButton variant='ghost' color='gray' asChild>
+                    <DotsHorizontalIcon />
+                  </IconButton>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content>
+                  <DropdownMenu.Item onSelect={() => console.log('Edit')}>Edit</DropdownMenu.Item>
+                  <DropdownMenu.Item onSelect={() => console.log('Delete')}>Delete</DropdownMenu.Item>  
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
+            </div>}
+            
           </div>
         </Accordion.Trigger>
 
         <Accordion.Content asChild>
-          <div className='project-content w-full bg-hubfolio-primary-02 text-hubfolio-subtext rounded-b data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden px-6 '>
+          <div className='project-content w-full bg-gray-1 text-hubfolio-subtext rounded-b data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden px-6 '>
             {content?.map((s, i) => {
               return (
                 <div key={i}>
@@ -62,7 +85,7 @@ const ProjectCard = ({_id, title, tagline, iconLink, content}: ProjectCardProps)
           </div>
         </Accordion.Content>
         
-      </div>
+      </Box>
     </Accordion.Item>
   );
 };
