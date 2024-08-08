@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import * as Accordion from '@radix-ui/react-accordion';
 import ProjectSubsection from './ProjectSubsection';
 import Divider from './subsections/Divider';
+import Project from '@/models/project';
 
 interface ProjectCardProps {
   _id: string,
@@ -20,17 +21,12 @@ interface Content {
 
 const ProjectCard = ({_id, title, tagline, iconLink, content}: ProjectCardProps) => {
 
-  // const [sections, setSections] = useState<Section[]>();
-  // const [isLoading, setIsLoading] = useState(false);
-  
-  // // const fetchFullProject = async () => {
-  // //   const projectSections = (
-  // //     await fetch("http://localhost:3000/api/projects/"+_id+"/content", {cache: "no-cache"}).then((project) => project.json())
-  // //   ) as {_id: string, content: Section[]}
-    
-  // //   setSections(projectSections.content)
-  // // }
+  // const [properties, setProperties] = useState<any>({ _id: _id, title: title, tagline: tagline, iconLink: iconLink, content: content });
 
+  // const fetchProject = async () => {
+  //   const project = (await fetch("http://localhost:3000/api/projects/"+_id, {cache: "no-cache"}).then((project) => project.json())) as Project;
+  //   setProperties(project);
+  // }
 
   return (
     <Accordion.Item value={_id} className='m-4' asChild> 
@@ -45,7 +41,7 @@ const ProjectCard = ({_id, title, tagline, iconLink, content}: ProjectCardProps)
           <div className={`flex p-6 gap-x-6 items-center leading-none text-hubfolio-text bg-hubfolio-primary-01  data-[state=closed]:cursor-pointer`}
           >
             <img height="30" width="30" src={iconLink}/>
-            <div className="basis-10/12 gap-y-3 flex flex-col ">
+            <div className="basis-10/12 gap-y-2 flex flex-col ">
               <h2 className="text-lg font-bold tracking-wider">{title}</h2>
               <p className="text-xs text-hubfolio-subtext-darker ">{tagline}</p>
             </div>

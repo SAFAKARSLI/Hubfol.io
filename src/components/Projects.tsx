@@ -1,11 +1,8 @@
 import React from 'react';
 
-import { headers } from "next/headers";
 import ProjectList from './ProjectList';
-
 import Project from '@/models/project';
 import ProjectFrame from './ProjectFrame';
-
 
 type ProjectsProps = {
   activeProject?: string;
@@ -17,8 +14,8 @@ const Projects = ({activeProject}: ProjectsProps) => {
     const fetchProjects = (
         await fetch("http://localhost:3000/api/projects", {cache: "no-cache"}).then((projects) => projects.json())
       ) as Project[];
-
-    return <ProjectList projects={fetchProjects} activeProject={activeProject}/>;
+      console.log(fetchProjects)
+    return <ProjectList initialProjects={fetchProjects} activeProject={activeProject}/>;
   }
   
 
