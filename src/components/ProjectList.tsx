@@ -16,12 +16,14 @@ type Props = {
 function ProjectList({initialProjects}: Props) {
   
   const { _id } = useParams<{ _id: string }>();
-  const [accordionValue, setAccordionValue] = useState<string>();
+  const [accordionValue, setAccordionValue] = useState<string>("");
   const [projectList, setProjectList] = useState<Project[]>(initialProjects);
   const router = useRouter();
 
   useEffect(() => {
-    setAccordionValue(_id)
+    if (_id) {
+      setAccordionValue(_id)
+    }
   });
 
   function renderProjects() {
