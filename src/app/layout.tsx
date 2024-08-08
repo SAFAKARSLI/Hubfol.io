@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import TopBar from "@/components/TopBar";
+import { Theme } from "@radix-ui/themes";
 
 export const metadata: Metadata = {
   title: "Hubfol.io",
@@ -18,13 +19,15 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet" />
       </head>
       <body >
-      <div className="min-h-screen flex flex-col">
-        <TopBar />
-        <div className="flex flex-1">
-          {children}
-        </div>
-    </div>
-        </body>
+        <Theme accentColor="teal" appearance="dark">
+          <div className="min-h-screen flex flex-col">
+            <TopBar />
+            <div className="flex flex-1">
+              {children}
+            </div>
+          </div>
+        </Theme>
+      </body>
     </html>
   );
 }
