@@ -49,7 +49,7 @@ function ProjectList({initialProjects}: Props) {
   }
 
   return (
-    <Box width={"24rem"} minWidth={"24rem"} py={"4"} overflowY={"auto"} className="h-[calc(100vh-8rem)] bg-gray-1 border-x border-b border-gray-6">
+    <Box width={"24rem"} minWidth={"24rem"} py={"4"} overflowY={"auto"} className="h-[calc(100vh-8rem)] bg-gray-1 border-x border-b border-gray-4">
         <Accordion.Root
         type="single"
         onValueChange={onChangeActiveProject}

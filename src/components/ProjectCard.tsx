@@ -34,19 +34,18 @@ const ProjectCard = ({_id, title, tagline, iconLink, content, activeProjectId}: 
   return (
     <Accordion.Item value={_id} asChild> 
       <Box 
-
       className='
       mx-4
       mb-4
       rounded
       border
-      border-gray-6
-      overflow-hidden
-      data-[state=open]:bg-gray-3 
-      hover:bg-gray-4' >
+      border-gray-4
+      overflow-hidden' >
 
         <Accordion.Trigger asChild>
-          <div className={`flex p-4 px-6  leading-none text-hubfolio-text bg-gray-2  data-[state=closed]:cursor-pointer shadow-xl`}
+          <div className={`flex p-4 px-6  leading-none text-hubfolio-text 
+          bg-gray-1 data-[state=open]:bg-gray-2 hover:bg-gray-2
+          data-[state=closed]:cursor-pointer  shadow-xl `}
           >
             <div className='flex-1 flex gap-x-6'>
               <img height="30" width="30" src={iconLink}/>
