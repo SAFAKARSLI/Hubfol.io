@@ -23,7 +23,7 @@ const Projects = ({activeProject}: ProjectsProps) => {
   return (
     <Flex flexGrow={"1"}>
       {render()}
-      <Box width={"100%"} height={"100%"} p={"6"}>
+      <Box width={"100%"} height={"100%"} p={"5"}>
         <ProjectFrame />
       </Box>
     </Flex>

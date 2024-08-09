@@ -35,8 +35,8 @@ const ProjectCard = ({_id, title, tagline, iconLink, content, activeProjectId}: 
     <Accordion.Item value={_id} asChild> 
       <Box 
       className='
-      mx-4
-      mb-4
+      mx-5
+      mb-5
       rounded
       border
       border-gray-4
