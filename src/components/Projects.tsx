@@ -3,28 +3,24 @@ import React from 'react';
 import ProjectList from './ProjectList';
 import Project from '@/models/project';
 import ProjectFrame from './ProjectFrame';
-import { Box, Flex, Container } from '@radix-ui/themes';
+import { Box, Flex } from '@radix-ui/themes';
+import { getProjects } from '@/app/actions';
 
-type ProjectsProps = {
-  activeProject?: string;
+interface ProjectsProps {
+  activeProjectId: string;
 };
 
-const Projects = ({activeProject}: ProjectsProps) => {
-
+const Projects = ({activeProjectId}: ProjectsProps) => {
   async function render() {
-    const fetchProjects = (
-        await fetch("http://localhost:3000/api/projects", {cache: "no-cache"}).then((projects) => projects.json())
-      ) as Project[];
-      console.log(fetchProjects)
-    return <ProjectList initialProjects={fetchProjects} activeProject={activeProject}/>;
+    const fetchProjects = (await getProjects()) as Project[];
+    return <ProjectList initialProjects={fetchProjects} activeProjectId={activeProjectId}/>;
   }
-  
 
   return (
     <Flex flexGrow={"1"}>
       {render()}
       <Box width={"100%"} height={"100%"} p={"5"}>
-        <ProjectFrame />
+        <ProjectFrame activeProjectId={activeProjectId}/>
       </Box>
     </Flex>
   );

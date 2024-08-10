@@ -11,7 +11,7 @@ import { Box, Flex } from '@radix-ui/themes';
 
 type Props = {
   initialProjects: Project[]
-  activeProject?: string
+  activeProjectId: string
 }
 
 function ProjectList({initialProjects}: Props) {
@@ -28,6 +28,7 @@ function ProjectList({initialProjects}: Props) {
   });
 
   function renderProjects() {
+    console.log("Rendering projects: ", projectList);
     return projectList.map((p, i) => {
       return (
         <ProjectCard 

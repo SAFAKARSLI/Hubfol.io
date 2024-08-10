@@ -1,10 +1,12 @@
 import Projects from '@/components/Projects'
 import React from 'react'
 
-import { headers } from "next/headers";
+type Props = {
+  params: {
+    _id: string;
+  };
+}
 
-type Props = {}
-
-export default function page({}: Props) {
-  return <Projects />
+export default function page({ params }: Props) {
+  return <Projects activeProjectId={params._id}/>
 }
