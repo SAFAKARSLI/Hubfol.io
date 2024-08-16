@@ -1,11 +1,11 @@
-import type { Config } from "tailwindcss";
+import type { Config } from 'tailwindcss';
 
 /** @type {import('tailwindcss').Config} */
 const config: Config = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
@@ -66,42 +66,32 @@ const config: Config = {
           surface: 'var(--gray-surface)',
           indicator: 'var(--gray-indicator)',
           track: 'var(--gray-track)',
-        }
+        },
       },
       fontFamily: {
         sans: ['PT Sans', 'sans-serif'],
       },
       fontSize: {
-        'xs': '.8rem',
-        'sm': '.9rem',
-        'base': '1rem',
-        'lg': '1.1rem',
+        xs: '.8rem',
+        sm: '.9rem',
+        base: '1rem',
+        lg: '1.1rem',
       },
       borderRadius: {
         DEFAULT: '.6rem',
       },
-      // letterSpacing: {
-      //   DEFAULT: '15em', // Add this line for default letter spacing
-      // },
-      // boxShadow: {
-      //   'custom': '0 4px 4px 3px rgba(0, 0, 0, 0.25)',
-      //   'custom-active-project': '0 0 .25rem .10rem rgba(103, 103, 103, .40)',
-      // },
-      // colors: {
-      //   "hubfolio-primary": "rgb(var(--hubfolio-primary))",
-      //   "hubfolio-primary-01": "rgb(var(--hubfolio-primary-01))",
-      //   "hubfolio-primary-02": "rgb(var(--hubfolio-primary-02))",
-      //   "hubfolio-primary-03": "rgb(var(--hubfolio-primary-03))",
-      //   "hubfolio-accent": "rgb(var(--hubfolio-accent))",
-      //   "hubfolio-border": "rgb(var(--hubfolio-border))",
-      //   "hubfolio-subtext": "rgb(var(--hubfolio-subtext))",
-      //   "hubfolio-text": "rgb(var(--hubfolio-text))",
-      //   "hubfolio-text-header": "rgb(var(--hubfolio-text-header))",
-      //   "hubfolio-bg": "rgb(var(--hubfolio-bg))",
-      //   "hubfolio-bg-content": "rgb(var(--hubfolio-bg-content))",
-      //   "hubfolio-subtext-darker": "rgb(var(--hubfolio-subtext-darker))"
-      // },
       keyframes: {
+        overlayShow: {
+          from: { opacity: '0' },
+          to: { opacity: '1' },
+        },
+        contentShow: {
+          from: {
+            opacity: '0',
+            transform: 'translate(-50%, -48%) scale(0.96)',
+          },
+          to: { opacity: '1', transform: 'translate(-50%, -50%) scale(1)' },
+        },
         slideDown: {
           from: { height: '0px' },
           to: { height: 'var(--radix-accordion-content-height)' },
@@ -114,6 +104,8 @@ const config: Config = {
       animation: {
         slideDown: 'slideDown 300ms cubic-bezier(0.87, 0, 0.13, 1)',
         slideUp: 'slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1)',
+        overlayShow: 'overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
+        contentShow: 'contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
       },
     },
   },

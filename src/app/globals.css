@@ -1,12 +1,12 @@
 @import '@radix-ui/themes/styles.css';
 
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* 2C14DB -> Accent Color */
-.dark, .dark-theme {
+.dark,
+.dark-theme {
   --violet-1: #0c1020;
   --violet-2: #10162b;
   --violet-3: #172055;
@@ -41,7 +41,8 @@
 
 @supports (color: color(display-p3 1 1 1)) {
   @media (color-gamut: p3) {
-    .dark, .dark-theme {
+    .dark,
+    .dark-theme {
       --violet-1: oklch(17.8% 0.034 270.9);
       --violet-2: oklch(20.7% 0.042 270.9);
       --violet-3: oklch(27.1% 0.096 270.9);
@@ -76,7 +77,8 @@
   }
 }
 
-.dark, .dark-theme {
+.dark,
+.dark-theme {
   --gray-1: #111113;
   --gray-2: #19191b;
   --gray-3: #222325;
@@ -103,7 +105,7 @@
   --gray-a11: #eff0feb9;
   --gray-a12: #fdfdffef;
 
-  --gray-contrast: #FFFFFF;
+  --gray-contrast: #ffffff;
   --gray-surface: rgba(0, 0, 0, 0.05);
   --gray-indicator: #6c6e79;
   --gray-track: #6c6e79;
@@ -111,7 +113,8 @@
 
 @supports (color: color(display-p3 1 1 1)) {
   @media (color-gamut: p3) {
-    .dark, .dark-theme {
+    .dark,
+    .dark-theme {
       --gray-1: oklch(17.8% 0.004 277.7);
       --gray-2: oklch(21.5% 0.004 277.7);
       --gray-3: oklch(25.5% 0.005 277.7);
@@ -138,7 +141,7 @@
       --gray-a11: color(display-p3 0.945 0.949 1 / 0.719);
       --gray-a12: color(display-p3 0.992 0.992 1 / 0.937);
 
-      --gray-contrast: #FFFFFF;
+      --gray-contrast: #ffffff;
       --gray-surface: color(display-p3 0 0 0 / 5%);
       --gray-indicator: oklch(54% 0.017 277.7);
       --gray-track: oklch(54% 0.017 277.7);
@@ -146,10 +149,11 @@
   }
 }
 
-.dark, .dark-theme, :is(.dark, .dark-theme) :where(.radix-themes:not(.light, .light-theme)) {
+.dark,
+.dark-theme,
+:is(.dark, .dark-theme) :where(.radix-themes:not(.light, .light-theme)) {
   --color-background: #111;
 }
-
 
 /* width */
 ::-webkit-scrollbar {
@@ -163,11 +167,9 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background:  #0F0F10;
+  background: #0f0f10;
   border-radius: 2px;
 }
-
-
 
 .project-content {
   position: relative;
@@ -187,7 +189,6 @@
   box-shadow: 3px 0px 15px red;
 } */
 
-
 #main-content {
   position: relative;
 }
@@ -198,36 +199,8 @@
 
 body {
   font-family: 'PT Sans', sans-serif;
-  letter-spacing: .5px;
+  letter-spacing: 0.5px;
 }
-
-:root {
-  --hubfolio-primary: 34 35 37;
-  --hubfolio-primary-01: 26 27 28;
-  --hubfolio-primary-02: 15 15 16;
-  --hubfolio-primary-03: 56 58 61;
-  --hubfolio-accent: 33 41 240;
-  --hubfolio-border: 55 57 62;
-  --hubfolio-subtext: 205 205 205;
-  --hubfolio-subtext-darker: 195 195 195;
-  --hubfolio-text: 242 245 251;
-  --hubfolio-text-header: 239 239 239;
-  --hubfolio-bg: 195 196 204;
-  --hubfolio-bg-content: 246 246 251;
-
-
-  /* --hubfolio-primary-01: #1A1B1C;
-  --hubfolio-primary-02: #0F0F10;
-  --hubfolio-primary-03: #383A3D;
-  --hubfolio-accent: #2129F0;
-  --hubfolio-border: #5A5B5E;
-  --hubfolio-subtext: #CDCDCD;
-  --hubfolio-text: #F2F5FB;
-  --hubfolio-text-header: #EFEFEF;
-  --hubfolio-bg: #C3C4CC;
-  --hubfolio-bg-content: #F6F6FB; */
-}
-
 
 @layer utilities {
   .text-balance {

@@ -43,11 +43,11 @@ const ProjectCard = ({_id, title, tagline, iconLink, content, activeProjectId}: 
       overflow-hidden' >
 
         <Accordion.Trigger asChild>
-          <div className={`flex p-4 px-6  leading-none text-hubfolio-text 
+          <div className={`flex py-4 px-8  
           bg-gray-1 data-[state=open]:bg-gray-2 hover:bg-gray-2
           data-[state=closed]:cursor-pointer `}
           >
-            <div className='flex-1 flex gap-x-6'>
+            <div className='flex-1 flex gap-x-8'>
               <img height="30" width="30" src={iconLink}/>
               <div className="gap-y-1 flex flex-col">
                 <Text weight={"bold"} size={"3"}>{title}</Text>

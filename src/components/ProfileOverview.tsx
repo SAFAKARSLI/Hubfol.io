@@ -14,7 +14,7 @@ interface ProfileOverviewProps {
  
 const ProfileOverview: React.FC<ProfileOverviewProps> = ({userName, title, location, contactInfo}) => {
   return (
-    <Flex height="6rem" width="24rem" minWidth={"24rem"} px="7" py="4" className='bg-gray-1  border border-gray-4'>
+    <Flex height="6rem" width="24rem" minWidth={"24rem"} px="8" py="4" className='bg-gray-1  border border-gray-4'>
       <Flex flexGrow="1" justify={'between'} direction={"column"} >
         <Flex direction={"column"} gap={"1"} >
           <Flex gap={"2"}>
