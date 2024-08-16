@@ -1,7 +1,9 @@
 import React from 'react'
 import ProfileOverview from './ProfileOverview'
-import { Flex, Text, Box } from '@radix-ui/themes'
+import { Flex, Text, Button } from '@radix-ui/themes'
 import Link from 'next/link'
+import { getServerSession } from 'next-auth'
+import { signOut, signIn } from 'next-auth/react'
 
 type Props = {}
 
