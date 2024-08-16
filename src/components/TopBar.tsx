@@ -29,14 +29,14 @@ const TopBar: React.FC<Props> = async ({}) => {
             contactInfo='johndoe@hubfol.io'
         />
         <Flex px={"8rem"} justify={"between"} className='border-y border-gray-4 w-full bg-gray-1' >
-          <Flex justify={"between"} align={"center"} height={"100%"} width={"50%"}>
+          <Flex justify={"between"} align={"center"} height={"100%"} width={"60%"}>
           {links.map((link, i) => (
             <Text as={'div'} size={"2"} color='gray' key={i} className='hover:text-white'>
               <Link href={"/"+link.toLowerCase().replaceAll(' ', '-')}>{link}</Link>
             </Text>
           ))}
           </Flex>
-          <Flex gap={"8rem"} align={"center"}>
+          <Flex gap={"5rem"} align={"center"}>
             <Button size={"3"}>
               <EnvelopeClosedIcon /> Send Proposal</Button>
 
@@ -49,8 +49,7 @@ const TopBar: React.FC<Props> = async ({}) => {
                   </Button>
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Content>
-                  <DropdownMenu.Item><FaGoogle /> <Link href={"api/auth/signin"}>Sign In With Google</Link></DropdownMenu.Item>
-
+                  <DropdownMenu.Item color='red'><FaGoogle /><Link href={"/api/auth/signin"}>Sign In With Google</Link></DropdownMenu.Item>
                 </DropdownMenu.Content>
               </DropdownMenu.Root>
               :

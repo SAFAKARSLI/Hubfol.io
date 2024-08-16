@@ -45,7 +45,7 @@ const ProjectCard = ({_id, title, tagline, iconLink, content, activeProjectId}: 
         <Accordion.Trigger asChild>
           <div className={`flex p-4 px-6  leading-none text-hubfolio-text 
           bg-gray-1 data-[state=open]:bg-gray-2 hover:bg-gray-2
-          data-[state=closed]:cursor-pointer  shadow-xl `}
+          data-[state=closed]:cursor-pointer `}
           >
             <div className='flex-1 flex gap-x-6'>
               <img height="30" width="30" src={iconLink}/>

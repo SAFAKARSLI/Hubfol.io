@@ -8,6 +8,8 @@ import * as Accordion  from '@radix-ui/react-accordion';
 import Project from '@/models/project';
 import ProjectCard from './ProjectCard';
 import { Box, Flex } from '@radix-ui/themes';
+import AddProjectButton from './AddProjectButton';
+import ProjectListHeader from './ProjectListHeader';
 
 type Props = {
   initialProjects: Project[]
@@ -28,8 +30,7 @@ function ProjectList({initialProjects}: Props) {
   });
 
   function renderProjects() {
-    console.log("Rendering projects: ", projectList);
-    return projectList.map((p, i) => {
+    const projects = projectList.map((p, i) => {
       return (
         <ProjectCard 
           key={i}
@@ -42,6 +43,13 @@ function ProjectList({initialProjects}: Props) {
         />
       )
     })
+    return (
+      <div>
+        <ProjectListHeader />
+        {projects}
+        <AddProjectButton />
+      </div>
+    )
   }
 
   function onChangeActiveProject(_id: string) {
@@ -57,7 +65,7 @@ function ProjectList({initialProjects}: Props) {
         value={accordionValue}
         >
           <Flex direction={"column"}>
-          {renderProjects()}
+            {renderProjects()}
           </Flex>
         </Accordion.Root>
     </Box>

@@ -1,6 +1,7 @@
 import { DotFilledIcon, DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { Badge, DropdownMenu, Button, IconButton, Text, Flex, Box } from '@radix-ui/themes';
 import React from 'react';
+import ViewContactInfo from './ViewContactInfo';
 
 
 interface ProfileOverviewProps {
@@ -17,13 +18,13 @@ const ProfileOverview: React.FC<ProfileOverviewProps> = ({userName, title, locat
       <Flex flexGrow="1" justify={'between'} direction={"column"} >
         <Flex direction={"column"} gap={"1"} >
           <Flex gap={"2"}>
-            <Text as='p' size="2" weight="medium" >{userName} </Text>
+            <Text as='p' size="2" weight="medium">{userName} </Text>
             <Badge>Open to Work</Badge>
           </Flex>
           <Text as='p' size="1" color='gray'>{title}</Text>
         </Flex>
         <Box>
-          <Text  as="p" size="1" color='gray'>{location}</Text>
+          <ViewContactInfo />
         </Box>
       </Flex>
       <Flex direction={"column"} justify={"between"} align={"end"} height={"full"}>
