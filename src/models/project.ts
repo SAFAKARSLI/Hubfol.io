@@ -1,18 +1,17 @@
 import mongoDB from 'mongodb';
 
 export default interface Project {
-    _id: mongoDB.ObjectId,
-    title: string,
-    tagline: string,
-    iconLink: string,
-    content: Content[]
-    userId: number
-    url: string,
+  _id?: mongoDB.ObjectId;
+  title?: string;
+  tagline?: string;
+  iconLink?: string | ArrayBuffer;
+  sections?: Section[];
+  userId?: number;
+  url?: string;
 }
 
-
-export interface Content {
-    title: string,
-    contentType: string,
-    content: string | string[] | object[]
+export interface Section {
+  title: string;
+  contentType: string;
+  content: string | string[] | object[];
 }

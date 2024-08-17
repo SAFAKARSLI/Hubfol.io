@@ -155,25 +155,6 @@
   --color-background: #111;
 }
 
-/* width */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background-color: var(--gray-1);
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #0f0f10;
-  border-radius: 2px;
-}
-
-.project-content {
-  position: relative;
-}
 /* 
 .project-content::after {
   background-color: red;
