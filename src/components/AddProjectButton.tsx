@@ -169,6 +169,19 @@ function AddProjectButton({}: Props) {
     );
   };
 
+  const handleCreateProject = () => {
+    const formData = new FormData();
+
+    if (newProject.iconLink instanceof ArrayBuffer) {
+      const blob = new Blob([newProject.iconLink], {
+        type: 'application/octet-stream',
+      });
+      formData.append('iconLink', blob);
+    }
+
+    createProject(JSON.parse(JSON.stringify(newProject)), formData);
+  };
+
   return (
     <Box className="mx-7">
       <Dialog.Root
@@ -193,7 +206,7 @@ function AddProjectButton({}: Props) {
             <Tabs.List>
               <Tabs.Trigger value="project-info">Project Info</Tabs.Trigger>
               <Tabs.Trigger value="sections">Sections</Tabs.Trigger>
-              <Tabs.Trigger value="frame">Frame</Tabs.Trigger>
+              {/* <Tabs.Trigger value="frame">Frame</Tabs.Trigger> */}
             </Tabs.List>
 
             <Tabs.Content value="project-info">
@@ -280,11 +293,11 @@ function AddProjectButton({}: Props) {
               </Flex>
             </Tabs.Content>
 
-            <Tabs.Content value="frame">
+            {/* <Tabs.Content value="frame">
               <Text size="2">
                 Edit your profile or update contact information.
               </Text>
-            </Tabs.Content>
+            </Tabs.Content> */}
           </Tabs.Root>
 
           <Separator size={'4'} mb={'4'} />
@@ -296,7 +309,7 @@ function AddProjectButton({}: Props) {
               </Button>
             </Dialog.Close>
             <Dialog.Close>
-              <Button>Create Project</Button>
+              <Button onClick={handleCreateProject}>Create Project</Button>
             </Dialog.Close>
           </Flex>
         </Dialog.Content>

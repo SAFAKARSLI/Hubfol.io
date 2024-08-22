@@ -6,6 +6,7 @@ import { ObjectId } from 'mongodb';
 import {
   S3Client,
   PutObjectCommand,
+  ObjectCannedACL,
   DeleteObjectCommand,
   // paginateListObjectsV2,
   GetObjectCommand,
@@ -32,13 +33,46 @@ export const getProject = async (_id: string) => {
   return JSON.parse(JSON.stringify(project));
 };
 
-export const createProject = async (project: Project) => {
+export const createProject = async (project: Project, formData: FormData) => {
   await client.connect();
 
-  // project.
-  const result = await client
-    .db('dev')
-    .collection('projects')
-    .insertOne(project);
-  return result;
+  const iconLink = formData.get('iconLink');
+
+  if (iconLink && iconLink instanceof File) {
+    const arrayBuffer = await iconLink.arrayBuffer();
+    const body = Buffer.from(arrayBuffer);
+
+    const region = process.env.AWS_REGION as string;
+    const accessKeyId = process.env.AWS_ACCESS_KEY_ID as string;
+    const secretAccessKey = process.env.AWS_SECRET_KEY as string;
+    const bucketName = process.env.AWS_PROJECT_ICONS_BUCKET_NAME as string;
+
+    if (!region || !accessKeyId || !secretAccessKey || !bucketName) {
+      throw new Error('Missing AWS configuration');
+    }
+
+    const s3Client = new S3Client({
+      region,
+      credentials: {
+        accessKeyId,
+        secretAccessKey,
+      },
+    });
+
+    const uniqueKey = `${project.title}-${new Date().getTime()}`; // Use a unique key for each project
+
+    const uploadParams = {
+      Bucket: bucketName,
+      Key: uniqueKey,
+      Body: body,
+    };
+
+    await s3Client.send(new PutObjectCommand(uploadParams));
+
+    project.iconLink = `https://s3.amazonaws.com/${bucketName}/${uniqueKey}`;
+
+    await client.db('dev').collection('projects').insertOne(project);
+  } else {
+    throw new Error('Invalid iconLink');
+  }
 };
