@@ -7,6 +7,7 @@ import {
   Droppable,
   DroppableProvided,
 } from 'react-beautiful-dnd';
+import { cloneDeep } from 'lodash';
 import {
   Box,
   Button,
@@ -19,17 +20,14 @@ import {
   Separator,
   TextArea,
   Select,
-  Card,
-  Avatar,
   Tabs,
   ScrollArea,
   Badge,
 } from '@radix-ui/themes';
-import { PlusIcon, Cross2Icon, RowSpacingIcon } from '@radix-ui/react-icons';
-import * as Collapsible from '@radix-ui/react-collapsible';
+import { PlusIcon } from '@radix-ui/react-icons';
 
 import { createProject } from '@/app/actions';
-import Project, { Section } from '@/models/project';
+import Project from '@/models/project';
 
 type Props = {};
 
@@ -49,10 +47,8 @@ const defaultSections = [
 
 function AddProjectButton({}: Props) {
   const [newProject, setNewProject] = React.useState({
-    sections: defaultSections,
+    sections: cloneDeep(defaultSections),
   } as Project);
-  // const [sections, setSections] = React.useState([] as Section[]);
-  // const [sectionCount, setSectionCount] = React.useState(1);
   const [activeSection, setActiveSection] = React.useState(0);
 
   const handleFileInput = (file: File) => {
@@ -63,6 +59,10 @@ function AddProjectButton({}: Props) {
       setNewProject({ ...newProject, iconLink: arrayBuffer! });
     };
   };
+
+  useEffect(() => {
+    console.log(newProject);
+  });
 
   const renderSections = () => {
     const sectionList = newProject.sections!.map((section, i) => {
@@ -84,6 +84,7 @@ function AddProjectButton({}: Props) {
         </RadioCards.Item>
       );
     });
+
     return (
       <Flex as="div" minHeight={'15rem'} justify={'between'}>
         <ScrollArea
@@ -93,7 +94,8 @@ function AddProjectButton({}: Props) {
           style={{ maxHeight: '25rem' }}
         >
           <RadioCards.Root
-            defaultValue={activeSection.toString()}
+            defaultValue={'0'}
+            value={activeSection.toString()}
             onValueChange={(e) => setActiveSection(parseInt(e))}
           >
             <Flex
@@ -102,7 +104,6 @@ function AddProjectButton({}: Props) {
               justify={'center'}
               height={'full'}
               p={'4'}
-              className=""
             >
               {sectionList}
             </Flex>
@@ -117,7 +118,7 @@ function AddProjectButton({}: Props) {
               </Text>
               <TextField.Root
                 onChange={(e) => {
-                  const newSections = newProject.sections;
+                  const newSections = cloneDeep(newProject.sections!);
                   newSections![activeSection].title = e.target.value;
                   setNewProject({ ...newProject, sections: newSections });
                 }}
@@ -127,36 +128,35 @@ function AddProjectButton({}: Props) {
             </label>
             <label>
               <Text as="div" size="2" mb="1" weight="bold">
-                Content Type
-              </Text>
-              <Select.Root
-                defaultValue="text"
-                onValueChange={(e) => {
-                  const newSections = newProject.sections;
-                  newSections![activeSection].contentType = e;
-                  setNewProject({ ...newProject, sections: newSections });
-                }}
-                value={newProject.sections![activeSection].contentType}
-              >
-                <Select.Trigger className="max-w-[10rem]" />
-                <Select.Content onClick={() => console.log('ON CONTENT CLICK')}>
-                  <Select.Group>
-                    <Select.Item value="text">Plain-text</Select.Item>
-                    <Select.Item value="tech-stack">Tech Stack</Select.Item>
-                    <Select.Item value="carousel">Carousel</Select.Item>
-                    <Select.Item value="video">Video</Select.Item>
-                  </Select.Group>
-                </Select.Content>
-              </Select.Root>
-            </label>
-            <label>
-              <Text as="div" size="2" mb="1" weight="bold">
                 Content
+                <Select.Root
+                  defaultValue="text"
+                  size={'1'}
+                  onValueChange={(e) => {
+                    const newSections = cloneDeep(newProject.sections!);
+                    newSections[activeSection].contentType = e;
+                    setNewProject({ ...newProject, sections: newSections });
+                  }}
+                  value={newProject.sections![activeSection].contentType}
+                >
+                  <Select.Trigger
+                    className="max-w-[10rem] ml-2"
+                    variant="soft"
+                  />
+                  <Select.Content>
+                    <Select.Group>
+                      <Select.Item value="text">Plain-text</Select.Item>
+                      <Select.Item value="tech-stack">Tech Stack</Select.Item>
+                      <Select.Item value="carousel">Carousel</Select.Item>
+                      <Select.Item value="video">Video</Select.Item>
+                    </Select.Group>
+                  </Select.Content>
+                </Select.Root>
               </Text>
               <TextArea
                 value={newProject.sections![activeSection].content as string}
                 onChange={(e) => {
-                  const newSections = newProject.sections;
+                  const newSections = cloneDeep(newProject.sections!);
                   newSections![activeSection].content = e.target.value;
                   setNewProject({ ...newProject, sections: newSections });
                 }}
@@ -172,7 +172,10 @@ function AddProjectButton({}: Props) {
   return (
     <Box className="mx-7">
       <Dialog.Root
-        onOpenChange={() => setNewProject({ sections: [...defaultSections] })}
+        onOpenChange={() => {
+          setNewProject({ sections: defaultSections });
+          setActiveSection(0);
+        }}
       >
         <Dialog.Trigger>
           <Button
@@ -205,9 +208,9 @@ function AddProjectButton({}: Props) {
                       Project Name
                     </Text>
                     <TextField.Root
-                      onChange={(e) =>
-                        setNewProject({ ...newProject, title: e.target.value })
-                      }
+                      onChange={(e) => {
+                        setNewProject({ ...newProject, title: e.target.value });
+                      }}
                       placeholder="Enter your project name"
                     />
                   </label>
@@ -263,7 +266,7 @@ function AddProjectButton({}: Props) {
                   variant="outline"
                   className="h-[3rem] mx-0 my-2 font-bold"
                   onClick={() => {
-                    const newSections = newProject.sections;
+                    const newSections = cloneDeep(newProject.sections!);
                     newSections!.push({
                       title: 'New Section',
                       contentType: 'text',

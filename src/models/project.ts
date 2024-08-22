@@ -8,10 +8,12 @@ export default interface Project {
   sections?: Section[];
   userId?: number;
   url?: string;
+  [Symbol.iterator]?(): IterableIterator<any>;
 }
 
 export interface Section {
   title: string;
   contentType: string;
   content: string | string[] | object[];
+  [Symbol.iterator]?(): IterableIterator<any>;
 }
