@@ -11,7 +11,6 @@ import { cloneDeep } from 'lodash';
 import {
   Box,
   Button,
-  Heading,
   RadioCards,
   Dialog,
   Flex,
@@ -169,7 +168,7 @@ function AddProjectButton({}: Props) {
     );
   };
 
-  const handleCreateProject = () => {
+  const handleCreateProject = async () => {
     const formData = new FormData();
 
     if (newProject.iconLink instanceof ArrayBuffer) {
@@ -179,7 +178,7 @@ function AddProjectButton({}: Props) {
       formData.append('iconLink', blob);
     }
 
-    createProject(JSON.parse(JSON.stringify(newProject)), formData);
+    await createProject(JSON.parse(JSON.stringify(newProject)), formData);
   };
 
   return (

@@ -3,6 +3,7 @@
 import client from '@/db';
 import Project from '@/models/project';
 import { ObjectId } from 'mongodb';
+import { Readable } from 'stream';
 import {
   S3Client,
   PutObjectCommand,
@@ -11,6 +12,11 @@ import {
   // paginateListObjectsV2,
   GetObjectCommand,
 } from '@aws-sdk/client-s3';
+
+const region = process.env.AWS_REGION as string;
+const accessKeyId = process.env.AWS_ACCESS_KEY_ID as string;
+const secretAccessKey = process.env.AWS_SECRET_KEY as string;
+const bucketName = process.env.AWS_PROJECT_ICONS_BUCKET_NAME as string;
 
 export const getProjects = async () => {
   await client.connect();
@@ -42,11 +48,6 @@ export const createProject = async (project: Project, formData: FormData) => {
     const arrayBuffer = await iconLink.arrayBuffer();
     const body = Buffer.from(arrayBuffer);
 
-    const region = process.env.AWS_REGION as string;
-    const accessKeyId = process.env.AWS_ACCESS_KEY_ID as string;
-    const secretAccessKey = process.env.AWS_SECRET_KEY as string;
-    const bucketName = process.env.AWS_PROJECT_ICONS_BUCKET_NAME as string;
-
     if (!region || !accessKeyId || !secretAccessKey || !bucketName) {
       throw new Error('Missing AWS configuration');
     }
@@ -59,7 +60,10 @@ export const createProject = async (project: Project, formData: FormData) => {
       },
     });
 
-    const uniqueKey = `${project.title}-${new Date().getTime()}`; // Use a unique key for each project
+    const uniqueKey = `${project.title?.replaceAll(
+      ' ',
+      '_'
+    )}-${new Date().getTime()}`; // Use a unique key for each project
 
     const uploadParams = {
       Bucket: bucketName,
@@ -70,6 +74,7 @@ export const createProject = async (project: Project, formData: FormData) => {
     await s3Client.send(new PutObjectCommand(uploadParams));
 
     project.iconLink = `https://s3.amazonaws.com/${bucketName}/${uniqueKey}`;
+    project.userId = 123; // UPDATE THIS
 
     await client.db('dev').collection('projects').insertOne(project);
   } else {

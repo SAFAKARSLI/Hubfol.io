@@ -4,11 +4,15 @@ import * as Accordion from '@radix-ui/react-accordion';
 import ProjectSubsection from './ProjectSubsection';
 import Divider from './subsections/Divider';
 import Project from '@/models/project';
+
 import { Box, DropdownMenu, IconButton, Text } from '@radix-ui/themes';
+
+import Image from 'next/image';
 
 import { Section } from '@/models/project';
 
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
+import { getProject } from '@/app/actions';
 
 interface ProjectCardProps {
   _id: string;
@@ -33,7 +37,6 @@ const ProjectCard = ({
   //   const project = (await fetch("http://localhost:3000/api/projects/"+_id, {cache: "no-cache"}).then((project) => project.json())) as Project;
   //   setProperties(project);
   // }
-
   return (
     <Accordion.Item value={_id} asChild>
       <Box
@@ -47,13 +50,19 @@ const ProjectCard = ({
       >
         <Accordion.Trigger asChild>
           <div
-            className={`flex py-4 px-8  
+            className={`flex py-4 px-8 
           bg-gray-1 data-[state=open]:bg-gray-2 hover:bg-gray-2
           data-[state=closed]:cursor-pointer `}
           >
-            <div className="flex-1 flex gap-x-8">
-              <img height="30" width="30" src={iconLink as string} />
-              <div className="gap-y-1 flex flex-col">
+            <div className="flex justify-between w-full items-center gap-x-8">
+              <Image
+                width={'40'}
+                height="40"
+                alt={`${title}-icon`}
+                src={iconLink as string}
+              />
+
+              <div className="gap-y-1 flex-1 flex flex-col">
                 <Text weight={'bold'} size={'3'}>
                   {title}
                 </Text>
@@ -61,7 +70,7 @@ const ProjectCard = ({
               </div>
             </div>
             {_id === activeProjectId && (
-              <div className="h-full">
+              <div className="h-full flex-none">
                 <DropdownMenu.Root>
                   <DropdownMenu.Trigger>
                     <IconButton variant="ghost" color="gray" asChild>
