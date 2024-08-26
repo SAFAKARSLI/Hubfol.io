@@ -59,7 +59,7 @@ function ProjectList({ initialProjects }: Props) {
     <Box
       width={'24rem'}
       minWidth={'24rem'}
-      pt={'5'}
+      py={'5'}
       overflowY={'auto'}
       className="h-[calc(100vh-6rem)] bg-gray-1 border-x border-b border-gray-4 "
     >
