@@ -23,7 +23,7 @@ import {
 
 import Image from 'next/image';
 
-import { Section } from '@/models/project';
+import { Section } from '@/types/project';
 import { deleteProject } from '@/app/actions';
 import { redirect } from 'next/navigation';
 

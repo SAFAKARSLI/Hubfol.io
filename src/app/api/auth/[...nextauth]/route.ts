@@ -3,6 +3,7 @@ import GoogleProvider from 'next-auth/providers/google';
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import client from '@/db';
 import { Adapter } from 'next-auth/adapters';
+import { v4 as uuidv4 } from 'uuid';
 
 const authOptions: NextAuthOptions = {
   adapter: MongoDBAdapter(client, {
@@ -14,6 +15,20 @@ const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
+  callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      // Check if the user already has a UUID
+      if (!user.uuid) {
+        user.uuid = uuidv4();
+      }
+      return true;
+    },
+    async session({ session, user }) {
+      // Add the UUID to the session object
+      session.user.uuid = user.uuid;
+      return session;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);

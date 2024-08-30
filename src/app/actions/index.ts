@@ -1,9 +1,8 @@
 'use server';
 
 import client from '@/db';
-import Project from '@/models/project';
+import Project from '@/types/project';
 import { ObjectId } from 'mongodb';
-import { Readable } from 'stream';
 import {
   S3Client,
   PutObjectCommand,

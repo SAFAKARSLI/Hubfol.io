@@ -5,7 +5,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 
 import * as Accordion from '@radix-ui/react-accordion';
 
-import Project from '@/models/project';
+import Project from '@/types/project';
 import ProjectCard from './ProjectCard';
 import { Box, Flex } from '@radix-ui/themes';
 import AddProjectButton from './AddProjectButton';

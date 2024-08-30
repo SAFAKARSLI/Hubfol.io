@@ -26,7 +26,7 @@ import {
 import { PlusIcon } from '@radix-ui/react-icons';
 
 import { createProject } from '@/app/actions';
-import Project from '@/models/project';
+import Project from '@/types/project';
 
 type Props = {};
 
