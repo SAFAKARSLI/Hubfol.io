@@ -6,6 +6,13 @@ import { Adapter } from 'next-auth/adapters';
 import { v4 as uuidv4 } from 'uuid';
 
 const authOptions: NextAuthOptions = {
+  pages: {
+    // signIn: '/auth/signin',
+    // signOut: '/auth/signout',
+    // error: '/auth/error',
+    // verifyRequest: '/auth/verify-request',
+    newUser: '/auth/new-user',
+  },
   adapter: MongoDBAdapter(client, {
     databaseName: 'dev',
   }) as Adapter,
@@ -23,9 +30,10 @@ const authOptions: NextAuthOptions = {
       }
       return true;
     },
-    async session({ session, user }) {
+    async session({ session, user, trigger, newSession }) {
       // Add the UUID to the session object
       session.user.uuid = user.uuid;
+
       return session;
     },
   },

@@ -98,3 +98,32 @@ export const deleteProject = async (_id: string) => {
 
   redirect('/projects');
 };
+
+export const checkExistingUser = async (email: string) => {
+  await client.connect();
+  const user = await client.db('dev').collection('users').findOne({
+    email: email,
+  });
+
+  return user;
+};
+
+export const updateUser = async (email: string, data: any) => {
+  await client.connect();
+  await client.db('dev').collection('users').updateOne(
+    { email },
+    {
+      $set: data,
+    }
+  );
+
+  redirect('/projects');
+};
+export const getUser = async (email: string) => {
+  await client.connect();
+  const user = await client.db('dev').collection('users').findOne({
+    email: email,
+  });
+
+  return user;
+};

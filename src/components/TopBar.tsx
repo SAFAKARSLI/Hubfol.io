@@ -27,12 +27,7 @@ const TopBar: React.FC<Props> = async ({}) => {
 
   return (
     <Flex className="">
-      <ProfileOverview
-        userName="John DOE"
-        title="Freelance Software Engineer"
-        location="San Francisco, CA, USA"
-        contactInfo="johndoe@hubfol.io"
-      />
+      <ProfileOverview />
       <Flex
         px={'8rem'}
         justify={'between'}
@@ -66,7 +61,7 @@ const TopBar: React.FC<Props> = async ({}) => {
           {!session?.user ? (
             <DropdownMenu.Root>
               <DropdownMenu.Trigger>
-                <Button variant="ghost" size={'3'}>
+                <Button variant="ghost" size={'2'}>
                   Sign In
                   <DropdownMenu.TriggerIcon />
                 </Button>
@@ -79,7 +74,9 @@ const TopBar: React.FC<Props> = async ({}) => {
               </DropdownMenu.Content>
             </DropdownMenu.Root>
           ) : (
-            <RadixLink href={'/api/auth/signout'}>Sign Out</RadixLink>
+            <RadixLink href={'/api/auth/signout'} size={'2'}>
+              Sign Out
+            </RadixLink>
           )}
         </Flex>
       </Flex>
