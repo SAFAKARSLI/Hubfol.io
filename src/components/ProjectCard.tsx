@@ -3,16 +3,29 @@ import React, { useEffect, useState } from 'react';
 import * as Accordion from '@radix-ui/react-accordion';
 import ProjectSubsection from './ProjectSubsection';
 import Divider from './subsections/Divider';
-import Project from '@/models/project';
 
-import { Box, DropdownMenu, IconButton, Text } from '@radix-ui/themes';
+import {
+  Box,
+  DropdownMenu,
+  IconButton,
+  Text,
+  AlertDialog,
+  Button,
+  Flex,
+  Table,
+  Inset,
+} from '@radix-ui/themes';
+import {
+  DotsHorizontalIcon,
+  TrashIcon,
+  Pencil2Icon,
+} from '@radix-ui/react-icons';
 
 import Image from 'next/image';
 
 import { Section } from '@/models/project';
-
-import { DotsHorizontalIcon } from '@radix-ui/react-icons';
-import { getProject } from '@/app/actions';
+import { deleteProject } from '@/app/actions';
+import { redirect } from 'next/navigation';
 
 interface ProjectCardProps {
   _id: string;
@@ -31,12 +44,9 @@ const ProjectCard = ({
   sections,
   activeProjectId,
 }: ProjectCardProps) => {
-  // const [properties, setProperties] = useState<any>({ _id: _id, title: title, tagline: tagline, iconLink: iconLink, content: content });
+  const [deleteDialogeOpen, setDeleteDialogeOpen] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState('');
 
-  // const fetchProject = async () => {
-  //   const project = (await fetch("http://localhost:3000/api/projects/"+_id, {cache: "no-cache"}).then((project) => project.json())) as Project;
-  //   setProperties(project);
-  // }
   return (
     <Accordion.Item value={_id} asChild>
       <Box
@@ -79,20 +89,71 @@ const ProjectCard = ({
                   </DropdownMenu.Trigger>
                   <DropdownMenu.Content>
                     <DropdownMenu.Item onSelect={() => console.log('Edit')}>
+                      <Pencil2Icon />
                       Edit
                     </DropdownMenu.Item>
-                    <DropdownMenu.Item onSelect={() => console.log('Delete')}>
+                    <DropdownMenu.Item
+                      color="red"
+                      onSelect={() => setDeleteDialogeOpen(true)}
+                    >
+                      <TrashIcon />
                       Delete
                     </DropdownMenu.Item>
                   </DropdownMenu.Content>
                 </DropdownMenu.Root>
+                <AlertDialog.Root
+                  onOpenChange={() => {
+                    setDeleteDialogeOpen(false);
+                    setConfirmDelete('');
+                  }}
+                  open={deleteDialogeOpen}
+                >
+                  <AlertDialog.Content maxWidth="500px">
+                    <AlertDialog.Title>Delete `{title}`</AlertDialog.Title>
+                    <AlertDialog.Description size="2">
+                      Are you sure you want to delete the <b>`{title}`</b>? This
+                      action is permanent and cannot be undone. <br /> <br />
+                      To confirm deletion, type{' '}
+                      <b>
+                        <i>{title}</i>
+                      </b>{' '}
+                      in the input below.
+                    </AlertDialog.Description>
+                    <input
+                      value={confirmDelete}
+                      onChange={(e) => setConfirmDelete(e.target.value)}
+                      className="w-full text-sm px-2 p-1 border text border-gray-4 rounded my-3 focus:outline-none"
+                    />
+                    <Flex gap="3" justify="end">
+                      <AlertDialog.Cancel>
+                        <Button variant="soft" color="gray">
+                          Cancel
+                        </Button>
+                      </AlertDialog.Cancel>
+                      <AlertDialog.Action>
+                        <Button
+                          color="red"
+                          disabled={title != confirmDelete}
+                          onClick={() => {
+                            deleteProject(_id);
+                          }}
+                        >
+                          Delete project
+                        </Button>
+                      </AlertDialog.Action>
+                    </Flex>
+                  </AlertDialog.Content>
+                </AlertDialog.Root>
               </div>
             )}
           </div>
         </Accordion.Trigger>
 
         <Accordion.Content asChild>
-          <div className="project-content w-full bg-gray-1 text-hubfolio-subtext rounded-b data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden px-6 ">
+          <div
+            className="project-content w-full bg-gray-1 text-hubfolio-subtext rounded-b 
+          data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden px-6 "
+          >
             {sections?.map((s, i) => {
               return (
                 <div key={i}>

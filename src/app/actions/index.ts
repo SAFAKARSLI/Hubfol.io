@@ -12,6 +12,7 @@ import {
   // paginateListObjectsV2,
   GetObjectCommand,
 } from '@aws-sdk/client-s3';
+import { redirect } from 'next/navigation';
 
 const region = process.env.AWS_REGION as string;
 const accessKeyId = process.env.AWS_ACCESS_KEY_ID as string;
@@ -37,6 +38,12 @@ export const getProject = async (_id: string) => {
     .collection('projects')
     .findOne({ _id: new ObjectId(_id) });
   return JSON.parse(JSON.stringify(project));
+};
+
+export const getProjectCount = async () => {
+  await client.connect();
+  const count = await client.db('dev').collection('projects').countDocuments();
+  return count;
 };
 
 export const createProject = async (project: Project, formData: FormData) => {
@@ -77,7 +84,18 @@ export const createProject = async (project: Project, formData: FormData) => {
     project.userId = 123; // UPDATE THIS
 
     await client.db('dev').collection('projects').insertOne(project);
+    redirect('/projects');
   } else {
     throw new Error('Invalid iconLink');
   }
+};
+
+export const deleteProject = async (_id: string) => {
+  await client.connect();
+  await client
+    .db('dev')
+    .collection('projects')
+    .deleteOne({ _id: new ObjectId(_id) });
+
+  redirect('/projects');
 };

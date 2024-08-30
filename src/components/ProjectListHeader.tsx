@@ -1,19 +1,20 @@
-import React from 'react'
-
+import React from 'react';
 
 import { Badge, Flex, Heading } from '@radix-ui/themes';
 
-type Props = {}
+type Props = {
+  projectCount: number;
+};
 
-function ProjectListHeader({}: Props) {
+function ProjectListHeader({ projectCount }: Props) {
   return (
-    <Flex gap={"2"} justify={"start"} align={"center"} mb={"5"} mx={"8"}>
+    <Flex gap={'2'} justify={'start'} align={'center'} mb={'5'} mx={'8'}>
       <Heading size={'4'}>Projects:</Heading>
-      <Badge variant='solid' radius='full' size={"2"}>
-          2
+      <Badge variant="solid" radius="full" size={'2'}>
+        {projectCount}
       </Badge>
     </Flex>
-  )
+  );
 }
 
-export default ProjectListHeader
+export default ProjectListHeader;

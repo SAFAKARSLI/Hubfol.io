@@ -44,7 +44,7 @@ function ProjectList({ initialProjects }: Props) {
     });
     return (
       <div>
-        <ProjectListHeader />
+        <ProjectListHeader projectCount={initialProjects.length} />
         {projects}
         <AddProjectButton />
       </div>
