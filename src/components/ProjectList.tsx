@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 
 import * as Accordion from '@radix-ui/react-accordion';
 
@@ -17,14 +17,17 @@ type Props = {
 };
 
 function ProjectList({ initialProjects }: Props) {
-  const { _id } = useParams<{ _id: string }>();
+  const { projectUUID, userUUID } = useParams<{
+    projectUUID: string;
+    userUUID: string;
+  }>();
   const [accordionValue, setAccordionValue] = useState<string>('');
   const [projectList, setProjectList] = useState<Project[]>(initialProjects);
   const router = useRouter();
 
   useEffect(() => {
-    if (_id) {
-      setAccordionValue(_id);
+    if (projectUUID) {
+      setAccordionValue(projectUUID);
     }
   });
 
@@ -33,12 +36,12 @@ function ProjectList({ initialProjects }: Props) {
       return (
         <ProjectCard
           key={i}
-          _id={String(p._id)}
+          _id={p.projectUUID as string}
           title={p.title!}
           tagline={p.tagline!}
           iconLink={p.iconLink!}
           sections={p.sections!}
-          activeProjectId={_id}
+          activeProjectId={projectUUID}
         />
       );
     });
@@ -51,8 +54,8 @@ function ProjectList({ initialProjects }: Props) {
     );
   }
 
-  function onChangeActiveProject(_id: string) {
-    router.push('/projects/' + _id);
+  function onChangeActiveProject(projectUUID: string) {
+    router.push(`/users/${userUUID}/projects/${projectUUID}`);
   }
 
   return (

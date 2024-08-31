@@ -8,11 +8,12 @@ import { getProjects } from '@/app/actions';
 
 interface ProjectsProps {
   activeProjectId: string;
+  userUUID: string;
 }
 
-const Projects = ({ activeProjectId }: ProjectsProps) => {
+const Projects = ({ activeProjectId, userUUID }: ProjectsProps) => {
   async function render() {
-    const fetchProjects = (await getProjects()) as Project[];
+    const fetchProjects = (await getProjects(userUUID)) as Project[];
     return (
       <ProjectList
         initialProjects={fetchProjects}

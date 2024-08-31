@@ -59,10 +59,6 @@ function AddProjectButton({}: Props) {
     };
   };
 
-  useEffect(() => {
-    console.log(newProject);
-  });
-
   const renderSections = () => {
     const sectionList = newProject.sections!.map((section, i) => {
       return (

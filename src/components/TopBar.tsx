@@ -12,8 +12,7 @@ import { FaGoogle } from 'react-icons/fa';
 import { EnvelopeClosedIcon } from '@radix-ui/react-icons';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-
-type Props = {};
+import { Params, SlugProps } from '@/types/slug';
 
 const links: string[] = [
   'Profile Overview',
@@ -22,7 +21,8 @@ const links: string[] = [
   'Certificates and Education',
 ];
 
-const TopBar: React.FC<Props> = async ({}) => {
+async function TopBar({ params }: SlugProps) {
+  const userUUID = params.userUUID;
   const session = await getServerSession(authOptions);
 
   return (
@@ -47,7 +47,11 @@ const TopBar: React.FC<Props> = async ({}) => {
               key={i}
               className="hover:text-white"
             >
-              <Link href={'/' + link.toLowerCase().replaceAll(' ', '-')}>
+              <Link
+                href={`/users/${userUUID}/${link
+                  .toLowerCase()
+                  .replaceAll(' ', '-')}`}
+              >
                 {link}
               </Link>
             </Text>
@@ -82,6 +86,6 @@ const TopBar: React.FC<Props> = async ({}) => {
       </Flex>
     </Flex>
   );
-};
+}
 
 export default TopBar;

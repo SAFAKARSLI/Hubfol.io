@@ -2,6 +2,7 @@ import mongoDB from 'mongodb';
 
 export default interface Project {
   _id?: mongoDB.ObjectId;
+  projectUUID?: string;
   title?: string;
   tagline?: string;
   iconLink?: string | ArrayBuffer;

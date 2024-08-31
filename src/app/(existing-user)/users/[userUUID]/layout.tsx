@@ -2,17 +2,15 @@ import type { Metadata } from 'next';
 import '@/app/globals.css';
 import TopBar from '@/components/TopBar';
 import { Theme } from '@radix-ui/themes';
+import React from 'react';
+import { Params, SlugProps } from '@/types/slug';
 
 export const metadata: Metadata = {
   title: 'Hubfol.io',
   description: 'Showcase the portfolio',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children, params }: Readonly<SlugProps>) {
   return (
     <html lang="en">
       <head>
@@ -24,7 +22,7 @@ export default function RootLayout({
       <body>
         <Theme accentColor="violet" appearance="dark">
           <div className="min-h-screen flex flex-col">
-            <TopBar />
+            <TopBar params={params} children={children} />
             <div className="flex flex-1">{children}</div>
           </div>
         </Theme>
