@@ -16,17 +16,14 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getUser } from '@/app/actions';
 import { WithId } from 'mongodb';
 
-type Props = {};
+type Props = {
+  user: User;
+};
 
-async function ViewContactInfo({}: Props) {
+async function ViewContactInfo({ user }: Props) {
   const session = await getServerSession(authOptions);
 
-  const fetchUser = async () => {
-    return await getUser(session?.user.email);
-  };
-
   const renderUserInfo = async () => {
-    const user = (await fetchUser()) as WithId<User>;
     return (
       <DataList.Root>
         <DataList.Item align="center">

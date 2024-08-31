@@ -26,6 +26,7 @@ function ProjectList({ initialProjects }: Props) {
   const router = useRouter();
 
   useEffect(() => {
+    console.log(initialProjects);
     if (projectUUID) {
       setAccordionValue(projectUUID);
     }
@@ -49,7 +50,7 @@ function ProjectList({ initialProjects }: Props) {
       <div>
         <ProjectListHeader projectCount={initialProjects.length} />
         {projects}
-        <AddProjectButton />
+        <AddProjectButton userUUID={userUUID} />
       </div>
     );
   }

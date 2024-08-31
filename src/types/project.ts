@@ -7,7 +7,7 @@ export default interface Project {
   tagline?: string;
   iconLink?: string | ArrayBuffer;
   sections?: Section[];
-  userId?: number;
+  ownerId?: string;
   url?: string;
   [Symbol.iterator]?(): IterableIterator<any>;
 }

@@ -2,7 +2,9 @@
 
 import client from '@/db';
 import Project from '@/types/project';
+import { signIn, signOut } from 'next-auth/react';
 import { ObjectId } from 'mongodb';
+import { v4 as uuidv4 } from 'uuid';
 import {
   S3Client,
   PutObjectCommand,
@@ -17,6 +19,14 @@ const region = process.env.AWS_REGION as string;
 const accessKeyId = process.env.AWS_ACCESS_KEY_ID as string;
 const secretAccessKey = process.env.AWS_SECRET_KEY as string;
 const bucketName = process.env.AWS_PROJECT_ICONS_BUCKET_NAME as string;
+
+export const logIn = async (userUUID: string) => {
+  await signIn('google', { callbackUrl: `/users/${userUUID}/projects` });
+};
+
+export const logOut = async (userUUID: string) => {
+  await signOut({ callbackUrl: `/users/${userUUID}/projects` });
+};
 
 export const getProjects = async (userUUID: string) => {
   await client.connect();
@@ -44,7 +54,11 @@ export const getProjectCount = async () => {
   return count;
 };
 
-export const createProject = async (project: Project, formData: FormData) => {
+export const createProject = async (
+  project: Project,
+  formData: FormData,
+  userUUID: string
+) => {
   await client.connect();
 
   const iconLink = formData.get('iconLink');
@@ -79,10 +93,11 @@ export const createProject = async (project: Project, formData: FormData) => {
     await s3Client.send(new PutObjectCommand(uploadParams));
 
     project.iconLink = `https://s3.amazonaws.com/${bucketName}/${uniqueKey}`;
-    project.userId = 123; // UPDATE THIS
+    project.ownerId = userUUID; // UPDATE THIS
+    project.projectUUID = uuidv4();
 
     await client.db('dev').collection('projects').insertOne(project);
-    redirect('/projects');
+    redirect(`/users/${userUUID}/projects`);
   } else {
     throw new Error('Invalid iconLink');
   }
@@ -118,10 +133,10 @@ export const updateUser = async (email: string, data: any) => {
 
   redirect('/projects');
 };
-export const getUser = async (email: string) => {
+export const getUser = async (userUUID: string) => {
   await client.connect();
   const user = await client.db('dev').collection('users').findOne({
-    email: email,
+    uuid: userUUID,
   });
 
   return user;

@@ -1,4 +1,4 @@
-import { DotFilledIcon, DotsHorizontalIcon } from '@radix-ui/react-icons';
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import {
   Badge,
   DropdownMenu,
@@ -14,12 +14,17 @@ import React from 'react';
 import ViewContactInfo from './ViewContactInfo';
 import { getUser } from '@/app/actions';
 import { WithId } from 'mongodb';
+import { SlugProps } from '@/types/slug';
 
-interface ProfileOverviewProps {}
+interface ProfileOverviewProps {
+  userUUID: string;
+}
 
-const ProfileOverview: React.FC<ProfileOverviewProps> = async ({}) => {
+const ProfileOverview = async ({ userUUID }: ProfileOverviewProps) => {
   const session = await getServerSession(authOptions);
-  const user = (await getUser(session?.user.email)) as WithId<User>;
+
+  const user = (await getUser(userUUID)) as WithId<User>;
+  console.log(user);
 
   return (
     <Flex
@@ -43,11 +48,16 @@ const ProfileOverview: React.FC<ProfileOverviewProps> = async ({}) => {
           </Text>
         </Flex>
         <Box>
-          <ViewContactInfo />
+          <ViewContactInfo user={user} />
         </Box>
       </Flex>
-      <Flex direction={'column'} justify={'end'} align={'end'} height={'full'}>
-        {/* <DropdownMenu.Root>
+      <Flex
+        direction={'column'}
+        justify={'between'}
+        align={'end'}
+        height={'full'}
+      >
+        <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <IconButton variant="ghost" color="gray" radius="medium">
               <DotsHorizontalIcon width="16" height="16" />
@@ -57,7 +67,7 @@ const ProfileOverview: React.FC<ProfileOverviewProps> = async ({}) => {
             <DropdownMenu.Item>Share</DropdownMenu.Item>
             <DropdownMenu.Item>View full profile</DropdownMenu.Item>
           </DropdownMenu.Content>
-        </DropdownMenu.Root> */}
+        </DropdownMenu.Root>
         <Badge size="2" variant="soft" radius="medium">
           ${user.hourlyRate}/hr
         </Badge>

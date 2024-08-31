@@ -77,6 +77,29 @@
   }
 }
 
+.header-link::before {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0; /* Adjusted to start from the left */
+  width: 100%;
+  color: gray;
+  height: 1px;
+  background-color: var(--violet-8);
+  transform-origin: center;
+
+  transform: scaleX(0);
+  transition: transform 0.3s;
+}
+
+.header-link {
+  position: relative;
+}
+
+.header-link:hover::before {
+  transform: scaleX(1);
+}
+
 .dark,
 .dark-theme {
   --gray-1: #111113;

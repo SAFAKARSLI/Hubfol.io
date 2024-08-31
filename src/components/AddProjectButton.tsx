@@ -28,7 +28,9 @@ import { PlusIcon } from '@radix-ui/react-icons';
 import { createProject } from '@/app/actions';
 import Project from '@/types/project';
 
-type Props = {};
+type Props = {
+  userUUID: string;
+};
 
 const defaultSections = [
   {
@@ -44,7 +46,7 @@ const defaultSections = [
   },
 ];
 
-function AddProjectButton({}: Props) {
+function AddProjectButton({ userUUID }: Props) {
   const [newProject, setNewProject] = React.useState({
     sections: cloneDeep(defaultSections),
   } as Project);
@@ -174,7 +176,11 @@ function AddProjectButton({}: Props) {
       formData.append('iconLink', blob);
     }
 
-    await createProject(JSON.parse(JSON.stringify(newProject)), formData);
+    await createProject(
+      JSON.parse(JSON.stringify(newProject)),
+      formData,
+      userUUID
+    );
   };
 
   return (
