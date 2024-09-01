@@ -26,7 +26,6 @@ function ProjectList({ initialProjects }: Props) {
   const router = useRouter();
 
   useEffect(() => {
-    console.log(initialProjects);
     if (projectUUID) {
       setAccordionValue(projectUUID);
     }

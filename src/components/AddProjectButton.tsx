@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   DragDropContext,
   Draggable,
@@ -7,26 +7,34 @@ import {
   Droppable,
   DroppableProvided,
 } from 'react-beautiful-dnd';
-import { cloneDeep } from 'lodash';
 import {
-  Box,
-  Button,
+  Cross1Icon,
+  Cross2Icon,
+  MagnifyingGlassIcon,
+  PlusIcon,
+} from '@radix-ui/react-icons';
+import { cloneDeep, set } from 'lodash';
+import {
   RadioCards,
-  Dialog,
   Flex,
   Text,
   TextField,
-  Separator,
   TextArea,
   Select,
-  Tabs,
   ScrollArea,
   Badge,
+  Spinner,
+  Box,
+  Dialog,
+  Button,
+  Tabs,
+  Separator,
 } from '@radix-ui/themes';
-import { PlusIcon } from '@radix-ui/react-icons';
 
-import { createProject } from '@/app/actions';
+import { createProject, getProjects, getTechs } from '@/app/actions';
 import Project from '@/types/project';
+import { SearchResult } from '@/types/searchResult';
+import SearchResultList from './SearchResultList';
 
 type Props = {
   userUUID: string;
@@ -42,15 +50,61 @@ const defaultSections = [
   {
     title: 'Tech Stack',
     contentType: 'tech-stack',
-    content: 'This is a tech stack',
+    content: '',
   },
 ];
 
 function AddProjectButton({ userUUID }: Props) {
-  const [newProject, setNewProject] = React.useState({
+  const [newProject, setNewProject] = useState({
     sections: cloneDeep(defaultSections),
   } as Project);
-  const [activeSection, setActiveSection] = React.useState(0);
+  const [activeSection, setActiveSection] = useState(0);
+  const [query, setQuery] = useState('');
+  const [queryBounce, setQueryBounce] = useState('');
+  const [search, setSearch] = useState({
+    loading: false,
+    result: [] as SearchResult[],
+    resultVisible: false,
+  });
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (queryBounce) {
+        setSearch({ ...search, loading: false });
+        setQuery(queryBounce);
+      }
+    }, 700);
+
+    if (queryBounce === '') {
+      setQuery('');
+      setSearch({
+        ...search,
+        result: new Array<SearchResult>(),
+        loading: false,
+        resultVisible: false,
+      });
+    }
+
+    return () => {
+      clearTimeout(timeoutId);
+      setSearch({ ...search, loading: true, resultVisible: false });
+    };
+  }, [queryBounce]);
+
+  useEffect(() => {
+    const fetchTech = async () => {
+      try {
+        let result = (await getTechs(query)) as SearchResult[];
+        setSearch({ ...search, result, resultVisible: true });
+      } catch (error) {
+        console.error('Error fetching techs:', error);
+      }
+    };
+
+    if (query) {
+      fetchTech();
+    }
+  }, [query]);
 
   const handleFileInput = (file: File) => {
     const reader = new FileReader();
@@ -123,8 +177,8 @@ function AddProjectButton({ userUUID }: Props) {
                 value={newProject.sections![activeSection].title}
               />
             </label>
-            <label>
-              <Text as="div" size="2" mb="1" weight="bold">
+            <div>
+              <Text as="div" size="2" weight="bold">
                 Content
                 <Select.Root
                   defaultValue="text"
@@ -137,29 +191,68 @@ function AddProjectButton({ userUUID }: Props) {
                   value={newProject.sections![activeSection].contentType}
                 >
                   <Select.Trigger
-                    className="max-w-[10rem] ml-2"
+                    className="max-w-[10rem] ml-2 mb-2"
                     variant="soft"
                   />
                   <Select.Content>
                     <Select.Group>
                       <Select.Item value="text">Plain-text</Select.Item>
                       <Select.Item value="tech-stack">Tech Stack</Select.Item>
-                      <Select.Item value="carousel">Carousel</Select.Item>
-                      <Select.Item value="video">Video</Select.Item>
+                      {/* <Select.Item value="carousel">Carousel</Select.Item>
+                      <Select.Item value="video">Video</Select.Item> */}
                     </Select.Group>
                   </Select.Content>
                 </Select.Root>
               </Text>
-              <TextArea
-                value={newProject.sections![activeSection].content as string}
-                onChange={(e) => {
-                  const newSections = cloneDeep(newProject.sections!);
-                  newSections![activeSection].content = e.target.value;
-                  setNewProject({ ...newProject, sections: newSections });
-                }}
-                placeholder="Enter the content"
-              />
-            </label>
+              {newProject.sections?.[activeSection]?.contentType ===
+              'tech-stack' ? (
+                <Flex direction={'column'} width={'100%'}>
+                  <TextField.Root
+                    onFocus={() =>
+                      setSearch({ ...search, resultVisible: true })
+                    }
+                    onBlur={() =>
+                      setSearch({ ...search, resultVisible: false })
+                    }
+                    size={'2'}
+                    value={queryBounce}
+                    onChange={(e) => {
+                      setQueryBounce(e.target.value);
+                    }}
+                    placeholder="Search for a technology"
+                  >
+                    <TextField.Slot>
+                      {search.loading ? (
+                        <Spinner />
+                      ) : (
+                        <MagnifyingGlassIcon height="16" width="16" />
+                      )}
+                    </TextField.Slot>
+                    {queryBounce && (
+                      <TextField.Slot>
+                        <Cross2Icon
+                          className="cursor-pointer hover:bg-gray-3"
+                          onClick={() => setQueryBounce('')}
+                        />
+                      </TextField.Slot>
+                    )}
+                  </TextField.Root>
+                  {search.resultVisible && (
+                    <SearchResultList iconList={search.result} />
+                  )}
+                </Flex>
+              ) : (
+                <TextArea
+                  value={newProject.sections![activeSection].content as string}
+                  onChange={(e) => {
+                    const newSections = cloneDeep(newProject.sections!);
+                    newSections![activeSection].content = e.target.value;
+                    setNewProject({ ...newProject, sections: newSections });
+                  }}
+                  placeholder="Enter the content here"
+                />
+              )}
+            </div>
           </Flex>
         </Flex>
       </Flex>
@@ -271,8 +364,9 @@ function AddProjectButton({ userUUID }: Props) {
             <Tabs.Content value="sections">
               <Flex direction="column" gap="3" my={'4'}>
                 <Text size="2" mb="1">
-                  Sections are different ways you can flex your project. This
-                  information is visible when the project is active.
+                  Sections are different ways by which you can flex your
+                  project. This information is visible when the project is
+                  active.
                 </Text>
 
                 {renderSections()}

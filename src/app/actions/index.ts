@@ -141,3 +141,21 @@ export const getUser = async (userUUID: string) => {
 
   return user;
 };
+
+export const getTechs = async (queryText: string) => {
+  await client.connect();
+  try {
+    const techs = await client
+      .db('dev')
+      .collection('icons')
+      .find(
+        { brandName: { $regex: queryText, $options: 'i' } },
+        { projection: { _id: 0 } } // Exclude the _id field
+      )
+      .toArray();
+    console.log(techs);
+    return JSON.parse(JSON.stringify(techs));
+  } catch (error) {
+    console.error(error);
+  }
+};

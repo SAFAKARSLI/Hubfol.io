@@ -1,8 +1,6 @@
 import React from 'react';
-import { headers } from 'next/headers';
 import { Box } from '@radix-ui/themes';
 import { getProject } from '@/app/actions';
-import { WithId } from 'mongodb';
 import Project from '@/types/project';
 import Image from 'next/image';
 import { Text, Flex } from '@radix-ui/themes';
