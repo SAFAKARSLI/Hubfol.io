@@ -14,7 +14,6 @@ import React from 'react';
 import ViewContactInfo from './ViewContactInfo';
 import { getUser } from '@/app/actions';
 import { WithId } from 'mongodb';
-import { SlugProps } from '@/types/slug';
 
 interface ProfileOverviewProps {
   userUUID: string;
@@ -24,13 +23,12 @@ const ProfileOverview = async ({ userUUID }: ProfileOverviewProps) => {
   const session = await getServerSession(authOptions);
 
   const user = (await getUser(userUUID)) as WithId<User>;
-  console.log(user);
 
   return (
     <Flex
       height="6rem"
-      width="24rem"
-      minWidth={'24rem'}
+      width="27rem"
+      minWidth={'27rem'}
       px="8"
       py="4"
       className="bg-gray-1  border border-gray-4"
@@ -43,7 +41,7 @@ const ProfileOverview = async ({ userUUID }: ProfileOverviewProps) => {
             </Text>
             <Badge>Open to Work</Badge>
           </Flex>
-          <Text as="p" size="1" color="gray">
+          <Text size="1" color="gray">
             {user.title}
           </Text>
         </Flex>

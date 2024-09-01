@@ -1,5 +1,5 @@
 import * as Accordion from '@radix-ui/react-accordion';
-import { Box, Text, Heading } from '@radix-ui/themes';
+import { Box, Text, Heading, ScrollArea } from '@radix-ui/themes';
 import Image from 'next/image';
 
 import { Section } from '@/types/project';
@@ -27,10 +27,10 @@ const ProjectCard = ({
 }: ProjectCardProps) => {
   return (
     <Accordion.Item value={_id} asChild>
-      <Box className="mx-5 mb-5 rounded border border-gray-4 overflow-hidden">
+      <Box className="mx-8 mb-6 rounded border border-gray-4 overflow-hidden">
         <Accordion.Trigger asChild>
           <div
-            className={`flex py-4 px-8 
+            className={`flex py-3 px-8 
           bg-gray-1 data-[state=open]:bg-gray-2 hover:bg-gray-2
           data-[state=closed]:cursor-pointer `}
           >
@@ -56,19 +56,21 @@ const ProjectCard = ({
         </Accordion.Trigger>
 
         <Accordion.Content asChild>
-          <div className="bg-gray-1 data-[state=open]:animate-slideDown overflow-hidden px-6 ">
-            {sections?.map((s, i) => {
-              return (
-                <div key={i}>
-                  <ProjectSubsection
-                    title={s.title}
-                    contentType={s.contentType}
-                    content={s.content}
-                  />
-                  {i == sections.length - 1 ? null : <Divider />}
-                </div>
-              );
-            })}
+          <div className="bg-gray-1 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden ">
+            <ScrollArea type="auto" className="max-h-[50rem] w-full">
+              {sections?.map((s, i) => {
+                return (
+                  <div key={i}>
+                    <ProjectSubsection
+                      title={s.title}
+                      contentType={s.contentType}
+                      content={s.content}
+                    />
+                    {i == sections.length - 1 ? null : <Divider />}
+                  </div>
+                );
+              })}
+            </ScrollArea>
           </div>
         </Accordion.Content>
       </Box>

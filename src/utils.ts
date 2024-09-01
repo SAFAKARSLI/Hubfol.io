@@ -14,6 +14,8 @@ export const defaultSections = [
   },
 ];
 
+export const preferredTheme = 'violet';
+
 export const defaultSectionValues = {
   loading: false,
   result: [] as SearchResult[],

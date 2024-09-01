@@ -4,6 +4,7 @@ import TopBar from '@/components/TopBar';
 import { Theme } from '@radix-ui/themes';
 import React from 'react';
 import { Params, SlugProps } from '@/types/slug';
+import { preferredTheme } from '@/utils';
 
 export const metadata: Metadata = {
   title: 'Hubfol.io',
@@ -20,7 +21,7 @@ export default function RootLayout({ children, params }: Readonly<SlugProps>) {
         />
       </head>
       <body>
-        <Theme accentColor="violet" appearance="dark">
+        <Theme accentColor={preferredTheme} appearance="dark">
           <div className="min-h-screen flex flex-col">
             <TopBar params={params} children={children} />
             <div className="flex flex-1">{children}</div>

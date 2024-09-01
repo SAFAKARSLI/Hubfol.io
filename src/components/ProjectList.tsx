@@ -53,15 +53,15 @@ function ProjectList({ initialProjects }: Props) {
 
   return (
     <Box
-      width={'24rem'}
-      minWidth={'24rem'}
+      width={'27rem'}
+      minWidth={'27rem'}
       py={'5'}
       className="h-[calc(100vh-6rem)] bg-gray-1 border-x border-b border-gray-4 "
     >
       <ScrollArea
         type="auto"
         scrollbars="vertical"
-        className="w-[24rem] min-w-[24rem]"
+        className="w-[27rem] min-w-[27rem]"
         style={{ maxHeight: 'calc(100vh-6rem)' }}
       >
         <Accordion.Root

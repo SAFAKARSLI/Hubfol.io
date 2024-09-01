@@ -34,7 +34,7 @@ export const getProjects = async (userUUID: string) => {
   const projects = await client
     .db('dev')
     .collection('projects')
-    .find({ ownerId: userUUID })
+    .find({ ownerId: userUUID }, { projection: { _id: 0 } })
     .toArray();
 
   return JSON.parse(JSON.stringify(projects));

@@ -15,6 +15,7 @@ import { getServerSession, User } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getUser } from '@/app/actions';
 import { WithId } from 'mongodb';
+import { preferredTheme } from '@/utils';
 
 type Props = {
   user: User;
@@ -60,7 +61,7 @@ async function ViewContactInfo({ user }: Props) {
 
   return (
     <Dialog.Root>
-      <Flex gap={'1'}>
+      <Flex gap={'1'} align={'center'}>
         <PersonIcon className="h-3 w-3" />
         <Dialog.Trigger>
           <Text

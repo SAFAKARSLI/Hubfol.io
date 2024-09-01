@@ -20,8 +20,8 @@ import AuthenticationButton from './AuthenticationButton';
 const links: string[] = [
   'Profile Overview',
   'Projects',
-  'Professional Experiences',
-  'Certificates and Education',
+  'Publishings',
+  'Reviews',
 ];
 
 async function TopBar({ params }: SlugProps) {
@@ -29,38 +29,39 @@ async function TopBar({ params }: SlugProps) {
   const session = await getServerSession(authOptions);
 
   return (
-    <Flex className="">
+    <Flex>
       <ProfileOverview userUUID={userUUID} />
       <Flex
         justify={'between'}
-        className="border-y border-gray-4 w-full bg-gray-1 px-[8rem]"
+        className="border-y border-gray-4 bg-gray-1 px-8 w-full"
       >
-        <div className="w-[15rem]"></div>
-        <Flex
-          align={'center'}
-          height={'100%'}
-          // width={'45%'}
-          className="text-center gap-[8rem]"
-        >
-          {links.map((link, i) => (
-            <Text
-              as={'div'}
-              size={'2'}
-              color="gray"
-              key={i}
-              className="hover:text-white header-link"
-            >
-              <Link
-                href={`/users/${userUUID}/${link
-                  .toLowerCase()
-                  .replaceAll(' ', '-')}`}
+        <div className="flex-1 flex items-center justify-center">
+          <Flex
+            align={'center'}
+            height={'100%'}
+            justify={'between'}
+            className="text-center  w-[40rem]"
+          >
+            {links.map((link, i) => (
+              <Text
+                as={'div'}
+                size={'2'}
+                color="gray"
+                key={i}
+                className="hover:text-white header-link"
               >
-                {link}
-              </Link>
-            </Text>
-          ))}
-        </Flex>
-        <Flex gap={'5'} align={'center'} className="w-auto">
+                <Link
+                  href={`/users/${userUUID}/${link
+                    .toLowerCase()
+                    .replaceAll(' ', '-')}`}
+                >
+                  {link}
+                </Link>
+              </Text>
+            ))}
+          </Flex>
+        </div>
+        <Flex gap={'5'} align={'center'} className="flex-none">
           <Button size={'2'}>
             <EnvelopeClosedIcon /> Send Proposal
           </Button>

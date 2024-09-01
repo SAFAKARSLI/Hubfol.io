@@ -28,7 +28,7 @@ const ProjectSubsection = ({
   };
 
   return (
-    <div className="pb-8">
+    <div className="pb-8 px-6">
       <Heading size={'3'} my={'5'}>
         {title}
       </Heading>
