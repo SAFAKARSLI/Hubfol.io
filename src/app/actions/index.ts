@@ -153,7 +153,6 @@ export const getTechs = async (queryText: string) => {
         { projection: { _id: 0 } } // Exclude the _id field
       )
       .toArray();
-    console.log(techs);
     return JSON.parse(JSON.stringify(techs));
   } catch (error) {
     console.error(error);

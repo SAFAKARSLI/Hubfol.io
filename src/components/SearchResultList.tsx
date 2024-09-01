@@ -5,13 +5,19 @@ import SearchResultCard from './SearchResultCard';
 
 type Props = {
   iconList: SearchResult[];
+  onTechAdd: (tech: string) => void;
 };
 
-function SearchResultList({ iconList }: Props) {
+function SearchResultList({ iconList, onTechAdd }: Props) {
   const renderSearchCards = () => {
     return iconList.map((icon, i) => {
       return (
-        <SearchResultCard key={i} brandName={icon.brandName} slug={icon.slug} />
+        <SearchResultCard
+          key={i}
+          onTechAdd={onTechAdd}
+          brandName={icon.brandName}
+          slug={icon.slug}
+        />
       );
     });
   };

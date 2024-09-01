@@ -50,7 +50,7 @@ const defaultSections = [
   {
     title: 'Tech Stack',
     contentType: 'tech-stack',
-    content: '',
+    content: [],
   },
 ];
 
@@ -68,10 +68,14 @@ function AddProjectButton({ userUUID }: Props) {
   });
 
   useEffect(() => {
+    console.log(newProject);
+  }, [newProject]);
+
+  useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (queryBounce) {
-        setSearch({ ...search, loading: false });
         setQuery(queryBounce);
+        setSearch({ ...search, loading: false });
       }
     }, 700);
 
@@ -105,6 +109,13 @@ function AddProjectButton({ userUUID }: Props) {
       fetchTech();
     }
   }, [query]);
+
+  const handleAddTechStack = (tech: string) => {
+    const newSections = cloneDeep(newProject.sections!);
+    (newSections[activeSection].content as string[]).push(tech);
+    setNewProject({ ...newProject, sections: newSections });
+    setQueryBounce('');
+  };
 
   const handleFileInput = (file: File) => {
     const reader = new FileReader();
@@ -186,6 +197,9 @@ function AddProjectButton({ userUUID }: Props) {
                   onValueChange={(e) => {
                     const newSections = cloneDeep(newProject.sections!);
                     newSections[activeSection].contentType = e;
+                    e == 'text'
+                      ? (newSections[activeSection].content = '')
+                      : (newSections[activeSection].content = []);
                     setNewProject({ ...newProject, sections: newSections });
                   }}
                   value={newProject.sections![activeSection].contentType}
@@ -204,54 +218,61 @@ function AddProjectButton({ userUUID }: Props) {
                   </Select.Content>
                 </Select.Root>
               </Text>
-              {newProject.sections?.[activeSection]?.contentType ===
-              'tech-stack' ? (
-                <Flex direction={'column'} width={'100%'}>
-                  <TextField.Root
-                    onFocus={() =>
-                      setSearch({ ...search, resultVisible: true })
-                    }
-                    onBlur={() =>
-                      setSearch({ ...search, resultVisible: false })
-                    }
-                    size={'2'}
-                    value={queryBounce}
-                    onChange={(e) => {
-                      setQueryBounce(e.target.value);
-                    }}
-                    placeholder="Search for a technology"
-                  >
-                    <TextField.Slot>
-                      {search.loading ? (
-                        <Spinner />
-                      ) : (
-                        <MagnifyingGlassIcon height="16" width="16" />
-                      )}
-                    </TextField.Slot>
-                    {queryBounce && (
+              <label>
+                {newProject.sections?.[activeSection]?.contentType ===
+                'tech-stack' ? (
+                  <Flex direction={'column'} width={'100%'}>
+                    <TextField.Root
+                      onFocus={() =>
+                        setSearch({ ...search, resultVisible: true })
+                      }
+                      onBlur={(e) => {
+                        setSearch({ ...search, resultVisible: false });
+                      }}
+                      size={'2'}
+                      value={queryBounce}
+                      onChange={(e) => {
+                        setQueryBounce(e.target.value);
+                      }}
+                      placeholder="Search for a technology"
+                    >
                       <TextField.Slot>
-                        <Cross2Icon
-                          className="cursor-pointer hover:bg-gray-3"
-                          onClick={() => setQueryBounce('')}
-                        />
+                        {search.loading ? (
+                          <Spinner />
+                        ) : (
+                          <MagnifyingGlassIcon height="16" width="16" />
+                        )}
                       </TextField.Slot>
+                      {queryBounce && (
+                        <TextField.Slot>
+                          <Cross2Icon
+                            className="cursor-pointer hover:bg-gray-3"
+                            onClick={() => setQueryBounce('')}
+                          />
+                        </TextField.Slot>
+                      )}
+                    </TextField.Root>
+                    {search.resultVisible && (
+                      <SearchResultList
+                        onTechAdd={handleAddTechStack}
+                        iconList={search.result}
+                      />
                     )}
-                  </TextField.Root>
-                  {search.resultVisible && (
-                    <SearchResultList iconList={search.result} />
-                  )}
-                </Flex>
-              ) : (
-                <TextArea
-                  value={newProject.sections![activeSection].content as string}
-                  onChange={(e) => {
-                    const newSections = cloneDeep(newProject.sections!);
-                    newSections![activeSection].content = e.target.value;
-                    setNewProject({ ...newProject, sections: newSections });
-                  }}
-                  placeholder="Enter the content here"
-                />
-              )}
+                  </Flex>
+                ) : (
+                  <TextArea
+                    value={
+                      newProject.sections![activeSection].content as string
+                    }
+                    onChange={(e) => {
+                      const newSections = cloneDeep(newProject.sections!);
+                      newSections![activeSection].content = e.target.value;
+                      setNewProject({ ...newProject, sections: newSections });
+                    }}
+                    placeholder="Enter the content here"
+                  />
+                )}
+              </label>
             </div>
           </Flex>
         </Flex>
@@ -282,6 +303,8 @@ function AddProjectButton({ userUUID }: Props) {
         onOpenChange={() => {
           setNewProject({ sections: defaultSections });
           setActiveSection(0);
+          setQuery('');
+          setQueryBounce('');
         }}
       >
         <Dialog.Trigger>
@@ -294,7 +317,7 @@ function AddProjectButton({ userUUID }: Props) {
         </Dialog.Trigger>
 
         <Dialog.Content maxWidth="50rem">
-          <Dialog.Title>New Project</Dialog.Title>
+          <Dialog.Title size={'6'}>Create New Project</Dialog.Title>
 
           <Tabs.Root defaultValue="project-info">
             <Tabs.List>
@@ -311,7 +334,7 @@ function AddProjectButton({ userUUID }: Props) {
                 </Text>
                 <Flex direction="column" gap="3" mb={'4'}>
                   <label>
-                    <Text as="div" size="2" mb="1" weight="bold">
+                    <Text as="div" size="4" mb="1" weight="bold">
                       Project Name
                     </Text>
                     <TextField.Root
@@ -348,7 +371,7 @@ function AddProjectButton({ userUUID }: Props) {
                   </label>
                   <label>
                     <Text as="div" size="2" mb="1" weight="bold">
-                      Icon Image
+                      Project Icon
                     </Text>
                     <input
                       onChange={(e) =>
