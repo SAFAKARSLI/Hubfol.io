@@ -5,14 +5,14 @@ import React, { useEffect } from 'react';
 type Props = {
   brandName: string;
   slug: string;
-  onTechAdd: (tech: string) => void;
+  onTechAdd: (brandName: string, slug: string) => void;
 };
 
 function SearchResultCard({ brandName, slug, onTechAdd }: Props) {
   return (
     <div
       className="flex items-center gap-2 p-2 hover:bg-gray-3 w-full cursor-pointer h-10"
-      onMouseDown={() => onTechAdd(slug)}
+      onMouseDown={() => onTechAdd(brandName, slug)}
     >
       <img
         width={20}

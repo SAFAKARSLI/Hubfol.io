@@ -5,7 +5,7 @@ import SearchResultCard from './SearchResultCard';
 
 type Props = {
   iconList: SearchResult[];
-  onTechAdd: (tech: string) => void;
+  onTechAdd: (brandName: string, slug: string) => void;
 };
 
 function SearchResultList({ iconList, onTechAdd }: Props) {

@@ -7,7 +7,7 @@ import * as Accordion from '@radix-ui/react-accordion';
 
 import Project from '@/types/project';
 import ProjectCard from './ProjectCard';
-import { Box, Flex } from '@radix-ui/themes';
+import { Box, Flex, ScrollArea } from '@radix-ui/themes';
 import AddProjectButton from './AddProjectButton';
 import ProjectListHeader from './ProjectListHeader';
 
@@ -32,7 +32,7 @@ function ProjectList({ initialProjects }: Props) {
   });
 
   function renderProjects() {
-    const projects = projectList.map((p, i) => {
+    return projectList.map((p, i) => {
       return (
         <ProjectCard
           key={i}
@@ -45,13 +45,6 @@ function ProjectList({ initialProjects }: Props) {
         />
       );
     });
-    return (
-      <div>
-        <ProjectListHeader projectCount={initialProjects.length} />
-        {projects}
-        <AddProjectButton userUUID={userUUID} />
-      </div>
-    );
   }
 
   function onChangeActiveProject(projectUUID: string) {
@@ -63,16 +56,30 @@ function ProjectList({ initialProjects }: Props) {
       width={'24rem'}
       minWidth={'24rem'}
       py={'5'}
-      overflowY={'auto'}
       className="h-[calc(100vh-6rem)] bg-gray-1 border-x border-b border-gray-4 "
     >
-      <Accordion.Root
-        type="single"
-        onValueChange={onChangeActiveProject}
-        value={accordionValue}
+      <ScrollArea
+        type="auto"
+        scrollbars="vertical"
+        className="w-[24rem] min-w-[24rem]"
+        style={{ maxHeight: 'calc(100vh-6rem)' }}
       >
-        <Flex direction={'column'}>{renderProjects()}</Flex>
-      </Accordion.Root>
+        <Accordion.Root
+          type="single"
+          onValueChange={onChangeActiveProject}
+          value={accordionValue}
+        >
+          <Flex direction={'column'}>
+            <ProjectListHeader projectCount={initialProjects.length} />
+            {renderProjects()}
+            <AddProjectButton
+              userUUID={userUUID}
+              updateProjects={setProjectList}
+              projectList={projectList}
+            />
+          </Flex>
+        </Accordion.Root>
+      </ScrollArea>
     </Box>
   );
 }

@@ -13,7 +13,8 @@ import {
   // paginateListObjectsV2,
   GetObjectCommand,
 } from '@aws-sdk/client-s3';
-import { redirect } from 'next/navigation';
+import { permanentRedirect, redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 const region = process.env.AWS_REGION as string;
 const accessKeyId = process.env.AWS_ACCESS_KEY_ID as string;
@@ -97,20 +98,18 @@ export const createProject = async (
     project.projectUUID = uuidv4();
 
     await client.db('dev').collection('projects').insertOne(project);
-    redirect(`/users/${userUUID}/projects`);
+    revalidatePath(`/users/${userUUID}/projects`);
+    return project;
   } else {
     throw new Error('Invalid iconLink');
   }
 };
 
-export const deleteProject = async (_id: string) => {
+export const deleteProject = async (projectUUID: string, userUUID: string) => {
   await client.connect();
-  await client
-    .db('dev')
-    .collection('projects')
-    .deleteOne({ _id: new ObjectId(_id) });
+  await client.db('dev').collection('projects').deleteOne({ projectUUID });
 
-  redirect('/projects');
+  redirect(`/users/${userUUID}/projects`);
 };
 
 export const checkExistingUser = async (email: string) => {

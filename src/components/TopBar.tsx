@@ -10,12 +10,11 @@ import {
   DropdownMenu,
 } from '@radix-ui/themes';
 import Link from 'next/link';
-import { FaGoogle } from 'react-icons/fa';
+import { FaGoogle, FaSignInAlt } from 'react-icons/fa';
 import { EnvelopeClosedIcon } from '@radix-ui/react-icons';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { SlugProps } from '@/types/slug';
-import { logIn } from '@/app/actions';
 import AuthenticationButton from './AuthenticationButton';
 
 const links: string[] = [
@@ -72,13 +71,13 @@ async function TopBar({ params }: SlugProps) {
             <DropdownMenu.Root>
               <DropdownMenu.Trigger>
                 <Button variant="ghost" size={'2'}>
+                  <FaSignInAlt className="mr-1" />
                   Sign In
                   <DropdownMenu.TriggerIcon />
                 </Button>
               </DropdownMenu.Trigger>
               <DropdownMenu.Content>
                 <DropdownMenu.Item color="red">
-                  {/* <Link href={'/api/auth/signin'}>Sign In With Google</Link> */}
                   <FaGoogle color="white" />
                   <AuthenticationButton
                     label={'Sign In With Google'}
@@ -88,9 +87,6 @@ async function TopBar({ params }: SlugProps) {
               </DropdownMenu.Content>
             </DropdownMenu.Root>
           ) : (
-            // <RadixLink href={'/api/auth/signout'} size={'2'}>
-            //   Sign Out
-            // </RadixLink>
             <AuthenticationButton label={'Sign Out'} userUUID={userUUID} />
           )}
         </Flex>

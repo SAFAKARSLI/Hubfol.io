@@ -1,34 +1,40 @@
-import React from 'react'
+import React from 'react';
 
-import TextSection from './subsections/Text'
-import TechStack from './subsections/TechStack'
+import TextSection from './subsections/Text';
+import TechStack from './subsections/TechStack';
 
-import { Box, Heading, Text } from '@radix-ui/themes'
+import { Box, Heading, Text } from '@radix-ui/themes';
 
 type Props = {
-    title: string;
-    contentType: string;
-    content: any;
-    width?: string;
-}
+  title: string;
+  contentType: string;
+  content: any;
+  width?: string;
+};
 
-const ProjectSubsection: React.FC<Props> = ({ title, content, width="w-full", contentType}) => {
-    
-    const renderContent = () => {
-        switch(contentType) {
-            case 'text':
-                return <TextSection text={content}/>
-            case 'stack':
-                return <TechStack techStack={content}/>
-        }
+const ProjectSubsection = ({
+  title,
+  content,
+  width = 'w-full',
+  contentType,
+}: Props) => {
+  const renderContent = () => {
+    switch (contentType) {
+      case 'text':
+        return <TextSection text={content} />;
+      case 'tech-stack':
+        return <TechStack techStack={content} />;
     }
-    
-    return (
-        <div className='pb-8'>
-            <Heading  size={"2"} my={"5"}>{title}</Heading>
-            <div className={`${width}`}>{renderContent()}</div>
-        </div>
-    )
-}
+  };
 
-export default ProjectSubsection
+  return (
+    <div className="pb-8">
+      <Heading size={'3'} my={'5'}>
+        {title}
+      </Heading>
+      <div className={`${width}`}>{renderContent()}</div>
+    </div>
+  );
+};
+
+export default ProjectSubsection;

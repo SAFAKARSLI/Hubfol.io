@@ -4,8 +4,6 @@ import React from 'react';
 import { signIn, signOut } from 'next-auth/react';
 import { FaSignOutAlt } from 'react-icons/fa';
 
-import { logIn, logOut } from '@/app/actions';
-
 type Props = {
   label: string;
   userUUID: string;
