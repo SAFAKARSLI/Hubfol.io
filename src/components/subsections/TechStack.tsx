@@ -12,7 +12,7 @@ const TechStack = ({ techStack }: Props) => {
         return (
           <div
             key={index}
-            className={`flex flex-col text-xs text-gray-11 items-center border rounded border-gray-4 hover:bg-gray-2 h-[5rem] overflowhidden`}
+            className={`flex flex-col text-xs text-gray-11 text-center gap-1 items-center border rounded border-gray-4 hover:bg-gray-2 h-[5rem] overflowhidden`}
           >
             <img
               height="30"

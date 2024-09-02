@@ -42,6 +42,7 @@ function ProjectList({ initialProjects }: Props) {
           iconLink={p.iconLink!}
           sections={p.sections!}
           activeProjectId={projectUUID}
+          ownerId={p.ownerId!}
         />
       );
     });

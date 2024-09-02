@@ -11,6 +11,8 @@ import Project from '@/types/project';
 import { defaultSections } from '@/utils';
 import ProjectDialog from './ProjectDialog';
 
+import { v4 as uuidv4 } from 'uuid';
+
 type Props = {
   userUUID: string;
   updateProjects: React.Dispatch<SetStateAction<Project[]>>;
@@ -24,22 +26,10 @@ function AddProjectButton({ userUUID, updateProjects, projectList }: Props) {
   const [dialog, setDialog] = useState(false);
 
   const handleCreateProject = async () => {
-    const formData = new FormData();
-
-    if (newProject.iconLink instanceof ArrayBuffer) {
-      const blob = new Blob([newProject.iconLink], {
-        type: 'application/octet-stream',
-      });
-      formData.append('iconLink', blob);
-    }
-
-    const projectFromDb = (await createProject(
-      JSON.parse(JSON.stringify(newProject)),
-      formData,
-      userUUID
-    )) as Project;
-    console.log(projectFromDb);
-    updateProjects([...projectList, projectFromDb]);
+    newProject.ownerId = userUUID;
+    newProject.projectUUID = uuidv4();
+    await createProject(JSON.parse(JSON.stringify(newProject)), userUUID);
+    updateProjects([...projectList, newProject]);
   };
 
   return (
@@ -47,7 +37,7 @@ function AddProjectButton({ userUUID, updateProjects, projectList }: Props) {
       <Dialog.Root
         open={dialog}
         onOpenChange={() => {
-          dialog && setNewProject({ ...newProject, sections: defaultSections });
+          dialog && setNewProject({ sections: defaultSections });
         }}
       >
         <Dialog.Trigger>

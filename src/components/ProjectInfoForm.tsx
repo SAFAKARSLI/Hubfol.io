@@ -85,7 +85,7 @@ function ProjectInfoForm({ project, setProject }: Props) {
           Project Icon
         </Heading>
         {project.iconLink ? (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <div className="h-[3.5rem] w-[3.5rem] relative">
               <Image
                 src={project.iconLink as string}

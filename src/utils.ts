@@ -24,7 +24,7 @@ export const preferredColorOptions: {
   appearance: 'dark',
 };
 
-export const defaultSectionValues = {
+export const defultSearchTechValues = {
   loading: false,
   result: [] as SearchResult[],
   resultVisible: false,

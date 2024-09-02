@@ -35,7 +35,8 @@ import Project from '@/types/project';
 import SearchResultList from './SearchResultList';
 import { SearchResult } from '@/types/searchResult';
 import { getTechs } from '@/app/actions';
-import { defaultSections, defaultSectionValues } from '@/utils';
+import { defultSearchTechValues } from '@/utils';
+import SearchTechInput from './SearchTechInput';
 
 type Props = {
   project: Project;
@@ -44,69 +45,19 @@ type Props = {
 
 function SectionsForm({ project, setProject }: Props) {
   const [activeSection, setActiveSection] = useState(0);
-  const [query, setQuery] = useState('');
-  const [queryBounce, setQueryBounce] = useState('');
-  const [search, setSearch] = useState(defaultSectionValues);
 
   useEffect(() => {
     // Cleanup function that sets the state to default values.
     return () => {
-      setSearch({ ...search, result: [], resultVisible: false });
-      setQueryBounce('');
       setActiveSection(0);
     };
   }, []);
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (queryBounce) {
-        setQuery(queryBounce);
-        setSearch({ ...search, loading: false });
-      }
-    }, 700);
-
-    if (queryBounce === '') {
-      setQuery('');
-      setSearch(defaultSectionValues);
-    }
-
-    return () => {
-      clearTimeout(timeoutId);
-      setSearch({ ...search, loading: true, resultVisible: false });
-    };
-  }, [queryBounce]);
-
-  // Is called after the bounce
-  useEffect(() => {
-    const fetchTech = async () => {
-      try {
-        let result = (await getTechs(query)) as SearchResult[];
-        setSearch({ ...search, result, resultVisible: true });
-      } catch (error) {
-        console.error('Error fetching techs:', error);
-      }
-    };
-
-    if (query) {
-      fetchTech();
-    }
-  }, [query]);
 
   const handleDeleteSection = (index: number) => {
     const newSections = cloneDeep(project.sections!);
     newSections.splice(index, 1);
     setProject({ ...project, sections: newSections });
     setActiveSection(0);
-  };
-
-  const handleAddTechStack = (brandName: string, slug: string) => {
-    const newSections = cloneDeep(project.sections!);
-    (newSections[activeSection].content as SearchResult[]).push({
-      brandName,
-      slug,
-    });
-    setProject({ ...project, sections: newSections });
-    setQueryBounce('');
   };
 
   const renderSections = () => {
@@ -198,44 +149,11 @@ function SectionsForm({ project, setProject }: Props) {
             <label className="flex-1">
               {project.sections?.[activeSection]?.contentType ===
               'tech-stack' ? (
-                <Flex direction={'column'} width={'100%'}>
-                  <TextField.Root
-                    onFocus={() =>
-                      setSearch({ ...search, resultVisible: true })
-                    }
-                    onBlur={(e) => {
-                      setSearch({ ...search, resultVisible: false });
-                    }}
-                    size={'2'}
-                    value={queryBounce}
-                    onChange={(e) => {
-                      setQueryBounce(e.target.value);
-                    }}
-                    placeholder="Search for a technology"
-                  >
-                    <TextField.Slot>
-                      {search.loading ? (
-                        <Spinner />
-                      ) : (
-                        <MagnifyingGlassIcon height="16" width="16" />
-                      )}
-                    </TextField.Slot>
-                    {queryBounce && (
-                      <TextField.Slot>
-                        <Cross2Icon
-                          className="cursor-pointer hover:bg-gray-3"
-                          onClick={() => setQueryBounce('')}
-                        />
-                      </TextField.Slot>
-                    )}
-                  </TextField.Root>
-                  {search.resultVisible && (
-                    <SearchResultList
-                      onTechAdd={handleAddTechStack}
-                      iconList={search.result}
-                    />
-                  )}
-                </Flex>
+                <SearchTechInput
+                  project={project}
+                  sectionNo={activeSection}
+                  setProject={setProject}
+                />
               ) : (
                 <TextArea
                   className="h-full"

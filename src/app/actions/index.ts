@@ -52,42 +52,13 @@ export const getProjectCount = async () => {
   return count;
 };
 
-export const createProject = async (
-  project: Project,
-  formData: FormData,
-  userUUID: string
-) => {
+export const createProject = async (project: Project, userUUID: string) => {
   await client.connect();
+  console.log(project, userUUID);
 
-  const iconLink = formData.get('iconLink');
-
-  if (iconLink && iconLink instanceof File) {
-    const arrayBuffer = await iconLink.arrayBuffer();
-    const body = Buffer.from(arrayBuffer);
-
-    const uniqueKey = `${project.title?.replaceAll(
-      ' ',
-      '_'
-    )}-${new Date().getTime()}`; // Use a unique key for each project
-
-    const uploadParams = {
-      Bucket: bucketName,
-      Key: uniqueKey,
-      Body: body,
-    };
-
-    await s3Client.send(new PutObjectCommand(uploadParams));
-
-    project.iconLink = `https://s3.amazonaws.com/${bucketName}/${uniqueKey}`;
-    project.ownerId = userUUID; // UPDATE THIS
-    project.projectUUID = uuidv4();
-
-    await client.db('dev').collection('projects').insertOne(project);
-    revalidatePath(`/users/${userUUID}/projects`);
-    return project;
-  } else {
-    throw new Error('Invalid iconLink');
-  }
+  await client.db('dev').collection('projects').insertOne(project);
+  revalidatePath(`/users/${userUUID}/projects`);
+  return project;
 };
 
 export const uploadIcon = async (formData: FormData) => {
@@ -147,9 +118,25 @@ export const updateUser = async (email: string, data: any) => {
       $set: data,
     }
   );
-
   redirect('/projects');
 };
+
+export const updateProject = async (
+  projectUUID: string,
+  project: Project,
+  userUUID: string
+) => {
+  await client.connect();
+  client.db('dev').collection('projects').updateOne(
+    { projectUUID },
+    {
+      $set: project,
+    }
+  );
+  redirect(`/users/${userUUID}/projects`);
+  return project;
+};
+
 export const getUser = async (userUUID: string) => {
   await client.connect();
   const user = await client.db('dev').collection('users').findOne({

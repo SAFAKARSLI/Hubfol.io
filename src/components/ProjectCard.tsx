@@ -15,6 +15,7 @@ interface ProjectCardProps {
   iconLink: string | ArrayBuffer;
   sections: Section[] | null;
   activeProjectId: string;
+  ownerId: string;
 }
 
 const ProjectCard = ({
@@ -24,6 +25,7 @@ const ProjectCard = ({
   iconLink,
   sections,
   activeProjectId,
+  ownerId,
 }: ProjectCardProps) => {
   return (
     <Accordion.Item value={projectUUID} asChild>
@@ -56,7 +58,14 @@ const ProjectCard = ({
                 title={title}
                 projectUUID={projectUUID}
                 initialProject={
-                  { title, projectUUID, tagline, iconLink, sections } as Project
+                  {
+                    title,
+                    projectUUID,
+                    tagline,
+                    iconLink,
+                    sections,
+                    ownerId,
+                  } as Project
                 }
               />
             )}

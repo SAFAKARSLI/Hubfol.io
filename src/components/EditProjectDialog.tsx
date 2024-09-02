@@ -1,6 +1,7 @@
 import React from 'react';
 import ProjectDialog from './ProjectDialog';
 import Project from '@/types/project';
+import { updateProject } from '@/app/actions';
 
 type Props = {
   project: Project;
@@ -10,7 +11,11 @@ type Props = {
 
 function EditProjectDialog({ project, setProject, setEditDialogeOpen }: Props) {
   const handleEditProject = async () => {
-    console.log('Edit project', project);
+    const updatedProject = await updateProject(
+      project.projectUUID!,
+      project,
+      project.ownerId!
+    );
   };
 
   return (
