@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --accent-color: var(--violet-10); /* Default value */
+}
+
 /* 2C14DB -> Accent Color */
 .dark,
 .dark-theme {
@@ -37,6 +41,51 @@
   --violet-surface: #101b4580;
   --violet-indicator: #2c14db;
   --violet-track: #2c14db;
+}
+
+.violetDark {
+  --violet-1: #14121f;
+  --violet-2: #1b1525;
+  --violet-3: #291f43;
+  --violet-4: #33255b;
+  --violet-5: #3c2e69;
+  --violet-6: #473876;
+  --violet-7: #56468b;
+  --violet-8: #6958ad;
+  --violet-9: #6e56cf;
+  --violet-10: #7d66d9;
+  --violet-11: #baa7ff;
+  --violet-12: #e2ddfe;
+}
+
+.yellowDark {
+  --yellow-1: #14120b;
+  --yellow-2: #1b180f;
+  --yellow-3: #2d2305;
+  --yellow-4: #362b00;
+  --yellow-5: #433500;
+  --yellow-6: #524202;
+  --yellow-7: #665417;
+  --yellow-8: #836a21;
+  --yellow-9: #ffe629;
+  --yellow-10: #ffff57;
+  --yellow-11: #f5e147;
+  --yellow-12: #f6eeb4;
+}
+
+.orangeDark {
+  --orange-1: #17120e;
+  --orange-2: #1e160f;
+  --orange-3: #331e0b;
+  --orange-4: #462100;
+  --orange-5: #562800;
+  --orange-6: #66350c;
+  --orange-7: #7e451d;
+  --orange-8: #a35829;
+  --orange-9: #f76b15;
+  --orange-10: #ff801f;
+  --orange-11: #ffa057;
+  --orange-12: #ffe0c2;
 }
 
 @supports (color: color(display-p3 1 1 1)) {
@@ -85,7 +134,7 @@
   width: 100%;
   color: gray;
   height: 1px;
-  background-color: var(--violet-8);
+  background-color: var(--accent-color);
   transform-origin: center;
 
   transform: scaleX(0);

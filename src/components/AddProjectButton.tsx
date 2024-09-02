@@ -54,6 +54,7 @@ function AddProjectButton({ userUUID, updateProjects, projectList }: Props) {
           <Button
             variant="ghost"
             className="cursor-pointer rounded h-12 w-full my-0 "
+            onClick={() => setDialog(true)}
           >
             <PlusIcon /> Add Project
           </Button>

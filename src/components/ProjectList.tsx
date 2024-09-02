@@ -56,7 +56,7 @@ function ProjectList({ initialProjects }: Props) {
       width={'27rem'}
       minWidth={'27rem'}
       py={'5'}
-      className="h-[calc(100vh-6rem)] bg-gray-1 border-x border-b border-gray-4 "
+      className="h-[calc(100vh-6rem)] bg-gray-1 border-x border-b border-gray-4"
     >
       <ScrollArea
         type="auto"

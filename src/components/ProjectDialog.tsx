@@ -11,6 +11,7 @@ import ProjectInfoForm from './ProjectInfoForm';
 import SectionsForm from './SectionsForm';
 import Project from '@/types/project';
 import { Cross1Icon } from '@radix-ui/react-icons';
+import { set } from 'lodash';
 
 type Props = {
   title: string;
@@ -33,8 +34,8 @@ function ProjectDialog({
     <Dialog.Content maxWidth="50rem">
       <div className="w-full flex justify-between">
         <Dialog.Title size={'6'}>{title}</Dialog.Title>
-        <IconButton className="cursor-pointer" variant="ghost">
-          <Cross1Icon onClick={() => setDialog(false)} />
+        <IconButton className="cursor-pointer" variant="ghost" size={'2'}>
+          <Cross1Icon onClick={() => setDialog(false)} className="w-5 h-5" />
         </IconButton>
       </div>
 
@@ -66,7 +67,14 @@ function ProjectDialog({
           </Button>
         </Dialog.Close>
         <Dialog.Close>
-          <Button onClick={onSubmit}>{actionButtonLabel}</Button>
+          <Button
+            onClick={() => {
+              onSubmit();
+              setDialog(false);
+            }}
+          >
+            {actionButtonLabel}
+          </Button>
         </Dialog.Close>
       </Flex>
     </Dialog.Content>
