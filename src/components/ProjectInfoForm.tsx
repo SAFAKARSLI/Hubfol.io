@@ -2,6 +2,7 @@ import React from 'react';
 import { Heading, Text } from '@radix-ui/themes';
 import FormInput from '@/components/FormInput';
 import Project from '@/types/project';
+import { CrossCircledIcon } from '@radix-ui/react-icons';
 // import { project, setProject } from '@/store/project'
 
 type Props = {
@@ -59,13 +60,25 @@ function ProjectInfoForm({ project, setProject }: Props) {
         onChange={(e) => setProject({ ...project, url: e.target.value })}
       />
       <label>
-        <Heading size="4" mb="1">
+        <Heading size="4" mb="2">
           Project Icon
         </Heading>
-        <input
-          onChange={(e) => handleFileInput((e.target.files as FileList)[0])}
-          type="file"
-        />
+        {project.iconLink ? (
+          <div>
+            <img
+              src={project.iconLink as string}
+              alt="project icon"
+              width="full"
+              height="full"
+              className="bg-gray-1 border border-gray-5 w-[4rem] h-[4rem] rounded p-2"
+            />
+          </div>
+        ) : (
+          <input
+            onChange={(e) => handleFileInput((e.target.files as FileList)[0])}
+            type="file"
+          />
+        )}
       </label>
     </div>
   );

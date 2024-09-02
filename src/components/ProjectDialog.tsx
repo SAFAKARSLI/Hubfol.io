@@ -31,12 +31,25 @@ function ProjectDialog({
   setDialog,
 }: Props) {
   return (
-    <Dialog.Content maxWidth="50rem">
+    <Dialog.Content
+      maxWidth="50rem"
+      onEscapeKeyDown={(e) => e.preventDefault()}
+      onInteractOutside={(e) => e.preventDefault()}
+    >
       <div className="w-full flex justify-between">
         <Dialog.Title size={'6'}>{title}</Dialog.Title>
-        <IconButton className="cursor-pointer" variant="ghost" size={'2'}>
-          <Cross1Icon onClick={() => setDialog(false)} className="w-5 h-5" />
-        </IconButton>
+        <Dialog.Close>
+          <IconButton
+            className="cursor-pointer"
+            variant="ghost"
+            size={'2'}
+            onClick={() => {
+              setDialog(false);
+            }}
+          >
+            <Cross1Icon className="w-5 h-5" />
+          </IconButton>
+        </Dialog.Close>
       </div>
 
       <Tabs.Root defaultValue="project-info">
@@ -57,11 +70,7 @@ function ProjectDialog({
       <Separator size={'4'} mb={'4'} />
 
       <Flex gap="3" mt="4" justify="end">
-        <Dialog.Close
-          onClick={() => {
-            console.log('CLOSE CLICKED');
-          }}
-        >
+        <Dialog.Close>
           <Button variant="soft" color="gray" onClick={() => setDialog(false)}>
             Cancel
           </Button>

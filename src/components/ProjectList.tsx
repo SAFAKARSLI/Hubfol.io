@@ -61,7 +61,7 @@ function ProjectList({ initialProjects }: Props) {
       <ScrollArea
         type="auto"
         scrollbars="vertical"
-        className="w-[27rem] min-w-[27rem]"
+        className="w-[27rem] "
         style={{ maxHeight: 'calc(100vh-6rem)' }}
       >
         <Accordion.Root

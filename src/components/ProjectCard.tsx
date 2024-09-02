@@ -34,13 +34,15 @@ const ProjectCard = ({
           bg-gray-1 data-[state=open]:bg-gray-2 hover:bg-gray-2
           data-[state=closed]:cursor-pointer `}
           >
-            <div className="flex justify-between w-full items-center gap-x-8">
-              <Image
-                width={'40'}
-                height="40"
-                alt={`${title}-icon`}
-                src={iconLink as string}
-              />
+            <div className="flex justify-between h-[3rem] w-full items-center gap-x-8">
+              <div className="w-[2.4rem] h-[2.4rem] relative">
+                <Image
+                  fill
+                  objectFit="contain"
+                  alt={`${title}-icon`}
+                  src={iconLink as string}
+                />
+              </div>
 
               <div className="gap-y-1 flex-1 flex flex-col">
                 <Heading size={'3'}>{title}</Heading>

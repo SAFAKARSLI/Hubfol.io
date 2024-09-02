@@ -135,29 +135,26 @@ function SectionsForm({ project, setProject }: Props) {
     });
 
     return (
-      <div className="flex justify-between gap-[4rem]">
-        <div className="flex-none h-full">
-          <ScrollArea
-            type="auto"
-            scrollbars="vertical"
-            className="rounded bg-gray-1  border-gray-5 w-[15rem] min-h-[15rem]"
-            style={{ maxHeight: '20rem' }}
+      <div className="flex  gap-[4rem] h-[20rem]">
+        <ScrollArea
+          type="auto"
+          scrollbars="vertical"
+          className="rounded bg-gray-1  border-gray-5 w-[15rem] h-full"
+        >
+          <RadioCards.Root
+            defaultValue={'0'}
+            value={activeSection.toString()}
+            onValueChange={(e) => setActiveSection(parseInt(e))}
           >
-            <RadioCards.Root
-              defaultValue={'0'}
-              value={activeSection.toString()}
-              onValueChange={(e) => setActiveSection(parseInt(e))}
-            >
-              <Flex direction={'column'} gap={'3'} height={'full'} p={'4'}>
-                {sectionList}
-              </Flex>
-            </RadioCards.Root>
-          </ScrollArea>
-        </div>
+            <Flex direction={'column'} gap={'3'} height={'full'} p={'4'}>
+              {sectionList}
+            </Flex>
+          </RadioCards.Root>
+        </ScrollArea>
 
-        <div className="flex flex-col w-auto h-full gap-3 mb-4 flex-1">
-          <label>
-            <Text as="div" size="2" mb="1" weight="bold">
+        <div className="flex flex-col h-full gap-3 flex-1">
+          <div className="flex-none">
+            <Text mb="1" weight="bold">
               Title
             </Text>
             <TextField.Root
@@ -169,9 +166,9 @@ function SectionsForm({ project, setProject }: Props) {
               placeholder="Enter the section header (e.g 'Project Description')"
               value={project.sections![activeSection].title}
             />
-          </label>
-          <div>
-            <Text as="div" size="2" weight="bold">
+          </div>
+          <div className="flex-1 flex-col flex">
+            <Text weight="bold">
               Content
               <Select.Root
                 defaultValue="text"
@@ -198,7 +195,7 @@ function SectionsForm({ project, setProject }: Props) {
                 </Select.Content>
               </Select.Root>
             </Text>
-            <label>
+            <label className="flex-1">
               {project.sections?.[activeSection]?.contentType ===
               'tech-stack' ? (
                 <Flex direction={'column'} width={'100%'}>
@@ -241,7 +238,7 @@ function SectionsForm({ project, setProject }: Props) {
                 </Flex>
               ) : (
                 <TextArea
-                  className="h-[10rem]"
+                  className="h-full"
                   value={project.sections![activeSection].content as string}
                   onChange={(e) => {
                     const newSections = cloneDeep(project.sections!);
