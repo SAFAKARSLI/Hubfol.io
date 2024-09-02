@@ -45,7 +45,7 @@ export const getProject = async (projectUUID: string) => {
   const project = await client
     .db('dev')
     .collection('projects')
-    .findOne({ projectUUID });
+    .findOne({ projectUUID }, { projection: { _id: 0 } });
   return JSON.parse(JSON.stringify(project));
 };
 

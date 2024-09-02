@@ -14,10 +14,58 @@ export const defaultSections = [
   },
 ];
 
-export const preferredTheme = 'violet';
+export const preferredColorOptions: {
+  accentColor: colorOptions;
+  grayColor: grayColorOptions;
+  appearance: appearanceOptions;
+} = {
+  accentColor: 'violet',
+  grayColor: 'mauve',
+  appearance: 'dark',
+};
 
 export const defaultSectionValues = {
   loading: false,
   result: [] as SearchResult[],
   resultVisible: false,
 };
+
+export type colorOptions =
+  | 'gray'
+  | 'gold'
+  | 'bronze'
+  | 'brown'
+  | 'yellow'
+  | 'amber'
+  | 'orange'
+  | 'tomato'
+  | 'red'
+  | 'ruby'
+  | 'crimson'
+  | 'pink'
+  | 'plum'
+  | 'purple'
+  | 'violet'
+  | 'iris'
+  | 'indigo'
+  | 'blue'
+  | 'cyan'
+  | 'teal'
+  | 'jade'
+  | 'green'
+  | 'grass'
+  | 'lime'
+  | 'mint'
+  | 'sky';
+
+export type grayColorOptions =
+  | 'gray'
+  | 'mauve'
+  | 'slate'
+  | 'sage'
+  | 'sand'
+  | 'auto'
+  | 'olive'
+  | undefined;
+
+export type appearanceOptions = 'dark' | 'inherit' | 'light' | undefined;

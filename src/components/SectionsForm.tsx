@@ -30,14 +30,13 @@ import SearchResultList from './SearchResultList';
 import { SearchResult } from '@/types/searchResult';
 import { getTechs } from '@/app/actions';
 import { defaultSections, defaultSectionValues } from '@/utils';
-import { SlugProps } from '@/types/slug';
 
 type Props = {
-  newProject: Project;
-  setNewProject: (project: Project) => void;
+  project: Project;
+  setProject: (project: Project) => void;
 };
 
-function SectionsForm({ newProject, setNewProject }: Props) {
+function SectionsForm({ project, setProject }: Props) {
   const [activeSection, setActiveSection] = useState(0);
   const [query, setQuery] = useState('');
   const [queryBounce, setQueryBounce] = useState('');
@@ -49,6 +48,7 @@ function SectionsForm({ newProject, setNewProject }: Props) {
       setSearch({ ...search, result: [], resultVisible: false });
       setQueryBounce('');
       setActiveSection(0);
+      // setProject({ ...project, sections: defaultSections });
     };
   }, []);
 
@@ -88,17 +88,18 @@ function SectionsForm({ newProject, setNewProject }: Props) {
   }, [query]);
 
   const handleAddTechStack = (brandName: string, slug: string) => {
-    const newSections = cloneDeep(newProject.sections!);
+    const newSections = cloneDeep(project.sections!);
     (newSections[activeSection].content as SearchResult[]).push({
       brandName,
       slug,
     });
-    setNewProject({ ...newProject, sections: newSections });
+    setProject({ ...project, sections: newSections });
     setQueryBounce('');
   };
 
   const renderSections = () => {
-    const sectionList = newProject.sections!.map((section, i) => {
+    console.log(project);
+    const sectionList = project.sections!.map((section, i) => {
       return (
         <RadioCards.Item
           value={i.toString()}
@@ -151,12 +152,12 @@ function SectionsForm({ newProject, setNewProject }: Props) {
               </Text>
               <TextField.Root
                 onChange={(e) => {
-                  const newSections = cloneDeep(newProject.sections!);
+                  const newSections = cloneDeep(project.sections!);
                   newSections![activeSection].title = e.target.value;
-                  setNewProject({ ...newProject, sections: newSections });
+                  setProject({ ...project, sections: newSections });
                 }}
                 placeholder="Enter the section header (e.g 'Project Description')"
-                value={newProject.sections![activeSection].title}
+                value={project.sections![activeSection].title}
               />
             </label>
             <div>
@@ -166,14 +167,14 @@ function SectionsForm({ newProject, setNewProject }: Props) {
                   defaultValue="text"
                   size={'1'}
                   onValueChange={(e) => {
-                    const newSections = cloneDeep(newProject.sections!);
+                    const newSections = cloneDeep(project.sections!);
                     newSections[activeSection].contentType = e;
                     e == 'text'
                       ? (newSections[activeSection].content = '')
                       : (newSections[activeSection].content = []);
-                    setNewProject({ ...newProject, sections: newSections });
+                    setProject({ ...project, sections: newSections });
                   }}
-                  value={newProject.sections![activeSection].contentType}
+                  value={project.sections![activeSection].contentType}
                 >
                   <Select.Trigger
                     className="max-w-[10rem] ml-2 mb-2"
@@ -188,7 +189,7 @@ function SectionsForm({ newProject, setNewProject }: Props) {
                 </Select.Root>
               </Text>
               <label>
-                {newProject.sections?.[activeSection]?.contentType ===
+                {project.sections?.[activeSection]?.contentType ===
                 'tech-stack' ? (
                   <Flex direction={'column'} width={'100%'}>
                     <TextField.Root
@@ -230,13 +231,12 @@ function SectionsForm({ newProject, setNewProject }: Props) {
                   </Flex>
                 ) : (
                   <TextArea
-                    value={
-                      newProject.sections![activeSection].content as string
-                    }
+                    className="h-[10rem]"
+                    value={project.sections![activeSection].content as string}
                     onChange={(e) => {
-                      const newSections = cloneDeep(newProject.sections!);
+                      const newSections = cloneDeep(project.sections!);
                       newSections![activeSection].content = e.target.value;
-                      setNewProject({ ...newProject, sections: newSections });
+                      setProject({ ...project, sections: newSections });
                     }}
                     placeholder="Enter the content here"
                   />
@@ -261,13 +261,13 @@ function SectionsForm({ newProject, setNewProject }: Props) {
         variant="outline"
         className="h-[3rem] mx-0 my-2 font-bold"
         onClick={() => {
-          const newSections = cloneDeep(newProject.sections!);
+          const newSections = cloneDeep(project.sections!);
           newSections!.push({
             title: 'New Section',
             contentType: 'text',
             content: 'This is a new section',
           });
-          setNewProject({ ...newProject, sections: newSections });
+          setProject({ ...project, sections: newSections });
         }}
       >
         <PlusIcon /> Add Section

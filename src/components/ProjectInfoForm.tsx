@@ -2,20 +2,20 @@ import React from 'react';
 import { Heading, Text } from '@radix-ui/themes';
 import FormInput from '@/components/FormInput';
 import Project from '@/types/project';
-// import { newProject, setNewProject } from '@/store/newProject'
+// import { project, setProject } from '@/store/project'
 
 type Props = {
-  newProject: Project;
-  setNewProject: (project: Project) => void;
+  project: Project;
+  setProject: (project: Project) => void;
 };
 
-function NewProjectInfoForm({ newProject, setNewProject }: Props) {
+function ProjectInfoForm({ project, setProject }: Props) {
   const handleFileInput = (file: File) => {
     const reader = new FileReader();
     reader.readAsArrayBuffer(file);
     reader.onload = () => {
       const arrayBuffer = reader.result;
-      setNewProject({ ...newProject, iconLink: arrayBuffer! });
+      setProject({ ...project, iconLink: arrayBuffer! });
     };
   };
 
@@ -31,9 +31,9 @@ function NewProjectInfoForm({ newProject, setNewProject }: Props) {
         name="title"
         placerholder="Enter your project name"
         type="text"
-        value={newProject.title as string}
+        value={project.title as string}
         onChange={(e) => {
-          setNewProject({ ...newProject, title: e.target.value });
+          setProject({ ...project, title: e.target.value });
         }}
       />
       <FormInput
@@ -41,10 +41,10 @@ function NewProjectInfoForm({ newProject, setNewProject }: Props) {
         name="tagline"
         placerholder="Describe your project in one sentence"
         type="text"
-        value={newProject.tagline as string}
+        value={project.tagline as string}
         onChange={(e) =>
-          setNewProject({
-            ...newProject,
+          setProject({
+            ...project,
             tagline: e.target.value,
           })
         }
@@ -55,8 +55,8 @@ function NewProjectInfoForm({ newProject, setNewProject }: Props) {
         name="url"
         placerholder="Enter the project URL"
         type="text"
-        value={newProject.url as string}
-        onChange={(e) => setNewProject({ ...newProject, url: e.target.value })}
+        value={project.url as string}
+        onChange={(e) => setProject({ ...project, url: e.target.value })}
       />
       <label>
         <Heading size="4" mb="1">
@@ -71,4 +71,4 @@ function NewProjectInfoForm({ newProject, setNewProject }: Props) {
   );
 }
 
-export default NewProjectInfoForm;
+export default ProjectInfoForm;

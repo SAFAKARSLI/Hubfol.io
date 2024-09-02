@@ -2,14 +2,14 @@ import * as Accordion from '@radix-ui/react-accordion';
 import { Box, Text, Heading, ScrollArea } from '@radix-ui/themes';
 import Image from 'next/image';
 
-import { Section } from '@/types/project';
+import Project, { Section } from '@/types/project';
 
-import DeleteProjectDialog from './DeleteProjectDialog';
 import ProjectSubsection from './ProjectSubsection';
 import Divider from './subsections/Divider';
+import ProjectMenu from './ProjectMenu';
 
 interface ProjectCardProps {
-  _id: string;
+  projectUUID: string;
   title: string;
   tagline: string;
   iconLink: string | ArrayBuffer;
@@ -18,7 +18,7 @@ interface ProjectCardProps {
 }
 
 const ProjectCard = ({
-  _id,
+  projectUUID,
   title,
   tagline,
   iconLink,
@@ -26,7 +26,7 @@ const ProjectCard = ({
   activeProjectId,
 }: ProjectCardProps) => {
   return (
-    <Accordion.Item value={_id} asChild>
+    <Accordion.Item value={projectUUID} asChild>
       <Box className="mx-8 mb-6 rounded border border-gray-4 overflow-hidden">
         <Accordion.Trigger asChild>
           <div
@@ -49,8 +49,14 @@ const ProjectCard = ({
                 </Text>
               </div>
             </div>
-            {_id === activeProjectId && (
-              <DeleteProjectDialog title={title} projectUUID={_id} />
+            {projectUUID === activeProjectId && (
+              <ProjectMenu
+                title={title}
+                projectUUID={projectUUID}
+                initialProject={
+                  { title, projectUUID, tagline, iconLink, sections } as Project
+                }
+              />
             )}
           </div>
         </Accordion.Trigger>

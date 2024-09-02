@@ -36,7 +36,7 @@ function ProjectList({ initialProjects }: Props) {
       return (
         <ProjectCard
           key={i}
-          _id={p.projectUUID as string}
+          projectUUID={p.projectUUID as string}
           title={p.title!}
           tagline={p.tagline!}
           iconLink={p.iconLink!}

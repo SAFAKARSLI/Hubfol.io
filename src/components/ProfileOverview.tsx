@@ -57,7 +57,7 @@ const ProfileOverview = async ({ userUUID }: ProfileOverviewProps) => {
       >
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
-            <IconButton variant="ghost" color="gray" radius="medium">
+            <IconButton variant="ghost" color="gray" size={'1'}>
               <DotsHorizontalIcon width="16" height="16" />
             </IconButton>
           </DropdownMenu.Trigger>

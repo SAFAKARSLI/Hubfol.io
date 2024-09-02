@@ -1,6 +1,6 @@
 'use client';
 import '@/app/globals.css';
-import { preferredTheme } from '@/utils';
+import { preferredColorOptions } from '@/utils';
 import { Theme } from '@radix-ui/themes';
 
 import { SessionProvider } from 'next-auth/react';
@@ -22,7 +22,11 @@ export default function RootLayout({
       </head>
       <body>
         <SessionProvider session={session}>
-          <Theme accentColor={preferredTheme} appearance="dark">
+          <Theme
+            accentColor={preferredColorOptions.accentColor}
+            appearance={preferredColorOptions.appearance}
+            grayColor={preferredColorOptions.grayColor}
+          >
             <div className="h-screen w-screen bg-gray-2 flex justify-center items-center">
               {children}
             </div>
