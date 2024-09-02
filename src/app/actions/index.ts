@@ -3,7 +3,7 @@
 import client from '@/db';
 import Project from '@/types/project';
 import { signIn, signOut } from 'next-auth/react';
-import { ObjectId } from 'mongodb';
+import { s3Client } from '@/aws/s3';
 import { v4 as uuidv4 } from 'uuid';
 import {
   S3Client,
@@ -16,9 +16,6 @@ import {
 import { permanentRedirect, redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 
-const region = process.env.AWS_REGION as string;
-const accessKeyId = process.env.AWS_ACCESS_KEY_ID as string;
-const secretAccessKey = process.env.AWS_SECRET_KEY as string;
 const bucketName = process.env.AWS_PROJECT_ICONS_BUCKET_NAME as string;
 
 export const logIn = async (userUUID: string) => {
@@ -68,18 +65,6 @@ export const createProject = async (
     const arrayBuffer = await iconLink.arrayBuffer();
     const body = Buffer.from(arrayBuffer);
 
-    if (!region || !accessKeyId || !secretAccessKey || !bucketName) {
-      throw new Error('Missing AWS configuration');
-    }
-
-    const s3Client = new S3Client({
-      region,
-      credentials: {
-        accessKeyId,
-        secretAccessKey,
-      },
-    });
-
     const uniqueKey = `${project.title?.replaceAll(
       ' ',
       '_'
@@ -103,6 +88,39 @@ export const createProject = async (
   } else {
     throw new Error('Invalid iconLink');
   }
+};
+
+export const uploadIcon = async (formData: FormData) => {
+  const iconLink = formData.get('iconLink');
+
+  if (iconLink && iconLink instanceof File) {
+    const arrayBuffer = await iconLink.arrayBuffer();
+    const body = Buffer.from(arrayBuffer);
+
+    const uniqueKey = `${uuidv4()}-${new Date().getTime()}`;
+
+    const uploadParams = {
+      Bucket: bucketName,
+      Key: uniqueKey,
+      Body: body,
+    };
+
+    await s3Client.send(new PutObjectCommand(uploadParams));
+    return `https://s3.amazonaws.com/${bucketName}/${uniqueKey}`;
+  } else {
+    throw new Error('Invalid iconLink');
+  }
+};
+
+export const deleteIcon = async (iconLink: string) => {
+  const key = iconLink.split('/').slice(-1)[0];
+
+  const deleteParams = {
+    Bucket: bucketName,
+    Key: key,
+  };
+
+  await s3Client.send(new DeleteObjectCommand(deleteParams));
 };
 
 export const deleteProject = async (projectUUID: string, userUUID: string) => {

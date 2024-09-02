@@ -71,7 +71,12 @@ function ProjectDialog({
 
       <Flex gap="3" mt="4" justify="end">
         <Dialog.Close>
-          <Button variant="soft" color="gray" onClick={() => setDialog(false)}>
+          <Button
+            variant="soft"
+            size={'3'}
+            color="gray"
+            onClick={() => setDialog(false)}
+          >
             Cancel
           </Button>
         </Dialog.Close>
@@ -81,6 +86,7 @@ function ProjectDialog({
               onSubmit();
               setDialog(false);
             }}
+            size={'3'}
           >
             {actionButtonLabel}
           </Button>

@@ -39,7 +39,7 @@ function FormInput({
 }: Props) {
   return (
     <div>
-      <Heading size={'4'} className="pb-2">
+      <Heading size={'3'} className="pb-2">
         {label}
       </Heading>
       <label>

@@ -43,7 +43,7 @@ function AddProjectButton({ userUUID, updateProjects, projectList }: Props) {
   };
 
   return (
-    <Box className={`mx-7 mb-[12rem]`}>
+    <Box className={`mx-9 mb-[12rem]`}>
       <Dialog.Root
         open={dialog}
         onOpenChange={() => {

@@ -38,7 +38,7 @@ const ProjectCard = ({
               <div className="w-[2.4rem] h-[2.4rem] relative">
                 <Image
                   fill
-                  objectFit="contain"
+                  style={{ objectFit: 'contain' }}
                   alt={`${title}-icon`}
                   src={iconLink as string}
                 />

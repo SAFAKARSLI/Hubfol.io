@@ -69,3 +69,6 @@ export type grayColorOptions =
   | undefined;
 
 export type appearanceOptions = 'dark' | 'inherit' | 'light' | undefined;
+
+export const allowedIconTypes =
+  'image/png, image/jpeg, image/jpg, image/svg+xml';

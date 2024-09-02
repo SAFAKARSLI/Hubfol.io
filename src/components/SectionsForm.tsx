@@ -189,7 +189,7 @@ function SectionsForm({ project, setProject }: Props) {
                 />
                 <Select.Content>
                   <Select.Group>
-                    <Select.Item value="text">Plain-text</Select.Item>
+                    <Select.Item value="text">Text</Select.Item>
                     <Select.Item value="tech-stack">Tech Stack</Select.Item>
                   </Select.Group>
                 </Select.Content>

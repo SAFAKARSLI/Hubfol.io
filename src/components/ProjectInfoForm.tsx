@@ -2,7 +2,10 @@ import React from 'react';
 import { Heading, Text } from '@radix-ui/themes';
 import FormInput from '@/components/FormInput';
 import Project from '@/types/project';
-import { CrossCircledIcon } from '@radix-ui/react-icons';
+import { Cross1Icon } from '@radix-ui/react-icons';
+import Image from 'next/image';
+import { allowedIconTypes } from '@/utils';
+import { deleteIcon, uploadIcon } from '@/app/actions';
 // import { project, setProject } from '@/store/project'
 
 type Props = {
@@ -11,12 +14,30 @@ type Props = {
 };
 
 function ProjectInfoForm({ project, setProject }: Props) {
+  const handleRemoveIcon = async () => {
+    if (project.iconLink) {
+      await deleteIcon(project.iconLink as string);
+      setProject({ ...project, iconLink: '' });
+    }
+  };
+
   const handleFileInput = (file: File) => {
+    if (!allowedIconTypes.includes(file.type)) {
+      throw new Error('Invalid file type');
+    }
+
+    const formData = new FormData();
     const reader = new FileReader();
+
     reader.readAsArrayBuffer(file);
-    reader.onload = () => {
+    reader.onload = async () => {
       const arrayBuffer = reader.result;
-      setProject({ ...project, iconLink: arrayBuffer! });
+      const blob = new Blob([arrayBuffer as ArrayBuffer], {
+        type: 'application/octet-stream',
+      });
+      formData.append('iconLink', blob);
+      const s3Link = await uploadIcon(formData);
+      setProject({ ...project, iconLink: s3Link });
     };
   };
 
@@ -60,17 +81,23 @@ function ProjectInfoForm({ project, setProject }: Props) {
         onChange={(e) => setProject({ ...project, url: e.target.value })}
       />
       <label>
-        <Heading size="4" mb="2">
+        <Heading size="3" mb="2">
           Project Icon
         </Heading>
         {project.iconLink ? (
-          <div>
-            <img
-              src={project.iconLink as string}
-              alt="project icon"
-              width="full"
-              height="full"
-              className="bg-gray-1 border border-gray-5 w-[4rem] h-[4rem] rounded p-2"
+          <div className="flex items-center gap-2">
+            <div className="h-[3.5rem] w-[3.5rem] relative">
+              <Image
+                src={project.iconLink as string}
+                alt="project icon"
+                fill
+                style={{ objectFit: 'contain' }}
+                className="bg-gray-1 border border-gray-5 w-[4rem] h-[4rem] rounded p-2"
+              />
+            </div>
+            <Cross1Icon
+              className="w-6 h-6 hover:bg-gray-5 text-gray-300 rounded-sm p-1 cursor-pointer"
+              onMouseDown={handleRemoveIcon}
             />
           </div>
         ) : (
