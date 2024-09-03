@@ -12,15 +12,12 @@ import { defaultSections } from '@/utils';
 import ProjectDialog from './ProjectDialog';
 
 import { v4 as uuidv4 } from 'uuid';
-import { useRouter } from 'next/navigation';
 
 type Props = {
   userUUID: string;
-  updateProjects: React.Dispatch<SetStateAction<Project[]>>;
-  projectList: Project[];
 };
 
-function AddProjectButton({ userUUID, updateProjects, projectList }: Props) {
+function AddProjectButton({ userUUID }: Props) {
   const [newProject, setNewProject] = useState({
     sections: cloneDeep(defaultSections),
   } as Project);
@@ -30,15 +27,15 @@ function AddProjectButton({ userUUID, updateProjects, projectList }: Props) {
     newProject.ownerId = userUUID;
     newProject.projectUUID = uuidv4();
     await createProject(JSON.parse(JSON.stringify(newProject)), userUUID);
-    updateProjects([...projectList, newProject]);
+    location.reload();
   };
 
   return (
-    <Box className={`mx-9 mb-[12rem]`}>
+    <Box className={`px-2 w-full`}>
       <Dialog.Root
         open={dialog}
         onOpenChange={() => {
-          dialog && setNewProject({ sections: defaultSections });
+          !dialog && setNewProject({ sections: defaultSections });
         }}
       >
         <Dialog.Trigger>

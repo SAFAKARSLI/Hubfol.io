@@ -157,9 +157,15 @@ export const updateProject = async (projectUUID: string, project: Project) => {
 
 export const getUser = async (userUUID: string) => {
   await client.connect();
-  const user = await client.db('dev').collection('users').findOne({
-    uuid: userUUID,
-  });
+  const user = await client
+    .db('dev')
+    .collection('users')
+    .findOne(
+      {
+        uuid: userUUID,
+      },
+      { projection: { _id: 0 } }
+    );
 
   return user;
 };

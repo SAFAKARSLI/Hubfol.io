@@ -67,11 +67,9 @@ function AccordionProjectList({ initialProjects }: Props) {
           <Flex direction={'column'} className="gap-5 px-5">
             <ProjectListHeader projectCount={initialProjects.length} />
             {renderProjects()}
-            <AddProjectButton
-              userUUID={userUUID}
-              updateProjects={setProjectList}
-              projectList={projectList}
-            />
+            <div className="w-full mb-[15rem]">
+              <AddProjectButton userUUID={userUUID} />
+            </div>
           </Flex>
         </Accordion.Root>
       </ScrollArea>

@@ -90,8 +90,8 @@ function ProjectDialog({
         <Dialog.Close>
           <Button
             onClick={() => {
-              setDialog(false);
               onSubmit();
+              handleCancelChange();
             }}
             size={'3'}
           >

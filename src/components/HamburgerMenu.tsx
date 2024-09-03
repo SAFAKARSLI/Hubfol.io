@@ -1,11 +1,5 @@
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
-import {
-  Button,
-  DropdownMenu,
-  Heading,
-  IconButton,
-  Text,
-} from '@radix-ui/themes';
+import { DropdownMenu, IconButton, ScrollArea, Text } from '@radix-ui/themes';
 import React from 'react';
 import { getProjects, getUser, openProject } from '@/app/actions';
 import Project from '@/types/project';
@@ -13,6 +7,7 @@ import Image from 'next/image';
 import { WithId } from 'mongodb';
 import { User } from 'next-auth';
 import ProjectCard from './ProjectCard';
+import AddProjectButton from './AddProjectButton';
 
 type Props = {
   userUUID: string;
@@ -48,8 +43,11 @@ async function HamburgerMenu({ userUUID }: Props) {
           </IconButton>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
-          <div className="flex flex-col gap-2 w-[16rem]">
-            {renderProjects()}
+          <div className="flex flex-col gap-1 w-[16rem] my-2">
+            <ScrollArea type="auto" style={{ maxHeight: '20rem' }}>
+              {renderProjects()}
+            </ScrollArea>
+            <AddProjectButton userUUID={userUUID} />
           </div>
         </DropdownMenu.Content>
       </DropdownMenu.Root>

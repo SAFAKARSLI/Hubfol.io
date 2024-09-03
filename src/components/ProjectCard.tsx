@@ -16,7 +16,7 @@ function ProjectCard({ project, userUUID }: Props) {
   const router = useRouter();
   return (
     <div
-      className={`flex h-[4rem] justify-start items-center gap-4 border border-gray-5 rounded p-4  cursor-pointer
+      className={`flex h-[4rem] justify-start items-center gap-4 border border-gray-5 rounded p-4 my-2  cursor-pointer 
       ${
         params.projectUUID === project.projectUUID
           ? `bg-${preferredColorOptions.accentColor}-4 hover:bg-${preferredColorOptions.accentColor}-4`
