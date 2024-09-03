@@ -3,12 +3,12 @@ import '@/app/globals.css';
 import TopBar from '@/components/TopBar';
 import { Theme } from '@radix-ui/themes';
 import React from 'react';
-import { Params, SlugProps } from '@/types/slug';
+import { SlugProps } from '@/types/slug';
 import { preferredColorOptions } from '@/utils';
 
 export const metadata: Metadata = {
-  title: 'Hubfol.io',
-  description: 'Showcase the portfolio',
+  title: 'Hubfolio',
+  description: 'Showcase your portfolio',
 };
 
 export default function RootLayout({ children, params }: Readonly<SlugProps>) {
@@ -19,6 +19,7 @@ export default function RootLayout({ children, params }: Readonly<SlugProps>) {
           href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap"
           rel="stylesheet"
         />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body>
         <Theme

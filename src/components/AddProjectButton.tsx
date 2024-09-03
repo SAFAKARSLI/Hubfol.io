@@ -12,6 +12,7 @@ import { defaultSections } from '@/utils';
 import ProjectDialog from './ProjectDialog';
 
 import { v4 as uuidv4 } from 'uuid';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   userUUID: string;

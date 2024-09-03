@@ -18,9 +18,7 @@ import {
 
 import { useParams } from 'next/navigation';
 
-import { deleteProject } from '@/app/actions';
 import DeleteProjectDialog from './DeleteProjectDialog';
-import ProjectDialog from './ProjectDialog';
 import Project from '@/types/project';
 import EditProjectDialog from './EditProjectDialog';
 import { cloneDeep } from 'lodash';
@@ -83,16 +81,12 @@ function ProjectMenu({ projectUUID, title, initialProject }: Props) {
         />
       </AlertDialog.Root>
 
-      <Dialog.Root
-        open={editDialogeOpen}
-        onOpenChange={() => {
-          setProject(cloneDeep(initialProject));
-        }}
-      >
+      <Dialog.Root open={editDialogeOpen}>
         <EditProjectDialog
           project={project}
           setProject={setProject}
           setEditDialogeOpen={setEditDialogeOpen}
+          initialProject={initialProject}
         />
       </Dialog.Root>
     </div>

@@ -11,7 +11,9 @@ import ProjectInfoForm from './ProjectInfoForm';
 import SectionsForm from './SectionsForm';
 import Project from '@/types/project';
 import { Cross1Icon } from '@radix-ui/react-icons';
-import { set } from 'lodash';
+import { initial, set } from 'lodash';
+import { preferredColorOptions } from '@/utils';
+import { getIcon } from '@/app/actions';
 
 type Props = {
   title: string;
@@ -20,6 +22,7 @@ type Props = {
   project: Project;
   setProject: (project: Project) => void;
   setDialog: (open: boolean) => void;
+  initialProject: Project;
 };
 
 function ProjectDialog({
@@ -29,7 +32,13 @@ function ProjectDialog({
   project,
   setProject,
   setDialog,
+  initialProject,
 }: Props) {
+  const handleCancelChange = () => {
+    setDialog(false);
+    setProject(initialProject);
+  };
+
   return (
     <Dialog.Content
       maxWidth="50rem"
@@ -43,9 +52,7 @@ function ProjectDialog({
             className="cursor-pointer"
             variant="ghost"
             size={'2'}
-            onClick={() => {
-              setDialog(false);
-            }}
+            onClick={handleCancelChange}
           >
             <Cross1Icon className="w-5 h-5" />
           </IconButton>
@@ -67,7 +74,7 @@ function ProjectDialog({
         </Tabs.Content>
       </Tabs.Root>
 
-      <Separator size={'4'} mb={'4'} />
+      <Separator size={'4'} mb={'4'} color={'gray'} />
 
       <Flex gap="3" mt="4" justify="end">
         <Dialog.Close>
@@ -75,7 +82,7 @@ function ProjectDialog({
             variant="soft"
             size={'3'}
             color="gray"
-            onClick={() => setDialog(false)}
+            onClick={handleCancelChange}
           >
             Cancel
           </Button>
@@ -83,8 +90,8 @@ function ProjectDialog({
         <Dialog.Close>
           <Button
             onClick={() => {
-              onSubmit();
               setDialog(false);
+              onSubmit();
             }}
             size={'3'}
           >

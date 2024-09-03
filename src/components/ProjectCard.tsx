@@ -7,6 +7,7 @@ import Project, { Section } from '@/types/project';
 import ProjectSubsection from './ProjectSubsection';
 import Divider from './subsections/Divider';
 import ProjectMenu from './ProjectMenu';
+import { use, useEffect, useRef } from 'react';
 
 interface ProjectCardProps {
   projectUUID: string;
@@ -27,11 +28,19 @@ const ProjectCard = ({
   activeProjectId,
   ownerId,
 }: ProjectCardProps) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (activeProjectId === projectUUID) {
+      cardRef.current?.scrollIntoView({ behavior: 'instant', block: 'start' });
+    }
+  }, []);
   return (
     <Accordion.Item value={projectUUID} asChild>
-      <Box className="mx-8 mb-6 rounded border border-gray-4 overflow-hidden">
+      <div className="mx-8 mb-6 rounded border border-gray-4 overflow-hidden data-[state=open]:shadow-gray-3 shadow-md">
         <Accordion.Trigger asChild>
           <div
+            ref={cardRef}
             className={`flex py-3 px-8 
           bg-gray-1 data-[state=open]:bg-gray-2 hover:bg-gray-2
           data-[state=closed]:cursor-pointer `}
@@ -40,6 +49,7 @@ const ProjectCard = ({
               <div className="w-[2.4rem] h-[2.4rem] relative">
                 <Image
                   fill
+                  sizes="100px"
                   style={{ objectFit: 'contain' }}
                   alt={`${title}-icon`}
                   src={iconLink as string}
@@ -90,7 +100,7 @@ const ProjectCard = ({
             </ScrollArea>
           </div>
         </Accordion.Content>
-      </Box>
+      </div>
     </Accordion.Item>
   );
 };

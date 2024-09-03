@@ -75,7 +75,7 @@ function SearchTechInput({ project, setProject, sectionNo }: Props) {
   }, [query]);
 
   return (
-    <Flex direction={'column'} width={'100%'}>
+    <div className="flex flex-col w-full relative flex-none">
       <TextField.Root
         onFocus={() => setSearch({ ...search, resultVisible: true })}
         onBlur={(e) => {
@@ -110,7 +110,7 @@ function SearchTechInput({ project, setProject, sectionNo }: Props) {
           iconList={search.result}
         />
       )}
-    </Flex>
+    </div>
   );
 }
 

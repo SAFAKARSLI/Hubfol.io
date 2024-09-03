@@ -1,4 +1,5 @@
 import mongoDB from 'mongodb';
+import { SearchResult } from './searchResult';
 
 export default interface Project {
   _id?: mongoDB.ObjectId;
@@ -15,6 +16,6 @@ export default interface Project {
 export interface Section {
   title: string;
   contentType: string;
-  content: string | string[] | object[];
+  content: string | SearchResult[];
   [Symbol.iterator]?(): IterableIterator<any>;
 }

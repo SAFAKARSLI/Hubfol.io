@@ -55,9 +55,9 @@ function ProjectList({ initialProjects }: Props) {
   return (
     <Box
       width={'27rem'}
-      minWidth={'27rem'}
+      // minWidth={'27rem'}
       py={'5'}
-      className="h-[calc(100vh-6rem)] bg-gray-1 border-x border-b border-gray-4"
+      className="h-[calc(100vh-6rem)] bg-gray-1 border-x border-b border-gray-4 w-[27rem] sm:max-md:w-8 "
     >
       <ScrollArea
         type="auto"

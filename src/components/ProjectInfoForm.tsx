@@ -16,7 +16,6 @@ type Props = {
 function ProjectInfoForm({ project, setProject }: Props) {
   const handleRemoveIcon = async () => {
     if (project.iconLink) {
-      await deleteIcon(project.iconLink as string);
       setProject({ ...project, iconLink: '' });
     }
   };
@@ -91,6 +90,7 @@ function ProjectInfoForm({ project, setProject }: Props) {
                 src={project.iconLink as string}
                 alt="project icon"
                 fill
+                sizes="100px"
                 style={{ objectFit: 'contain' }}
                 className="bg-gray-1 border border-gray-5 w-[4rem] h-[4rem] rounded p-2"
               />

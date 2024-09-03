@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { act, useEffect, useState } from 'react';
 import {
   DragDropContext,
   Draggable,
@@ -29,14 +29,18 @@ import {
   Button,
   IconButton,
   Separator,
+  Heading,
 } from '@radix-ui/themes';
 
 import Project from '@/types/project';
 import SearchResultList from './SearchResultList';
 import { SearchResult } from '@/types/searchResult';
 import { getTechs } from '@/app/actions';
-import { defultSearchTechValues } from '@/utils';
+import { defultSearchTechValues, preferredColorOptions } from '@/utils';
 import SearchTechInput from './SearchTechInput';
+import Divider from './subsections/Divider';
+import TechCardList from './TechCardList';
+import FormInput from './FormInput';
 
 type Props = {
   project: Project;
@@ -56,12 +60,12 @@ function SectionsForm({ project, setProject }: Props) {
   const handleDeleteSection = (index: number) => {
     const newSections = cloneDeep(project.sections!);
     newSections.splice(index, 1);
+
+    if (activeSection !== 0) setActiveSection(activeSection - 1);
     setProject({ ...project, sections: newSections });
-    setActiveSection(0);
   };
 
   const renderSections = () => {
-    console.log(project);
     const sectionList = project.sections!.map((section, i) => {
       return (
         <RadioCards.Item
@@ -86,39 +90,43 @@ function SectionsForm({ project, setProject }: Props) {
     });
 
     return (
-      <div className="flex  gap-[4rem] h-[20rem]">
-        <ScrollArea
-          type="auto"
-          scrollbars="vertical"
-          className="rounded bg-gray-1  border-gray-5 w-[15rem] h-full"
-        >
-          <RadioCards.Root
-            defaultValue={'0'}
-            value={activeSection.toString()}
-            onValueChange={(e) => setActiveSection(parseInt(e))}
+      <div className="flex gap-4 h-[20rem] ">
+        <div className="flex gap-1 flex-col items-center h-full">
+          <Heading size={'3'}>Sections List</Heading>
+          <ScrollArea
+            type="auto"
+            scrollbars="vertical"
+            className="rounded bg-gray-1  border-gray-5 w-[15rem] flex-1"
           >
-            <Flex direction={'column'} gap={'3'} height={'full'} p={'4'}>
-              {sectionList}
-            </Flex>
-          </RadioCards.Root>
-        </ScrollArea>
-
-        <div className="flex flex-col h-full gap-3 flex-1">
-          <div className="flex-none">
-            <Text mb="1" weight="bold">
-              Title
-            </Text>
-            <TextField.Root
-              onChange={(e) => {
-                const newSections = cloneDeep(project.sections!);
-                newSections![activeSection].title = e.target.value;
-                setProject({ ...project, sections: newSections });
+            <RadioCards.Root
+              defaultValue={'0'}
+              value={activeSection.toString()}
+              onValueChange={(e) => {
+                setActiveSection(parseInt(e));
               }}
-              placeholder="Enter the section header (e.g 'Project Description')"
-              value={project.sections![activeSection].title}
-            />
-          </div>
-          <div className="flex-1 flex-col flex">
+            >
+              <Flex direction={'column'} gap={'3'} height={'full'} p={'4'}>
+                {sectionList}
+              </Flex>
+            </RadioCards.Root>
+          </ScrollArea>
+        </div>
+        <Separator orientation={'vertical'} size={'4'} />
+        <div className="flex flex-col gap-3 flex-1">
+          <FormInput
+            label="Title"
+            name="title"
+            placerholder="Enter the section title (e.g 'Project Description')"
+            type="text"
+            onChange={(e) => {
+              const newSections = cloneDeep(project.sections!);
+              newSections![activeSection].title = e.target.value;
+              setProject({ ...project, sections: newSections });
+            }}
+            value={project.sections![activeSection].title}
+          />
+
+          <div className="flex flex-col">
             <Text weight="bold">
               Content
               <Select.Root
@@ -146,28 +154,46 @@ function SectionsForm({ project, setProject }: Props) {
                 </Select.Content>
               </Select.Root>
             </Text>
-            <label className="flex-1">
-              {project.sections?.[activeSection]?.contentType ===
-              'tech-stack' ? (
-                <SearchTechInput
-                  project={project}
-                  sectionNo={activeSection}
-                  setProject={setProject}
-                />
-              ) : (
-                <TextArea
-                  className="h-full"
-                  value={project.sections![activeSection].content as string}
-                  onChange={(e) => {
-                    const newSections = cloneDeep(project.sections!);
-                    newSections![activeSection].content = e.target.value;
-                    setProject({ ...project, sections: newSections });
-                  }}
-                  placeholder="Enter the content here"
-                />
-              )}
-            </label>
+
+            {project.sections?.[activeSection]?.contentType === 'tech-stack' ? (
+              <SearchTechInput
+                project={project}
+                sectionNo={activeSection}
+                setProject={setProject}
+              />
+            ) : (
+              <TextArea
+                className="flex-1"
+                value={project.sections![activeSection].content as string}
+                onChange={(e) => {
+                  const newSections = cloneDeep(project.sections!);
+                  newSections![activeSection].content = e.target.value;
+                  setProject({ ...project, sections: newSections });
+                }}
+                placeholder="Enter the content here"
+              />
+            )}
           </div>
+          {project.sections?.[activeSection]?.contentType === 'tech-stack' && (
+            <ScrollArea
+              type="auto"
+              scrollbars="vertical"
+              className="rounded  p-3 bg-gray-1 w-full h-full"
+            >
+              <TechCardList
+                setTechs={(e: number) => {
+                  const newSections = cloneDeep(project.sections!);
+                  newSections[activeSection].content = (
+                    newSections[activeSection].content as SearchResult[]
+                  ).filter((_, i) => i !== e);
+                  setProject({ ...project, sections: newSections });
+                }}
+                techs={
+                  project.sections![activeSection].content as SearchResult[]
+                }
+              />
+            </ScrollArea>
+          )}
         </div>
       </div>
     );
@@ -193,6 +219,7 @@ function SectionsForm({ project, setProject }: Props) {
               content: 'This is a new section',
             });
             setProject({ ...project, sections: newSections });
+            setActiveSection(newSections.length - 1);
           }}
         >
           <PlusIcon /> Add Section
@@ -205,7 +232,6 @@ function SectionsForm({ project, setProject }: Props) {
             handleDeleteSection(activeSection);
           }}
         >
-          {' '}
           <TrashIcon /> Delete Section
         </Button>
       </div>

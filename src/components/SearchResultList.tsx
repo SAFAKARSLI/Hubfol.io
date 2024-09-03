@@ -23,14 +23,16 @@ function SearchResultList({ iconList, onTechAdd }: Props) {
   };
 
   return (
-    <ScrollArea
-      type="always"
-      scrollbars="vertical"
-      className="rounded-b bg-gray-1 border border-gray-5 w-full"
-      style={{ maxHeight: '10rem' }}
-    >
-      {renderSearchCards()}
-    </ScrollArea>
+    <div className="absolute z-10 top-full left-0 right-0">
+      <ScrollArea
+        type="always"
+        scrollbars="vertical"
+        className="rounded-b bg-gray-1 border border-gray-5 w-full "
+        style={{ maxHeight: '10rem' }}
+      >
+        {renderSearchCards()}
+      </ScrollArea>
+    </div>
   );
 }
 

@@ -1,21 +1,31 @@
+'use client';
 import React from 'react';
 import ProjectDialog from './ProjectDialog';
 import Project from '@/types/project';
-import { updateProject } from '@/app/actions';
+import { deleteIcon, updateProject } from '@/app/actions';
+import { useRouter } from 'next/navigation';
+import { initial } from 'lodash';
 
 type Props = {
   project: Project;
   setProject: (project: Project) => void;
   setEditDialogeOpen: (open: boolean) => void;
+  initialProject: Project;
 };
 
-function EditProjectDialog({ project, setProject, setEditDialogeOpen }: Props) {
+function EditProjectDialog({
+  project,
+  setProject,
+  setEditDialogeOpen,
+  initialProject,
+}: Props) {
+  const router = useRouter();
   const handleEditProject = async () => {
-    const updatedProject = await updateProject(
-      project.projectUUID!,
-      project,
-      project.ownerId!
-    );
+    if (initialProject.iconLink !== project.iconLink) {
+      await deleteIcon(initialProject.iconLink as string);
+    }
+    const updatedProject = await updateProject(project.projectUUID!, project);
+    location.reload();
   };
 
   return (
@@ -26,6 +36,7 @@ function EditProjectDialog({ project, setProject, setEditDialogeOpen }: Props) {
       setProject={setProject}
       onSubmit={handleEditProject}
       setDialog={setEditDialogeOpen}
+      initialProject={initialProject}
     />
   );
 }

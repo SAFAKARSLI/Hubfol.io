@@ -1,5 +1,6 @@
 'use client';
 import { Flex } from '@radix-ui/themes';
+import Image from 'next/image';
 import React, { useEffect } from 'react';
 
 type Props = {
@@ -15,6 +16,7 @@ function SearchResultCard({ brandName, slug, onTechAdd }: Props) {
       onMouseDown={() => onTechAdd(brandName, slug)}
     >
       <img
+        alt={`${slug}-logo`}
         width={20}
         height={20}
         src={`https://cdn.simpleicons.org/${slug}/_/eee?viewbox=auto`}

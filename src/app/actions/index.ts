@@ -58,7 +58,7 @@ export const createProject = async (project: Project, userUUID: string) => {
 
   await client.db('dev').collection('projects').insertOne(project);
   revalidatePath(`/users/${userUUID}/projects`);
-  return project;
+  return JSON.parse(JSON.stringify(project));
 };
 
 export const uploadIcon = async (formData: FormData) => {
@@ -94,6 +94,22 @@ export const deleteIcon = async (iconLink: string) => {
   await s3Client.send(new DeleteObjectCommand(deleteParams));
 };
 
+export const getIcon = async (iconLink: string) => {
+  const key = iconLink.split('/').slice(-1)[0];
+
+  const getParams = {
+    Bucket: bucketName,
+    Key: '1123',
+  };
+
+  try {
+    const data = await s3Client.send(new GetObjectCommand(getParams));
+    return data.Body;
+  } catch (error) {
+    return 'Icon not found';
+  }
+};
+
 export const deleteProject = async (projectUUID: string, userUUID: string) => {
   await client.connect();
   await client.db('dev').collection('projects').deleteOne({ projectUUID });
@@ -121,11 +137,7 @@ export const updateUser = async (email: string, data: any) => {
   redirect('/projects');
 };
 
-export const updateProject = async (
-  projectUUID: string,
-  project: Project,
-  userUUID: string
-) => {
+export const updateProject = async (projectUUID: string, project: Project) => {
   await client.connect();
   client.db('dev').collection('projects').updateOne(
     { projectUUID },
@@ -133,7 +145,6 @@ export const updateProject = async (
       $set: project,
     }
   );
-  redirect(`/users/${userUUID}/projects`);
   return project;
 };
 
@@ -154,7 +165,7 @@ export const getTechs = async (queryText: string) => {
       .collection('icons')
       .find(
         { brandName: { $regex: queryText, $options: 'i' } },
-        { projection: { _id: 0 } } // Exclude the _id field
+        { projection: { _id: 0 } }
       )
       .toArray();
     return JSON.parse(JSON.stringify(techs));

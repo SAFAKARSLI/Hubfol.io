@@ -46,7 +46,7 @@ function FormInput({
         <Flex align={'center'} gap={'1'}>
           {logo}
           <TextField.Root
-            size={'3'}
+            size={'2'}
             min={0}
             name={name}
             placeholder={placerholder}
