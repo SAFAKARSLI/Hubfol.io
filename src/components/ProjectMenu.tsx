@@ -1,12 +1,10 @@
+'use client';
 import React, { useState } from 'react';
 
 import {
   DropdownMenu,
   IconButton,
   AlertDialog,
-  Flex,
-  Button,
-  TextField,
   Dialog,
 } from '@radix-ui/themes';
 
@@ -21,7 +19,6 @@ import { useParams } from 'next/navigation';
 import DeleteProjectDialog from './DeleteProjectDialog';
 import Project from '@/types/project';
 import EditProjectDialog from './EditProjectDialog';
-import { cloneDeep } from 'lodash';
 
 type Props = {
   projectUUID: string;

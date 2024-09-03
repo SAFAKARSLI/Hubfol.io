@@ -6,8 +6,8 @@ import { useParams, useRouter } from 'next/navigation';
 import * as Accordion from '@radix-ui/react-accordion';
 
 import Project from '@/types/project';
-import ProjectCard from './ProjectCard';
-import { Box, Flex, ScrollArea } from '@radix-ui/themes';
+import AccordionProjectItem from './AccordionProjectItem';
+import { Flex, ScrollArea } from '@radix-ui/themes';
 import AddProjectButton from './AddProjectButton';
 import ProjectListHeader from './ProjectListHeader';
 
@@ -16,7 +16,7 @@ type Props = {
   activeProjectId: string;
 };
 
-function ProjectList({ initialProjects }: Props) {
+function AccordionProjectList({ initialProjects }: Props) {
   const { projectUUID, userUUID } = useParams<{
     projectUUID: string;
     userUUID: string;
@@ -34,7 +34,7 @@ function ProjectList({ initialProjects }: Props) {
   function renderProjects() {
     return projectList.map((p, i) => {
       return (
-        <ProjectCard
+        <AccordionProjectItem
           key={i}
           projectUUID={p.projectUUID as string}
           title={p.title!}
@@ -53,16 +53,10 @@ function ProjectList({ initialProjects }: Props) {
   }
 
   return (
-    <Box
-      width={'27rem'}
-      // minWidth={'27rem'}
-      py={'5'}
-      className="h-[calc(100vh-6rem)] bg-gray-1 border-x border-b border-gray-4 w-[27rem] sm:max-md:w-8 "
-    >
+    <div className="h-[calc(100vh-6rem)] py-5 bg-gray-1 border-x border-b border-gray-4 w-[27rem] -2xl:w-[24rem] -xl:hidden">
       <ScrollArea
         type="auto"
         scrollbars="vertical"
-        className="w-[27rem] "
         style={{ maxHeight: 'calc(100vh-6rem)' }}
       >
         <Accordion.Root
@@ -70,7 +64,7 @@ function ProjectList({ initialProjects }: Props) {
           onValueChange={onChangeActiveProject}
           value={accordionValue}
         >
-          <Flex direction={'column'}>
+          <Flex direction={'column'} className="gap-5 px-5">
             <ProjectListHeader projectCount={initialProjects.length} />
             {renderProjects()}
             <AddProjectButton
@@ -81,8 +75,8 @@ function ProjectList({ initialProjects }: Props) {
           </Flex>
         </Accordion.Root>
       </ScrollArea>
-    </Box>
+    </div>
   );
 }
 
-export default ProjectList;
+export default AccordionProjectList;

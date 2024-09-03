@@ -94,6 +94,13 @@ export const deleteIcon = async (iconLink: string) => {
   await s3Client.send(new DeleteObjectCommand(deleteParams));
 };
 
+export const openProject =
+  (userUUID: string, projectUUID: string) =>
+  (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    redirect(`/users/${userUUID}/projects/${projectUUID}`);
+  };
+
 export const getIcon = async (iconLink: string) => {
   const key = iconLink.split('/').slice(-1)[0];
 

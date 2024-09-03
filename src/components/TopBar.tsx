@@ -1,6 +1,5 @@
 import React from 'react';
 import ProfileOverview from './ProfileOverview';
-import { signOut, signIn } from 'next-auth/react';
 import {
   Flex,
   Text,
@@ -8,14 +7,16 @@ import {
   Separator,
   Link as RadixLink,
   DropdownMenu,
+  IconButton,
 } from '@radix-ui/themes';
 import Link from 'next/link';
 import { FaGoogle, FaSignInAlt } from 'react-icons/fa';
-import { EnvelopeClosedIcon } from '@radix-ui/react-icons';
+import { EnvelopeClosedIcon, HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { SlugProps } from '@/types/slug';
 import AuthenticationButton from './AuthenticationButton';
+import HamburgerMenu from './HamburgerMenu';
 
 const links: string[] = [
   'Profile Overview',
@@ -24,8 +25,9 @@ const links: string[] = [
   'Reviews',
 ];
 
-async function TopBar({ params }: SlugProps) {
+async function TopBar({ params, children }: SlugProps) {
   const userUUID = params.userUUID;
+  const projectUUID = params.projectUUID;
   const session = await getServerSession(authOptions);
 
   return (
@@ -33,22 +35,19 @@ async function TopBar({ params }: SlugProps) {
       <ProfileOverview userUUID={userUUID} />
       <Flex
         justify={'between'}
-        className="border-y border-gray-4 bg-gray-1 px-8 w-full"
+        className="border-y border-gray-4 bg-gray-1 px-8 w-full -xl:h-[5rem] h-[6rem] items-center"
       >
+        <HamburgerMenu userUUID={userUUID} activeProject={projectUUID} />
+
         <div className="flex-1 flex items-center justify-center">
-          <Flex
-            align={'center'}
-            height={'100%'}
-            justify={'between'}
-            className="text-center  w-[40rem]"
-          >
+          <div className="flex items-center h-full justify-between text-center  w-[40rem] -2xl:w-[32rem]  -xl:w-[28rem]">
             {links.map((link, i) => (
               <Text
                 as={'div'}
                 size={'2'}
                 color="gray"
                 key={i}
-                className="hover:text-white header-link"
+                className="hover:text-white header-link -2xl:text-xs"
               >
                 <Link
                   href={`/users/${userUUID}/${link
@@ -59,7 +58,7 @@ async function TopBar({ params }: SlugProps) {
                 </Link>
               </Text>
             ))}
-          </Flex>
+          </div>
         </div>
         <Flex gap={'5'} align={'center'} className="flex-none">
           <Button size={'2'}>

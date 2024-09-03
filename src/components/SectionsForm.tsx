@@ -126,7 +126,7 @@ function SectionsForm({ project, setProject }: Props) {
             value={project.sections![activeSection].title}
           />
 
-          <div className="flex flex-col">
+          <div className="flex flex-col flex-1">
             <Text weight="bold">
               Content
               <Select.Root

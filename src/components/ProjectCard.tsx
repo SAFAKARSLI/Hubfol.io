@@ -1,108 +1,47 @@
-import * as Accordion from '@radix-ui/react-accordion';
-import { Box, Text, Heading, ScrollArea } from '@radix-ui/themes';
+'use client';
+import Project from '@/types/project';
+import { preferredColorOptions } from '@/utils';
+import { Heading, Text } from '@radix-ui/themes';
 import Image from 'next/image';
+import { useParams, useRouter } from 'next/navigation';
+import React from 'react';
 
-import Project, { Section } from '@/types/project';
-
-import ProjectSubsection from './ProjectSubsection';
-import Divider from './subsections/Divider';
-import ProjectMenu from './ProjectMenu';
-import { use, useEffect, useRef } from 'react';
-
-interface ProjectCardProps {
-  projectUUID: string;
-  title: string;
-  tagline: string;
-  iconLink: string | ArrayBuffer;
-  sections: Section[] | null;
-  activeProjectId: string;
-  ownerId: string;
-}
-
-const ProjectCard = ({
-  projectUUID,
-  title,
-  tagline,
-  iconLink,
-  sections,
-  activeProjectId,
-  ownerId,
-}: ProjectCardProps) => {
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (activeProjectId === projectUUID) {
-      cardRef.current?.scrollIntoView({ behavior: 'instant', block: 'start' });
-    }
-  }, []);
-  return (
-    <Accordion.Item value={projectUUID} asChild>
-      <div className="mx-8 mb-6 rounded border border-gray-4 overflow-hidden data-[state=open]:shadow-gray-3 shadow-md">
-        <Accordion.Trigger asChild>
-          <div
-            ref={cardRef}
-            className={`flex py-3 px-8 
-          bg-gray-1 data-[state=open]:bg-gray-2 hover:bg-gray-2
-          data-[state=closed]:cursor-pointer `}
-          >
-            <div className="flex justify-between h-[3rem] w-full items-center gap-x-8">
-              <div className="w-[2.4rem] h-[2.4rem] relative">
-                <Image
-                  fill
-                  sizes="100px"
-                  style={{ objectFit: 'contain' }}
-                  alt={`${title}-icon`}
-                  src={iconLink as string}
-                />
-              </div>
-
-              <div className="gap-y-1 flex-1 flex flex-col">
-                <Heading size={'3'}>{title}</Heading>
-                <Text size={'2'} className="text-gray-11">
-                  {tagline}
-                </Text>
-              </div>
-            </div>
-            {projectUUID === activeProjectId && (
-              <ProjectMenu
-                title={title}
-                projectUUID={projectUUID}
-                initialProject={
-                  {
-                    title,
-                    projectUUID,
-                    tagline,
-                    iconLink,
-                    sections,
-                    ownerId,
-                  } as Project
-                }
-              />
-            )}
-          </div>
-        </Accordion.Trigger>
-
-        <Accordion.Content asChild>
-          <div className="bg-gray-1 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden ">
-            <ScrollArea type="auto" className="max-h-[50rem] w-full">
-              {sections?.map((s, i) => {
-                return (
-                  <div key={i}>
-                    <ProjectSubsection
-                      title={s.title}
-                      contentType={s.contentType}
-                      content={s.content}
-                    />
-                    {i == sections.length - 1 ? null : <Divider />}
-                  </div>
-                );
-              })}
-            </ScrollArea>
-          </div>
-        </Accordion.Content>
-      </div>
-    </Accordion.Item>
-  );
+type Props = {
+  project: Project;
+  userUUID?: string;
 };
+
+function ProjectCard({ project, userUUID }: Props) {
+  const params = useParams<{ projectUUID: string }>();
+  const router = useRouter();
+  return (
+    <div
+      className={`flex h-[4rem] justify-start items-center gap-4 border border-gray-5 rounded p-4  cursor-pointer
+      ${
+        params.projectUUID === project.projectUUID
+          ? `bg-${preferredColorOptions.accentColor}-4 hover:bg-${preferredColorOptions.accentColor}-4`
+          : 'hover:bg-gray-4'
+      }`}
+      onClick={() =>
+        router.push(`/users/${userUUID}/projects/${project.projectUUID}`)
+      }
+    >
+      <div className="relative h-8 w-8">
+        <Image
+          fill
+          sizes="50px"
+          src={project.iconLink as string}
+          alt={project.title!}
+          style={{ objectFit: 'contain' }}
+          className="w-[1.2rem] h-[1.2rem] rounded-lg"
+        />
+      </div>
+      <div className="flex flex-col ">
+        <Heading className="text-base">{project.title}</Heading>
+        <Text className="text-xs ">{project.tagline}</Text>
+      </div>
+    </div>
+  );
+}
 
 export default ProjectCard;

@@ -5,5 +5,5 @@ import { SlugProps } from '@/types/slug';
 
 export default async function page({ params }: SlugProps) {
   const { userUUID } = params;
-  return <Projects userUUID={userUUID} activeProjectId="NO_ACTIVE_PROJECT" />;
+  return <Projects userUUID={userUUID} />;
 }

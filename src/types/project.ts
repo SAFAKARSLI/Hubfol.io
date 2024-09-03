@@ -6,7 +6,7 @@ export default interface Project {
   projectUUID?: string;
   title?: string;
   tagline?: string;
-  iconLink?: string | ArrayBuffer;
+  iconLink?: string;
   sections?: Section[];
   ownerId?: string;
   url?: string;

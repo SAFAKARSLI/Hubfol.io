@@ -21,18 +21,10 @@ interface ProfileOverviewProps {
 
 const ProfileOverview = async ({ userUUID }: ProfileOverviewProps) => {
   const session = await getServerSession(authOptions);
-
   const user = (await getUser(userUUID)) as WithId<User>;
 
   return (
-    <Flex
-      height="6rem"
-      width="27rem"
-      minWidth={'27rem'}
-      px="8"
-      py="4"
-      className="bg-gray-1  border border-gray-4"
-    >
+    <div className="flex bg-gray-1 border border-gray-4 h-[6rem] w-[27rem] -sm:hidden -2xl:w-[24rem] -xl:w-[20rem] px-8 py-4 flex-none -xl:hidden">
       <Flex flexGrow="1" justify={'between'} direction={'column'}>
         <Flex direction={'column'} gap={'1'}>
           <Flex gap={'2'}>
@@ -70,7 +62,7 @@ const ProfileOverview = async ({ userUUID }: ProfileOverviewProps) => {
           ${user.hourlyRate}/hr
         </Badge>
       </Flex>
-    </Flex>
+    </div>
   );
 };
 

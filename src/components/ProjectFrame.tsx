@@ -11,12 +11,12 @@ type Props = {
 
 function ProjectFrame({ activeProjectId }: Props) {
   async function renderFrame() {
-    if (activeProjectId == 'NO_ACTIVE_PROJECT') {
+    if (!activeProjectId) {
       return (
         <Flex
           direction={'column'}
           gap={'3'}
-          className="h-full w-full items-center justify-center"
+          className="h-full w-full items-center justify-center flex-1"
         >
           <Image
             alt="brand-logo"
@@ -32,13 +32,9 @@ function ProjectFrame({ activeProjectId }: Props) {
     } else {
       const project = (await getProject(activeProjectId)) as Project;
       return (
-        <Box
-          overflow={'hidden'}
-          className="rounded border border-gray-6"
-          height={'100%'}
-        >
+        <div className="rounded border border-gray-6 overflow-hidden h-full flex-1">
           <iframe src={project.url} className="w-full h-full" />
-        </Box>
+        </div>
       );
     }
   }

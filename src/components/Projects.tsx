@@ -1,34 +1,37 @@
-import React from 'react';
+import React, { act } from 'react';
 
-import ProjectList from './ProjectList';
+import AccordionProjectList from './AccordionProjectList';
 import Project from '@/types/project';
 import ProjectFrame from './ProjectFrame';
 import { Box, Flex } from '@radix-ui/themes';
 import { getProjects } from '@/app/actions';
+import ProjectConsole from './ProjectConsole';
 
 interface ProjectsProps {
-  activeProjectId: string;
+  activeProjectId?: string;
   userUUID: string;
 }
 
-const Projects = ({ activeProjectId, userUUID }: ProjectsProps) => {
-  async function render() {
-    const fetchProjects = (await getProjects(userUUID)) as Project[];
-    return (
-      <ProjectList
-        initialProjects={fetchProjects}
-        activeProjectId={activeProjectId}
-      />
-    );
-  }
+const Projects = async ({ activeProjectId, userUUID }: ProjectsProps) => {
+  const projects = (await getProjects(userUUID)) as Project[];
 
   return (
-    <Flex flexGrow={'1'}>
-      {render()}
-      <Box width={'100%'} height={'100%'} p={'5'}>
-        <ProjectFrame activeProjectId={activeProjectId} />
-      </Box>
-    </Flex>
+    <div className="flex w-full">
+      <div className="flex-none">
+        <AccordionProjectList
+          initialProjects={projects}
+          activeProjectId={activeProjectId!}
+        />
+      </div>
+      <div className="h-full w-full p-8">
+        <ProjectFrame activeProjectId={activeProjectId!} />
+      </div>
+      {activeProjectId && (
+        <ProjectConsole
+          project={projects.find((e) => activeProjectId == e.projectUUID)!}
+        />
+      )}
+    </div>
   );
 };
 

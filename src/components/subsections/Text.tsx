@@ -7,14 +7,14 @@ type Props = {
 
 const TextSection: React.FC<Props> = ({ text }) => {
   return (
-    <Text as="p" size={'2'} className="tracking-wider text-gray-12">
+    <p className=" text-gray-12 text-sm -2xl:text-xs">
       {text.split('\n').map((line, index) => (
         <React.Fragment key={index}>
           {line}
           <br />
         </React.Fragment>
       ))}
-    </Text>
+    </p>
   );
 };
 

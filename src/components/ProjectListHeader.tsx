@@ -8,7 +8,7 @@ type Props = {
 
 function ProjectListHeader({ projectCount }: Props) {
   return (
-    <Flex gap={'2'} justify={'start'} align={'center'} mb={'5'} mx={'8'}>
+    <Flex gap={'2'} justify={'start'} align={'center'} mx={'5'}>
       <Heading size={'4'}>Projects:</Heading>
       <Badge variant="solid" radius="full" size={'2'}>
         {projectCount}

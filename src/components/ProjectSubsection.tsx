@@ -29,7 +29,7 @@ const ProjectSubsection = ({
 
   return (
     <div className="pb-8 px-6">
-      <Heading size={'3'} my={'5'}>
+      <Heading as="h3" my={'5'} className="text-lg -2xl:text-sm">
         {title}
       </Heading>
       <div className={`${width}`}>{renderContent()}</div>

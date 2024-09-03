@@ -13,9 +13,6 @@ import { CopyIcon, PersonIcon } from '@radix-ui/react-icons';
 import Divider from './subsections/Divider';
 import { getServerSession, User } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import { getUser } from '@/app/actions';
-import { WithId } from 'mongodb';
-import { preferredTheme } from '@/utils';
 
 type Props = {
   user: User;

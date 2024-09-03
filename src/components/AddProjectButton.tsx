@@ -58,6 +58,7 @@ function AddProjectButton({ userUUID, updateProjects, projectList }: Props) {
           project={newProject}
           setProject={setNewProject}
           setDialog={setDialog}
+          initialProject={newProject}
         />
       </Dialog.Root>
     </Box>
