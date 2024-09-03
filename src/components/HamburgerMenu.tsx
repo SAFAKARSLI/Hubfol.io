@@ -8,6 +8,7 @@ import { WithId } from 'mongodb';
 import { User } from 'next-auth';
 import ProjectCard from './ProjectCard';
 import AddProjectButton from './AddProjectButton';
+import ProjectListHeader from './ProjectListHeader';
 
 type Props = {
   userUUID: string;
@@ -16,7 +17,7 @@ type Props = {
 
 async function HamburgerMenu({ userUUID }: Props) {
   const user = (await getUser(userUUID)) as WithId<User>;
-  const projects = await getProjects(userUUID);
+  const projects = (await getProjects(userUUID)) as Project[];
 
   const renderProjects = () => {
     return projects.map((project: Project) => {
@@ -44,6 +45,7 @@ async function HamburgerMenu({ userUUID }: Props) {
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
           <div className="flex flex-col gap-1 w-[16rem] my-2">
+            <ProjectListHeader projectCount={projects.length} />
             <ScrollArea type="auto" style={{ maxHeight: '20rem' }}>
               {renderProjects()}
             </ScrollArea>

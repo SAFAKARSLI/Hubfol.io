@@ -12,6 +12,7 @@ import { defaultSections } from '@/utils';
 import ProjectDialog from './ProjectDialog';
 
 import { v4 as uuidv4 } from 'uuid';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   userUUID: string;
@@ -22,12 +23,13 @@ function AddProjectButton({ userUUID }: Props) {
     sections: cloneDeep(defaultSections),
   } as Project);
   const [dialog, setDialog] = useState(false);
+  const router = useRouter();
 
   const handleCreateProject = async () => {
     newProject.ownerId = userUUID;
     newProject.projectUUID = uuidv4();
     await createProject(JSON.parse(JSON.stringify(newProject)), userUUID);
-    location.reload();
+    router.push(`/users/${userUUID}/projects/${newProject.projectUUID}`);
   };
 
   return (

@@ -35,8 +35,8 @@ function ProjectDialog({
   initialProject,
 }: Props) {
   const handleCancelChange = () => {
-    setDialog(false);
     setProject(initialProject);
+    setDialog(false);
   };
 
   return (
@@ -90,8 +90,8 @@ function ProjectDialog({
         <Dialog.Close>
           <Button
             onClick={() => {
+              setDialog(false);
               onSubmit();
-              handleCancelChange();
             }}
             size={'3'}
           >
