@@ -16,11 +16,9 @@ export const defaultSections = [
 
 export const preferredColorOptions: {
   accentColor: colorOptions;
-  grayColor: grayColorOptions;
   appearance: appearanceOptions;
 } = {
   accentColor: 'violet',
-  grayColor: 'mauve',
   appearance: 'dark',
 };
 
@@ -72,3 +70,10 @@ export type appearanceOptions = 'dark' | 'inherit' | 'light' | undefined;
 
 export const allowedIconTypes =
   'image/png, image/jpeg, image/jpg, image/svg+xml';
+
+export const links: string[] = [
+  'Profile Overview',
+  'Projects',
+  'Publishings',
+  'Reviews',
+];

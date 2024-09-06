@@ -16,13 +16,14 @@ function ProjectFrame({ activeProjectId }: Props) {
         <Flex
           direction={'column'}
           gap={'3'}
-          className="h-full w-full items-center justify-center flex-1"
+          className="h-full w-full items-center justify-center"
         >
           <Image
             alt="brand-logo"
             src="/hubfolio-dark-logo.png"
-            width={300}
-            height={300}
+            width={200}
+            height={200}
+            className=""
           />
           <Text weight={'bold'} size={'6'}>
             Select a Project To View
@@ -32,7 +33,7 @@ function ProjectFrame({ activeProjectId }: Props) {
     } else {
       const project = (await getProject(activeProjectId)) as Project;
       return (
-        <div className="rounded border border-gray-6 overflow-hidden h-full flex-1">
+        <div className="rounded overflow-hidden h-full">
           <iframe src={project.url} className="w-full h-full" />
         </div>
       );

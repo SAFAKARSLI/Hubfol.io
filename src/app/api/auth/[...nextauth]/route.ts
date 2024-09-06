@@ -27,7 +27,10 @@ const authOptions: NextAuthOptions = {
       // Check if the user already has a UUID
       if (!user.uuid) {
         user.uuid = uuidv4();
+        // user.preferences.accentColor = 'violet';
+        // user.preferences.theme = 'dark';
       }
+
       return true;
     },
     async session({ session, user, trigger, newSession }) {

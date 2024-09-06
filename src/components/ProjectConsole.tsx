@@ -6,56 +6,48 @@ import * as Accordion from '@radix-ui/react-accordion';
 import AccordionProjectItem from './AccordionProjectItem';
 import { IconButton } from '@radix-ui/themes';
 import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
+import { preferredColorOptions } from '@/utils';
 
 type Props = {
   project: Project;
 };
 
 function ProjectConsole({ project }: Props) {
-  const [accordionValue, setAccordionValue] = useState('');
-
-  useEffect(() => {
-    if (project && project.projectUUID) {
-      setAccordionValue(project.projectUUID);
-    }
-  }, []);
+  const [isConsoleOpen, setConsoleOpen] = useState(true);
 
   return (
-    <div className="xl:hidden absolute bottom-4 right-0 flex flex-col justify-center items-center">
+    <div
+      className={`xl:hidden w-[25rem] absolute  right-0  
+       -sm:w-full bottom-0 h-1/2 flex flex-col justify-end max-h-[50vh]`}
+    >
       <IconButton
-        variant="solid"
-        color="violet"
-        className="w-full rounded-t rounded-b-none h-[1rem]"
+        color={preferredColorOptions.accentColor}
+        className=" w-full rounded-t rounded-b-none h-[1.5rem] flex-none"
         size={'1'}
-        onClick={() =>
-          accordionValue
-            ? setAccordionValue('')
-            : setAccordionValue(project.projectUUID as string)
-        }
+        onClick={() => setConsoleOpen(!isConsoleOpen)}
       >
-        {accordionValue ? <ChevronDownIcon /> : <ChevronUpIcon />}
+        {isConsoleOpen ? <ChevronDownIcon /> : <ChevronUpIcon />}
       </IconButton>
-      <div className=" bg-gray-1 w-[25rem] p-4 max-h-[50rem] border-x border-t border-violet-5">
-        <Accordion.Root
-          type="single"
-          value={accordionValue}
-          onValueChange={() => setAccordionValue(project.projectUUID as string)}
+
+      <Accordion.Root type="single" value={project.projectUUID} asChild>
+        <div
+          className={`${
+            !isConsoleOpen && 'hidden'
+          }  bg-gray-1 w-full border-x border-t border-violet-5 `}
         >
-          <div className="max-h-[44rem] ">
-            {project && (
-              <AccordionProjectItem
-                projectUUID={project.projectUUID as string}
-                title={project.title!}
-                tagline={project.tagline!}
-                iconLink={project.iconLink!}
-                sections={project.sections!}
-                activeProjectId={project.projectUUID!}
-                ownerId={project.ownerId!}
-              />
-            )}
-          </div>
-        </Accordion.Root>
-      </div>
+          {project && (
+            <AccordionProjectItem
+              projectUUID={project.projectUUID as string}
+              title={project.title!}
+              tagline={project.tagline!}
+              iconLink={project.iconLink!}
+              sections={project.sections!}
+              activeProjectId={project.projectUUID!}
+              ownerId={project.ownerId!}
+            />
+          )}
+        </div>
+      </Accordion.Root>
     </div>
   );
 }

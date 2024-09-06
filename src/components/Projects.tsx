@@ -23,7 +23,7 @@ const Projects = async ({ activeProjectId, userUUID }: ProjectsProps) => {
           activeProjectId={activeProjectId!}
         />
       </div>
-      <div className="h-full w-full p-8">
+      <div className="h-full w-full p-3 -lg:pb-10 lg:p-8">
         <ProjectFrame activeProjectId={activeProjectId!} />
       </div>
       {activeProjectId && (

@@ -33,21 +33,27 @@ const AccordionProjectItem = ({
 
   useEffect(() => {
     if (activeProjectId === projectUUID) {
-      cardRef.current?.scrollIntoView({ behavior: 'instant', block: 'start' });
+      cardRef.current?.scrollIntoView({
+        behavior: 'instant',
+        block: 'start',
+        inline: 'nearest',
+      });
     }
-  }, []);
+  }, [activeProjectId, projectUUID]);
   return (
     <Accordion.Item value={projectUUID} asChild>
-      <div className="rounded border border-gray-4 overflow-hidden data-[state=open]:shadow-gray-3 shadow-md h-full">
+      <div className="rounded border border-gray-4 overflow-hidden data-[state=open]:shadow-gray-3 shadow-md ">
         <Accordion.Trigger asChild>
           <div
-            ref={cardRef}
             className={`flex py-3 px-6 
           bg-gray-1 data-[state=open]:bg-gray-2 hover:bg-gray-2
-          data-[state=closed]:cursor-pointer `}
+          data-[state=closed]:cursor-pointer`}
           >
-            <div className="flex justify-between h-[3rem] w-full items-center gap-x-6 -2xl:gap-x-4">
-              <div className="w-[2.4rem] h-[2.4rem] relative -2xl:w-[1.8rem] flex-none">
+            <div
+              className="flex w-full items-center gap-x-6 -2xl:gap-x-4"
+              ref={cardRef}
+            >
+              <div className="w-[2.4rem] h-[2.4rem] relative -2xl:w-[1.8rem] ">
                 <Image
                   fill
                   sizes="100px"
@@ -86,8 +92,8 @@ const AccordionProjectItem = ({
         </Accordion.Trigger>
 
         <Accordion.Content asChild>
-          <div className="bg-gray-1 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden ">
-            <ScrollArea type="auto" className="max-h-[35rem] ">
+          <div className="bg-gray-1 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden">
+            <ScrollArea type="auto" className="max-h-[50vh]">
               {sections?.map((s, i) => {
                 return (
                   <div key={i}>

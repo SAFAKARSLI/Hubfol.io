@@ -1,7 +1,7 @@
 'use client';
 import React, { SetStateAction, useEffect, useState } from 'react';
 
-import { PlusIcon } from '@radix-ui/react-icons';
+import { FilePlusIcon, PlusIcon } from '@radix-ui/react-icons';
 import { cloneDeep } from 'lodash';
 import { Flex, Box, Dialog, Button, Tabs, Separator } from '@radix-ui/themes';
 
@@ -43,10 +43,10 @@ function AddProjectButton({ userUUID }: Props) {
         <Dialog.Trigger>
           <Button
             variant="ghost"
-            className="cursor-pointer rounded h-12 w-full my-0 "
+            className="cursor-pointer rounded h-12 w-full "
             onClick={() => setDialog(true)}
           >
-            <PlusIcon /> Add Project
+            <PlusIcon className="mx-1" /> Add Project
           </Button>
         </Dialog.Trigger>
 

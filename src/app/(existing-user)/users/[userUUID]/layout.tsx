@@ -25,10 +25,9 @@ export default function RootLayout({ children, params }: Readonly<SlugProps>) {
         <Theme
           accentColor={preferredColorOptions.accentColor}
           appearance={preferredColorOptions.appearance}
-          grayColor={preferredColorOptions.grayColor}
         >
-          <div className="min-h-screen flex flex-col">
-            <TopBar params={params} children={children} />
+          <div className="min-h-[100dvh] flex flex-col">
+            <TopBar params={params} />
             <div className="flex flex-1">{children}</div>
           </div>
         </Theme>

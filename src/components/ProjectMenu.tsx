@@ -39,7 +39,11 @@ function ProjectMenu({ projectUUID, title, initialProject }: Props) {
     <div>
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-          <IconButton variant="ghost" color="gray" size={'1'} className="mt-1">
+          <IconButton
+            variant="ghost"
+            color="gray"
+            className="mt-1 h-4 w-4 -md:h-6 -md:w-6"
+          >
             <DotsHorizontalIcon />
           </IconButton>
         </DropdownMenu.Trigger>
