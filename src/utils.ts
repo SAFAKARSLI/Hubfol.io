@@ -71,9 +71,21 @@ export type appearanceOptions = 'dark' | 'inherit' | 'light' | undefined;
 export const allowedIconTypes =
   'image/png, image/jpeg, image/jpg, image/svg+xml';
 
-export const links: string[] = [
-  'Profile Overview',
-  'Projects',
-  'Publishings',
-  'Reviews',
+export const links = [
+  {
+    title: 'Profile Overview',
+    url: 'profile-overview',
+  },
+  {
+    title: 'Projects',
+    url: 'projects',
+  },
+  {
+    title: 'Publishings',
+    url: 'publishings',
+  },
+  {
+    title: 'Reviews',
+    url: 'reviews',
+  },
 ];

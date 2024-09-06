@@ -42,10 +42,10 @@ const AccordionProjectItem = ({
   }, [activeProjectId, projectUUID]);
   return (
     <Accordion.Item value={projectUUID} asChild>
-      <div className="rounded border border-gray-4 overflow-hidden data-[state=open]:shadow-gray-3 shadow-md ">
+      <div className="rounded border border-gray-4 flex flex-col overflow-hidden data-[state=open]:shadow-gray-3 shadow-md h-full">
         <Accordion.Trigger asChild>
           <div
-            className={`flex py-3 px-6 
+            className={`flex py-3 px-6 h-[4.5rem]
           bg-gray-1 data-[state=open]:bg-gray-2 hover:bg-gray-2
           data-[state=closed]:cursor-pointer`}
           >
@@ -92,8 +92,8 @@ const AccordionProjectItem = ({
         </Accordion.Trigger>
 
         <Accordion.Content asChild>
-          <div className="bg-gray-1 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden">
-            <ScrollArea type="auto" className="max-h-[50vh]">
+          <div className="bg-gray-1 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden ">
+            <ScrollArea type="auto" className="max-h-[40vh]">
               {sections?.map((s, i) => {
                 return (
                   <div key={i}>

@@ -1,7 +1,6 @@
-import { CardStackIcon } from '@radix-ui/react-icons';
-import { DropdownMenu, IconButton, ScrollArea, Text } from '@radix-ui/themes';
+import { Text } from '@radix-ui/themes';
 import React from 'react';
-import { getProjects, getUser, openProject } from '@/app/actions';
+import { getProjects, getUser } from '@/app/actions';
 import Project from '@/types/project';
 import { WithId } from 'mongodb';
 import { User } from 'next-auth';
@@ -16,19 +15,13 @@ type Props = {
 async function MiniProfileOverview({ userUUID }: Props) {
   const user = (await getUser(userUUID)) as WithId<User>;
   const projects = (await getProjects(userUUID)) as Project[];
-  const colorOption = preferredColorOptions.accentColor;
-
   return (
-    <div
-      className={`xl:hidden h-3/4 w-[15rem] bg-violet-1 rounded border border-violet-6 p-3 flex justify-between items-center`}
-    >
-      <div className="flex flex-col">
-        <Text className="text-sm font-bold ">{user.name}</Text>
-        <Text className="text-xs" color="gray">
-          {user.title}
-        </Text>
-      </div>
+    <div className={`xl:hidden flex items-center h-full w-[15rem] gap-2`}>
       <HamburgerProjectMenu projects={projects} userUUID={userUUID} />
+      <div className="w-full">
+        <p className="text-sm  font-bold truncate ">{user.name}</p>
+        <p className="text-xs truncate text-gray-400 ">{user.title}</p>
+      </div>
     </div>
   );
 }

@@ -1,36 +1,24 @@
+'use client';
 import { links } from '@/utils';
-import { Text } from '@radix-ui/themes';
 import React from 'react';
-import Link from 'next/link';
-import { SlugProps } from '@/types/slug';
+import { useParams, usePathname } from 'next/navigation';
+import NavLink from './NavLink';
 
 interface NavigationLinksProps {
-  userUUID: string;
   isCol?: boolean;
   onClick?: () => void;
 }
 
-function NavigationLinks({
-  userUUID,
-  isCol = false,
-  onClick,
-}: NavigationLinksProps) {
+function NavigationLinks({ isCol = false, onClick }: NavigationLinksProps) {
+  const url = usePathname();
   return (
     <div
       className={`flex ${
-        isCol && 'flex-col justify-center'
-      } items-center h-full justify-between text-center w-full flex-1`}
+        isCol && 'flex-col '
+      } h-full text-center justify-between items-center`}
     >
       {links.map((link, i) => (
-        <Link
-          href={`/users/${userUUID}/${link.toLowerCase().replaceAll(' ', '-')}`}
-          color="gray"
-          key={i}
-          className="hover:text-white text-gray-400 header-link items-center justify-center h-full flex -2xl:text-xs flex-1  w-full"
-          onClick={onClick}
-        >
-          {link}
-        </Link>
+        <NavLink link={link} key={i} onClick={onClick} />
       ))}
     </div>
   );

@@ -16,7 +16,7 @@ function ProjectFrame({ activeProjectId }: Props) {
         <Flex
           direction={'column'}
           gap={'3'}
-          className="h-full w-full items-center justify-center"
+          className="h-full w-full items-center justify-center text-center"
         >
           <Image
             alt="brand-logo"

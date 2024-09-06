@@ -34,7 +34,7 @@
   --violet-a10: #4000ffaf;
   --violet-a11: #97aeff;
   --violet-a12: #d4e0ff;
-  --violet-a13: color(display-p3 0 0 0 / 0.7);
+  --violet-a13: color(display-p3 0 0 0 / 0.4);
 
   --violet-contrast: #fff;
   --violet-surface: #101b4580;
@@ -45,12 +45,12 @@
 .header-link::before {
   content: '';
   position: absolute;
-  bottom: -8px;
+  bottom: -6px;
   left: 0; /* Adjusted to start from the left */
   width: 100%;
   color: gray;
   height: 1px;
-  background-color: var(--accent-color);
+  background-color: var(--violet-a8);
   transform-origin: center;
 
   transform: scaleX(0);
@@ -62,6 +62,11 @@
 }
 
 .header-link:hover::before {
+  transform: scaleX(1);
+}
+
+.header-link-active::before {
+  color: white;
   transform: scaleX(1);
 }
 

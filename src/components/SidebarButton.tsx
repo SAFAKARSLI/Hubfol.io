@@ -6,39 +6,54 @@ import { links, preferredColorOptions } from '@/utils';
 import Link from 'next/link';
 import NavigationLinks from './NavigationLinks';
 import { useParams } from 'next/navigation';
+import NavLink from './NavLink';
+import SendProposalButton from './SendProposalButton';
 
-type Props = {};
+type Props = {
+  icon: React.ReactNode;
+  position: 'left' | 'right';
+  iconVariant: 'soft' | 'surface';
+};
 
-function SidebarButton({}: Props) {
+function SidebarButton({ icon, iconVariant, position }: Props) {
   const [visible, setVisible] = React.useState(false);
-  const { userUUID } = useParams();
+  const menuPosition = position === 'left' ? `left-0` : 'right-0';
+  const menuSlideAnimation =
+    position === 'left'
+      ? visible
+        ? 'translate-x-0'
+        : '-translate-x-full'
+      : visible
+      ? 'translate-x-0'
+      : 'translate-x-full';
   return (
     <div>
       <IconButton
-        variant="surface"
+        variant={iconVariant}
         size={'3'}
         onClick={() => setVisible(!visible)}
       >
-        <HamburgerMenuIcon />
+        {icon}
       </IconButton>
 
       <div
-        className={`flex flex-col justify-between p-3 gap-3 fixed bottom-0 left-0 h-full bg-gray-1 border border-gray-4 w-[15rem] transition-transform duration-300 z-20 ${
-          visible ? 'transform translate-x-0' : 'transform -translate-x-full'
-        }`}
+        className={`flex flex-col justify-between p-6 gap-3 fixed bottom-0 ${menuPosition} ${menuSlideAnimation} h-full bg-gray-2 border border-gray-4 w-[15rem] duration-300 z-20`}
       >
         <div className="flex justify-end">
           <IconButton variant="ghost" onClick={() => setVisible(false)}>
             <Cross1Icon />
           </IconButton>
         </div>
-        <div className="flex flex-col  flex-1">
-          <div className="h-[15rem] mt-9">
-            <NavigationLinks
-              isCol
-              userUUID={userUUID as string}
-              onClick={() => setVisible(false)}
-            />
+        <div
+          onClick={() => setVisible(false)}
+          className="h-full flex flex-col items-center"
+        >
+          <div
+            className={`flex flex-col h-1/3 mt-[5rem] text-center justify-between items-center w-full`}
+          >
+            {links.map((link, i) => (
+              <NavLink link={link} key={i} onClick={() => setVisible(false)} />
+            ))}
           </div>
         </div>
       </div>
@@ -46,7 +61,8 @@ function SidebarButton({}: Props) {
         className={` fixed left-0 top-0 right-0 bottom-0 bg-violet-a13 z-10 ${
           !visible && 'hidden'
         }`}
-      ></div>
+        onClick={() => setVisible(false)}
+      />
     </div>
   );
 }
