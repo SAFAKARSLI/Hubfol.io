@@ -18,6 +18,7 @@ interface AccordionProjectItemProps {
   sections: Section[] | null;
   activeProjectId: string;
   ownerId: string;
+  url: string;
 }
 
 const AccordionProjectItem = ({
@@ -28,6 +29,7 @@ const AccordionProjectItem = ({
   sections,
   activeProjectId,
   ownerId,
+  url,
 }: AccordionProjectItemProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -84,6 +86,7 @@ const AccordionProjectItem = ({
                     iconLink,
                     sections,
                     ownerId,
+                    url,
                   } as Project
                 }
               />

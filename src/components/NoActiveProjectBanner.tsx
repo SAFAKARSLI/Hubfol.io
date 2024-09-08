@@ -1,4 +1,5 @@
-import { Flex, Text } from '@radix-ui/themes';
+import { CardStackIcon } from '@radix-ui/react-icons';
+import { Button, Flex, Text } from '@radix-ui/themes';
 import Image from 'next/image';
 import React from 'react';
 
@@ -18,7 +19,12 @@ function NoActiveProjectBanner({}: Props) {
         height={200}
       />
       <Text weight={'bold'} size={'6'}>
-        Select a Project To View
+        Select a Project from the{' '}
+        {
+          <Button variant="soft" size={'2'} className="h-10">
+            <CardStackIcon /> Projects
+          </Button>
+        }
       </Text>
     </Flex>
   );

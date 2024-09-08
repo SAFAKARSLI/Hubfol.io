@@ -4,7 +4,6 @@ import ProjectDialog from './ProjectDialog';
 import Project from '@/types/project';
 import { deleteIcon, updateProject } from '@/app/actions';
 import { useRouter } from 'next/navigation';
-import { initial } from 'lodash';
 
 type Props = {
   project: Project;

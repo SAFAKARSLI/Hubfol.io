@@ -14,6 +14,7 @@ type Props = {
 };
 
 function ProjectInfoForm({ project, setProject }: Props) {
+  console.log(project);
   const handleRemoveIcon = async () => {
     if (project.iconLink) {
       setProject({ ...project, iconLink: '' });

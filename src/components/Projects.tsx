@@ -15,7 +15,7 @@ const Projects = async ({ activeProjectId, userUUID }: ProjectsProps) => {
   const projects = (await getProjects(userUUID)) as Project[];
 
   return (
-    <div className="flex w-full">
+    <div className="flex w-screen">
       <div className="flex-none">
         <AccordionProjectList
           initialProjects={projects}

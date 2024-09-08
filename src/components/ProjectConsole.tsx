@@ -56,6 +56,7 @@ function ProjectConsole({ project }: Props) {
                 sections={project.sections!}
                 activeProjectId={project.projectUUID!}
                 ownerId={project.ownerId!}
+                url={project.url!}
               />
             )}
           </div>

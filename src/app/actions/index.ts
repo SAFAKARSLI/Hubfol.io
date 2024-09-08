@@ -34,6 +34,8 @@ export const getProjects = async (userUUID: string) => {
     .find({ ownerId: userUUID }, { projection: { _id: 0 } })
     .toArray();
 
+  console.log(projects);
+
   return JSON.parse(JSON.stringify(projects));
 };
 
@@ -84,14 +86,16 @@ export const uploadIcon = async (formData: FormData) => {
 };
 
 export const deleteIcon = async (iconLink: string) => {
-  const key = iconLink.split('/').slice(-1)[0];
+  if (iconLink) {
+    const key = iconLink.split('/').slice(-1)[0];
 
-  const deleteParams = {
-    Bucket: bucketName,
-    Key: key,
-  };
+    const deleteParams = {
+      Bucket: bucketName,
+      Key: key,
+    };
 
-  await s3Client.send(new DeleteObjectCommand(deleteParams));
+    await s3Client.send(new DeleteObjectCommand(deleteParams));
+  }
 };
 
 export const openProject =

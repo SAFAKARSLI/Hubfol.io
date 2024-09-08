@@ -43,6 +43,7 @@ function AccordionProjectList({ initialProjects }: Props) {
           sections={p.sections!}
           activeProjectId={projectUUID}
           ownerId={p.ownerId!}
+          url={p.url!}
         />
       );
     });
