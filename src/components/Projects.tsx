@@ -1,11 +1,10 @@
-import React, { act } from 'react';
+import React from 'react';
 
 import AccordionProjectList from './AccordionProjectList';
 import Project from '@/types/project';
 import ProjectFrame from './ProjectFrame';
-import { Box, Flex } from '@radix-ui/themes';
 import { getProjects } from '@/app/actions';
-import ProjectConsole from './ProjectConsole';
+import NoActiveProjectBanner from './NoActiveProjectBanner';
 
 interface ProjectsProps {
   activeProjectId?: string;
@@ -23,14 +22,15 @@ const Projects = async ({ activeProjectId, userUUID }: ProjectsProps) => {
           activeProjectId={activeProjectId!}
         />
       </div>
-      <div className="h-full w-full p-3 -lg:pb-10 lg:p-8">
-        <ProjectFrame activeProjectId={activeProjectId!} />
+      <div className="flex-1 w-full m-3">
+        {activeProjectId ? (
+          <ProjectFrame
+            project={projects.find((e) => e.projectUUID === activeProjectId)}
+          />
+        ) : (
+          <NoActiveProjectBanner />
+        )}
       </div>
-      {activeProjectId && (
-        <ProjectConsole
-          project={projects.find((e) => activeProjectId == e.projectUUID)!}
-        />
-      )}
     </div>
   );
 };

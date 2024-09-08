@@ -9,7 +9,7 @@ type Props = {
 
 const TechStack = ({ techStack }: Props) => {
   return (
-    <div className="grid justify-center items-center grid-cols-4 gap-3 w-full">
+    <div className="justify-center items-center flex flex-wrap gap-3 w-full">
       {techStack.map((tech, index) => {
         return <TechCard key={index} tech={tech} />;
       })}

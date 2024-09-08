@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import { Tooltip } from '@radix-ui/themes';
 import { SearchResult } from '@/types/searchResult';
@@ -10,10 +11,20 @@ type Props = {
 };
 
 function TechCard({ tech, onClick }: Props) {
+  const [showTooltip, setShowTooltip] = React.useState(false);
+
+  const handleTooltipOpen = () => {
+    setShowTooltip(true);
+    setTimeout(() => {
+      setShowTooltip(false);
+    }, 1000);
+  };
+
   return (
-    <Tooltip content={tech.brandName}>
+    <Tooltip content={tech.brandName} open={showTooltip}>
       <div
-        className={`flex flex-col justify-center items-center border rounded border-gray-4 h-[4rem] relative`}
+        className={`flex flex-col justify-evenly items-center border rounded border-gray-4 h-[5rem] w-[5rem] relative overflow-hidden`}
+        onClick={handleTooltipOpen}
       >
         {onClick && (
           <Cross2Icon
@@ -23,12 +34,13 @@ function TechCard({ tech, onClick }: Props) {
         )}
         <img
           alt={`${tech.slug}-logo`}
-          height="32"
-          width="32"
+          className="object-contain h-10 w-10"
           src={`https://cdn.simpleicons.org/${tech.slug}?viewbox=auto`}
         />
 
-        {/* {<div className="flex-none pb-2">{tech.brandName}</div>} */}
+        <p className="flex-none text-xs text-gray-300 truncate px-2 w-full text-center">
+          {tech.brandName}
+        </p>
       </div>
     </Tooltip>
   );

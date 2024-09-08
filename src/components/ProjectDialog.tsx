@@ -45,60 +45,62 @@ function ProjectDialog({
       onEscapeKeyDown={(e) => e.preventDefault()}
       onInteractOutside={(e) => e.preventDefault()}
     >
-      <div className="w-full flex justify-between">
-        <Dialog.Title size={'6'}>{title}</Dialog.Title>
-        <Dialog.Close>
-          <IconButton
-            className="cursor-pointer"
-            variant="ghost"
-            size={'2'}
-            onClick={handleCancelChange}
-          >
-            <Cross1Icon className="w-5 h-5" />
-          </IconButton>
-        </Dialog.Close>
+      <div className="flex flex-col">
+        <div className="w-full flex justify-between p-0">
+          <Dialog.Title size={'6'}>{title}</Dialog.Title>
+          <Dialog.Close>
+            <IconButton
+              className="cursor-pointer"
+              variant="ghost"
+              size={'2'}
+              onClick={handleCancelChange}
+            >
+              <Cross1Icon className="w-5 h-5" />
+            </IconButton>
+          </Dialog.Close>
+        </div>
+
+        <Tabs.Root defaultValue="project-info">
+          <Tabs.List size={'2'}>
+            <Tabs.Trigger value="project-info">Project Info</Tabs.Trigger>
+            <Tabs.Trigger value="sections">Sections</Tabs.Trigger>
+          </Tabs.List>
+
+          <Tabs.Content value="project-info">
+            <ProjectInfoForm project={project} setProject={setProject} />
+          </Tabs.Content>
+
+          <Tabs.Content value="sections">
+            <SectionsForm project={project} setProject={setProject} />
+          </Tabs.Content>
+        </Tabs.Root>
+
+        <Separator size={'4'} mb={'4'} color={'gray'} />
+
+        <Flex gap="3" mt="4" justify="end">
+          <Dialog.Close>
+            <Button
+              variant="soft"
+              size={'3'}
+              color="gray"
+              onClick={handleCancelChange}
+            >
+              Cancel
+            </Button>
+          </Dialog.Close>
+          <Dialog.Close>
+            <Button
+              onClick={() => {
+                setDialog(false);
+                onSubmit();
+              }}
+              size={'3'}
+            >
+              {actionButtonLabel}
+            </Button>
+          </Dialog.Close>
+        </Flex>
       </div>
-
-      <Tabs.Root defaultValue="project-info">
-        <Tabs.List size={'2'}>
-          <Tabs.Trigger value="project-info">Project Info</Tabs.Trigger>
-          <Tabs.Trigger value="sections">Sections</Tabs.Trigger>
-        </Tabs.List>
-
-        <Tabs.Content value="project-info">
-          <ProjectInfoForm project={project} setProject={setProject} />
-        </Tabs.Content>
-
-        <Tabs.Content value="sections">
-          <SectionsForm project={project} setProject={setProject} />
-        </Tabs.Content>
-      </Tabs.Root>
-
-      <Separator size={'4'} mb={'4'} color={'gray'} />
-
-      <Flex gap="3" mt="4" justify="end">
-        <Dialog.Close>
-          <Button
-            variant="soft"
-            size={'3'}
-            color="gray"
-            onClick={handleCancelChange}
-          >
-            Cancel
-          </Button>
-        </Dialog.Close>
-        <Dialog.Close>
-          <Button
-            onClick={() => {
-              setDialog(false);
-              onSubmit();
-            }}
-            size={'3'}
-          >
-            {actionButtonLabel}
-          </Button>
-        </Dialog.Close>
-      </Flex>
     </Dialog.Content>
   );
 }

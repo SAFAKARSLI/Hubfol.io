@@ -49,7 +49,7 @@ function SidebarButton({ icon, iconVariant, position }: Props) {
           className="h-full flex flex-col items-center"
         >
           <div
-            className={`flex flex-col h-1/3 mt-[5rem] text-center justify-between items-center w-full`}
+            className={`flex flex-col h-1/3 mt-[2rem] +maxH:h-2/3 text-center justify-between items-center w-full`}
           >
             {links.map((link, i) => (
               <NavLink link={link} key={i} onClick={() => setVisible(false)} />

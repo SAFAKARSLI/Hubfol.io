@@ -8,6 +8,7 @@ type Props = {
 };
 
 function TechCardList({ techs, setTechs }: Props) {
+  const [activeTooltip, setActiveTooltip] = React.useState<number | null>(null);
   const renderTechCards = () => {
     return techs.map((tech, i) => {
       return <TechCard key={i} tech={tech} onClick={() => setTechs(i)} />;
@@ -15,7 +16,7 @@ function TechCardList({ techs, setTechs }: Props) {
   };
 
   return (
-    <div className="grid justify-center items-center grid-cols-6 gap-2 w-full">
+    <div className="flex flex-wrap max-h-[10rem] justify-center gap-2 w-full">
       {renderTechCards()}
     </div>
   );

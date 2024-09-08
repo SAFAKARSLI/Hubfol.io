@@ -1,4 +1,7 @@
 import type { Metadata } from 'next';
+import Head from 'next/head';
+import type { Viewport } from 'next';
+
 import '@/app/globals.css';
 import TopBar from '@/components/TopBar';
 import { Theme } from '@radix-ui/themes';
@@ -11,24 +14,29 @@ export const metadata: Metadata = {
   description: 'Showcase your portfolio',
 };
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export default function RootLayout({ children, params }: Readonly<SlugProps>) {
   return (
     <html lang="en">
-      <head>
+      <Head>
         <link
           href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap"
           rel="stylesheet"
         />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      </head>
-      <body>
+      </Head>
+      <body className="overflow-hidden">
         <Theme
           accentColor={preferredColorOptions.accentColor}
           appearance={preferredColorOptions.appearance}
         >
-          <div className="min-h-[100dvh] flex flex-col">
+          <div className="min-h-[100dvh] flex flex-col ">
             <TopBar params={params} />
-            <div className="flex flex-1">{children}</div>
+            <div className="flex flex-1 ">{children}</div>
           </div>
         </Theme>
       </body>

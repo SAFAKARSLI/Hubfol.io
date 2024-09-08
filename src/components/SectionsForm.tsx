@@ -71,15 +71,19 @@ function SectionsForm({ project, setProject }: Props) {
         <RadioCards.Item
           value={i.toString()}
           key={i}
-          className="flex flex-col items-start z-10"
+          className="flex md:flex-col items-start z-10 justify-between"
         >
-          <div className="flex justify-between w-full">
-            <Text as="div" size="2" weight="bold">
-              {section.title}
-            </Text>
-          </div>
+          <Text
+            as="div"
+            size="2"
+            weight="bold"
+            truncate
+            className="-md:text-xs"
+          >
+            {section.title}
+          </Text>
 
-          <div>
+          <div className="flex">
             <Text size={'1'} color="gray" mr={'1'}>
               Type:
             </Text>
@@ -90,13 +94,15 @@ function SectionsForm({ project, setProject }: Props) {
     });
 
     return (
-      <div className="flex gap-4 h-[20rem] ">
-        <div className="flex gap-1 flex-col items-center h-full">
-          <Heading size={'3'}>Sections List</Heading>
+      <div className="flex -md:flex-col gap-3 py-4 -md:items-center">
+        <div className="flex gap-1 flex-col  items-center h-full max-w-[20rem]">
+          <Heading size={'3'} className="-md:text-sm">
+            Sections List
+          </Heading>
           <ScrollArea
             type="auto"
             scrollbars="vertical"
-            className="rounded bg-gray-1  border-gray-5 w-[15rem] flex-1"
+            className="rounded bg-gray-1  border-gray-5 md:w-[15rem] h-[20rem] "
           >
             <RadioCards.Root
               defaultValue={'0'}
@@ -112,7 +118,7 @@ function SectionsForm({ project, setProject }: Props) {
           </ScrollArea>
         </div>
         <Separator orientation={'vertical'} size={'4'} />
-        <div className="flex flex-col gap-3 flex-1">
+        <div className="flex flex-col gap-3 flex-1 min-w-[10rem] w-full">
           <FormInput
             label="Title"
             name="title"
@@ -127,7 +133,7 @@ function SectionsForm({ project, setProject }: Props) {
           />
 
           <div className="flex flex-col flex-1">
-            <Text weight="bold">
+            <Text weight="bold" className="-md:text-sm">
               Content
               <Select.Root
                 defaultValue="text"
@@ -163,7 +169,7 @@ function SectionsForm({ project, setProject }: Props) {
               />
             ) : (
               <TextArea
-                className="flex-1"
+                className="flex-1 -md:text-xs"
                 value={project.sections![activeSection].content as string}
                 onChange={(e) => {
                   const newSections = cloneDeep(project.sections!);
@@ -178,7 +184,7 @@ function SectionsForm({ project, setProject }: Props) {
             <ScrollArea
               type="auto"
               scrollbars="vertical"
-              className="rounded  p-3 bg-gray-1 w-full h-full"
+              className="rounded  p-3 bg-gray-1 w-full h-full min-h-[10rem] "
             >
               <TechCardList
                 setTechs={(e: number) => {
@@ -201,7 +207,7 @@ function SectionsForm({ project, setProject }: Props) {
 
   return (
     <div className="flex flex-col gap-4 my-5 w-full">
-      <Text size="3">
+      <Text size="3" className="-md:text-sm">
         Sections are different ways by which you can flex your project. This
         information is visible when the project is active.
       </Text>
@@ -210,7 +216,7 @@ function SectionsForm({ project, setProject }: Props) {
       <div className="flex h-[3rem] w-full gap-6">
         <Button
           variant="soft"
-          className="h-full flex-1 font-bold"
+          className="h-full flex-1 font-bold -sm:text-xs"
           onClick={() => {
             const newSections = cloneDeep(project.sections!);
             newSections!.push({
@@ -225,7 +231,7 @@ function SectionsForm({ project, setProject }: Props) {
           <PlusIcon /> Add Section
         </Button>
         <Button
-          className="h-full flex-none font-bold"
+          className="h-full flex-initial font-bold"
           variant="outline"
           color="red"
           onClick={() => {

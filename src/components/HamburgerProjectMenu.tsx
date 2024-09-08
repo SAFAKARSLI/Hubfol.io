@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { DropdownMenu, IconButton, ScrollArea } from '@radix-ui/themes';
+import { Button, DropdownMenu, IconButton, ScrollArea } from '@radix-ui/themes';
 import { CardStackIcon } from '@radix-ui/react-icons';
 import ProjectListHeader from './ProjectListHeader';
 import AddProjectButton from './AddProjectButton';
@@ -28,12 +28,19 @@ function HamburgerProjectMenu({ projects, userUUID }: Props) {
   return (
     <DropdownMenu.Root open={open}>
       <DropdownMenu.Trigger onClick={() => setOpen(true)}>
-        <IconButton variant="soft" size={'3'} className="-xl:flex hidden">
-          <CardStackIcon />
-        </IconButton>
+        <Button
+          variant="soft"
+          size={'3'}
+          className="-xl:flex hidden text-xs"
+          onScroll={() => {
+            console.log('SCROLLLL');
+          }}
+        >
+          <CardStackIcon /> <div className="-xs:hidden">Projects</div>
+        </Button>
       </DropdownMenu.Trigger>
       <DropdownMenu.Content onInteractOutside={() => setOpen(false)}>
-        <div className="flex flex-col gap-2 w-[16rem] my-2">
+        <div className="flex flex-col gap-2  my-2">
           <ProjectListHeader projectCount={projects.length} />
           <ScrollArea
             type="auto"

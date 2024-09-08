@@ -75,7 +75,7 @@ function SearchTechInput({ project, setProject, sectionNo }: Props) {
   }, [query]);
 
   return (
-    <div className="flex flex-col w-full relative flex-none">
+    <div className="flex flex-col w-full relative flex-none ">
       <TextField.Root
         onFocus={() => setSearch({ ...search, resultVisible: true })}
         onBlur={(e) => {
@@ -87,6 +87,7 @@ function SearchTechInput({ project, setProject, sectionNo }: Props) {
           setQueryBounce(e.target.value);
         }}
         placeholder="Search for a technology"
+        className="-md:text-xs"
       >
         <TextField.Slot>
           {search.loading ? (

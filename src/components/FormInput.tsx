@@ -38,8 +38,8 @@ function FormInput({
   onChange,
 }: Props) {
   return (
-    <div>
-      <Heading size={'3'} className="pb-2">
+    <div className="flex-none">
+      <Heading size={'3'} className="pb-2 -md:text-sm">
         {label}
       </Heading>
       <label>
@@ -53,7 +53,7 @@ function FormInput({
             type={type as InputType}
             value={value}
             onChange={onChange}
-            className="text-m w-full"
+            className="w-full -md:text-xs"
           />
         </Flex>
       </label>

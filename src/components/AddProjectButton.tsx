@@ -33,7 +33,7 @@ function AddProjectButton({ userUUID }: Props) {
   };
 
   return (
-    <Box className={`px-2 w-full`}>
+    <Box className={` w-full`}>
       <Dialog.Root
         open={dialog}
         onOpenChange={() => {
@@ -42,11 +42,11 @@ function AddProjectButton({ userUUID }: Props) {
       >
         <Dialog.Trigger>
           <Button
-            variant="ghost"
+            variant="soft"
             className="cursor-pointer rounded h-12 w-full "
             onClick={() => setDialog(true)}
           >
-            <PlusIcon className="mx-1" /> Add Project
+            <PlusIcon /> Add Project
           </Button>
         </Dialog.Trigger>
 

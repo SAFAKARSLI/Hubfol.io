@@ -31,14 +31,14 @@ async function TopBar({ params }: TopBarProps) {
       <ProfileOverview userUUID={userUUID} />
       <div className="flex border-y border-gray-5 bg-gray-1  px-8 -md:px-3 w-screen -xl:h-[5rem] h-[6rem] items-center">
         <MiniProfileOverview userUUID={userUUID} activeProject={projectUUID} />
-        <div className="grow flex justify-center">
-          <div className="max-w-[45rem] w-[40rem] -2xl:w-[28rem] -xl:w-[25rem] -lg:hidden  h-full">
+        <div className="grow flex justify-center -lg:hidden">
+          <div className="max-w-[45rem] w-[40rem] -2xl:w-[28rem] -xl:w-[25rem]   h-full">
             <NavigationLinks />
           </div>
         </div>
 
         <Flex align={'center'}>
-          <SendProposalButton />
+          {/* <SendProposalButton /> */}
 
           <Separator orientation="vertical" size="2" className="mx-3" />
 

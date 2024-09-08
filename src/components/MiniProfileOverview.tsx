@@ -16,11 +16,15 @@ async function MiniProfileOverview({ userUUID }: Props) {
   const user = (await getUser(userUUID)) as WithId<User>;
   const projects = (await getProjects(userUUID)) as Project[];
   return (
-    <div className={`xl:hidden flex items-center h-full w-[15rem] gap-2`}>
+    <div className={`xl:hidden flex w-full items-center h-full gap-3`}>
       <HamburgerProjectMenu projects={projects} userUUID={userUUID} />
-      <div className="w-full">
-        <p className="text-sm  font-bold truncate ">{user.name}</p>
-        <p className="text-xs truncate text-gray-400 ">{user.title}</p>
+      <div className="text-center overflow-hidden flex-1 w-[8rem]">
+        <p className="text-sm font-bold truncate block text-nowrap">
+          {user.name}
+        </p>
+        <p className="text-xs truncate text-gray-400 truncate block">
+          {user.title}
+        </p>
       </div>
     </div>
   );
