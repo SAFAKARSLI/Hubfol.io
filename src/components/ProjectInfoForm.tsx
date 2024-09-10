@@ -105,6 +105,7 @@ function ProjectInfoForm({ project, setProject }: Props) {
           <input
             onChange={(e) => handleFileInput((e.target.files as FileList)[0])}
             type="file"
+            className="w-full"
           />
         )}
       </label>

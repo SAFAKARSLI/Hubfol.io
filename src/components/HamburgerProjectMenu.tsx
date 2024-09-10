@@ -49,7 +49,10 @@ function HamburgerProjectMenu({ projects, userUUID }: Props) {
           >
             {renderProjects()}
           </ScrollArea>
-          <AddProjectButton userUUID={userUUID} />
+          <AddProjectButton
+            userUUID={userUUID}
+            onSubmit={() => setOpen(false)}
+          />
         </div>
       </DropdownMenu.Content>
     </DropdownMenu.Root>

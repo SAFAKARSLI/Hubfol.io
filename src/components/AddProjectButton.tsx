@@ -16,9 +16,10 @@ import { useRouter } from 'next/navigation';
 
 type Props = {
   userUUID: string;
+  onSubmit?: () => void;
 };
 
-function AddProjectButton({ userUUID }: Props) {
+function AddProjectButton({ userUUID, onSubmit }: Props) {
   const [newProject, setNewProject] = useState({
     sections: cloneDeep(defaultSections),
   } as Project);
@@ -30,10 +31,11 @@ function AddProjectButton({ userUUID }: Props) {
     newProject.projectUUID = uuidv4();
     await createProject(JSON.parse(JSON.stringify(newProject)), userUUID);
     router.push(`/users/${userUUID}/projects/${newProject.projectUUID}`);
+    onSubmit && onSubmit();
   };
 
   return (
-    <Box className={` w-full`}>
+    <Box>
       <Dialog.Root
         open={dialog}
         onOpenChange={() => {

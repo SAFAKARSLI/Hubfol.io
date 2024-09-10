@@ -19,12 +19,7 @@ function NoActiveProjectBanner({}: Props) {
         height={200}
       />
       <Text weight={'bold'} size={'6'}>
-        Select a Project from the{' '}
-        {
-          <Button variant="soft" size={'2'} className="h-10">
-            <CardStackIcon /> Projects
-          </Button>
-        }
+        Select a Project to View
       </Text>
     </Flex>
   );

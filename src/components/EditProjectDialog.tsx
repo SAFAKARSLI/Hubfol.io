@@ -18,7 +18,6 @@ function EditProjectDialog({
   setEditDialogeOpen,
   initialProject,
 }: Props) {
-  const router = useRouter();
   const handleEditProject = async () => {
     if (initialProject.iconLink !== project.iconLink) {
       await deleteIcon(initialProject.iconLink as string);

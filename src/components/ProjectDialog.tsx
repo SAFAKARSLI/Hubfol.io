@@ -46,7 +46,7 @@ function ProjectDialog({
       onInteractOutside={(e) => e.preventDefault()}
     >
       <div className="flex flex-col">
-        <div className="w-full flex justify-between p-0">
+        <div className="flex justify-between">
           <Dialog.Title size={'6'}>{title}</Dialog.Title>
           <Dialog.Close>
             <IconButton
