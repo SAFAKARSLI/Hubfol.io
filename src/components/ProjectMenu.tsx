@@ -8,6 +8,8 @@ import {
   Dialog,
 } from '@radix-ui/themes';
 
+import * as DialogPrimitive from '@radix-ui/react-dialog';
+
 import {
   TrashIcon,
   Pencil2Icon,
@@ -86,14 +88,16 @@ function ProjectMenu({ projectUUID, title, initialProject }: Props) {
         />
       </AlertDialog.Root>
 
-      <Dialog.Root open={editDialogeOpen}>
-        <EditProjectDialog
-          project={project}
-          setProject={setProject}
-          setEditDialogeOpen={setEditDialogeOpen}
-          initialProject={initialProject}
-        />
-      </Dialog.Root>
+      <DialogPrimitive.Root open={editDialogeOpen}>
+        <DialogPrimitive.Portal forceMount>
+          <EditProjectDialog
+            project={project}
+            setProject={setProject}
+            setEditDialogeOpen={setEditDialogeOpen}
+            initialProject={initialProject}
+          />
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
     </div>
   );
 }

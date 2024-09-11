@@ -47,7 +47,7 @@ function HamburgerProjectMenu({ projects, userUUID }: Props) {
                       tagline={p.tagline!}
                       iconLink={p.iconLink!}
                       sections={p.sections!}
-                      activeProjectId={projectUUID}
+                      activeProjectId={''}
                       ownerId={p.ownerId!}
                       url={p.url!}
                     />
