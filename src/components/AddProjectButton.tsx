@@ -44,7 +44,7 @@ function AddProjectButton({ userUUID, onSubmit, variant = 'soft' }: Props) {
         <Dialog.Trigger>
           <Button
             variant={variant}
-            className="cursor-pointer rounded h-12 w-full "
+            className="cursor-pointer rounded h-12 w-full mb-3"
             onClick={() => setDialog(true)}
           >
             <PlusIcon /> Add Project

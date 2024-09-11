@@ -44,7 +44,10 @@ function FormInput({
       <div className="flex-none flex flex-col gap-1">
         <Form.Label asChild>
           <Heading size={'3'} className=" -md:text-sm ">
-            {label}
+            {label}{' '}
+            <p className="inline text-gray-9 text-xs  font-medium">
+              (required)
+            </p>
           </Heading>
         </Form.Label>
 

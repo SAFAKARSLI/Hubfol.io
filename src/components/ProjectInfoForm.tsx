@@ -44,8 +44,8 @@ function ProjectInfoForm({ project, setProject }: Props) {
   return (
     <div className="flex flex-col gap-4 my-5">
       <Text size="3">
-        Enter the project information below. All of the fields are required
-        <b className="text-red-500">*</b>. You can edit this information later.
+        Enter the project information below. You can edit this information
+        later.
       </Text>
 
       <FormInput
