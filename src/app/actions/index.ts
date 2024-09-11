@@ -34,8 +34,6 @@ export const getProjects = async (userUUID: string) => {
     .find({ ownerId: userUUID }, { projection: { _id: 0 } })
     .toArray();
 
-  console.log(projects);
-
   return JSON.parse(JSON.stringify(projects));
 };
 
@@ -56,11 +54,14 @@ export const getProjectCount = async () => {
 
 export const createProject = async (project: Project, userUUID: string) => {
   await client.connect();
-  console.log(project, userUUID);
+  console.log(project.iconLink);
+
+  project.ownerId = userUUID;
+  project.projectUUID = uuidv4();
 
   await client.db('dev').collection('projects').insertOne(project);
-  revalidatePath(`/users/${userUUID}/projects`);
-  return JSON.parse(JSON.stringify(project));
+  // revalidatePath(`/users/${userUUID}/projects`);
+  redirect(`/users/${userUUID}/projects/${project.projectUUID}`);
 };
 
 export const uploadIcon = async (formData: FormData) => {

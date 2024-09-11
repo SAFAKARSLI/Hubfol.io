@@ -21,9 +21,9 @@ function TechCard({ tech, onClick }: Props) {
   };
 
   return (
-    <Tooltip content={tech.brandName} open={showTooltip}>
+    <Tooltip content={tech.brandName} open={false} className="z-10">
       <div
-        className={`flex flex-col justify-evenly items-center border rounded border-gray-4 h-[5rem] w-[5rem] relative overflow-hidden`}
+        className={`flex flex-col justify-evenly items-center border rounded border-gray-4 h-[5rem] w-[5rem] relative `}
         onClick={handleTooltipOpen}
       >
         {onClick && (

@@ -5,8 +5,8 @@ import Project from '@/types/project';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import Image from 'next/image';
 import { allowedIconTypes } from '@/utils';
-import { deleteIcon, uploadIcon } from '@/app/actions';
-// import { project, setProject } from '@/store/project'
+import { uploadIcon } from '@/app/actions';
+import * as Form from '@radix-ui/react-form';
 
 type Props = {
   project: Project;
@@ -49,9 +49,10 @@ function ProjectInfoForm({ project, setProject }: Props) {
       </Text>
 
       <FormInput
-        label="Project Name"
+        label="Title"
         name="title"
         placerholder="Enter your project name"
+        message="Please enter a valid project name"
         type="text"
         value={project.title as string}
         onChange={(e) => {

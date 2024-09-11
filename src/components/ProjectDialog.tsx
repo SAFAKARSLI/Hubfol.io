@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import {
   Dialog,
@@ -11,9 +12,8 @@ import ProjectInfoForm from './ProjectInfoForm';
 import SectionsForm from './SectionsForm';
 import Project from '@/types/project';
 import { Cross1Icon } from '@radix-ui/react-icons';
-import { initial, set } from 'lodash';
-import { preferredColorOptions } from '@/utils';
-import { getIcon } from '@/app/actions';
+import * as Form from '@radix-ui/react-form';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   title: string;
@@ -34,9 +34,17 @@ function ProjectDialog({
   setDialog,
   initialProject,
 }: Props) {
+  const router = useRouter();
   const handleCancelChange = () => {
     setProject(initialProject);
     setDialog(false);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSubmit();
+    setDialog(false);
+    router.refresh();
   };
 
   return (
@@ -45,7 +53,7 @@ function ProjectDialog({
       onEscapeKeyDown={(e) => e.preventDefault()}
       onInteractOutside={(e) => e.preventDefault()}
     >
-      <div className="flex flex-col">
+      <Form.Root className="flex flex-col" onSubmit={handleSubmit}>
         <div className="flex justify-between">
           <Dialog.Title size={'6'}>{title}</Dialog.Title>
           <Dialog.Close>
@@ -89,18 +97,14 @@ function ProjectDialog({
             </Button>
           </Dialog.Close>
           <Dialog.Close>
-            <Button
-              onClick={() => {
-                setDialog(false);
-                onSubmit();
-              }}
-              size={'3'}
-            >
-              {actionButtonLabel}
-            </Button>
+            <Form.Submit asChild>
+              <Button size={'3'} asChild>
+                <button type="submit">{actionButtonLabel}</button>
+              </Button>
+            </Form.Submit>
           </Dialog.Close>
         </Flex>
-      </div>
+      </Form.Root>
     </Dialog.Content>
   );
 }

@@ -3,7 +3,6 @@ import React from 'react';
 import ProjectDialog from './ProjectDialog';
 import Project from '@/types/project';
 import { deleteIcon, updateProject } from '@/app/actions';
-import { useRouter } from 'next/navigation';
 
 type Props = {
   project: Project;
@@ -22,8 +21,7 @@ function EditProjectDialog({
     if (initialProject.iconLink !== project.iconLink) {
       await deleteIcon(initialProject.iconLink as string);
     }
-    const updatedProject = await updateProject(project.projectUUID!, project);
-    location.reload();
+    await updateProject(project.projectUUID!, project);
   };
 
   return (

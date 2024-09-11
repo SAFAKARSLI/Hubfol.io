@@ -9,6 +9,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      boxShadow: {
+        outline: '0 0 0 1px var(--violet-7)',
+      },
       safelist: [
         {
           pattern:

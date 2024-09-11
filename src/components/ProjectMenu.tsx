@@ -48,7 +48,11 @@ function ProjectMenu({ projectUUID, title, initialProject }: Props) {
           </IconButton>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
-          <DropdownMenu.Item onSelect={() => setEditDialogeOpen(true)}>
+          <DropdownMenu.Item
+            onMouseDown={() => {
+              setEditDialogeOpen(true);
+            }}
+          >
             <Pencil2Icon />
             Edit
           </DropdownMenu.Item>
@@ -56,7 +60,7 @@ function ProjectMenu({ projectUUID, title, initialProject }: Props) {
 
           <DropdownMenu.Item
             color="red"
-            onSelect={() => setDeleteDialogeOpen(true)}
+            onMouseDown={() => setDeleteDialogeOpen(true)}
           >
             <TrashIcon />
             Delete

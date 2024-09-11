@@ -7,13 +7,9 @@ import * as Accordion from '@radix-ui/react-accordion';
 
 import Project from '@/types/project';
 import AccordionProjectItem from './AccordionProjectItem';
-import { Flex, ScrollArea } from '@radix-ui/themes';
-import AddProjectButton from './AddProjectButton';
-import ProjectListHeader from './ProjectListHeader';
 
 type Props = {
   initialProjects: Project[];
-  activeProjectId: string;
 };
 
 function AccordionProjectList({ initialProjects }: Props) {
@@ -22,59 +18,41 @@ function AccordionProjectList({ initialProjects }: Props) {
     userUUID: string;
   }>();
   const [accordionValue, setAccordionValue] = useState<string>('');
-  const [projectList, setProjectList] = useState<Project[]>(initialProjects);
   const router = useRouter();
 
   useEffect(() => {
-    if (projectUUID) {
-      setAccordionValue(projectUUID);
-    }
-  });
-
-  function renderProjects() {
-    return projectList.map((p, i) => {
-      return (
-        <AccordionProjectItem
-          key={i}
-          projectUUID={p.projectUUID as string}
-          title={p.title!}
-          tagline={p.tagline!}
-          iconLink={p.iconLink!}
-          sections={p.sections!}
-          activeProjectId={projectUUID}
-          ownerId={p.ownerId!}
-          url={p.url!}
-        />
-      );
-    });
-  }
+    if (projectUUID) setAccordionValue(projectUUID);
+  }, []);
 
   function onChangeActiveProject(projectUUID: string) {
     router.push(`/users/${userUUID}/projects/${projectUUID}`);
   }
 
   return (
-    <div className="h-[calc(100vh-6rem)] py-5 bg-gray-1 border-x border-b border-gray-4 w-[27rem] -2xl:w-[24rem] -xl:hidden">
-      <ScrollArea
-        type="auto"
-        scrollbars="vertical"
-        style={{ maxHeight: 'calc(100vh-6rem)' }}
-      >
-        <Accordion.Root
-          type="single"
-          onValueChange={onChangeActiveProject}
-          value={accordionValue}
-        >
-          <Flex direction={'column'} className="gap-5 px-5">
-            <ProjectListHeader projectCount={initialProjects.length} />
-            {renderProjects()}
-            <div className="w-full mb-[15rem]">
-              <AddProjectButton userUUID={userUUID} />
-            </div>
-          </Flex>
-        </Accordion.Root>
-      </ScrollArea>
-    </div>
+    <Accordion.Root
+      type="single"
+      onValueChange={onChangeActiveProject}
+      value={accordionValue}
+      asChild
+    >
+      <div className="px-5 flex flex-col gap-4">
+        {initialProjects.map((p, i) => {
+          return (
+            <AccordionProjectItem
+              key={i}
+              projectUUID={p.projectUUID as string}
+              title={p.title!}
+              tagline={p.tagline!}
+              iconLink={p.iconLink!}
+              sections={p.sections!}
+              activeProjectId={projectUUID}
+              ownerId={p.ownerId!}
+              url={p.url!}
+            />
+          );
+        })}
+      </div>
+    </Accordion.Root>
   );
 }
 

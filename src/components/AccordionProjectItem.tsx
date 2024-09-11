@@ -9,6 +9,7 @@ import ProjectSubsection from './ProjectSubsection';
 import Divider from './subsections/Divider';
 import ProjectMenu from './ProjectMenu';
 import { use, useEffect, useRef } from 'react';
+import { defaultIconLink } from '@/utils';
 
 interface AccordionProjectItemProps {
   projectUUID: string;
@@ -44,36 +45,44 @@ const AccordionProjectItem = ({
   }, [activeProjectId, projectUUID]);
   return (
     <Accordion.Item value={projectUUID} asChild>
-      <div className="rounded border border-gray-4 flex flex-col overflow-hidden data-[state=open]:shadow-gray-3 shadow-md h-full">
+      <div
+        className={`rounded border overflow-hidden data-[state=open]:shadow-gray-3 border-gray-4 shadow-md w-full m-auto`}
+      >
         <Accordion.Trigger asChild>
           <div
-            className={`flex py-3 px-6 h-[4.5rem]
-          bg-gray-1 data-[state=open]:bg-gray-2 hover:bg-gray-2
-          data-[state=closed]:cursor-pointer`}
+            className={`flex py-3 sm:px-7 px-4 
+          ${
+            activeProjectId == projectUUID && 'bg-gray-2'
+          } bg-gray-1 hover:bg-gray-2
+          data-[state=closed]:cursor-pointer w-full`}
           >
-            <div
-              className="flex w-full items-center gap-x-6 -2xl:gap-x-4"
-              ref={cardRef}
-            >
-              <div className="w-[2.4rem] h-[2.4rem] relative -2xl:w-[1.8rem] ">
-                <Image
-                  fill
-                  sizes="100px"
-                  style={{ objectFit: 'contain' }}
-                  alt={`${title}-icon`}
-                  src={iconLink as string}
-                />
-              </div>
+            <img
+              style={{ objectFit: 'contain' }}
+              width={'10%'}
+              height={'auto'}
+              alt={`${title}-icon`}
+              src={
+                (iconLink as string) ? (iconLink as string) : defaultIconLink
+              }
+            />
 
-              <div className="gap-y-1 flex-1 flex flex-col">
-                <Heading size={'3'} className="-2xl:text-sm">
-                  {title}
-                </Heading>
-                <Text size={'2'} className="text-gray-11 -2xl:text-xs">
-                  {tagline}
-                </Text>
-              </div>
+            <div className="min-w-[5rem] sm:mx-7 mx-4 flex-1">
+              <Heading
+                size={'3'}
+                as="h2"
+                className="-2xl:text-sm truncate mb-1"
+              >
+                {title}
+              </Heading>
+              <Text
+                size={'2'}
+                as="p"
+                className="text-gray-11 -2xl:text-xs truncate"
+              >
+                {tagline}
+              </Text>
             </div>
+
             {projectUUID === activeProjectId && (
               <ProjectMenu
                 title={title}
@@ -95,7 +104,7 @@ const AccordionProjectItem = ({
         </Accordion.Trigger>
 
         <Accordion.Content asChild>
-          <div className="bg-gray-1 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden ">
+          <div className="bg-gray-1 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden z-50">
             <ScrollArea type="auto" className="max-h-[40vh]">
               {sections?.map((s, i) => {
                 return (

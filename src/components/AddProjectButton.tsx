@@ -8,7 +8,7 @@ import { Flex, Box, Dialog, Button, Tabs, Separator } from '@radix-ui/themes';
 import { createProject } from '@/app/actions';
 import Project from '@/types/project';
 
-import { defaultSections } from '@/utils';
+import { buttonVariants, defaultSections } from '@/utils';
 import ProjectDialog from './ProjectDialog';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -17,20 +17,19 @@ import { useRouter } from 'next/navigation';
 type Props = {
   userUUID: string;
   onSubmit?: () => void;
+  variant?: buttonVariants;
 };
 
-function AddProjectButton({ userUUID, onSubmit }: Props) {
+function AddProjectButton({ userUUID, onSubmit, variant = 'soft' }: Props) {
   const [newProject, setNewProject] = useState({
     sections: cloneDeep(defaultSections),
+    iconLink: '',
   } as Project);
   const [dialog, setDialog] = useState(false);
   const router = useRouter();
 
   const handleCreateProject = async () => {
-    newProject.ownerId = userUUID;
-    newProject.projectUUID = uuidv4();
     await createProject(JSON.parse(JSON.stringify(newProject)), userUUID);
-    router.push(`/users/${userUUID}/projects/${newProject.projectUUID}`);
     onSubmit && onSubmit();
   };
 
@@ -44,7 +43,7 @@ function AddProjectButton({ userUUID, onSubmit }: Props) {
       >
         <Dialog.Trigger>
           <Button
-            variant="soft"
+            variant={variant}
             className="cursor-pointer rounded h-12 w-full "
             onClick={() => setDialog(true)}
           >

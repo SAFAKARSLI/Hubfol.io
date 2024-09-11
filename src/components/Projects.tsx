@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 
 import AccordionProjectList from './AccordionProjectList';
 import Project from '@/types/project';
 import ProjectFrame from './ProjectFrame';
 import { getProjects } from '@/app/actions';
 import NoActiveProjectBanner from './NoActiveProjectBanner';
+import { Spinner } from '@radix-ui/themes';
+import ProjectsSidePanel from './ProjectsSidePanel';
 
 interface ProjectsProps {
   activeProjectId?: string;
@@ -17,16 +19,22 @@ const Projects = async ({ activeProjectId, userUUID }: ProjectsProps) => {
   return (
     <div className="flex w-screen">
       <div className="flex-none">
-        <AccordionProjectList
-          initialProjects={projects}
-          activeProjectId={activeProjectId!}
-        />
+        <ProjectsSidePanel initialProjects={projects} userUUID={userUUID} />
       </div>
       <div className="flex-1 w-full m-3">
         {activeProjectId ? (
-          <ProjectFrame
-            project={projects.find((e) => e.projectUUID === activeProjectId)}
-          />
+          <Suspense
+            fallback={
+              <div className="w-full flex items-center justify-center pt-6">
+                <Spinner />
+              </div>
+            }
+          >
+            <ProjectFrame
+              // project={projects.find((e) => e.projectUUID === activeProjectId)}
+              projectUUID={activeProjectId}
+            />
+          </Suspense>
         ) : (
           <NoActiveProjectBanner />
         )}

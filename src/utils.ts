@@ -28,6 +28,9 @@ export const defultSearchTechValues = {
   resultVisible: false,
 };
 
+export const defaultIconLink =
+  'https://s3.amazonaws.com/hubfol.io.project-icons/globe-solid.svg';
+
 export type colorOptions =
   | 'gray'
   | 'gold'
@@ -67,6 +70,15 @@ export type grayColorOptions =
   | undefined;
 
 export type appearanceOptions = 'dark' | 'inherit' | 'light' | undefined;
+
+export type buttonVariants =
+  | 'soft'
+  | 'classic'
+  | 'solid'
+  | 'surface'
+  | 'outline'
+  | 'ghost'
+  | undefined;
 
 export const allowedIconTypes =
   'image/png, image/jpeg, image/jpg, image/svg+xml';
