@@ -14,7 +14,7 @@ export default interface Project {
 }
 
 export interface Section {
-  title: string;
+  header: string;
   contentType: string;
   content: string | SearchResult[];
   [Symbol.iterator]?(): IterableIterator<any>;

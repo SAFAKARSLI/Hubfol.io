@@ -1,15 +1,14 @@
 'use client';
 import * as Accordion from '@radix-ui/react-accordion';
-import { Box, Text, Heading, ScrollArea } from '@radix-ui/themes';
-import Image from 'next/image';
+import { Text, Heading, ScrollArea } from '@radix-ui/themes';
 
 import Project, { Section } from '@/types/project';
 
-import ProjectSubsection from './ProjectSubsection';
-import Divider from './subsections/Divider';
+import Divider from './project-card-subsections/Divider';
 import ProjectMenu from './ProjectMenu';
-import { use, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { defaultIconLink } from '@/utils';
+import Subsection from './project-card-subsections/Subsection';
 
 interface AccordionProjectItemProps {
   projectUUID: string;
@@ -109,7 +108,7 @@ const AccordionProjectItem = ({
               {sections?.map((s, i) => {
                 return (
                   <div key={i}>
-                    <ProjectSubsection
+                    <Subsection
                       title={s.title}
                       contentType={s.contentType}
                       content={s.content}

@@ -1,7 +1,7 @@
 import { SearchResult } from '@/types/searchResult';
 import { Tooltip } from '@radix-ui/themes';
 import React from 'react';
-import TechCard from '../TechCard';
+import TechCard from '../project-form/form-sections/project-sections/TechCard';
 
 type Props = {
   techStack: SearchResult[];

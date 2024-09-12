@@ -10,7 +10,7 @@ import {
   Link,
 } from '@radix-ui/themes';
 import { CopyIcon, PersonIcon } from '@radix-ui/react-icons';
-import Divider from './subsections/Divider';
+import Divider from './project-card-subsections/Divider';
 import { getServerSession, User } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 

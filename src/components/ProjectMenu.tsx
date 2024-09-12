@@ -18,9 +18,10 @@ import {
 
 import { useParams } from 'next/navigation';
 
-import DeleteProjectDialog from './DeleteProjectDialog';
+import DeleteProjectDialog from './dialogs/DeleteProjectDialog';
 import Project from '@/types/project';
-import EditProjectDialog from './EditProjectDialog';
+import ProjectDialog from './dialogs/ProjectDialog';
+import { updateProject } from '@/app/actions';
 
 type Props = {
   projectUUID: string;
@@ -90,11 +91,11 @@ function ProjectMenu({ projectUUID, title, initialProject }: Props) {
 
       <DialogPrimitive.Root open={editDialogeOpen}>
         <DialogPrimitive.Portal forceMount>
-          <EditProjectDialog
-            project={project}
-            setProject={setProject}
-            setEditDialogeOpen={setEditDialogeOpen}
-            initialProject={initialProject}
+          <ProjectDialog
+            actionButtonLabel="Confirm Edit"
+            formAction={updateProject}
+            title="Edit Project"
+            initialValues={{}}
           />
         </DialogPrimitive.Portal>
       </DialogPrimitive.Root>

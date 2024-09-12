@@ -30,17 +30,20 @@ export default function RootLayout({ children, params }: Readonly<SlugProps>) {
           rel="stylesheet"
         />
       </Head>
-      <body className="overflow-hidden">
-        <Theme
-          accentColor={preferredColorOptions.accentColor}
-          appearance={preferredColorOptions.appearance}
-        >
-          <div className="min-h-[100dvh] flex flex-col ">
+      <Theme
+        accentColor={preferredColorOptions.accentColor}
+        appearance={preferredColorOptions.appearance}
+        asChild
+      >
+        <body>
+          <div className="h-[100dvh] flex flex-col overflow-x-hidden">
             <TopBar params={params} />
-            <div className="flex flex-1 ">{children}</div>
+            <div>
+              <div>{children}</div>
+            </div>
           </div>
-        </Theme>
-      </body>
+        </body>
+      </Theme>
     </html>
   );
 }

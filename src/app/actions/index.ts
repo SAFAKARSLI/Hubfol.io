@@ -5,18 +5,19 @@ import Project from '@/types/project';
 import { signIn, signOut } from 'next-auth/react';
 import { s3Client } from '@/aws/s3';
 import { v4 as uuidv4 } from 'uuid';
+import { z } from 'zod';
 import {
-  S3Client,
   PutObjectCommand,
-  ObjectCannedACL,
   DeleteObjectCommand,
-  // paginateListObjectsV2,
   GetObjectCommand,
 } from '@aws-sdk/client-s3';
-import { permanentRedirect, redirect } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import { url } from 'inspector';
+import { Section } from '@radix-ui/themes';
 
 const bucketName = process.env.AWS_PROJECT_ICONS_BUCKET_NAME as string;
+const db = client.db(process.env.DB_NAME as string);
 
 export const logIn = async (userUUID: string) => {
   await signIn('google', { callbackUrl: `/users/${userUUID}/projects` });
@@ -28,8 +29,7 @@ export const logOut = async (userUUID: string) => {
 
 export const getProjects = async (userUUID: string) => {
   await client.connect();
-  const projects = await client
-    .db('dev')
+  const projects = await db
     .collection('projects')
     .find({ ownerId: userUUID }, { projection: { _id: 0 } })
     .toArray();
@@ -39,8 +39,7 @@ export const getProjects = async (userUUID: string) => {
 
 export const getProject = async (projectUUID: string) => {
   await client.connect();
-  const project = await client
-    .db('dev')
+  const project = await db
     .collection('projects')
     .findOne({ projectUUID }, { projection: { _id: 0 } });
   return JSON.parse(JSON.stringify(project));
@@ -48,20 +47,63 @@ export const getProject = async (projectUUID: string) => {
 
 export const getProjectCount = async () => {
   await client.connect();
-  const count = await client.db('dev').collection('projects').countDocuments();
+  const count = await db.collection('projects').countDocuments();
   return count;
 };
 
-export const createProject = async (project: Project, userUUID: string) => {
-  await client.connect();
-  console.log(project.iconLink);
+export const createProject = async (
+  formData: FormData
+): Promise<(Project | string[])[]> => {
+  const project = {
+    title: formData.get('title') as string,
+    url: formData.get('url') as string,
+    sections: JSON.parse(formData.get('sections') as string),
+  } as Project;
 
-  project.ownerId = userUUID;
+  // project.ownerId = userUUID;
   project.projectUUID = uuidv4();
 
-  await client.db('dev').collection('projects').insertOne(project);
-  // revalidatePath(`/users/${userUUID}/projects`);
-  redirect(`/users/${userUUID}/projects/${project.projectUUID}`);
+  const schema = z.object({
+    title: z
+      .string()
+      .min(1, { message: 'Title must be at least 1 character long.' }),
+    url: z
+      .string()
+      .url({ message: "Invalid URL (Must include 'http://' or 'https://')" }),
+    sections: z
+      .array(
+        z.object({
+          title: z
+            .string()
+            .min(1, { message: 'Section header cannot be empty.' }),
+        })
+      )
+      .min(1),
+  });
+
+  const parse = schema.safeParse(project);
+
+  const errors = [] as string[];
+
+  if (!parse.success) {
+    parse.error.errors.forEach((err) => {
+      errors.push(`${err.path.join(' -> ')}: ${err.message}`);
+    });
+    console.log(errors);
+  }
+
+  return [project, errors];
+
+  // try {
+  //   await client.connect();
+  //   await db.collection('projects').insertOne(project);
+  //   revalidatePath(`/users/${userUUID}/projects`);
+  //   redirect(`/users/${userUUID}/projects/${project.projectUUID}`);
+  // } catch (error) {
+  //   throw new Error('Failed to create project');
+  // } finally {
+  //   client.close();
+  // }
 };
 
 export const uploadIcon = async (formData: FormData) => {
@@ -99,12 +141,12 @@ export const deleteIcon = async (iconLink: string) => {
   }
 };
 
-export const openProject =
-  (userUUID: string, projectUUID: string) =>
-  (event: React.MouseEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    redirect(`/users/${userUUID}/projects/${projectUUID}`);
-  };
+// export const openProject =
+//   (userUUID: string, projectUUID: string) =>
+//   (event: React.MouseEvent<HTMLDivElement>) => {
+//     event.preventDefault();
+//     redirect(`/users/${userUUID}/projects/${projectUUID}`);
+//   };
 
 export const getIcon = async (iconLink: string) => {
   const key = iconLink.split('/').slice(-1)[0];
@@ -124,14 +166,14 @@ export const getIcon = async (iconLink: string) => {
 
 export const deleteProject = async (projectUUID: string, userUUID: string) => {
   await client.connect();
-  await client.db('dev').collection('projects').deleteOne({ projectUUID });
+  await db.collection('projects').deleteOne({ projectUUID });
 
   redirect(`/users/${userUUID}/projects`);
 };
 
 export const checkExistingUser = async (email: string) => {
   await client.connect();
-  const user = await client.db('dev').collection('users').findOne({
+  const user = await db.collection('users').findOne({
     email: email,
   });
 
@@ -140,7 +182,7 @@ export const checkExistingUser = async (email: string) => {
 
 export const updateUser = async (email: string, data: any) => {
   await client.connect();
-  await client.db('dev').collection('users').updateOne(
+  await db.collection('users').updateOne(
     { email },
     {
       $set: data,
@@ -149,28 +191,28 @@ export const updateUser = async (email: string, data: any) => {
   redirect('/projects');
 };
 
-export const updateProject = async (projectUUID: string, project: Project) => {
+export const updateProject = async (
+  formData: FormData
+): Promise<(Project | string[])[]> => {
   await client.connect();
-  client.db('dev').collection('projects').updateOne(
-    { projectUUID },
-    {
-      $set: project,
-    }
-  );
-  return project;
+  return [{} as Project, [] as string[]];
+  // db.collection('projects').updateOne(
+  //   { projectUUID },
+  //   {
+  //     $set: project,
+  //   }
+  // );
+  // return project;
 };
 
 export const getUser = async (userUUID: string) => {
   await client.connect();
-  const user = await client
-    .db('dev')
-    .collection('users')
-    .findOne(
-      {
-        uuid: userUUID,
-      },
-      { projection: { _id: 0 } }
-    );
+  const user = await db.collection('users').findOne(
+    {
+      uuid: userUUID,
+    },
+    { projection: { _id: 0 } }
+  );
 
   return user;
 };

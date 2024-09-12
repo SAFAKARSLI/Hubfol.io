@@ -1,6 +1,7 @@
 import React from 'react';
 import * as Form from '@radix-ui/react-form';
 import { Heading, Flex, TextField } from '@radix-ui/themes';
+import { InputType } from '@/utils';
 
 type Props = {
   label: string;
@@ -8,26 +9,11 @@ type Props = {
   logo?: JSX.Element;
   placerholder: string;
   name: string;
-  value?: string | number;
+  defaultValue?: string | number;
   onChange?: (e: any) => void;
   message?: string;
+  required?: boolean;
 };
-
-type InputType =
-  | 'number'
-  | 'search'
-  | 'time'
-  | 'text'
-  | 'hidden'
-  | 'tel'
-  | 'url'
-  | 'email'
-  | 'date'
-  | 'datetime-local'
-  | 'month'
-  | 'password'
-  | 'week'
-  | undefined;
 
 function FormInput({
   label,
@@ -35,9 +21,10 @@ function FormInput({
   logo,
   name,
   placerholder,
-  value,
+  defaultValue,
   onChange,
   message,
+  required = false,
 }: Props) {
   return (
     <Form.Field name={name}>
@@ -60,10 +47,10 @@ function FormInput({
                 name={name}
                 placeholder={placerholder}
                 type={type as InputType}
-                value={value}
+                defaultValue={defaultValue}
                 onChange={onChange}
-                className="w-full p-2 focus:outline-none bg-gray-1 focus:shadow-outline focus:border-violet-7 rounded-md text-sm border border-gray-6 -md:text-xs data-[invalid]:placeholder-red-400 data-[invalid]:border-red-300"
-                required
+                className="w-full h-[2rem] p-2 outline-none bg-gray-1 focus:shadow-outline focus:border-violet-7 rounded-md text-sm border border-gray-6 -md:text-xs data-[invalid]:placeholder-red-400 data-[invalid]:border-red-300"
+                required={required}
                 autoComplete="off"
                 color="violet"
               />

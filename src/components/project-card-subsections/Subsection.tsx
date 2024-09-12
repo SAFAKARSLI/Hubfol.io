@@ -1,7 +1,7 @@
 import React from 'react';
 
-import TextSection from './subsections/Text';
-import TechStack from './subsections/TechStack';
+import TextSection from './Text';
+import TechStack from './TechStack';
 
 import { Box, Heading, Text } from '@radix-ui/themes';
 
@@ -12,7 +12,7 @@ type Props = {
   width?: string;
 };
 
-const ProjectSubsection = ({
+const Subsection = ({
   title,
   content,
   width = 'w-full',
@@ -37,4 +37,4 @@ const ProjectSubsection = ({
   );
 };
 
-export default ProjectSubsection;
+export default Subsection;

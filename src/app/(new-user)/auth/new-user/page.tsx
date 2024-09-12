@@ -3,10 +3,10 @@
 import React, { useEffect } from 'react';
 
 import { Button, Box, Flex, Heading, Text } from '@radix-ui/themes';
-import Divider from '@/components/subsections/Divider';
+import Divider from '@/components/project-card-subsections/Divider';
 
 import { FaDollarSign } from 'react-icons/fa';
-import FormInput from '@/components/FormInput';
+import FormInput from '@/components/project-form/FormInput';
 import { getSession, useSession } from 'next-auth/react';
 import { updateUser } from '@/app/actions';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';

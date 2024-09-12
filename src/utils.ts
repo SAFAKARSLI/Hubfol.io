@@ -1,18 +1,19 @@
+import { Section } from './types/project';
 import { SearchResult } from './types/searchResult';
 
 export const defaultSections = [
   {
-    title: 'Project Description',
+    header: 'Project Description',
     contentType: 'text',
     content: 'This is a project description',
   },
 
   {
-    title: 'Tech Stack',
+    header: 'Tech Stack',
     contentType: 'tech-stack',
     content: [],
   },
-];
+] as Section[];
 
 export const preferredColorOptions: {
   accentColor: colorOptions;
@@ -78,6 +79,22 @@ export type buttonVariants =
   | 'surface'
   | 'outline'
   | 'ghost'
+  | undefined;
+
+export type InputType =
+  | 'number'
+  | 'search'
+  | 'time'
+  | 'text'
+  | 'hidden'
+  | 'tel'
+  | 'url'
+  | 'email'
+  | 'date'
+  | 'datetime-local'
+  | 'month'
+  | 'password'
+  | 'week'
   | undefined;
 
 export const allowedIconTypes =
