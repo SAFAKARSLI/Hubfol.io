@@ -2,27 +2,28 @@
 import * as Accordion from '@radix-ui/react-accordion';
 import { Text, Heading, ScrollArea } from '@radix-ui/themes';
 
-import Project, { Section } from '@/types/project';
+import Project from '@/types/project';
 
 import Divider from './project-card-subsections/Divider';
 import ProjectMenu from './ProjectMenu';
 import { useEffect, useRef } from 'react';
 import { defaultIconLink } from '@/utils';
 import Subsection from './project-card-subsections/Subsection';
+import { Section } from '@/types/section';
 
 interface AccordionProjectItemProps {
-  projectUUID: string;
+  uuid: string;
   title: string;
   tagline: string;
   iconLink: string | ArrayBuffer;
-  sections: Section[] | null;
+  sections: string[];
   activeProjectId: string;
   ownerId: string;
   url: string;
 }
 
 const AccordionProjectItem = ({
-  projectUUID,
+  uuid,
   title,
   tagline,
   iconLink,
@@ -34,25 +35,23 @@ const AccordionProjectItem = ({
   const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (activeProjectId === projectUUID) {
+    if (activeProjectId === uuid) {
       cardRef.current?.scrollIntoView({
         behavior: 'instant',
         block: 'start',
         inline: 'nearest',
       });
     }
-  }, [activeProjectId, projectUUID]);
+  }, [activeProjectId]);
   return (
-    <Accordion.Item value={projectUUID} asChild>
+    <Accordion.Item value={uuid} asChild>
       <div
         className={`rounded border overflow-hidden data-[state=open]:shadow-gray-3 border-gray-4 shadow-md w-full m-auto`}
       >
         <Accordion.Trigger asChild>
           <div
             className={`flex py-3 sm:px-7 px-4 
-          ${
-            activeProjectId == projectUUID && 'bg-gray-2'
-          } bg-gray-1 hover:bg-gray-2
+          ${activeProjectId == uuid && 'bg-gray-2'} bg-gray-1 hover:bg-gray-2
           data-[state=closed]:cursor-pointer w-full`}
           >
             <img
@@ -82,22 +81,8 @@ const AccordionProjectItem = ({
               </Text>
             </div>
 
-            {projectUUID === activeProjectId && (
-              <ProjectMenu
-                title={title}
-                projectUUID={projectUUID}
-                initialProject={
-                  {
-                    title,
-                    projectUUID,
-                    tagline,
-                    iconLink,
-                    sections,
-                    ownerId,
-                    url,
-                  } as Project
-                }
-              />
+            {uuid === activeProjectId && (
+              <ProjectMenu title={title} projectUUID={uuid} />
             )}
           </div>
         </Accordion.Trigger>
@@ -105,18 +90,18 @@ const AccordionProjectItem = ({
         <Accordion.Content asChild>
           <div className="bg-gray-1 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden z-50">
             <ScrollArea type="auto" className="max-h-[40vh]">
-              {sections?.map((s, i) => {
+              {/* {sections?.map((s, i) => {
                 return (
                   <div key={i}>
                     <Subsection
-                      title={s.title}
+                      title={s.header}
                       contentType={s.contentType}
                       content={s.content}
                     />
                     {i == sections.length - 1 ? null : <Divider />}
                   </div>
                 );
-              })}
+              })} */}
             </ScrollArea>
           </div>
         </Accordion.Content>

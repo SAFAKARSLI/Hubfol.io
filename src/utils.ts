@@ -1,5 +1,5 @@
-import { Section } from './types/project';
-import { SearchResult } from './types/searchResult';
+import { Brand } from './types/brand';
+import { Section } from './types/section';
 
 export const defaultSections = [
   {
@@ -15,6 +15,8 @@ export const defaultSections = [
   },
 ] as Section[];
 
+export const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
 export const preferredColorOptions: {
   accentColor: colorOptions;
   appearance: appearanceOptions;
@@ -25,7 +27,7 @@ export const preferredColorOptions: {
 
 export const defultSearchTechValues = {
   loading: false,
-  result: [] as SearchResult[],
+  result: [] as Brand[],
   resultVisible: false,
 };
 

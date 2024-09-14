@@ -8,6 +8,7 @@ import React from 'react';
 
 export default async function page({ params }: SlugProps) {
   const { userUUID, projectUUID } = params;
+  console.log(projectUUID);
   const project = await getProject(projectUUID);
   return (
     <Form.Root>

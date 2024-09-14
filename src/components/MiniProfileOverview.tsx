@@ -1,11 +1,7 @@
-import { Text } from '@radix-ui/themes';
 import React from 'react';
-import { getProjects, getUser } from '@/app/actions';
-import Project from '@/types/project';
-import { WithId } from 'mongodb';
-import { User } from 'next-auth';
 import HamburgerProjectMenu from './HamburgerProjectMenu';
-import { preferredColorOptions } from '@/utils';
+import { getUser } from '@/app/actions/user';
+import Project from '@/types/project';
 
 type Props = {
   userUUID: string;
@@ -13,17 +9,19 @@ type Props = {
 };
 
 async function MiniProfileOverview({ userUUID }: Props) {
-  const user = (await getUser(userUUID)) as WithId<User>;
-  const projects = (await getProjects(userUUID)) as Project[];
+  const user = { name: 'SAFA KARSLI', title: 'SOFTWARE ENGINEER' }; //await getUser(userUUID);
+  const projects = (await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects?userUUID=${userUUID}`
+  ).then((r) => r.json())) as Project[];
   return (
     <div className={`xl:hidden flex w-full items-center h-full gap-3`}>
       <HamburgerProjectMenu projects={projects} userUUID={userUUID} />
       <div className="text-center overflow-hidden flex-1 w-[8rem]">
         <p className="text-sm font-bold truncate block text-nowrap">
-          {user.name}
+          {user?.name}
         </p>
         <p className="text-xs truncate text-gray-400 truncate block">
-          {user.title}
+          {user?.title}
         </p>
       </div>
     </div>

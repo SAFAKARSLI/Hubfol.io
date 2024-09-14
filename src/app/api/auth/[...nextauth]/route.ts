@@ -1,9 +1,10 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
-import client from '@/db';
 import { Adapter } from 'next-auth/adapters';
 import { v4 as uuidv4 } from 'uuid';
+import { PrismaAdapter } from '@auth/prisma-adapter';
+import { prisma } from '@/db';
 
 const authOptions: NextAuthOptions = {
   pages: {
@@ -13,9 +14,7 @@ const authOptions: NextAuthOptions = {
     // verifyRequest: '/auth/verify-request',
     newUser: '/auth/new-user',
   },
-  adapter: MongoDBAdapter(client, {
-    databaseName: 'dev',
-  }) as Adapter,
+  adapter: PrismaAdapter(prisma) as Adapter,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,

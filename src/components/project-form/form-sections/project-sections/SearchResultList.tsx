@@ -1,4 +1,4 @@
-import { SearchResult } from '@/types/searchResult';
+import { SearchResult } from '@/types/brand';
 import { Flex, ScrollArea } from '@radix-ui/themes';
 import React from 'react';
 import SearchResultCard from './SearchResultCard';

@@ -1,4 +1,4 @@
-import { SearchResult } from '@/types/searchResult';
+import { SearchResult } from '@/types/brand';
 import { Tooltip } from '@radix-ui/themes';
 import React from 'react';
 import TechCard from '../project-form/form-sections/project-sections/TechCard';

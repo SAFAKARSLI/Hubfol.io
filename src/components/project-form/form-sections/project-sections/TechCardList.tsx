@@ -1,4 +1,4 @@
-import { SearchResult } from '@/types/searchResult';
+import { SearchResult } from '@/types/brand';
 import React from 'react';
 import TechCard from './TechCard';
 

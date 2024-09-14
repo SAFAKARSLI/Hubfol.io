@@ -3,14 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "node --loader ts-node/esm src/page.ts",
     "lint": "next lint"
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.4.2",
+    "@auth/prisma-adapter": "^2.4.2",
     "@aws-sdk/client-s3": "^3.633.0",
+    "@prisma/client": "^5.19.1",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-aspect-ratio": "^1.1.0",
     "@radix-ui/react-collapsible": "^1.1.0",
@@ -43,7 +45,9 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.4",
     "postcss": "^8",
+    "prisma": "^5.19.1",
     "tailwindcss": "^3.4.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }

@@ -1,0 +1,182 @@
+'use server';
+
+import { s3Client } from '@/aws/s3';
+import Project from '@/types/project';
+import {
+  DeleteObjectCommand,
+  GetObjectCommand,
+  PutObjectCommand,
+} from '@aws-sdk/client-s3';
+import { redirect } from 'next/navigation';
+import { v4 as uuidv4 } from 'uuid';
+import { z } from 'zod';
+import { validateUUID } from './utils';
+import { cookies } from 'next/headers';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../api/auth/[...nextauth]/route';
+import { Section } from '@/types/section';
+import { prisma } from '@/db';
+
+const bucketName = process.env.AWS_PROJECT_ICONS_BUCKET_NAME as string;
+
+export const initiateProject = async () => {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    throw new Error('You are not authorized to do that.');
+  }
+
+  const projectUUID = uuidv4();
+  cookies().set('pUUID', projectUUID);
+
+  const date = new Date();
+
+  const sections = [
+    {
+      title: 'Project Description',
+      createdDate: date,
+      lastModifiedDate: null,
+      uuid: uuidv4(),
+      contentType: 'text',
+      content: '',
+      projectId: projectUUID,
+    },
+    {
+      title: 'Tech Stack',
+      createdDate: date,
+      lastModifiedDate: null,
+      uuid: uuidv4(),
+      contentType: 'tech-stack',
+      content: ['nextdotjs', 'typescript', 'tailwindcss'],
+      projectId: projectUUID,
+    },
+  ] as Section[];
+
+  redirect(`/users/${session.user.uuid}/projects/initiate`);
+};
+
+export const createProject = async (
+  formData: FormData,
+  { request }: { request: Request }
+) => {
+  if (request.method !== 'POST') throw new Error('Invalid request method.');
+  const session = await getServerSession(authOptions);
+
+  if (!session || !session.user) {
+    throw new Error('You must be signed in to perform this action.');
+  }
+
+  const ownerId = formData.get('ownerId') as string;
+  if (ownerId !== session.user.uuid) throw new Error('Not authorized.');
+  if (validateUUID(ownerId)) throw new Error('Invalid project owner provided.');
+
+  const uuid = uuidv4();
+  const project = {
+    name: formData.get('name') as string,
+    url: formData.get('url') as string,
+    iconLink: formData.get('iconLink') as string,
+    tagline: formData.get('tagline') as string,
+    createdAt: new Date(),
+    ownerId,
+    uuid,
+  };
+
+  const schema = z.object({
+    title: z
+      .string()
+      .min(1, { message: 'Title must be at least 1 character long.' }),
+    url: z
+      .string()
+      .url({ message: "Invalid URL (Must include 'http://' or 'https://')" }),
+    tagline: z.string().optional(),
+    iconLink: z.string().url().optional(),
+  });
+
+  const parse = schema.safeParse(project);
+
+  const errors = [] as string[];
+
+  if (!parse.success) {
+    parse.error.errors.forEach((err) => {
+      errors.push(`${err.path.join(' -> ')}: ${err.message}`);
+    });
+  } else {
+    // Save project to database
+    try {
+      await prisma.project.create({ data: project });
+    } catch (error) {
+      errors.push('Failed to create project');
+    } finally {
+      await prisma.$disconnect();
+    }
+  }
+  return [project, errors];
+};
+
+export const deleteProject = async (projectUUID: string, userUUID: string) => {
+  redirect(`/users/${userUUID}/projects`);
+};
+
+export const updateProject = async (
+  formData: FormData
+): Promise<(Project | string[])[]> => {
+  return [{} as Project, [] as string[]];
+};
+
+export const uploadProjectIcon = async (formData: FormData) => {
+  const iconLink = formData.get('iconLink');
+
+  if (iconLink && iconLink instanceof File) {
+    const arrayBuffer = await iconLink.arrayBuffer();
+    const body = Buffer.from(arrayBuffer);
+
+    const uniqueKey = `${uuidv4()}-${new Date().getTime()}`;
+
+    const uploadParams = {
+      Bucket: bucketName,
+      Key: uniqueKey,
+      Body: body,
+    };
+
+    await s3Client.send(new PutObjectCommand(uploadParams));
+    return `https://s3.amazonaws.com/${bucketName}/${uniqueKey}`;
+  } else {
+    throw new Error('Invalid iconLink');
+  }
+};
+
+export const deleteProjectIcon = async (iconLink: string) => {
+  if (iconLink) {
+    const key = iconLink.split('/').slice(-1)[0];
+
+    const deleteParams = {
+      Bucket: bucketName,
+      Key: key,
+    };
+
+    await s3Client.send(new DeleteObjectCommand(deleteParams));
+  }
+};
+
+// export const openProject =
+//   (userUUID: string, projectUUID: string) =>
+//   (event: React.MouseEvent<HTMLDivElement>) => {
+//     event.preventDefault();
+//     redirect(`/users/${userUUID}/projects/${projectUUID}`);
+//   };
+
+export const getProjectIcon = async (iconLink: string) => {
+  const key = iconLink.split('/').slice(-1)[0];
+
+  const getParams = {
+    Bucket: bucketName,
+    Key: '1123',
+  };
+
+  try {
+    const data = await s3Client.send(new GetObjectCommand(getParams));
+    return data.Body;
+  } catch (error) {
+    return 'Icon not found';
+  }
+};

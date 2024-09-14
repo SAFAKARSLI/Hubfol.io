@@ -40,7 +40,7 @@ function AccordionProjectList({ initialProjects }: Props) {
           return (
             <AccordionProjectItem
               key={i}
-              projectUUID={p.projectUUID as string}
+              uuid={p.uuid as string}
               title={p.title!}
               tagline={p.tagline!}
               iconLink={p.iconLink!}

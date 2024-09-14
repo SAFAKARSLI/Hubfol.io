@@ -2,7 +2,6 @@
 import Project from '@/types/project';
 import { defaultIconLink, preferredColorOptions } from '@/utils';
 import { Heading, Text } from '@radix-ui/themes';
-import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import React, { forwardRef } from 'react';
 
@@ -20,12 +19,12 @@ const ProjectCard = forwardRef<HTMLDivElement, Props>(
         ref={ref}
         className={`flex h-[4rem] justify-start items-center gap-4 border border-gray-5 rounded p-4 my-2  cursor-pointer 
       ${
-        params.projectUUID === project.projectUUID
+        params.projectUUID === project.uuid
           ? `bg-${preferredColorOptions.accentColor}-4 hover:bg-${preferredColorOptions.accentColor}-4`
           : 'hover:bg-gray-4'
       }`}
         onClick={() => {
-          router.push(`/users/${userUUID}/projects/${project.projectUUID}`);
+          router.push(`/users/${userUUID}/projects/${project.uuid}`);
         }}
       >
         <img

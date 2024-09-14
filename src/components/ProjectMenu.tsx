@@ -19,24 +19,17 @@ import {
 import { useParams } from 'next/navigation';
 
 import DeleteProjectDialog from './dialogs/DeleteProjectDialog';
-import Project from '@/types/project';
-import ProjectDialog from './dialogs/ProjectDialog';
-import { updateProject } from '@/app/actions';
 
 type Props = {
   projectUUID: string;
   title: string;
-  initialProject: Project;
+  // initialProject: Project;
 };
 
-function ProjectMenu({ projectUUID, title, initialProject }: Props) {
+function ProjectMenu({ projectUUID, title }: Props) {
   const { userUUID } = useParams<{ userUUID: string }>();
 
-  const [confirmDelete, setConfirmDelete] = useState('');
   const [deleteDialogeOpen, setDeleteDialogeOpen] = useState(false);
-
-  const [editDialogeOpen, setEditDialogeOpen] = useState(false);
-  const [project, setProject] = useState(initialProject);
 
   return (
     <div>
@@ -53,7 +46,7 @@ function ProjectMenu({ projectUUID, title, initialProject }: Props) {
         <DropdownMenu.Content>
           <DropdownMenu.Item
             onMouseDown={() => {
-              setEditDialogeOpen(true);
+              // setEditDialogeOpen(true);
             }}
           >
             <Pencil2Icon />
@@ -76,7 +69,6 @@ function ProjectMenu({ projectUUID, title, initialProject }: Props) {
         onOpenChange={() => {
           if (deleteDialogeOpen) {
             setDeleteDialogeOpen(false);
-            setConfirmDelete('');
           }
         }}
       >
@@ -84,21 +76,8 @@ function ProjectMenu({ projectUUID, title, initialProject }: Props) {
           title={title}
           projectUUID={projectUUID}
           userUUID={userUUID}
-          confirmDelete={confirmDelete}
-          setConfirmDelete={setConfirmDelete}
         />
       </AlertDialog.Root>
-
-      <DialogPrimitive.Root open={editDialogeOpen}>
-        <DialogPrimitive.Portal forceMount>
-          <ProjectDialog
-            actionButtonLabel="Confirm Edit"
-            formAction={updateProject}
-            title="Edit Project"
-            initialValues={{}}
-          />
-        </DialogPrimitive.Portal>
-      </DialogPrimitive.Root>
     </div>
   );
 }

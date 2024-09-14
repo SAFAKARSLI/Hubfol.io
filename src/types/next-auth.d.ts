@@ -9,11 +9,7 @@ interface Preferences {
 declare module 'next-auth' {
   interface User {
     uuid?: string;
-    title?: string;
-    location?: string;
-    phoneNumber?: string;
-    hourlyRate?: string;
-    preferences?: Preferences;
+    // preferences?: Preferences;
   }
 
   interface Session {

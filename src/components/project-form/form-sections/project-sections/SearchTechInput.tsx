@@ -1,7 +1,7 @@
 import React from 'react';
 import { Flex, TextField, Spinner } from '@radix-ui/themes';
 import { MagnifyingGlassIcon, Cross2Icon } from '@radix-ui/react-icons';
-import { SearchResult } from '@/types/searchResult';
+import { SearchResult } from '@/types/brand';
 import SearchResultList from './SearchResultList';
 import { cloneDeep } from 'lodash';
 import { useEffect, useState } from 'react';

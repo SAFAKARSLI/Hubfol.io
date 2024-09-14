@@ -5,13 +5,26 @@ import { Button, Table } from '@radix-ui/themes';
 import Project from '@/types/project';
 import ProjectsTableItem from './ProjectsTableItem';
 import { PlusIcon } from '@radix-ui/react-icons';
-import { defaultSections } from '@/utils';
+import { baseUrl, defaultSections } from '@/utils';
+import { cookies } from 'next/headers';
+import { initial } from 'lodash';
+import { Section } from '@/types/section';
 
 type Props = {
-  initialValues?: Project;
+  initialValues?: Section[];
 };
 
-function SectionsTable({ initialValues }: Props) {
+async function SectionsTable({ initialValues }: Props) {
+  var sections;
+  if (!initialValues) {
+    const projectUUID = cookies().get('pUUID');
+    console.log(projectUUID);
+
+    sections = (await fetch(`${baseUrl}/api/sections?uuid=${projectUUID}`).then(
+      (r) => r.json()
+    )) as Section[];
+  } else sections = initialValues;
+
   return (
     <div>
       <Table.Root size={'1'}>
@@ -24,7 +37,7 @@ function SectionsTable({ initialValues }: Props) {
         </Table.Header>
 
         <Table.Body>
-          {defaultSections.map((section, i) => (
+          {sections.map((section, i) => (
             <ProjectsTableItem section={section} key={i} />
           ))}
         </Table.Body>

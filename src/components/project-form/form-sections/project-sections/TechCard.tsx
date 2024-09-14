@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { Tooltip } from '@radix-ui/themes';
-import { SearchResult } from '@/types/searchResult';
+import { SearchResult } from '@/types/brand';
 import Image from 'next/image';
 import { Cross2Icon } from '@radix-ui/react-icons';
 

@@ -1,0 +1,168 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String          @id @default(cuid())
+  uuid          String          @db.Uuid @unique
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[] 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  freelancerId      Employee?
+  employerId        Employer?
+}
+ 
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@id([provider, providerAccountId])
+}
+ 
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+ 
+  @@id([identifier, token])
+}
+
+
+
+model Employer {
+  id           Int      @id @default(autoincrement())   
+  uuid         String   @db.Uuid @unique
+  name         String
+  email        String
+  phoneNumber  String?
+  location     String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt  
+  employees    EmployersOnEmployees[]
+  userId       String   @unique
+  authUser     User     @relation(fields: [userId], references: [id])
+}
+
+model EmployersOnEmployees {
+  employerId Int
+  employeeId Int
+
+  employer Employer @relation(fields: [employerId], references: [id], onDelete: Cascade)
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@id([employerId, employeeId])
+}
+
+model Employee {
+  id           Int      @id @default(autoincrement())   
+  uuid         String   @db.Uuid @unique
+  name         String
+  email        String
+  title        String
+  status       EMPLOYEE_STATUS @default(OPEN_TO_WORK)
+  hourlyRate   Float?
+  phoneNumber  String?
+  location     String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  projects     Project[]
+  employers    EmployersOnEmployees[]
+  userId       String   @unique  
+
+  authUser     User     @relation(fields: [userId], references: [id])
+}
+
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  uuid        String   @db.Uuid @unique
+  name        String
+  tagline     String?
+  url         String
+  iconLink    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  ownerId     String
+  sections    Section[]
+  
+  user        Employee   @relation(fields: [id], references: [id], onDelete: Cascade)
+}
+
+model Section {
+  id          Int      @id @default(autoincrement())
+  uuid        String   @db.Uuid @unique
+  title       String
+  description String?
+  contentType Content  @default(TEXT)
+  content     Json?
+  isActive    Boolean   @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  projectId   String
+
+  project     Project  @relation(fields: [id], references: [id], onDelete: Cascade)
+}
+
+model BrandIcons {
+  id          Int      @id @default(autoincrement())
+  uuid        String   @db.Uuid @unique
+  brand_name  String
+  slug        String
+}
+
+
+enum Content {
+  TEXT
+  CAROUSEL
+  VIDEO
+  BRAND_STACK
+}
+
+enum EMPLOYEE_STATUS {
+  NO_STATUS
+  OPEN_TO_WORK
+  BUSY
+  ON_VACATION
+}
+
+

@@ -1,6 +1,7 @@
 export interface Params {
   userUUID: string;
   projectUUID: string;
+  sectionUUID: string;
 }
 
 export interface SlugProps {

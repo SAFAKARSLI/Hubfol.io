@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AlertDialog, TextField, Flex, Button } from '@radix-ui/themes';
-import { deleteProject } from '@/app/actions';
+import { deleteProject } from '@/app/actions/project';
 
 type Props = {
   title: string;
   projectUUID: string;
   userUUID: string;
-  confirmDelete: string;
-  setConfirmDelete: (value: string) => void;
 };
 
-function DeleteProjectDialog({
-  title,
-  projectUUID,
-  userUUID,
-  confirmDelete,
-  setConfirmDelete,
-}: Props) {
+function DeleteProjectDialog({ title, projectUUID, userUUID }: Props) {
+  const [confirmDelete, setConfirmDelete] = useState('');
+
+  useEffect(() => {
+    return () => {
+      setConfirmDelete('');
+    };
+  }, []);
+
   return (
     <AlertDialog.Content maxWidth="500px">
       <AlertDialog.Title size={'6'}>Delete `{title}`</AlertDialog.Title>

@@ -12,8 +12,8 @@ import { getServerSession, User } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import React from 'react';
 import ViewContactInfo from './ViewContactInfo';
-import { getUser } from '@/app/actions';
 import { WithId } from 'mongodb';
+import { getUser } from '@/app/actions/user';
 
 interface ProfileOverviewProps {
   userUUID: string;

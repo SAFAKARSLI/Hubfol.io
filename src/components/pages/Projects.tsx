@@ -1,24 +1,17 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 
 import Project from '@/types/project';
-import ProjectFrame from '../ProjectFrame';
-import { getProjects } from '@/app/actions';
-import NoActiveProjectBanner from '../NoActiveProjectBanner';
-import { Spinner } from '@radix-ui/themes';
 import ProjectsSidePanel from '../ProjectsSidePanel';
 
 interface ProjectsProps {
-  activeProjectId?: string;
   userUUID: string;
   children?: React.ReactNode;
 }
 
-const Projects = async ({
-  activeProjectId,
-  userUUID,
-  children,
-}: ProjectsProps) => {
-  const projects = (await getProjects(userUUID)) as Project[];
+const Projects = async ({ userUUID, children }: ProjectsProps) => {
+  const projects = (await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects?uuid=${userUUID}`
+  ).then((r) => r.json())) as Project[];
 
   return (
     <div className="flex w-screen">
