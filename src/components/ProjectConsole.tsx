@@ -12,27 +12,25 @@ type Props = {
 };
 
 function ProjectConsole({ project }: Props) {
-  const [isConsoleOpen, setConsoleOpen] = useState('CLOSED');
+  const [isConsoleOpen, setConsoleOpen] = useState(false);
 
   // useEffect(() => {
   //   setConsoleOpen(true);
   // }, []);
 
   const handleConsoleOpen = () => {
-    setConsoleOpen(
-      isConsoleOpen === 'CLOSED' ? project?.projectUUID! : 'CLOSED'
-    );
+    setConsoleOpen(!isConsoleOpen);
   };
 
   return (
-    <div key={project?.projectUUID}>
+    <div key={project?.uuid}>
       <Accordion.Root
         type="single"
-        value={isConsoleOpen}
+        value={isConsoleOpen ? project?.uuid : ''}
         className={`xl:hidden w-[25rem] absolute right-0  
          -sm:w-full bottom-0  flex flex-col justify-end duration-300 z-50 overflow-hidden  rounded-t`}
       >
-        <Accordion.Item value={project!.projectUUID!}>
+        <Accordion.Item value={project!.uuid!}>
           <Accordion.Trigger asChild>
             <Button
               color={preferredColorOptions.accentColor}
@@ -40,7 +38,7 @@ function ProjectConsole({ project }: Props) {
               size={'1'}
               onClick={handleConsoleOpen}
             >
-              {isConsoleOpen != 'CLOSED' ? (
+              {isConsoleOpen ? (
                 <div className="flex gap-1 m-auto ">
                   <ChevronDownIcon /> Close Console
                 </div>
@@ -52,18 +50,18 @@ function ProjectConsole({ project }: Props) {
             </Button>
           </Accordion.Trigger>
           <Accordion.Content className="bg-gray-1 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden z-50">
-            <Accordion.Root type="single" value={project!.projectUUID} asChild>
+            <Accordion.Root type="single" value={project!.uuid} asChild>
               <div
                 className={` bg-gray-1  border-x border-violet-a3 duration-300  `}
               >
                 {project && isConsoleOpen && (
                   <AccordionProjectItem
-                    projectUUID={project.projectUUID as string}
-                    title={project.title!}
+                    uuid={project.uuid as string}
+                    name={project.name!}
                     tagline={project.tagline!}
                     iconLink={project.iconLink!}
                     sections={project.sections!}
-                    activeProjectId={project.projectUUID!}
+                    activeProjectId={project.uuid!}
                     ownerId={project.ownerId!}
                     url={project.url!}
                   />
@@ -75,9 +73,9 @@ function ProjectConsole({ project }: Props) {
       </Accordion.Root>
       <div
         className={`xl:hidden fixed left-0 top-0 right-0 bottom-0 bg-violet-a13 z-10 ${
-          isConsoleOpen == 'CLOSED' && 'hidden'
+          !isConsoleOpen && 'hidden'
         }`}
-        onClick={() => setConsoleOpen('CLOSED')}
+        onClick={() => setConsoleOpen(false)}
       />
     </div>
   );

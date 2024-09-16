@@ -7,19 +7,18 @@ type Props = {
   logo: JSX.Element;
   label: string;
   OAuthType: 'google' | 'github';
-  userUUID?: string;
 };
 
-function OAuthSignInButton({ logo, label, OAuthType, userUUID }: Props) {
+function OAuthSignInButton({ logo, label, OAuthType }: Props) {
+  const handleSignInButtonClick = async () => {
+    signIn(OAuthType, { callbackUrl: '/fully-signed-in' });
+  };
+
   return (
     <Button
       className="w-full"
       variant="ghost"
-      onClick={() =>
-        signIn(OAuthType, {
-          callbackUrl: `/u/${userUUID}/projects`,
-        })
-      }
+      onClick={handleSignInButtonClick}
     >
       <div className="flex gap-1 h-full justify-center items-center">
         {logo} <Text className="text-white">{label}</Text>

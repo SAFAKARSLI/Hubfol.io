@@ -1,9 +1,12 @@
 import { validateUUID } from '@/app/actions/utils';
 import { prisma } from '@/db';
-import { NextApiRequest } from 'next';
+import { NextRequest } from 'next/server';
 
-export async function GET(request: NextApiRequest) {
-  const { projectUUID } = request.query;
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { projectUUID: string } }
+) {
+  const { projectUUID } = params;
 
   if (!validateUUID(projectUUID as string)) {
     return new Response('Invalid project identifier provided: ' + projectUUID, {

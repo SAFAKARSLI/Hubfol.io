@@ -38,9 +38,7 @@ export default function RootLayout({ children, params }: Readonly<SlugProps>) {
         <body>
           <div className="h-[100dvh] flex flex-col overflow-x-hidden">
             <TopBar params={params} />
-            <div>
-              <div>{children}</div>
-            </div>
+            <div className="h-[calc(100dvh-6rem)]">{children}</div>
           </div>
         </body>
       </Theme>

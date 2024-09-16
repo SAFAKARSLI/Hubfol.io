@@ -1,6 +1,5 @@
-import NextAuth, { NextAuthOptions } from 'next-auth';
+import NextAuth, { getServerSession, NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import { Adapter } from 'next-auth/adapters';
 import { v4 as uuidv4 } from 'uuid';
 import { PrismaAdapter } from '@auth/prisma-adapter';

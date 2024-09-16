@@ -13,14 +13,13 @@ const Projects = async ({ userUUID, children }: ProjectsProps) => {
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects?userUUID=${userUUID}`,
     { cache: 'force-cache' }
   ).then((r) => r.json())) as Project[];
-  console.log('[Projects.tsx] projects: ', projects);
 
   return (
     <div className="flex w-screen">
       <div className="flex-none">
         <ProjectsSidePanel initialProjects={projects} userUUID={userUUID} />
       </div>
-      <div className="flex-1">{children}</div>
+      <div className="flex-1 m-3">{children}</div>
     </div>
   );
 };
