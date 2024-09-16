@@ -12,8 +12,7 @@ import { getServerSession, User } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import React from 'react';
 import ViewContactInfo from './ViewContactInfo';
-import { WithId } from 'mongodb';
-import { getUser } from '@/app/actions/user';
+import { baseUrl } from '@/utils';
 
 interface ProfileOverviewProps {
   userUUID: string;
@@ -21,7 +20,7 @@ interface ProfileOverviewProps {
 
 const ProfileOverview = async ({ userUUID }: ProfileOverviewProps) => {
   const session = await getServerSession(authOptions);
-  const user = (await getUser(userUUID)) as WithId<User>;
+  const user = await fetch(`${baseUrl}/api/users/${userUUID}`);
 
   return (
     <div className="flex bg-gray-1 border border-gray-4 h-[6rem] w-[27rem] -sm:hidden -2xl:w-[24rem] -xl:w-[20rem] px-8 py-4 flex-none -xl:hidden">

@@ -8,22 +8,18 @@ import { PlusIcon } from '@radix-ui/react-icons';
 import { baseUrl, defaultSections } from '@/utils';
 import { cookies } from 'next/headers';
 import { initial } from 'lodash';
-import { Section } from '@/types/section';
+import { Section } from '@prisma/client';
 
 type Props = {
   initialValues?: Section[];
 };
 
 async function SectionsTable({ initialValues }: Props) {
-  var sections;
-  if (!initialValues) {
-    const projectUUID = cookies().get('pUUID');
-    console.log(projectUUID);
+  const projectUUID = cookies().get('pUUID');
 
-    sections = (await fetch(`${baseUrl}/api/sections?uuid=${projectUUID}`).then(
-      (r) => r.json()
-    )) as Section[];
-  } else sections = initialValues;
+  const sections = (await fetch(
+    `${baseUrl}/api/sections?projectUUID=${projectUUID?.value}`
+  ).then((r) => r.json())) as Section[];
 
   return (
     <div>
@@ -37,7 +33,7 @@ async function SectionsTable({ initialValues }: Props) {
         </Table.Header>
 
         <Table.Body>
-          {sections.map((section, i) => (
+          {sections!.map((section, i) => (
             <ProjectsTableItem section={section} key={i} />
           ))}
         </Table.Body>

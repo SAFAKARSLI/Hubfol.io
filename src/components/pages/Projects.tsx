@@ -10,7 +10,7 @@ interface ProjectsProps {
 
 const Projects = async ({ userUUID, children }: ProjectsProps) => {
   const projects = (await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects?uuid=${userUUID}`
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects?userUUID=${userUUID}`
   ).then((r) => r.json())) as Project[];
 
   return (

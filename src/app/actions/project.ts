@@ -14,45 +14,73 @@ import { validateUUID } from './utils';
 import { cookies } from 'next/headers';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
-import { Section } from '@/types/section';
 import { prisma } from '@/db';
+import { Content } from '@prisma/client';
+import { InputJsonValue } from '@prisma/client/runtime/library';
+import { NextApiRequest } from 'next';
+import { baseUrl, extractUserUUID } from '@/utils';
+import { Section } from '@/types/section';
 
 const bucketName = process.env.AWS_PROJECT_ICONS_BUCKET_NAME as string;
 
-export const initiateProject = async () => {
+export const initiateProject = async (userUUID: string) => {
   const session = await getServerSession(authOptions);
-
-  if (!session) {
-    throw new Error('You are not authorized to do that.');
+  if (!session || !session.user) {
+    throw new Error('You must be signed in to do that.');
   }
+
+  if (session.user.uuid != userUUID) throw new Error('Not authorized.');
 
   const projectUUID = uuidv4();
   cookies().set('pUUID', projectUUID);
 
   const date = new Date();
-
   const sections = [
     {
       title: 'Project Description',
-      createdDate: date,
-      lastModifiedDate: null,
-      uuid: uuidv4(),
-      contentType: 'text',
-      content: '',
-      projectId: projectUUID,
+      createdAt: date,
+      updatedAt: date,
+      uuid: uuidv4() as string,
+      isActive: true,
+      contentType: Content.TEXT,
+      content: 'This is the project description.' as InputJsonValue,
     },
     {
       title: 'Tech Stack',
-      createdDate: date,
-      lastModifiedDate: null,
-      uuid: uuidv4(),
-      contentType: 'tech-stack',
-      content: ['nextdotjs', 'typescript', 'tailwindcss'],
-      projectId: projectUUID,
+      createdAt: date,
+      updatedAt: date,
+      uuid: uuidv4() as string,
+      isActive: true,
+      contentType: Content.BRAND_STACK,
+      content: ['nextdotjs', 'typescript', 'tailwindcss'] as InputJsonValue,
     },
   ] as Section[];
 
-  redirect(`/users/${session.user.uuid}/projects/initiate`);
+  try {
+    await prisma.project.create({
+      data: {
+        uuid: projectUUID,
+        ownerId: session.user.uuid,
+        createdAt: date,
+        name: 'New Project',
+        url: `${baseUrl}/api/void`,
+        tagline: '',
+        iconLink: '',
+        sections: {
+          createMany: {
+            data: sections,
+          },
+        },
+      },
+    });
+
+    await prisma.section.createMany({ data: sections });
+  } catch (error) {
+    console.error('Error creating sections:', error);
+  } finally {
+    await prisma.$disconnect();
+    redirect(`/u/${userUUID}/projects/initiate`);
+  }
 };
 
 export const createProject = async (
@@ -114,7 +142,7 @@ export const createProject = async (
 };
 
 export const deleteProject = async (projectUUID: string, userUUID: string) => {
-  redirect(`/users/${userUUID}/projects`);
+  redirect(`/u/${userUUID}/projects`);
 };
 
 export const updateProject = async (
@@ -157,13 +185,6 @@ export const deleteProjectIcon = async (iconLink: string) => {
     await s3Client.send(new DeleteObjectCommand(deleteParams));
   }
 };
-
-// export const openProject =
-//   (userUUID: string, projectUUID: string) =>
-//   (event: React.MouseEvent<HTMLDivElement>) => {
-//     event.preventDefault();
-//     redirect(`/users/${userUUID}/projects/${projectUUID}`);
-//   };
 
 export const getProjectIcon = async (iconLink: string) => {
   const key = iconLink.split('/').slice(-1)[0];

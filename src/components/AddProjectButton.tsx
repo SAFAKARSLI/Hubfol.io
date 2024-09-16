@@ -14,7 +14,7 @@ function AddProjectButton({ variant = 'soft' }: Props) {
   const { userUUID } = useParams();
 
   async function handleAddButtonClick() {
-    await initiateProject();
+    await initiateProject(userUUID as string);
   }
 
   return (

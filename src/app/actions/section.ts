@@ -1,8 +1,12 @@
 'use server';
 import { prisma } from '@/db';
-import { Section, SectionFormData } from '@/types/section';
+import { Content, Prisma, Section } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
+import { authOptions } from '../api/auth/[...nextauth]/route';
+import { getServerSession } from 'next-auth';
+import { extractUserUUID } from '@/utils';
+import { validateUUID } from './utils';
 
 export const getSections = async (projectUUID: string) => {
   try {
@@ -42,15 +46,33 @@ export const getSectionCount = async () => {
   }
 };
 
-export const createSection = async (formData: FormData) => {
+export const createSection = async (
+  formData: FormData,
+  { request }: { request: Request }
+) => {
+  const session = await getServerSession(authOptions);
+
+  if (request.method !== 'POST') throw new Error('Invalid request method.');
+
+  if (!session || !session.user) {
+    throw new Error('You must be logged in to create a section.');
+  }
+
+  const userUUID = extractUserUUID(request.url);
+  if (!userUUID || !validateUUID(userUUID))
+    throw new Error('Invalid user identifier provided: ' + userUUID);
+
+  if (userUUID !== session.user.uuid) {
+    throw new Error('Not authorized to create a section for this user.');
+  }
+
   const section = {
+    uuid: uuidv4(),
     title: formData.get('title') as string,
     projectId: formData.get('projectUUID') as string,
-    contentType: formData.get('contentType') as string,
-    content: formData.get('content'),
-  } as Section;
-
-  section.uuid = uuidv4();
+    contentType: formData.get('contentType') as Content,
+    content: formData.get('content') as Prisma.InputJsonValue,
+  };
 
   const schema = z.object({
     title: z
@@ -67,7 +89,6 @@ export const createSection = async (formData: FormData) => {
     parse.error.errors.forEach((err) => {
       errors.push(err.message);
     });
-
     return errors;
   }
 
@@ -78,7 +99,6 @@ export const createSection = async (formData: FormData) => {
     errors.push('Failed to create section');
   } finally {
     await prisma.$disconnect;
-
-    return [section];
+    return section;
   }
 };

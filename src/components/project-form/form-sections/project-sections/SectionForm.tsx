@@ -12,7 +12,7 @@ function SectionForm({ section }: Props) {
     <div>
       <FormInput
         label="Header"
-        defaultValue={section.header}
+        defaultValue={section.title}
         name="header"
         placerholder='Enter the section header here. (e.g "Project Description"'
         type={section.contentType}

@@ -9,7 +9,7 @@ type Props = {
 };
 
 async function MiniProfileOverview({ userUUID }: Props) {
-  const user = { name: 'SAFA KARSLI', title: 'SOFTWARE ENGINEER' }; //await getUser(userUUID);
+  const user = { name: 'SAFA KARSLI', title: 'SOFTWARE ENGINEER' };
   const projects = (await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects?userUUID=${userUUID}`
   ).then((r) => r.json())) as Project[];

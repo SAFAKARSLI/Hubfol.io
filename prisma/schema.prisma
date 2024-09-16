@@ -70,8 +70,8 @@ model VerificationToken {
 
 
 model Employer {
-  id           Int      @id @default(autoincrement())   
-  uuid         String   @db.Uuid @unique
+  id           Int      @default(autoincrement())   
+  uuid         String   @id @default(uuid()) @db.Uuid
   name         String
   email        String
   phoneNumber  String?
@@ -84,63 +84,64 @@ model Employer {
 }
 
 model EmployersOnEmployees {
-  employerId Int
-  employeeId Int
+  employerId String @db.Uuid
+  employeeId String @db.Uuid
 
-  employer Employer @relation(fields: [employerId], references: [id], onDelete: Cascade)
-  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  employer Employer @relation(fields: [employerId], references: [uuid], onDelete: Cascade)
+  employee Employee @relation(fields: [employeeId], references: [uuid], onDelete: Cascade)
 
   @@id([employerId, employeeId])
 }
 
 model Employee {
-  id           Int      @id @default(autoincrement())   
-  uuid         String   @db.Uuid @unique
+  id           Int             @default(autoincrement())   
+  uuid         String          @id @default(uuid()) @db.Uuid 
   name         String
-  email        String
+  email        String          @unique
   title        String
   status       EMPLOYEE_STATUS @default(OPEN_TO_WORK)
   hourlyRate   Float?
   phoneNumber  String?
   location     String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
   projects     Project[]
   employers    EmployersOnEmployees[]
-  userId       String   @unique  
+  userId       String          @unique  
 
-  authUser     User     @relation(fields: [userId], references: [id])
+  authUser     User            @relation(fields: [userId], references: [id])
 }
 
 
 model Project {
-  id          Int      @id @default(autoincrement())
-  uuid        String   @db.Uuid @unique
+  id          Int        @default(autoincrement())
+  uuid        String     @id @db.Uuid @unique
   name        String
   tagline     String?
   url         String
   iconLink    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  ownerId     String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  ownerId     String     @db.Uuid
   sections    Section[]
   
-  user        Employee   @relation(fields: [id], references: [id], onDelete: Cascade)
+  user        Employee   @relation(fields: [ownerId], references: [uuid], onDelete: Cascade)
+
 }
 
 model Section {
-  id          Int      @id @default(autoincrement())
-  uuid        String   @db.Uuid @unique
+  id          Int      @default(autoincrement())
+  uuid        String   @id @db.Uuid @unique
   title       String
   description String?
   contentType Content  @default(TEXT)
-  content     Json?
-  isActive    Boolean   @default(true)
+  content     Json
+  isActive    Boolean? @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  projectId   String
+  projectId   String   @db.Uuid
 
-  project     Project  @relation(fields: [id], references: [id], onDelete: Cascade)
+  project     Project  @relation(fields: [projectId], references: [uuid], onDelete: Cascade)
 }
 
 model BrandIcons {

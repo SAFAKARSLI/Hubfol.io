@@ -15,7 +15,6 @@ import NavigationLinks from './NavigationLinks';
 import SidebarButton from './SidebarButton';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import SendProposalButton from './SendProposalButton';
 
 interface TopBarProps {
   params: Params;
@@ -25,6 +24,19 @@ async function TopBar({ params }: TopBarProps) {
   const userUUID = params.userUUID;
   const projectUUID = params.projectUUID;
   const session = await getServerSession(authOptions);
+
+  console.log(userUUID);
+  console.log(userUUID);
+
+  console.log(userUUID);
+
+  console.log(userUUID);
+
+  console.log(userUUID);
+
+  console.log(userUUID);
+
+  console.log(userUUID);
 
   return (
     <Flex>

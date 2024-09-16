@@ -26,7 +26,6 @@ export default function RootLayout({
           <Theme
             accentColor={preferredColorOptions.accentColor}
             appearance={preferredColorOptions.appearance}
-            grayColor={preferredColorOptions.grayColor}
           >
             <div className="h-screen w-screen bg-gray-2 flex justify-center items-center">
               {children}

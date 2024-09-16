@@ -1,5 +1,5 @@
 'use client';
-import { Section } from '@/types/section';
+import { Section } from '@prisma/client';
 import { Table } from '@radix-ui/themes';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -10,15 +10,14 @@ type Props = {
 };
 
 function ProjectsTableItem({ section }: Props) {
-  const searchParams = useSearchParams();
   return (
     <Table.Row className="hover:bg-gray-2">
       <Table.RowHeaderCell>
         <Link
-          href={``}
+          href={`initiate/sections/${section.uuid}`}
           className="text-violet-11 hover:underline font-medium truncate w-1/3"
         >
-          {section.header}
+          {section.title}
         </Link>
       </Table.RowHeaderCell>
       <Table.Cell className="text-gray-11 w-1/3">

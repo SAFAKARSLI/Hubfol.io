@@ -7,7 +7,7 @@ type Props = {
   logo: JSX.Element;
   label: string;
   OAuthType: 'google' | 'github';
-  userUUID: string;
+  userUUID?: string;
 };
 
 function OAuthSignInButton({ logo, label, OAuthType, userUUID }: Props) {
@@ -16,7 +16,9 @@ function OAuthSignInButton({ logo, label, OAuthType, userUUID }: Props) {
       className="w-full"
       variant="ghost"
       onClick={() =>
-        signIn(OAuthType, { callbackUrl: `/users/${userUUID}/projects` })
+        signIn(OAuthType, {
+          callbackUrl: `/u/${userUUID}/projects`,
+        })
       }
     >
       <div className="flex gap-1 h-full justify-center items-center">

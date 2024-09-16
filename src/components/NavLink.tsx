@@ -19,7 +19,7 @@ function NavLink({ link, onClick }: Props) {
     : 'text-gray-400';
   return (
     <Link
-      href={`/users/${userUUID}/${link.url}`}
+      href={`/u/${userUUID}/${link.url}`}
       className={`text-center flex items-center text-sm -2xl:text-xs `}
       onClick={onClick}
     >

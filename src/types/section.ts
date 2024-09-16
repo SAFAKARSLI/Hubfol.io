@@ -1,12 +1,16 @@
+import { Content } from '@prisma/client';
 import { Brand } from './brand';
+import { InputJsonValue, JsonValue } from '@prisma/client/runtime/library';
 
 export interface Section {
   uuid: string;
-  createdDate: Date;
-  lastModifiedDate: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
   title: string;
-  contentType: string;
-  content: string | Brand[];
+  description: string | null;
+  isActive?: boolean;
+  contentType: Content;
+  content: InputJsonValue;
   projectId: string;
   // tags: string[];
 }

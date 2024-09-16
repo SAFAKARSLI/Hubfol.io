@@ -3,17 +3,36 @@ import { Section } from './types/section';
 
 export const defaultSections = [
   {
-    header: 'Project Description',
-    contentType: 'text',
+    uuid: '123e4567-e89b-12d3-a456-426614174000',
+    title: 'Project Description',
+    contentType: 'TEXT',
     content: 'This is a project description',
+    createdDate: new Date(),
+    lastModifiedDate: null,
+    projectId: 'project-uuid-1',
   },
 
   {
-    header: 'Tech Stack',
-    contentType: 'tech-stack',
-    content: [],
+    uuid: '123e4567-e89b-12d3-a456-426614174001',
+    title: 'Tech Stack',
+    contentType: 'TECH_STACK',
+    content: [] as Brand[],
+    createdDate: new Date(),
+    lastModifiedDate: null,
+    projectId: 'project-uuid-1',
   },
 ] as Section[];
+
+export const extractUserUUID = (url: string) => {
+  const regex = /\/u\/([^\/]+)\/projects\//;
+  const match = url.match(regex);
+
+  if (match && match[1]) {
+    return match[1]; // This is the userUUID
+  } else {
+    return null; // Return null if not found
+  }
+};
 
 export const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 

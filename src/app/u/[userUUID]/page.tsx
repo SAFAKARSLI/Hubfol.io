@@ -3,5 +3,5 @@ import { redirect } from 'next/navigation';
 
 export default async function page({ params }: SlugProps) {
   const { userUUID } = params;
-  redirect(`/users/${userUUID}/profile-overview`);
+  redirect(`/u/${userUUID}/profile-overview`);
 }
