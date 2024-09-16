@@ -13,9 +13,10 @@ import { CopyIcon, PersonIcon } from '@radix-ui/react-icons';
 import Divider from './project-card-subsections/Divider';
 import { getServerSession, User } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import Employee from '@/types/employee';
 
 type Props = {
-  user: User;
+  user: Employee;
 };
 
 async function ViewContactInfo({ user }: Props) {

@@ -18,7 +18,7 @@ import { prisma } from '@/db';
 import { Content } from '@prisma/client';
 import { InputJsonValue } from '@prisma/client/runtime/library';
 import { NextApiRequest } from 'next';
-import { baseUrl, extractUserUUID } from '@/utils';
+import { baseUrl } from '@/utils';
 import { Section } from '@/types/section';
 import { revalidatePath } from 'next/cache';
 

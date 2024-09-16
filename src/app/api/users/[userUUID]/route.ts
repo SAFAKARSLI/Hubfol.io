@@ -1,15 +1,17 @@
 import { prisma } from '@/db';
-import { extractUserUUID } from '@/utils';
+import { extractUUID } from '@/utils';
 import { NextApiRequest } from 'next';
 
 export async function GET(request: Request) {
-  const userUUID = extractUserUUID(request.url);
+  const url = new URL(request.url);
+  const userUUID = extractUUID(url.pathname, 'users');
+
   if (!userUUID || typeof userUUID !== 'string') {
     return new Response('User UUID is required', { status: 400 });
   }
 
   try {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.employee.findUnique({
       where: { uuid: userUUID as string },
     });
 

@@ -8,19 +8,22 @@ import {
   Flex,
   Box,
 } from '@radix-ui/themes';
-import { getServerSession, User } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import React from 'react';
 import ViewContactInfo from './ViewContactInfo';
 import { baseUrl } from '@/utils';
+import Employee from '@/types/employee';
 
 interface ProfileOverviewProps {
   userUUID: string;
 }
 
 const ProfileOverview = async ({ userUUID }: ProfileOverviewProps) => {
-  const session = await getServerSession(authOptions);
-  const user = await fetch(`${baseUrl}/api/users/${userUUID}`);
+  const user = (await fetch(`${baseUrl}/api/users/${userUUID}`).then((r) =>
+    r.json()
+  )) as Employee;
+
+  console.log(user);
 
   return (
     <div className="flex bg-gray-1 border border-gray-4 h-[6rem] w-[27rem] -sm:hidden -2xl:w-[24rem] -xl:w-[20rem] px-8 py-4 flex-none -xl:hidden">
