@@ -8,11 +8,13 @@ import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
 import { preferredColorOptions } from '@/utils';
 
 type Props = {
-  project?: Project;
+  project: Project;
 };
 
 function ProjectConsole({ project }: Props) {
   const [isConsoleOpen, setConsoleOpen] = useState(false);
+
+  console.log('ProjectConsole', project);
 
   // useEffect(() => {
   //   setConsoleOpen(true);
@@ -23,10 +25,10 @@ function ProjectConsole({ project }: Props) {
   };
 
   return (
-    <div key={project?.uuid}>
+    <div key={project.uuid}>
       <Accordion.Root
         type="single"
-        value={isConsoleOpen ? project?.uuid : ''}
+        value={isConsoleOpen ? project.uuid : ''}
         className={`xl:hidden w-[25rem] absolute right-0  
          -sm:w-full bottom-0  flex flex-col justify-end duration-300 z-50 overflow-hidden  rounded-t`}
       >
@@ -50,22 +52,20 @@ function ProjectConsole({ project }: Props) {
             </Button>
           </Accordion.Trigger>
           <Accordion.Content className="bg-gray-1 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden z-50">
-            <Accordion.Root type="single" value={project!.uuid} asChild>
+            <Accordion.Root type="single" value={project.uuid} asChild>
               <div
                 className={` bg-gray-1  border-x border-violet-a3 duration-300  `}
               >
-                {project && isConsoleOpen && (
-                  <AccordionProjectItem
-                    uuid={project.uuid as string}
-                    name={project.name!}
-                    tagline={project.tagline!}
-                    iconLink={project.iconLink!}
-                    sections={project.sections!}
-                    activeProjectId={project.uuid!}
-                    ownerId={project.ownerId!}
-                    url={project.url!}
-                  />
-                )}
+                <AccordionProjectItem
+                  uuid={project.uuid}
+                  name={project.name}
+                  tagline={project.tagline!}
+                  iconLink={project.iconLink!}
+                  sections={project.sections}
+                  activeProjectId={project.uuid}
+                  ownerId={project.ownerId}
+                  url={project.url!}
+                />
               </div>
             </Accordion.Root>
           </Accordion.Content>

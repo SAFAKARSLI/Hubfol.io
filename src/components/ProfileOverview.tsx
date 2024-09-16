@@ -23,8 +23,6 @@ const ProfileOverview = async ({ userUUID }: ProfileOverviewProps) => {
     r.json()
   )) as Employee;
 
-  console.log(user);
-
   return (
     <div className="flex bg-gray-1 border border-gray-4 h-[6rem] w-[27rem] -sm:hidden -2xl:w-[24rem] -xl:w-[20rem] px-8 py-4 flex-none -xl:hidden">
       <Flex flexGrow="1" justify={'between'} direction={'column'}>
@@ -33,7 +31,7 @@ const ProfileOverview = async ({ userUUID }: ProfileOverviewProps) => {
             <Text as="p" size="2" weight="medium">
               {user.name}{' '}
             </Text>
-            <Badge>Open to Work</Badge>
+            <Badge>{user.status.replaceAll('_', ' ')}</Badge>
           </Flex>
           <Text size="1" color="gray">
             {user.title}

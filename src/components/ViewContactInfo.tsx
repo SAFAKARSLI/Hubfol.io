@@ -29,7 +29,7 @@ async function ViewContactInfo({ user }: Props) {
           <DataList.Label minWidth="88px">Status</DataList.Label>
           <DataList.Value>
             <Badge variant="soft" radius="full">
-              Authorized
+              {user.status.replaceAll('_', ' ')}
             </Badge>
           </DataList.Value>
         </DataList.Item>

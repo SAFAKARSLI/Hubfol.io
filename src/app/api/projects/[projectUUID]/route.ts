@@ -14,8 +14,9 @@ export async function GET(
     });
   }
   try {
-    const projects = await prisma.project.findMany({
+    const projects = await prisma.project.findUnique({
       where: { uuid: projectUUID as string },
+      include: { sections: true },
     });
     return new Response(JSON.stringify(projects), { status: 200 });
   } catch (error) {

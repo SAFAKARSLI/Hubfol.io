@@ -13,8 +13,8 @@ function ProjectInfoForm({ initialValues: project }: Props) {
   return (
     <div className="flex flex-col gap-4 my-5">
       <FormInput
-        label="Title"
-        name="title"
+        label="Name"
+        name="name"
         placerholder="Enter your project name"
         message="Please enter a valid project name"
         type="text"

@@ -74,8 +74,6 @@ export const initiateProject = async (userUUID: string) => {
         },
       },
     });
-
-    await prisma.section.createMany({ data: sections });
   } catch (error) {
     console.error('Error creating sections:', error);
   } finally {
@@ -85,22 +83,24 @@ export const initiateProject = async (userUUID: string) => {
   }
 };
 
-export const createProject = async (
-  formData: FormData,
-  { request }: { request: Request }
+export const createInitiatedProject = async (
+  ownerId: string,
+  formData: FormData
 ) => {
-  if (request.method !== 'POST') throw new Error('Invalid request method.');
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user) {
     throw new Error('You must be signed in to perform this action.');
   }
 
-  const ownerId = formData.get('ownerId') as string;
   if (ownerId !== session.user.uuid) throw new Error('Not authorized.');
-  if (validateUUID(ownerId)) throw new Error('Invalid project owner provided.');
+  if (!validateUUID(ownerId))
+    throw new Error('Invalid project owner provided.');
 
-  const uuid = uuidv4();
+  if (!cookies().get('pUUID'))
+    throw new Error('An error occured while creating the project.');
+
+  const uuid = cookies().get('pUUID')!.value;
   const project = {
     name: formData.get('name') as string,
     url: formData.get('url') as string,
@@ -111,36 +111,38 @@ export const createProject = async (
     uuid,
   };
 
-  const schema = z.object({
-    title: z
-      .string()
-      .min(1, { message: 'Title must be at least 1 character long.' }),
-    url: z
-      .string()
-      .url({ message: "Invalid URL (Must include 'http://' or 'https://')" }),
-    tagline: z.string().optional(),
-    iconLink: z.string().url().optional(),
-  });
+  // const schema = z.object({
+  //   title: z
+  //     .string()
+  //     .min(1, { message: 'Title must be at least 1 character long.' }),
+  //   url: z
+  //     .string()
+  //     .url({ message: "Invalid URL (Must include 'http://' or 'https://')" }),
+  //   tagline: z.string().optional(),
+  //   iconLink: z.string().url().optional(),
+  // });
 
-  const parse = schema.safeParse(project);
+  // const parse = schema.safeParse(project);
 
-  const errors = [] as string[];
+  // const errors = [] as string[];
 
-  if (!parse.success) {
-    parse.error.errors.forEach((err) => {
-      errors.push(`${err.path.join(' -> ')}: ${err.message}`);
-    });
-  } else {
-    // Save project to database
-    try {
-      await prisma.project.create({ data: project });
-    } catch (error) {
-      errors.push('Failed to create project');
-    } finally {
-      await prisma.$disconnect();
-    }
+  // if (!parse.success) {
+  //   parse.error.errors.forEach((err) => {
+  //     errors.push(`${err.path.join(' -> ')}: ${err.message}`);
+  //   });
+  // } else {
+  try {
+    await prisma.project.update({ where: { uuid }, data: project });
+    console.log('Project updated successfully');
+  } catch (error) {
+    // errors.push('Failed to create project');
+  } finally {
+    await prisma.$disconnect();
   }
-  return [project, errors];
+  revalidatePath(`/u/${ownerId}/projects`);
+  redirect(`/u/${ownerId}/projects`);
+  // }
+  // return [project, errors];
 };
 
 export const deleteProject = async (projectUUID: string, userUUID: string) => {
@@ -155,12 +157,6 @@ export const deleteProject = async (projectUUID: string, userUUID: string) => {
   });
   revalidatePath(`/u/${userUUID}/projects`);
   redirect(`/u/${userUUID}/projects`);
-};
-
-export const updateProject = async (
-  formData: FormData
-): Promise<(Project | string[])[]> => {
-  return [{} as Project, [] as string[]];
 };
 
 export const uploadProjectIcon = async (formData: FormData) => {

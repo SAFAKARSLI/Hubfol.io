@@ -12,13 +12,8 @@ async function ProjectFrame({ projectUUID }: Props) {
   )) as Project;
 
   return (
-    <div className="rounded border border-gray-4 h-full overflow-hidden">
-      <iframe
-        className="w-full h-full"
-        src={project!.url!}
-        key={project?.uuid}
-        // onLoad={() => setSpinner(false)}
-      />
+    <div className="rounded border border-gray-4 h-full w-full overflow-hidden">
+      <iframe className="w-full h-full" src={project.url} key={project.uuid} />
 
       <ProjectConsole project={project} />
     </div>
