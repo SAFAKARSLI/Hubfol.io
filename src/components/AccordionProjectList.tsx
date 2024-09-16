@@ -5,8 +5,8 @@ import { useParams, useRouter } from 'next/navigation';
 
 import * as Accordion from '@radix-ui/react-accordion';
 
-import Project from '@/types/project';
 import AccordionProjectItem from './AccordionProjectItem';
+import Project from '@/types/project';
 
 type Props = {
   initialProjects: Project[];
@@ -25,7 +25,7 @@ function AccordionProjectList({ initialProjects }: Props) {
   }, []);
 
   function onChangeActiveProject(projectUUID: string) {
-    router.push(`/users/${userUUID}/projects/${projectUUID}`);
+    router.push(`/u/${userUUID}/projects/${projectUUID}`);
   }
 
   return (
@@ -41,7 +41,7 @@ function AccordionProjectList({ initialProjects }: Props) {
             <AccordionProjectItem
               key={i}
               uuid={p.uuid as string}
-              title={p.title!}
+              name={p.name!}
               tagline={p.tagline!}
               iconLink={p.iconLink!}
               sections={p.sections!}

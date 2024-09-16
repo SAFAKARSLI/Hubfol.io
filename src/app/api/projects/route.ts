@@ -11,6 +11,7 @@ export async function GET(request: Request) {
   try {
     const projects = await prisma.project.findMany({
       where: { ownerId: userUUID as string },
+      include: { sections: true },
     });
     return new Response(JSON.stringify(projects), { status: 200 });
   } catch (error) {

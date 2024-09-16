@@ -20,6 +20,7 @@ import { InputJsonValue } from '@prisma/client/runtime/library';
 import { NextApiRequest } from 'next';
 import { baseUrl, extractUserUUID } from '@/utils';
 import { Section } from '@/types/section';
+import { revalidatePath } from 'next/cache';
 
 const bucketName = process.env.AWS_PROJECT_ICONS_BUCKET_NAME as string;
 
@@ -79,6 +80,7 @@ export const initiateProject = async (userUUID: string) => {
     console.error('Error creating sections:', error);
   } finally {
     await prisma.$disconnect();
+    revalidatePath(`/u/${userUUID}/projects`);
     redirect(`/u/${userUUID}/projects/initiate`);
   }
 };
@@ -142,6 +144,16 @@ export const createProject = async (
 };
 
 export const deleteProject = async (projectUUID: string, userUUID: string) => {
+  const session = await getServerSession(authOptions);
+  if (!session || !session.user) {
+    throw new Error('You must be signed in to do that.');
+  }
+  if (session.user.uuid !== userUUID) throw new Error('Not authorized.');
+
+  await prisma.project.delete({
+    where: { uuid: projectUUID },
+  });
+  revalidatePath(`/u/${userUUID}/projects`);
   redirect(`/u/${userUUID}/projects`);
 };
 

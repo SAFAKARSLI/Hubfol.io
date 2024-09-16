@@ -18,7 +18,7 @@ function ProjectInfoForm({ initialValues: project }: Props) {
         placerholder="Enter your project name"
         message="Please enter a valid project name"
         type="text"
-        defaultValue={project?.title}
+        defaultValue={project?.name}
         required
       />
       <FormInput

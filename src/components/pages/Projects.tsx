@@ -10,8 +10,10 @@ interface ProjectsProps {
 
 const Projects = async ({ userUUID, children }: ProjectsProps) => {
   const projects = (await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects?userUUID=${userUUID}`
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects?userUUID=${userUUID}`,
+    { cache: 'force-cache' }
   ).then((r) => r.json())) as Project[];
+  console.log('[Projects.tsx] projects: ', projects);
 
   return (
     <div className="flex w-screen">

@@ -8,7 +8,7 @@ export interface Section {
   updatedAt: Date;
   title: string;
   description: string | null;
-  isActive?: boolean;
+  isActive: boolean | null;
   contentType: Content;
   content: InputJsonValue;
   projectId: string;

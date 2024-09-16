@@ -1,22 +1,19 @@
 'use client';
 import * as Accordion from '@radix-ui/react-accordion';
 import { Text, Heading, ScrollArea } from '@radix-ui/themes';
-
-import Project from '@/types/project';
-
-import Divider from './project-card-subsections/Divider';
 import ProjectMenu from './ProjectMenu';
 import { useEffect, useRef } from 'react';
 import { defaultIconLink } from '@/utils';
-import Subsection from './project-card-subsections/Subsection';
 import { Section } from '@/types/section';
+import Subsection from './project-card-subsections/Subsection';
+import Divider from './project-card-subsections/Divider';
 
 interface AccordionProjectItemProps {
   uuid: string;
-  title: string;
+  name: string;
   tagline: string;
   iconLink: string | ArrayBuffer;
-  sections: string[];
+  sections: Section[];
   activeProjectId: string;
   ownerId: string;
   url: string;
@@ -24,7 +21,7 @@ interface AccordionProjectItemProps {
 
 const AccordionProjectItem = ({
   uuid,
-  title,
+  name,
   tagline,
   iconLink,
   sections,
@@ -58,7 +55,7 @@ const AccordionProjectItem = ({
               style={{ objectFit: 'contain' }}
               width={'10%'}
               height={'auto'}
-              alt={`${title}-icon`}
+              alt={`${name}-icon`}
               src={
                 (iconLink as string) ? (iconLink as string) : defaultIconLink
               }
@@ -70,7 +67,7 @@ const AccordionProjectItem = ({
                 as="h2"
                 className="-2xl:text-sm truncate mb-1"
               >
-                {title}
+                {name}
               </Heading>
               <Text
                 size={'2'}
@@ -82,7 +79,7 @@ const AccordionProjectItem = ({
             </div>
 
             {uuid === activeProjectId && (
-              <ProjectMenu title={title} projectUUID={uuid} />
+              <ProjectMenu title={name} projectUUID={uuid} />
             )}
           </div>
         </Accordion.Trigger>
@@ -90,18 +87,18 @@ const AccordionProjectItem = ({
         <Accordion.Content asChild>
           <div className="bg-gray-1 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden z-50">
             <ScrollArea type="auto" className="max-h-[40vh]">
-              {/* {sections?.map((s, i) => {
+              {sections?.map((s, i) => {
                 return (
                   <div key={i}>
                     <Subsection
-                      title={s.header}
+                      title={s.title}
                       contentType={s.contentType}
                       content={s.content}
                     />
                     {i == sections.length - 1 ? null : <Divider />}
                   </div>
                 );
-              })} */}
+              })}
             </ScrollArea>
           </div>
         </Accordion.Content>

@@ -1,4 +1,4 @@
-import { Section } from '@prisma/client';
+import { Section } from './section';
 
 export default interface Project {
   uuid: string;

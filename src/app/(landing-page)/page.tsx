@@ -1,7 +1,7 @@
 import OAuthSignInButton from '@/components/OAuthSignInButton';
 import React from 'react';
 import { FaGoogle } from 'react-icons/fa';
-import { authOptions } from './api/auth/[...nextauth]/route';
+import { authOptions } from '../api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
 import SignOutButton from '@/components/SignOutButton';
 
