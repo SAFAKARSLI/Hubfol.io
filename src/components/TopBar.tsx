@@ -15,6 +15,7 @@ import NavigationLinks from './NavigationLinks';
 import SidebarButton from './SidebarButton';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import ProfileMenuDropdownButton from './ProfileMenuDropdownButton';
 
 interface TopBarProps {
   params: Params;
@@ -24,19 +25,6 @@ async function TopBar({ params }: TopBarProps) {
   const userUUID = params.userUUID;
   const projectUUID = params.projectUUID;
   const session = await getServerSession(authOptions);
-
-  console.log(userUUID);
-  console.log(userUUID);
-
-  console.log(userUUID);
-
-  console.log(userUUID);
-
-  console.log(userUUID);
-
-  console.log(userUUID);
-
-  console.log(userUUID);
 
   return (
     <Flex>
@@ -57,8 +45,8 @@ async function TopBar({ params }: TopBarProps) {
           <div className="-lg:hidden mr-3">
             <DropdownMenu.Root>
               <DropdownMenu.Trigger>
-                <IconButton variant="ghost" size={'3'} className="flex">
-                  <PersonIcon className="w-5 h-5" />
+                <IconButton variant="ghost" className="flex gap-1">
+                  <ProfileMenuDropdownButton />
                   <DropdownMenu.TriggerIcon />
                 </IconButton>
               </DropdownMenu.Trigger>
@@ -70,7 +58,6 @@ async function TopBar({ params }: TopBarProps) {
                         OAuthType="google"
                         label="Sign in with Google"
                         logo={<FaGoogle />}
-                        userUUID={userUUID}
                       />
                     ) : (
                       <SignOutButton userUUID={userUUID} />

@@ -1,5 +1,5 @@
 'use client';
-import { Section } from '@prisma/client';
+import { Section } from '@/types/section';
 import { Table } from '@radix-ui/themes';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';

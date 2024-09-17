@@ -2,8 +2,8 @@ import React from 'react';
 
 type Props = {};
 
-function CertificatesAndEducation({}: Props) {
-  return <div>CertificatesAndEducation</div>;
+function Reviews({}: Props) {
+  return <div>Reviews</div>;
 }
 
-export default CertificatesAndEducation;
+export default Reviews;

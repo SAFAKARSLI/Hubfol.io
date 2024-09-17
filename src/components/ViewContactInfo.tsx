@@ -5,15 +5,14 @@ import {
   Flex,
   DataList,
   Badge,
-  Code,
-  IconButton,
   Link,
+  Separator,
 } from '@radix-ui/themes';
-import { CopyIcon, PersonIcon } from '@radix-ui/react-icons';
-import Divider from './project-card-subsections/Divider';
+import { PersonIcon } from '@radix-ui/react-icons';
 import { getServerSession, User } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import Employee from '@/types/employee';
+import { FaDollarSign } from 'react-icons/fa';
 
 type Props = {
   user: Employee;
@@ -75,7 +74,7 @@ async function ViewContactInfo({ user }: Props) {
       <Dialog.Content maxWidth="450px">
         <Dialog.Title>Profile Information</Dialog.Title>
         <Dialog.Description size="2" mb="4">
-          <Divider />
+          <Separator size={'4'} />
         </Dialog.Description>
         {renderUserInfo()}
       </Dialog.Content>

@@ -5,22 +5,15 @@ import { Button, Table } from '@radix-ui/themes';
 import Project from '@/types/project';
 import ProjectsTableItem from './ProjectsTableItem';
 import { PlusIcon } from '@radix-ui/react-icons';
-import { baseUrl, defaultSections } from '@/utils';
+import { baseUrl } from '@/utils';
 import { cookies } from 'next/headers';
-import { initial } from 'lodash';
-import { Section } from '@prisma/client';
+import { Section } from '@/types/section';
 
 type Props = {
-  initialValues?: Section[];
+  sections: Section[];
 };
 
-async function SectionsTable({ initialValues }: Props) {
-  const projectUUID = cookies().get('pUUID');
-
-  const sections = (await fetch(
-    `${baseUrl}/api/sections?projectUUID=${projectUUID?.value}`
-  ).then((r) => r.json())) as Section[];
-
+async function SectionsTable({ sections }: Props) {
   return (
     <div>
       <Table.Root size={'1'}>

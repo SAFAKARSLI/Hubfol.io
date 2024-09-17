@@ -1,6 +1,5 @@
 import SectionForm from '@/components/project-form/form-sections/project-sections/SectionForm';
 import { SlugProps } from '@/types/slug';
-import { defaultSections } from '@/utils';
 import React from 'react';
 
 type Props = {};

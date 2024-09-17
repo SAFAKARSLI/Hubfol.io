@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from '@radix-ui/themes';
 import { buttonVariants } from '@/utils';
 import { PlusIcon } from '@radix-ui/react-icons';
-import { redirect, useParams } from 'next/navigation';
+import { redirect, useParams, useRouter } from 'next/navigation';
 import { initiateProject } from '@/app/actions/project';
 
 type Props = {
@@ -12,9 +12,11 @@ type Props = {
 
 function AddProjectButton({ variant = 'soft' }: Props) {
   const { userUUID } = useParams();
+  const router = useRouter();
 
   async function handleAddButtonClick() {
-    await initiateProject(userUUID as string);
+    router.push(`/u/${userUUID}/projects/initiate`);
+    // await initiateProject(userUUID as string);
   }
 
   return (

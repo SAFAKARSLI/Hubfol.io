@@ -7,9 +7,9 @@ type Props = {
 };
 
 async function ProjectFrame({ projectUUID }: Props) {
-  const project = (await fetch(`${baseUrl}/api/projects/${projectUUID}`).then(
-    (r) => r.json()
-  )) as Project;
+  const project = (await fetch(`${baseUrl}/api/projects/${projectUUID}`, {
+    next: { tags: ['projects'] },
+  }).then((r) => r.json())) as Project;
 
   return (
     <div className="rounded border border-gray-4 h-full w-full overflow-hidden">

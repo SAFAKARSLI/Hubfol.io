@@ -15,15 +15,12 @@ function OAuthSignInButton({ logo, label, OAuthType }: Props) {
   };
 
   return (
-    <Button
-      className="w-full"
-      variant="ghost"
+    <div
+      className="flex gap-1 h-full justify-center items-center hover:cursor-pointer"
       onClick={handleSignInButtonClick}
     >
-      <div className="flex gap-1 h-full justify-center items-center">
-        {logo} <Text className="text-white">{label}</Text>
-      </div>
-    </Button>
+      {logo} <Text className="text-white">{label}</Text>
+    </div>
   );
 }
 

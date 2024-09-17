@@ -15,12 +15,11 @@ import { cookies } from 'next/headers';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import { prisma } from '@/db';
-import { Content } from '@prisma/client';
+import { Content, Employee } from '@prisma/client';
 import { InputJsonValue } from '@prisma/client/runtime/library';
-import { NextApiRequest } from 'next';
 import { baseUrl } from '@/utils';
 import { Section } from '@/types/section';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 const bucketName = process.env.AWS_PROJECT_ICONS_BUCKET_NAME as string;
 
@@ -31,9 +30,6 @@ export const initiateProject = async (userUUID: string) => {
   }
 
   if (session.user.uuid != userUUID) throw new Error('Not authorized.');
-
-  const projectUUID = uuidv4();
-  cookies().set('pUUID', projectUUID);
 
   const date = new Date();
   const sections = [
@@ -58,9 +54,9 @@ export const initiateProject = async (userUUID: string) => {
   ] as Section[];
 
   try {
-    await prisma.project.create({
+    const initiatedProject = await prisma.project.create({
       data: {
-        uuid: projectUUID,
+        uuid: uuidv4(),
         ownerId: session.user.uuid,
         createdAt: date,
         name: 'New Project',
@@ -73,18 +69,20 @@ export const initiateProject = async (userUUID: string) => {
           },
         },
       },
+      include: { sections: true },
     });
+
+    return initiatedProject;
   } catch (error) {
     console.error('Error creating sections:', error);
   } finally {
     await prisma.$disconnect();
-    revalidatePath(`/u/${userUUID}/projects`);
-    redirect(`/u/${userUUID}/projects/initiate`);
+    revalidateTag('projects');
   }
 };
 
 export const createInitiatedProject = async (
-  ownerId: string,
+  project: Project,
   formData: FormData
 ) => {
   const session = await getServerSession(authOptions);
@@ -93,22 +91,18 @@ export const createInitiatedProject = async (
     throw new Error('You must be signed in to perform this action.');
   }
 
-  if (ownerId !== session.user.uuid) throw new Error('Not authorized.');
-  if (!validateUUID(ownerId))
+  if (project.ownerId !== session.user.uuid) throw new Error('Not authorized.');
+  if (!validateUUID(project.ownerId))
     throw new Error('Invalid project owner provided.');
 
-  if (!cookies().get('pUUID'))
-    throw new Error('An error occured while creating the project.');
-
-  const uuid = cookies().get('pUUID')!.value;
-  const project = {
+  const projectFromFormData = {
     name: formData.get('name') as string,
     url: formData.get('url') as string,
     iconLink: formData.get('iconLink') as string,
     tagline: formData.get('tagline') as string,
     createdAt: new Date(),
-    ownerId,
-    uuid,
+    ownerId: project.ownerId,
+    uuid: project.uuid,
   };
 
   // const schema = z.object({
@@ -132,21 +126,30 @@ export const createInitiatedProject = async (
   //   });
   // } else {
   try {
-    await prisma.project.update({ where: { uuid }, data: project });
-    console.log('Project updated successfully');
+    await prisma.project.upsert({
+      where: { uuid: project.uuid },
+      create: projectFromFormData,
+      update: projectFromFormData,
+    });
   } catch (error) {
     // errors.push('Failed to create project');
   } finally {
     await prisma.$disconnect();
   }
-  revalidatePath(`/u/${ownerId}/projects`);
-  redirect(`/u/${ownerId}/projects`);
+  revalidateTag('projects');
+  redirect(`/u/${project.ownerId}/projects/${project.uuid}`);
   // }
   // return [project, errors];
 };
 
-export const deleteProject = async (projectUUID: string, userUUID: string) => {
+export const deleteProject = async (projectUUID: string) => {
   const session = await getServerSession(authOptions);
+  const projectFromDb = (await fetch(
+    `${baseUrl}/api/projects/${projectUUID}`
+  ).then((res) => res.json())) as Project;
+
+  const userUUID = projectFromDb.ownerId;
+
   if (!session || !session.user) {
     throw new Error('You must be signed in to do that.');
   }
@@ -155,7 +158,7 @@ export const deleteProject = async (projectUUID: string, userUUID: string) => {
   await prisma.project.delete({
     where: { uuid: projectUUID },
   });
-  revalidatePath(`/u/${userUUID}/projects`);
+  revalidateTag('projects');
   redirect(`/u/${userUUID}/projects`);
 };
 

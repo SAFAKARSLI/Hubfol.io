@@ -33,12 +33,12 @@ const ProjectCard = forwardRef<HTMLDivElement, Props>(
               ? (project.iconLink as string)
               : defaultIconLink
           }
-          alt={project.title!}
+          alt={project.name!}
           style={{ objectFit: 'contain' }}
           className="w-[1.8rem] h-[1.8rem]"
         />
         <div className="flex flex-col ">
-          <Heading className="text-base">{project.title}</Heading>
+          <Heading className="text-base">{project.name}</Heading>
           <Text className="text-xs ">{project.tagline}</Text>
         </div>
       </div>

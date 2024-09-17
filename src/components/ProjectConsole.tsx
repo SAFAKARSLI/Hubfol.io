@@ -13,9 +13,6 @@ type Props = {
 
 function ProjectConsole({ project }: Props) {
   const [isConsoleOpen, setConsoleOpen] = useState(false);
-
-  console.log('ProjectConsole', project);
-
   // useEffect(() => {
   //   setConsoleOpen(true);
   // }, []);

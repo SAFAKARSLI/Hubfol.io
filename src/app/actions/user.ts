@@ -20,7 +20,6 @@ export const checkExistingUser = async (email: string) => {
       where: { email },
     });
     if (!user) {
-      console.log('User not found');
       return null;
     }
     return user;

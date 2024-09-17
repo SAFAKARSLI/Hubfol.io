@@ -13,12 +13,9 @@ function SignOutButton({ userUUID }: Props) {
   return (
     <AlertDialog.Root open={open}>
       <AlertDialog.Trigger onMouseDown={() => setOpen(true)}>
-        <Button
-          variant="ghost"
-          className="w-full flex items-center justify-start"
-        >
+        <Flex className="gap-1 items-center">
           <FaSignOutAlt /> Sign Out
-        </Button>
+        </Flex>
       </AlertDialog.Trigger>
       <AlertDialog.Content maxWidth="450px">
         <AlertDialog.Title size={'6'}>Sign Out</AlertDialog.Title>

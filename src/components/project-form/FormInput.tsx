@@ -11,7 +11,6 @@ type Props = {
   placerholder: string;
   name: string;
   defaultValue?: string | number;
-  onChange?: (e: any) => void;
   message?: string;
   required?: boolean;
 };
@@ -23,7 +22,6 @@ function FormInput({
   name,
   placerholder,
   defaultValue,
-  onChange,
   message,
   required = false,
 }: Props) {
@@ -40,7 +38,6 @@ function FormInput({
             placeholder={placerholder}
             type={type as InputType}
             defaultValue={defaultValue}
-            onChange={onChange}
             className="w-full h-[2rem] p-2 outline-none bg-gray-1 focus:shadow-outline focus:border-violet-7 rounded-md text-sm border border-gray-6 -md:text-xs data-[invalid]:placeholder-red-400 data-[invalid]:border-red-300"
             required={required}
             autoComplete="off"

@@ -2,6 +2,7 @@ import React from 'react';
 
 import Project from '@/types/project';
 import ProjectsSidePanel from '../ProjectsSidePanel';
+import next from 'next';
 
 interface ProjectsProps {
   userUUID: string;
@@ -11,7 +12,12 @@ interface ProjectsProps {
 const Projects = async ({ userUUID, children }: ProjectsProps) => {
   const projects = (await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects?userUUID=${userUUID}`,
-    { cache: 'force-cache' }
+    {
+      cache: 'no-store',
+      next: {
+        tags: ['projects'],
+      },
+    }
   ).then((r) => r.json())) as Project[];
 
   return (

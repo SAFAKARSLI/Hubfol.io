@@ -1,15 +1,30 @@
-import React from 'react';
+'use client';
+import React, { useEffect } from 'react';
 import FormInput from '@/components/project-form/FormInput';
 import Project from '@/types/project';
 import FileInput from './FileInput';
 import * as Form from '@radix-ui/react-form';
 import InputLabel from '../../InputLabel';
+import { deleteProject } from '@/app/actions/project';
 
 type Props = {
   initialValues?: Project;
 };
 
 function ProjectInfoForm({ initialValues: project }: Props) {
+  useEffect(() => {
+    const handleBrowserNavigation = async (e: PopStateEvent) => {
+      await deleteProject(project?.uuid!);
+      console.log('PROJECT DELETING');
+      return;
+    };
+
+    window.addEventListener('popstate', handleBrowserNavigation);
+
+    return () => {
+      window.removeEventListener('popstate', handleBrowserNavigation);
+    };
+  });
   return (
     <div className="flex flex-col gap-4 my-5">
       <FormInput

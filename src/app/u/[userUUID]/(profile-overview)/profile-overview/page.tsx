@@ -4,7 +4,7 @@ import React from 'react';
 
 function page({ params }: SlugProps) {
   const { userUUID } = params;
-  return <Projects userUUID={userUUID} />;
+  return <div>ProjectOverview</div>;
 }
 
 export default page;

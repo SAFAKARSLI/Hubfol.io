@@ -50,6 +50,7 @@ const AccordionProjectItem = ({
             className={`flex py-3 sm:px-7 px-4 
           ${activeProjectId == uuid && 'bg-gray-2'} bg-gray-1 hover:bg-gray-2
           data-[state=closed]:cursor-pointer w-full`}
+            ref={cardRef}
           >
             <img
               style={{ objectFit: 'contain' }}

@@ -5,8 +5,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
-import { extractUserUUID } from '@/utils';
 import { validateUUID } from './utils';
+import { extractUUID } from '@/utils';
 
 export const getSections = async (projectUUID: string) => {
   try {
@@ -58,7 +58,7 @@ export const createSection = async (
     throw new Error('You must be logged in to create a section.');
   }
 
-  const userUUID = extractUserUUID(request.url);
+  const userUUID = extractUUID(request.url, 'users');
   if (!userUUID || !validateUUID(userUUID))
     throw new Error('Invalid user identifier provided: ' + userUUID);
 

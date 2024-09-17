@@ -4,13 +4,14 @@ import { prisma } from '@/db';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const userUUID = searchParams.get('userUUID');
-  if (!(await validateUUID(userUUID!))) {
+  if (!validateUUID(userUUID!)) {
     return new Response('User UUID is required', { status: 400 });
   }
 
   try {
     const projects = await prisma.project.findMany({
       where: { ownerId: userUUID as string },
+      orderBy: { createdAt: 'asc' },
       include: { sections: true },
     });
     return new Response(JSON.stringify(projects), { status: 200 });

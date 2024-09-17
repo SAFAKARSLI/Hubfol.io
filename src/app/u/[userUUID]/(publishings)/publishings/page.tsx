@@ -2,8 +2,8 @@ import React from 'react';
 
 type Props = {};
 
-function ProfessionalExperiences({}: Props) {
-  return <div>ProfessionalExperiences</div>;
+function publishings({}: Props) {
+  return <div>publishings</div>;
 }
 
-export default ProfessionalExperiences;
+export default publishings;

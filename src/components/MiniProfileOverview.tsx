@@ -2,6 +2,9 @@ import React from 'react';
 import HamburgerProjectMenu from './HamburgerProjectMenu';
 import { getUser } from '@/app/actions/user';
 import Project from '@/types/project';
+import { baseUrl } from '@/utils';
+import { User } from '@prisma/client';
+import Employee from '@/types/employee';
 
 type Props = {
   userUUID: string;
@@ -9,10 +12,14 @@ type Props = {
 };
 
 async function MiniProfileOverview({ userUUID }: Props) {
-  const user = { name: 'SAFA KARSLI', title: 'SOFTWARE ENGINEER' };
+  const user = (await fetch(`${baseUrl}/api/users/${userUUID}`).then((r) =>
+    r.json()
+  )) as Employee;
   const projects = (await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects?userUUID=${userUUID}`
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects?userUUID=${userUUID}`,
+    { cache: 'force-cache', next: { tags: ['projects'] } }
   ).then((r) => r.json())) as Project[];
+
   return (
     <div className={`xl:hidden flex w-full items-center h-full gap-3`}>
       <HamburgerProjectMenu projects={projects} userUUID={userUUID} />
