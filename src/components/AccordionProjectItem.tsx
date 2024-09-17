@@ -49,13 +49,12 @@ const AccordionProjectItem = ({
           <div
             className={`flex py-3 sm:px-7 px-4 
           ${activeProjectId == uuid && 'bg-gray-2'} bg-gray-1 hover:bg-gray-2
-          data-[state=closed]:cursor-pointer w-full`}
+          data-[state=closed]:cursor-pointer w-full items-center h-[4rem]`}
             ref={cardRef}
           >
             <img
+              className="h-[2.3rem] w-[2.3rem] "
               style={{ objectFit: 'contain' }}
-              width={'10%'}
-              height={'auto'}
               alt={`${name}-icon`}
               src={
                 (iconLink as string) ? (iconLink as string) : defaultIconLink
@@ -79,9 +78,11 @@ const AccordionProjectItem = ({
               </Text>
             </div>
 
-            {uuid === activeProjectId && (
-              <ProjectMenu title={name} projectUUID={uuid} />
-            )}
+            <div className="h-full">
+              {uuid === activeProjectId && (
+                <ProjectMenu title={name} projectUUID={uuid} />
+              )}
+            </div>
           </div>
         </Accordion.Trigger>
 

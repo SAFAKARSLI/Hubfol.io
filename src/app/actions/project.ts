@@ -20,8 +20,61 @@ import { InputJsonValue } from '@prisma/client/runtime/library';
 import { baseUrl } from '@/utils';
 import { Section } from '@/types/section';
 import { revalidatePath, revalidateTag } from 'next/cache';
+import { UploadIcon } from '@radix-ui/react-icons';
 
 const bucketName = process.env.AWS_PROJECT_ICONS_BUCKET_NAME as string;
+
+export const createProject = async (formData: FormData) => {
+  console.log(formData);
+  const session = await getServerSession(authOptions);
+  if (!session || !session.user) {
+    throw new Error('You must be signed in to do that.');
+  }
+
+  const iconLink = await uploadProjectIcon(formData.get('iconLink') as File);
+  console.log('[actions/projects] iconLink', iconLink);
+
+  const projectFromFormData = {
+    name: formData.get('name') as string,
+    url: formData.get('url') as string,
+    iconLink,
+    tagline: formData.get('tagline') as string,
+    createdAt: new Date(),
+    ownerId: session.user.uuid,
+    uuid: uuidv4(),
+  };
+
+  // const schema = z.object({
+  //   name: z.string().min(1, { message: 'Name is required.' }),
+  //   url: z.string().url({ message: 'Invalid URL.' }),
+  //   tagline: z.string().optional(),
+  //   iconLink: z.string().url().optional(),
+  // });
+
+  // const parse = schema.safeParse(projectFromFormData);
+
+  // const errors = [] as string[];
+
+  // if (!parse.success) {
+  //   parse.error.errors.forEach((err) => {
+  //     errors.push(`${err.path.join(' -> ')}: ${err.message}`);
+  //   });
+  //   return { errors };
+  // }
+
+  try {
+    await prisma.project.create({
+      data: projectFromFormData,
+    });
+  } catch (error) {
+    // errors.push('Failed to create project');
+  } finally {
+    await prisma.$disconnect();
+  }
+
+  revalidateTag('projects');
+  redirect(`/u/${session.user.uuid}/projects/${projectFromFormData.uuid}`);
+};
 
 export const initiateProject = async (userUUID: string) => {
   const session = await getServerSession(authOptions);
@@ -135,38 +188,45 @@ export const createInitiatedProject = async (
     // errors.push('Failed to create project');
   } finally {
     await prisma.$disconnect();
+    revalidateTag('projects');
+    // redirect(`/u/${project.ownerId}/projects/${project.uuid}`);
   }
-  revalidateTag('projects');
-  redirect(`/u/${project.ownerId}/projects/${project.uuid}`);
+
   // }
   // return [project, errors];
 };
 
 export const deleteProject = async (projectUUID: string) => {
   const session = await getServerSession(authOptions);
-  const projectFromDb = (await fetch(
-    `${baseUrl}/api/projects/${projectUUID}`
-  ).then((res) => res.json())) as Project;
-
-  const userUUID = projectFromDb.ownerId;
-
   if (!session || !session.user) {
     throw new Error('You must be signed in to do that.');
   }
-  if (session.user.uuid !== userUUID) throw new Error('Not authorized.');
 
-  await prisma.project.delete({
-    where: { uuid: projectUUID },
-  });
-  revalidateTag('projects');
-  redirect(`/u/${userUUID}/projects`);
+  let userUUID: string | undefined;
+
+  try {
+    const projectFromDb = (await fetch(
+      `${baseUrl}/api/projects/${projectUUID}`
+    ).then((res) => res.json())) as Project;
+
+    userUUID = projectFromDb.ownerId;
+
+    if (session.user.uuid !== userUUID) throw new Error('Not authorized.');
+
+    await prisma.project.delete({
+      where: { uuid: projectUUID },
+    });
+  } catch (error) {
+    throw new Error('An error occured while deleting the project.');
+  } finally {
+    revalidateTag('projects');
+    redirect(`/u/${userUUID}/projects`);
+  }
 };
 
-export const uploadProjectIcon = async (formData: FormData) => {
-  const iconLink = formData.get('iconLink');
-
-  if (iconLink && iconLink instanceof File) {
-    const arrayBuffer = await iconLink.arrayBuffer();
+export const uploadProjectIcon = async (file: File) => {
+  if (file) {
+    const arrayBuffer = await file.arrayBuffer();
     const body = Buffer.from(arrayBuffer);
 
     const uniqueKey = `${uuidv4()}-${new Date().getTime()}`;
@@ -180,7 +240,7 @@ export const uploadProjectIcon = async (formData: FormData) => {
     await s3Client.send(new PutObjectCommand(uploadParams));
     return `https://s3.amazonaws.com/${bucketName}/${uniqueKey}`;
   } else {
-    throw new Error('Invalid iconLink');
+    throw new Error('Invalid icon data provided.');
   }
 };
 

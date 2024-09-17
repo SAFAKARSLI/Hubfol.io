@@ -32,7 +32,7 @@ function ProjectMenu({ projectUUID, title }: Props) {
   const [deleteDialogeOpen, setDeleteDialogeOpen] = useState(false);
 
   return (
-    <div>
+    <>
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
           <IconButton
@@ -78,7 +78,7 @@ function ProjectMenu({ projectUUID, title }: Props) {
           userUUID={userUUID}
         />
       </AlertDialog.Root>
-    </div>
+    </>
   );
 }
 

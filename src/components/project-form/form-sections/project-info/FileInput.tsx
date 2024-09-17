@@ -3,10 +3,13 @@
 import { allowedIconTypes } from '@/utils';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import React from 'react';
+import * as Form from '@radix-ui/react-form';
 
-type Props = {};
+type Props = {
+  editFormData: (key: string, value: string | Blob) => void;
+};
 
-function FileInput({}: Props) {
+function FileInput({ editFormData }: Props) {
   const [icon, setIcon] = React.useState<string | null>('');
 
   const handleFileInput = (file: File) => {
@@ -14,20 +17,15 @@ function FileInput({}: Props) {
       throw new Error('Invalid file type');
     }
 
-    const formData = new FormData();
     const reader = new FileReader();
-
     reader.readAsArrayBuffer(file);
-    reader.onload = async () => {
+    reader.onload = () => {
+      const arrayBuffer = reader.result;
+      const blob = new Blob([arrayBuffer as ArrayBuffer], {
+        type: 'application/octet-stream',
+      });
+      editFormData('iconLink', blob);
       setIcon(URL.createObjectURL(file));
-
-      // const arrayBuffer = reader.result
-      // const blob = new Blob([arrayBuffer as ArrayBuffer], {
-      //   type: 'application/octet-stream'
-      // })
-      // formData.append('iconLink', blob)
-      // const s3Link = await uploadIcon(formData)
-      // setProject({ ...project, iconLink: s3Link })
     };
   };
 
@@ -50,11 +48,14 @@ function FileInput({}: Props) {
           />
         </div>
       ) : (
-        <input
-          onChange={(e) => handleFileInput((e.target.files as FileList)[0])}
-          type="file"
-          className="w-full"
-        />
+        <Form.Control asChild>
+          <input
+            onChange={(e) => handleFileInput((e.target.files as FileList)[0])}
+            type="file"
+            className="w-full"
+            name={'iconLink'}
+          />
+        </Form.Control>
       )}
     </div>
   );

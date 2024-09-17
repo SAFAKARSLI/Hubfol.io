@@ -9,7 +9,7 @@ type Props = {
 
 function FormSection({ title, description, children }: Props) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 my-6">
       <Heading>{title}</Heading>
       {description && (
         <Text size="3" as="p" className="text-sm">

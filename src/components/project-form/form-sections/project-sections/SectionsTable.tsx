@@ -10,10 +10,10 @@ import { cookies } from 'next/headers';
 import { Section } from '@/types/section';
 
 type Props = {
-  sections: Section[];
+  // sections: Section[];
 };
 
-async function SectionsTable({ sections }: Props) {
+function SectionsTable({}: Props) {
   return (
     <div>
       <Table.Root size={'1'}>
@@ -26,9 +26,9 @@ async function SectionsTable({ sections }: Props) {
         </Table.Header>
 
         <Table.Body>
-          {sections!.map((section, i) => (
+          {/* {sections!.map((section, i) => (
             <ProjectsTableItem section={section} key={i} />
-          ))}
+          ))} */}
         </Table.Body>
       </Table.Root>
       <Button variant="soft" className="w-1/4 my-3 h-[2.5rem] float-right">

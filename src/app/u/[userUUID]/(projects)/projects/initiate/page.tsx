@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 export default async function page({ params }: SlugProps) {
   const { userUUID } = params;
 
-  const project = (await initiateProject(userUUID as string)) as Project;
+  // const project = (await initiateProject(userUUID as string)) as Project;
 
-  return <ProjectForm project={project} />;
+  return <ProjectForm />;
 }
