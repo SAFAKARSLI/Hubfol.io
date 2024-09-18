@@ -1,12 +1,13 @@
+import { validateUUID } from '@/app/actions/utils';
 import { prisma } from '@/db';
 import { extractUUID } from '@/utils';
-import { NextApiRequest } from 'next';
+import { notFound } from 'next/navigation';
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const userUUID = extractUUID(url.pathname, 'users');
 
-  if (!userUUID || typeof userUUID !== 'string') {
+  if (!userUUID || !validateUUID(userUUID)) {
     return new Response('User UUID is required', { status: 400 });
   }
 

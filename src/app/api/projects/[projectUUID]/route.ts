@@ -18,6 +18,11 @@ export async function GET(
       where: { uuid: projectUUID as string },
       include: { sections: true },
     });
+
+    if (!projects) {
+      return new Response('Project not found', { status: 404 });
+    }
+
     return new Response(JSON.stringify(projects), { status: 200 });
   } catch (error) {
     return new Response('Failed to fetch projects', { status: 500 });

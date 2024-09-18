@@ -1,6 +1,7 @@
 import Project from '@/types/project';
 import ProjectConsole from './ProjectConsole';
 import { baseUrl } from '@/utils';
+import { notFound } from 'next/navigation';
 
 type Props = {
   projectUUID: string;
@@ -10,6 +11,10 @@ async function ProjectFrame({ projectUUID }: Props) {
   const project = (await fetch(`${baseUrl}/api/projects/${projectUUID}`, {
     next: { tags: ['projects'] },
   }).then((r) => r.json())) as Project;
+
+  if (!project) {
+    notFound();
+  }
 
   return (
     <div className="rounded border border-gray-4 h-full w-full overflow-hidden">

@@ -7,7 +7,7 @@ type Props = {};
 function page({ params }: SlugProps) {
   const { sectionUUID, projectUUID, userUUID } = params;
 
-  return <SectionForm section={} />;
+  return <SectionForm />;
 }
 
 export default page;

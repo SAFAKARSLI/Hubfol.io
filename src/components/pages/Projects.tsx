@@ -3,6 +3,7 @@ import React from 'react';
 import Project from '@/types/project';
 import ProjectsSidePanel from '../ProjectsSidePanel';
 import next from 'next';
+import { notFound } from 'next/navigation';
 
 interface ProjectsProps {
   userUUID: string;
@@ -18,7 +19,12 @@ const Projects = async ({ userUUID, children }: ProjectsProps) => {
         tags: ['projects'],
       },
     }
-  ).then((r) => r.json())) as Project[];
+  ).then((r) => {
+    if (!r.ok) {
+      notFound();
+    }
+    return r.json();
+  })) as Project[];
 
   return (
     <div className="flex w-screen h-full">

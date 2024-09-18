@@ -12,10 +12,10 @@ import SignOutButton from './SignOutButton';
 import MiniProfileOverview from './MiniProfileOverview';
 import OAuthSignInButton from './OAuthSignInButton';
 import NavigationLinks from './NavigationLinks';
-import SidebarButton from './SidebarButton';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import ProfileMenuDropdownButton from './ProfileMenuDropdownButton';
+import SidebarButton from './custom-comps/SidebarButton';
 
 interface TopBarProps {
   params: Params;

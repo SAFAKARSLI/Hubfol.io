@@ -3,21 +3,19 @@ import FormInput from '../../FormInput';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Section } from '@/types/section';
 
-type Props = {
-  section: Section;
-};
+type Props = {};
 
-function SectionForm({ section }: Props) {
+function SectionForm({}: Props) {
   return (
     <div>
-      <FormInput
+      {/* <FormInput
         label="Header"
         defaultValue={section.title}
         name="header"
         placerholder='Enter the section header here. (e.g "Project Description"'
         type={section.contentType}
         logo={<MagnifyingGlassIcon />}
-      />
+      /> */}
     </div>
   );
 }

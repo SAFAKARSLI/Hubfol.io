@@ -7,12 +7,13 @@ import {
   Badge,
   Link,
   Separator,
+  IconButton,
 } from '@radix-ui/themes';
-import { PersonIcon } from '@radix-ui/react-icons';
+import { Cross1Icon, PersonIcon } from '@radix-ui/react-icons';
 import { getServerSession, User } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import Employee from '@/types/employee';
-import { FaDollarSign } from 'react-icons/fa';
+import { FaDollarSign, FaMailBulk, FaPhone, FaPhoneAlt } from 'react-icons/fa';
 
 type Props = {
   user: Employee;
@@ -72,7 +73,14 @@ async function ViewContactInfo({ user }: Props) {
       </Flex>
 
       <Dialog.Content maxWidth="450px">
-        <Dialog.Title>Profile Information</Dialog.Title>
+        <Flex className="w-full justify-between">
+          <Dialog.Title>Profile Information</Dialog.Title>
+          <Dialog.Close>
+            <IconButton variant="ghost">
+              <Cross1Icon />
+            </IconButton>
+          </Dialog.Close>
+        </Flex>
         <Dialog.Description size="2" mb="4">
           <Separator size={'4'} />
         </Dialog.Description>

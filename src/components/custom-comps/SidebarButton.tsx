@@ -4,10 +4,8 @@ import { Button, IconButton } from '@radix-ui/themes';
 import { Cross1Icon, HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { links, preferredColorOptions } from '@/utils';
 import Link from 'next/link';
-import NavigationLinks from './NavigationLinks';
 import { useParams } from 'next/navigation';
-import NavLink from './NavLink';
-import SendProposalButton from './SendProposalButton';
+import NavLink from '../NavLink';
 
 type Props = {
   icon: React.ReactNode;

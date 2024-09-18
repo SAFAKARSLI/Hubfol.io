@@ -17,15 +17,30 @@ type Props = {
 
 function DeleteProjectDialog({ title, projectUUID }: Props) {
   const [confirmDelete, setConfirmDelete] = useState('');
+  const [isDeleting, setIsDeleting] = useState<true | undefined>(undefined);
 
   useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (isDeleting) {
+        event.preventDefault();
+        return;
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
     return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
       setConfirmDelete('');
     };
   }, []);
 
   return (
-    <AlertDialog.Content maxWidth="500px" className=" z-50">
+    <AlertDialog.Content
+      maxWidth="500px"
+      className=" z-50"
+      forceMount={isDeleting}
+    >
       <Flex className="w-full justify-between h-[3rem]">
         <AlertDialog.Title size={'5'} className="truncate">
           Delete <p className="inline text-violet-11">`{title}`</p>
@@ -60,17 +75,17 @@ function DeleteProjectDialog({ title, projectUUID }: Props) {
             Cancel
           </Button>
         </AlertDialog.Cancel>
-        <AlertDialog.Action>
-          <Button
-            color="red"
-            disabled={title != confirmDelete}
-            onClick={async () => {
-              await deleteProject(projectUUID);
-            }}
-          >
-            Delete project
-          </Button>
-        </AlertDialog.Action>
+        <Button
+          color="red"
+          disabled={title != confirmDelete || isDeleting}
+          onClick={async () => {
+            setIsDeleting(true);
+            await deleteProject(projectUUID);
+          }}
+          loading={isDeleting}
+        >
+          Delete project
+        </Button>
       </Flex>
     </AlertDialog.Content>
   );

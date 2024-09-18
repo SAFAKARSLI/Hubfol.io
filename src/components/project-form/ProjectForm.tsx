@@ -11,37 +11,42 @@ import Project from '@/types/project';
 import InputLabel from './InputLabel';
 import FileInput from './form-sections/project-info/FileInput';
 import { usePreloadedFormData } from '@/hooks';
+import Stepper from '../custom-comps/stepper/Stepper';
+import FrameOptionsForm from './form-sections/frame-options/FrameOptionsForm';
 
 type Props = {
-  project: Project;
+  activeStep: number;
 };
 
-function ProjectForm({ project }: Props) {
-  const [formAction, editFormData] = usePreloadedFormData(createProject);
-
+function ProjectForm({ activeStep = 0 }: Props) {
   return (
-    <Form.Root action={formAction} className="max-w-[50rem] m-5">
-      <FormSection
-        title="General information"
-        description="Enter the project information below. You can edit this information later."
-      >
-        <ProjectInfoForm project={project} />
-        <Form.Field name="project-icon">
-          <InputLabel label="Project Icon" />
-          <FileInput editFormData={editFormData} />
-        </Form.Field>
-      </FormSection>
-
-      <Separator orientation="horizontal" size={'4'} />
-
-      <FormSection
-        title="Sections"
-        description="Sections are different ways by which you can flex your project. This information is visible when the project is active."
-      >
-        <SectionsTable />
-      </FormSection>
-      <button type="submit">Submit</button>
-    </Form.Root>
+    <Stepper
+      steps={[
+        {
+          title: 'General Information',
+          description:
+            'Enter the project information below. You can edit this information later.',
+          content: <ProjectInfoForm />,
+        },
+        {
+          title: 'Sections',
+          description:
+            'Sections are different ways by which you can flex your project. This information is visible when the project is active.',
+          content: <SectionsTable />,
+        },
+        {
+          title: 'Frame Options',
+          description: 'Choose your frame options.',
+          content: <FrameOptionsForm />,
+        },
+        {
+          title: 'Review',
+          description: 'Review your project details before submission.',
+          content: <div>Review your project details here.</div>,
+        },
+      ]}
+      activeStep={activeStep}
+    />
   );
 }
 

@@ -8,6 +8,7 @@ import { PlusIcon } from '@radix-ui/react-icons';
 import { baseUrl } from '@/utils';
 import { cookies } from 'next/headers';
 import { Section } from '@/types/section';
+import FormSection from '../FormSection';
 
 type Props = {
   // sections: Section[];
@@ -15,7 +16,7 @@ type Props = {
 
 function SectionsTable({}: Props) {
   return (
-    <div>
+    <>
       <Table.Root size={'1'}>
         <Table.Header>
           <Table.Row>
@@ -39,7 +40,7 @@ function SectionsTable({}: Props) {
         <PlusIcon />
         New Section
       </Button>
-    </div>
+    </>
   );
 }
 
