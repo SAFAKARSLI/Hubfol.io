@@ -2,7 +2,6 @@ import React from 'react';
 import StepperHeader from './StepperHeader';
 import { Step } from './step';
 import StepperContent from './StepperContent';
-import StepperNavigation from './StepperNavigation';
 
 type Props = {
   steps: Step[];

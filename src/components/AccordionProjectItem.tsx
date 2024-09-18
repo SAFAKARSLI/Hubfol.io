@@ -56,9 +56,7 @@ const AccordionProjectItem = ({
               className="h-[2.3rem] w-[2.3rem] "
               style={{ objectFit: 'contain' }}
               alt={`${name}-icon`}
-              src={
-                (iconLink as string) ? (iconLink as string) : defaultIconLink
-              }
+              src={iconLink ? (iconLink as string) : defaultIconLink}
             />
 
             <div className="min-w-[5rem] sm:mx-7 mx-4 flex-1">

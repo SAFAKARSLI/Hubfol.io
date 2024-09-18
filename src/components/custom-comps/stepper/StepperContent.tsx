@@ -17,9 +17,9 @@ function StepperContent({ step, maxStepNum }: Props) {
 
   return (
     <FormSection title={step.title} description={step.description}>
-      <Form.Root action={formAction}>
+      <Form.Root action={formAction} ref={formRef}>
         {cloneElement(step.content as React.ReactElement, { editFormData })}
-        <StepperNavigation maxStepNum={maxStepNum} formRef={formRef.current} />
+        <StepperNavigation maxStepNum={maxStepNum} formRef={formRef} />
       </Form.Root>
     </FormSection>
   );

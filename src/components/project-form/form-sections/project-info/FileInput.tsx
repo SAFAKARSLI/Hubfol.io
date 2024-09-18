@@ -44,7 +44,10 @@ function FileInput({ editFormData }: Props) {
           </div>
           <Cross1Icon
             className="w-6 h-6 hover:bg-gray-5 text-gray-300 rounded-sm p-1 cursor-pointer"
-            onMouseDown={() => setIcon('')}
+            onMouseDown={() => {
+              setIcon('');
+              editFormData('iconLink', '');
+            }}
           />
         </div>
       ) : (

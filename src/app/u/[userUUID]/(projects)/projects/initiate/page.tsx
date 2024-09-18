@@ -8,7 +8,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 export default async function page({ params, searchParams }: SlugProps) {
   const { userUUID } = params;
-  const activeStep = searchParams?.step;
-
-  return <ProjectForm activeStep={activeStep!} />;
+  const activeStep = searchParams?.step!;
+  return <ProjectForm activeStep={activeStep} />;
 }

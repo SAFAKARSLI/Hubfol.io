@@ -7,7 +7,7 @@ import React, { act } from 'react';
 
 type Props = {
   maxStepNum: number;
-  formRef: HTMLFormElement | null;
+  formRef: React.RefObject<HTMLFormElement>;
 };
 
 function StepperNavigation({ maxStepNum, formRef }: Props) {
@@ -17,9 +17,9 @@ function StepperNavigation({ maxStepNum, formRef }: Props) {
   const pathname = usePathname();
   const submitRef = React.useRef<HTMLButtonElement>(null);
 
-  const handleNextSectionButtonClick = async () => {
+  const handleNextSectionButtonClick = () => {
     if (activeStep < maxStepNum) {
-      await formRef?.requestSubmit(submitRef.current);
+      formRef?.current!.requestSubmit();
       router.push(`${pathname}?step=${activeStep + 1}`);
     } else {
       router.push(`/u/${userUUID}/projects`);
@@ -38,7 +38,7 @@ function StepperNavigation({ maxStepNum, formRef }: Props) {
       </Button>
       <Button
         variant="solid"
-        type="submit"
+        type="button"
         ref={submitRef}
         onClick={handleNextSectionButtonClick}
       >
