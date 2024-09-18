@@ -16,11 +16,7 @@ function Stepper({ steps, activeStep }: Props) {
   return (
     <div className="m-auto max-w-[900px]  px-8 -md:px-3">
       <StepperHeader steps={steps} />
-      <StepperContent step={steps[activeStep]} />
-      <StepperNavigation
-        maxStepNum={steps.length - 1}
-        onNextStep={() => console.log('nextstep')}
-      />
+      <StepperContent step={steps[activeStep]} maxStepNum={steps.length - 1} />
     </div>
   );
 }

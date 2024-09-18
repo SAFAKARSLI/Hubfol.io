@@ -16,12 +16,11 @@ function StepperHeader({ steps }: Props) {
   return (
     <Flex justify={'center'} align={'center'} gap={'3'} className="my-[3rem]">
       {steps.map((step, index) => (
-        <>
+        <React.Fragment key={index}>
           <Step
             index={index}
             title={step.title}
             description={step.description}
-            key={index}
             maxStepNum={steps.length - 1}
           />
           {index < steps.length - 1 && (
@@ -33,7 +32,7 @@ function StepperHeader({ steps }: Props) {
               }
             />
           )}
-        </>
+        </React.Fragment>
       ))}
     </Flex>
   );

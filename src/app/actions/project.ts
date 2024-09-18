@@ -11,7 +11,7 @@ import { redirect } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
 import { validateUUID } from './utils';
-import { getServerSession } from 'next-auth';
+import { getServerSession, Session } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import { prisma } from '@/db';
 import { Content, Employee } from '@prisma/client';
@@ -29,9 +29,8 @@ export const createProject = async (formData: FormData) => {
     throw new Error('You must be signed in to do that.');
   }
 
-  const iconLink = (await uploadProjectIcon(
-    formData.get('iconLink') as File
-  )) as string;
+  const iconLink = (await uploadProjectIcon(formData.get('iconLink') as File))
+    .data as string;
 
   const projectFromFormData = {
     name: formData.get('name') as string,
@@ -135,6 +134,89 @@ export const initiateProject = async (userUUID: string) => {
   }
 };
 
+const checkForAuthority = async (
+  projectUUID: string,
+  session: Session | null
+) => {
+  if (!session || !session.user) {
+    return { status: 401, message: 'You must be signed in to do that.' };
+  }
+
+  if (projectUUID == null) {
+    return { status: 201, message: 'Uninitiated project.' };
+  }
+
+  try {
+    const project = await prisma.project.findUnique({
+      where: { uuid: projectUUID, ownerId: session.user.uuid },
+    });
+    if (!project) {
+      return { status: 403, message: 'Not authorized.' };
+    }
+    return { status: 200, project };
+  } catch (error) {
+    return { status: 500, message: 'Internal Server Error.' };
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
+export const upsertGeneralInfo = async (formData: FormData) => {
+  console.log(formData);
+  const session = await getServerSession(authOptions);
+
+  const iconLink = (await uploadProjectIcon(formData.get('iconLink') as File))
+    .data as string;
+  const projectFromFormData = {
+    name: formData.get('name') as string,
+    url: formData.get('url') as string,
+    tagline: formData.get('tagline') as string,
+    iconLink,
+  };
+  const projectUUID = formData.get('projectUUID') as string;
+
+  if (projectUUID != null && !validateUUID(projectUUID))
+    return { status: 400, message: 'Invalid project identifier provided.' };
+
+  const authorityCheck = await checkForAuthority(projectUUID, session);
+
+  try {
+    if (authorityCheck.status == 200) {
+      const resultingProject = await prisma.project.update({
+        where: { uuid: projectUUID },
+        data: {
+          ...projectFromFormData,
+        },
+        select: {
+          uuid: true,
+          name: true,
+        },
+      });
+      return { status: 200, data: resultingProject };
+    } else if (authorityCheck.status == 201) {
+      const resultingProject = await prisma.project.create({
+        data: {
+          ...projectFromFormData,
+          uuid: uuidv4(),
+          ownerId: session!.user.uuid,
+          createdAt: new Date(),
+        },
+      });
+      return { status: 200, data: resultingProject };
+    } else {
+      return authorityCheck;
+    }
+  } catch (error) {
+    console.error('Error updating project:', error);
+    throw new Error(
+      'Internal Server Error. An error occurred while updating the project.'
+    );
+  } finally {
+    await prisma.$disconnect();
+    revalidateTag('projects');
+  }
+};
+
 export const createInitiatedProject = async (
   project: Project,
   formData: FormData
@@ -213,7 +295,7 @@ export const deleteProject = async (projectUUID: string) => {
   let userUUID: string | undefined;
 
   try {
-    const projectFromDb = prisma.project.findFirst({
+    const projectFromDb = prisma.project.findUnique({
       where: { ownerId: session.user.uuid, uuid: projectUUID },
     });
 
@@ -235,7 +317,7 @@ export const deleteProject = async (projectUUID: string) => {
 };
 
 export const uploadProjectIcon = async (file: File) => {
-  if (file) {
+  if (file.size != 0) {
     try {
       const arrayBuffer = await file.arrayBuffer();
       const body = Buffer.from(arrayBuffer);
@@ -249,7 +331,10 @@ export const uploadProjectIcon = async (file: File) => {
       };
 
       await s3Client.send(new PutObjectCommand(uploadParams));
-      return `https://s3.amazonaws.com/${bucketName}/${uniqueKey}`;
+      return {
+        status: 200,
+        data: `https://s3.amazonaws.com/${bucketName}/${uniqueKey}`,
+      };
     } catch (error) {
       console.error('Error uploading file:', error);
       return { status: 500, message: 'Error uploading file.' };
@@ -257,7 +342,7 @@ export const uploadProjectIcon = async (file: File) => {
       await s3Client.destroy();
     }
   } else {
-    return { status: 400, message: 'No icon file provided.' };
+    return { status: 201, data: undefined };
   }
 };
 

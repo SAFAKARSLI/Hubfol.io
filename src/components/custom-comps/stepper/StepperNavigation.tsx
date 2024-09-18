@@ -6,19 +6,20 @@ import { useRouter } from 'next/navigation';
 import React, { act } from 'react';
 
 type Props = {
-  onNextStep: () => void;
   maxStepNum: number;
+  formRef: HTMLFormElement | null;
 };
 
-function StepperNavigation({ onNextStep, maxStepNum }: Props) {
+function StepperNavigation({ maxStepNum, formRef }: Props) {
   const activeStep = Number(useSearchParams().get('step'));
   const { userUUID } = useParams();
   const router = useRouter();
   const pathname = usePathname();
+  const submitRef = React.useRef<HTMLButtonElement>(null);
 
   const handleNextSectionButtonClick = async () => {
     if (activeStep < maxStepNum) {
-      // await onNextStep();
+      await formRef?.requestSubmit(submitRef.current);
       router.push(`${pathname}?step=${activeStep + 1}`);
     } else {
       router.push(`/u/${userUUID}/projects`);
@@ -38,6 +39,7 @@ function StepperNavigation({ onNextStep, maxStepNum }: Props) {
       <Button
         variant="solid"
         type="submit"
+        ref={submitRef}
         onClick={handleNextSectionButtonClick}
       >
         {activeStep == maxStepNum ? 'Submit Form' : 'Next Section'}

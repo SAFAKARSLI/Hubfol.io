@@ -7,44 +7,42 @@ import * as Form from '@radix-ui/react-form';
 import InputLabel from '../../InputLabel';
 import FileInput from './FileInput';
 import { usePreloadedFormData } from '@/hooks';
-import { createProject } from '@/app/actions/project';
+import { createProject, upsertGeneralInfo } from '@/app/actions/project';
 
-type Props = {};
+type Props = {
+  editFormData?: (key: string, value: string | Blob) => void;
+};
 
-function ProjectInfoForm({}: Props) {
-  const [formAction, editFormData] = usePreloadedFormData(createProject);
-
+function ProjectInfoForm({ editFormData }: Props) {
   return (
-    <Form.Root action={formAction}>
-      <div className="flex flex-col gap-4">
-        <FormInput
-          label="Name"
-          name="name"
-          placerholder="Enter your project name"
-          message="You must provide a valid project name"
-          type="text"
-          required
-        />
-        <FormInput
-          label="Tagline"
-          name="tagline"
-          placerholder="Describe your project in one sentence"
-          type="text"
-        />
-        <FormInput
-          label="URL"
-          name="url"
-          placerholder="Enter the project URL"
-          message="You must provide a valid project URL"
-          type="text"
-          required
-        />
-        <Form.Field name="project-icon">
-          <InputLabel label="Project Icon" />
-          <FileInput editFormData={editFormData} />
-        </Form.Field>
-      </div>
-    </Form.Root>
+    <div className="flex flex-col gap-4">
+      <FormInput
+        label="Name"
+        name="name"
+        placerholder="Enter your project name"
+        message="You must provide a valid project name"
+        type="text"
+        required
+      />
+      <FormInput
+        label="Tagline"
+        name="tagline"
+        placerholder="Describe your project in one sentence"
+        type="text"
+      />
+      <FormInput
+        label="URL"
+        name="url"
+        placerholder="Enter the project URL"
+        message="You must provide a valid project URL"
+        type="url"
+        required
+      />
+      <Form.Field name="project-icon">
+        <InputLabel label="Project Icon" />
+        <FileInput editFormData={editFormData!} />
+      </Form.Field>
+    </div>
   );
 }
 
