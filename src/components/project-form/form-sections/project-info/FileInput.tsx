@@ -1,9 +1,11 @@
 'use client';
 
 import { allowedIconTypes } from '@/utils';
-import { Cross1Icon } from '@radix-ui/react-icons';
+import { Cross1Icon, UploadIcon } from '@radix-ui/react-icons';
 import React from 'react';
 import * as Form from '@radix-ui/react-form';
+import '@/app/globals.css';
+import { IconButton, Text } from '@radix-ui/themes';
 
 type Props = {
   editFormData: (key: string, value: string | Blob) => void;
@@ -11,6 +13,7 @@ type Props = {
 
 function FileInput({ editFormData }: Props) {
   const [icon, setIcon] = React.useState<string | null>('');
+  const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
   const handleFileInput = (file: File) => {
     if (!allowedIconTypes.includes(file.type)) {
@@ -52,12 +55,22 @@ function FileInput({ editFormData }: Props) {
         </div>
       ) : (
         <Form.Control asChild>
-          <input
-            onChange={(e) => handleFileInput((e.target.files as FileList)[0])}
-            type="file"
-            className="w-full"
-            name={'iconLink'}
-          />
+          <>
+            <IconButton
+              variant="surface"
+              size={'4'}
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <UploadIcon className="h-5 w-5" />
+            </IconButton>
+            <input
+              ref={fileInputRef}
+              onChange={(e) => handleFileInput((e.target.files as FileList)[0])}
+              type="file"
+              className="hidden"
+              name={'iconLink'}
+            />
+          </>
         </Form.Control>
       )}
     </div>

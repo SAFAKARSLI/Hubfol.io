@@ -295,13 +295,19 @@ export const deleteProject = async (projectUUID: string) => {
   let userUUID: string | undefined;
 
   try {
-    const projectFromDb = prisma.project.findUnique({
-      where: { ownerId: session.user.uuid, uuid: projectUUID },
+    const projectFromDb = await prisma.project.findUnique({
+      where: { uuid: projectUUID },
     });
 
     if (!projectFromDb) {
       return { status: 404, message: 'Project not found.' };
     }
+
+    if (projectFromDb.ownerId !== session.user.uuid) {
+      return { status: 403, message: 'Not authorized.' };
+    }
+
+    userUUID = projectFromDb.ownerId;
 
     await prisma.project.delete({
       where: { uuid: projectUUID },
