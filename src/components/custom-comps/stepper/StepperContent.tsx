@@ -1,27 +1,51 @@
 'use client';
-import React, { cloneElement, useRef } from 'react';
+import { usePreloadedFormData } from '@/hooks';
+import React, { cloneElement, useEffect, useRef } from 'react';
 import { Step } from './step';
 import FormSection from '@/components/project-form/form-sections/FormSection';
 import * as Form from '@radix-ui/react-form';
-import { usePreloadedFormData } from '@/hooks';
 import StepperNavigation from './StepperNavigation';
+import { Separator } from '@radix-ui/themes';
+import {
+  redirect,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation';
 
 type Props = {
-  step: Step;
-  maxStepNum: number;
+  steps: Step[];
 };
 
-function StepperContent({ step, maxStepNum }: Props) {
-  const [formAction, editFormData] = usePreloadedFormData(step.onComplete);
-  const formRef = useRef<HTMLFormElement>(null);
+function StepperContent({ steps }: Props) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const activeStepIndex = parseInt(searchParams.get('step')!);
+  const activeStep = steps[activeStepIndex];
+  const [formAction, editFormData] = usePreloadedFormData(
+    activeStep.onComplete
+  );
 
   return (
-    <FormSection title={step.title} description={step.description}>
-      <Form.Root action={formAction} ref={formRef}>
-        {cloneElement(step.content as React.ReactElement, { editFormData })}
-        <StepperNavigation maxStepNum={maxStepNum} formRef={formRef} />
+    <>
+      <Form.Root
+        action={formAction}
+        onSubmit={() => {
+          router.push(`${pathname}?step=${activeStepIndex + 1}`);
+        }}
+      >
+        <FormSection
+          title={activeStep.title}
+          description={activeStep.description}
+        >
+          {cloneElement(activeStep.content as React.ReactElement, {
+            editFormData,
+          })}
+        </FormSection>
+        <StepperNavigation maxStepNum={steps.length - 1} />
       </Form.Root>
-    </FormSection>
+    </>
   );
 }
 

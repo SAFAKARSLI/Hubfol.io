@@ -2,7 +2,6 @@ import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import {
   Badge,
   DropdownMenu,
-  Button,
   IconButton,
   Text,
   Flex,

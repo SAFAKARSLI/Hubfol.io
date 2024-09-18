@@ -1,48 +1,43 @@
 'use client';
-import { Button } from '@radix-ui/themes';
+import { ArrowRightIcon } from '@radix-ui/react-icons';
+import { Button, IconButton } from '@radix-ui/themes';
+import { set } from 'lodash';
 import { revalidatePath } from 'next/cache';
 import { useParams, usePathname, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import React, { act } from 'react';
+import React, { act, useEffect } from 'react';
+import { useFormStatus } from 'react-dom';
 
 type Props = {
   maxStepNum: number;
-  formRef: React.RefObject<HTMLFormElement>;
 };
 
-function StepperNavigation({ maxStepNum, formRef }: Props) {
+function StepperNavigation({ maxStepNum }: Props) {
   const activeStep = Number(useSearchParams().get('step'));
-  const { userUUID } = useParams();
   const router = useRouter();
   const pathname = usePathname();
-  const submitRef = React.useRef<HTMLButtonElement>(null);
-
-  const handleNextSectionButtonClick = () => {
-    if (activeStep < maxStepNum) {
-      formRef?.current!.requestSubmit();
-      router.push(`${pathname}?step=${activeStep + 1}`);
-    } else {
-      router.push(`/u/${userUUID}/projects`);
-    }
-  };
+  const formStatus = useFormStatus();
 
   return (
     <div className="space-x-2 float-right mt-3">
       <Button
         color="gray"
         variant="soft"
+        type="button"
         disabled={activeStep == 0}
         onClick={() => router.push(`${pathname}?step=${activeStep - 1}`)}
       >
         Back
       </Button>
-      <Button
-        variant="solid"
-        type="button"
-        ref={submitRef}
-        onClick={handleNextSectionButtonClick}
-      >
-        {activeStep == maxStepNum ? 'Submit Form' : 'Next Section'}
+      <Button variant="solid" type="submit" loading={formStatus.pending}>
+        {activeStep == maxStepNum ? (
+          <div>Submit Form</div>
+        ) : (
+          <>
+            Next Section
+            <ArrowRightIcon />
+          </>
+        )}
       </Button>
     </div>
   );

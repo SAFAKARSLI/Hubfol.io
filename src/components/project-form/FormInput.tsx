@@ -47,7 +47,7 @@ function FormInput({
         </Form.Control>
       </Flex>
       <Form.Message
-        match={'valueMissing'}
+        match={'typeMismatch'}
         name={name}
         className="text-sm text-red-300"
       >

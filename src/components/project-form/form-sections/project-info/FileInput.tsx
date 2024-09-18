@@ -33,7 +33,7 @@ function FileInput({ editFormData }: Props) {
   };
 
   return (
-    <div>
+    <div className="mt-1">
       {icon ? (
         <div className="flex items-center gap-1">
           <div className="h-[3.5rem] w-[3.5rem] relative">

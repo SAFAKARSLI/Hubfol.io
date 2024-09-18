@@ -1,13 +1,9 @@
 'use client';
 import React from 'react';
 import FormInput from '@/components/project-form/FormInput';
-import Project from '@/types/project';
-import FormSection from '../FormSection';
 import * as Form from '@radix-ui/react-form';
 import InputLabel from '../../InputLabel';
 import FileInput from './FileInput';
-import { usePreloadedFormData } from '@/hooks';
-import { createProject, upsertGeneralInfo } from '@/app/actions/project';
 
 type Props = {
   editFormData?: (key: string, value: string | Blob) => void;
@@ -34,7 +30,7 @@ function ProjectInfoForm({ editFormData }: Props) {
         label="URL"
         name="url"
         placerholder="Enter the project URL"
-        message="You must provide a valid project URL"
+        message="You must provide a full valid project URL. (must include http:// or https://)"
         type="url"
         required
       />

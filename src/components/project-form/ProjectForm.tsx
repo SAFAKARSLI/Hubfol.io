@@ -28,6 +28,7 @@ function ProjectForm({ activeStep = 0 }: Props) {
             'Enter the project information below. You can edit this information later.',
           content: <ProjectInfoForm />,
           onComplete: upsertGeneralInfo,
+          index: 0,
         },
         {
           title: 'Sections',
@@ -35,18 +36,21 @@ function ProjectForm({ activeStep = 0 }: Props) {
             'Sections are different ways by which you can flex your project. This information is visible when the project is active.',
           content: <SectionsTable />,
           onComplete: () => console.log('Skipped General Information'),
+          index: 1,
         },
         {
           title: 'Frame Options',
           description: 'Choose your frame options.',
           content: <FrameOptionsForm />,
           onComplete: () => console.log('Skipped General Information'),
+          index: 2,
         },
         {
           title: 'Review',
           description: 'Review your project details before submission.',
           content: <div>Review your project details here.</div>,
           onComplete: () => console.log('Skipped General Information'),
+          index: 3,
         },
       ]}
       activeStep={activeStep}
