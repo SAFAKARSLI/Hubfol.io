@@ -20,7 +20,7 @@ function HamburgerProjectMenu({ projects, userUUID }: Props) {
 
   const handleHamburgerProjectClick = (p: Project) => {
     setOpen(false);
-    router.push(`/users/${userUUID}/projects/${p.uuid}`);
+    router.push(`/u/${userUUID}/projects/${p.uuid}`);
   };
 
   return (

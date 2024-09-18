@@ -21,7 +21,7 @@ async function MiniProfileOverview({ userUUID }: Props) {
   ).then((r) => r.json())) as Project[];
 
   return (
-    <div className={`xl:hidden flex w-full items-center h-full gap-3`}>
+    <div className={`xl:hidden flex grow items-center h-full gap-3`}>
       <HamburgerProjectMenu projects={projects} userUUID={userUUID} />
       <div className="text-center overflow-hidden flex-1 w-[8rem]">
         <p className="text-sm font-bold truncate block text-nowrap">

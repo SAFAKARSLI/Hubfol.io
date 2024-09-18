@@ -72,11 +72,7 @@ function ProjectMenu({ projectUUID, title }: Props) {
           }
         }}
       >
-        <DeleteProjectDialog
-          title={title}
-          projectUUID={projectUUID}
-          userUUID={userUUID}
-        />
+        <DeleteProjectDialog title={title} projectUUID={projectUUID} />
       </AlertDialog.Root>
     </>
   );

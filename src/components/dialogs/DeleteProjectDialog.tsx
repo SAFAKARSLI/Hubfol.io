@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { AlertDialog, TextField, Flex, Button } from '@radix-ui/themes';
+import {
+  AlertDialog,
+  TextField,
+  Flex,
+  Button,
+  IconButton,
+  Em,
+} from '@radix-ui/themes';
 import { deleteProject } from '@/app/actions/project';
+import { Cross1Icon } from '@radix-ui/react-icons';
 
 type Props = {
   title: string;
   projectUUID: string;
-  userUUID: string;
 };
 
-function DeleteProjectDialog({ title, projectUUID, userUUID }: Props) {
+function DeleteProjectDialog({ title, projectUUID }: Props) {
   const [confirmDelete, setConfirmDelete] = useState('');
 
   useEffect(() => {
@@ -18,11 +25,22 @@ function DeleteProjectDialog({ title, projectUUID, userUUID }: Props) {
   }, []);
 
   return (
-    <AlertDialog.Content maxWidth="500px">
-      <AlertDialog.Title size={'6'}>Delete `{title}`</AlertDialog.Title>
-      <AlertDialog.Description size="3">
+    <AlertDialog.Content maxWidth="500px" className=" z-50">
+      <Flex className="w-full justify-between h-[3rem]">
+        <AlertDialog.Title size={'5'} className="truncate">
+          Delete <p className="inline text-violet-11">`{title}`</p>
+        </AlertDialog.Title>
+        <AlertDialog.Cancel>
+          <IconButton variant="ghost" color="gray">
+            <Cross1Icon />
+          </IconButton>
+        </AlertDialog.Cancel>
+      </Flex>
+      <AlertDialog.Description size="2">
         Are you sure you want to delete the <b>`{title}`</b>? This action is
-        permanent and cannot be undone. <br /> <br />
+        permanent and cannot be undone. All of the associated sections will also
+        be deleted.
+        <br /> <br />
         To confirm deletion, type{' '}
         <b>
           <i>{title}</i>
@@ -46,8 +64,8 @@ function DeleteProjectDialog({ title, projectUUID, userUUID }: Props) {
           <Button
             color="red"
             disabled={title != confirmDelete}
-            onClick={() => {
-              deleteProject(projectUUID, userUUID);
+            onClick={async () => {
+              await deleteProject(projectUUID);
             }}
           >
             Delete project

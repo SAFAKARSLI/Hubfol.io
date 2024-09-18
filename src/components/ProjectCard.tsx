@@ -24,7 +24,7 @@ const ProjectCard = forwardRef<HTMLDivElement, Props>(
           : 'hover:bg-gray-4'
       }`}
         onClick={() => {
-          router.push(`/users/${userUUID}/projects/${project.uuid}`);
+          router.push(`/u/${userUUID}/projects/${project.uuid}`);
         }}
       >
         <img

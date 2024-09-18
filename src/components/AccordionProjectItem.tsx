@@ -78,7 +78,7 @@ const AccordionProjectItem = ({
               </Text>
             </div>
 
-            <div className="h-full">
+            <div className="h-full z-50">
               {uuid === activeProjectId && (
                 <ProjectMenu title={name} projectUUID={uuid} />
               )}

@@ -16,16 +16,8 @@ type Props = {
   project: Project;
 };
 
-const formSubmitFunction = (formData: FormData) => {
-  console.log('Form submitted');
-};
-
 function ProjectForm({ project }: Props) {
   const [formAction, editFormData] = usePreloadedFormData(createProject);
-  // const createInitiatedProjectWithOwnerId = createInitiatedProject.bind(
-  //   null,
-  //   project
-  // );
 
   return (
     <Form.Root action={formAction} className="max-w-[50rem] m-5">

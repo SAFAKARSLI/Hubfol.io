@@ -31,7 +31,11 @@ function SectionsTable({}: Props) {
           ))} */}
         </Table.Body>
       </Table.Root>
-      <Button variant="soft" className="w-1/4 my-3 h-[2.5rem] float-right">
+      <Button
+        type="button"
+        variant="soft"
+        className="w-1/4 my-3 h-[2.5rem] float-right"
+      >
         <PlusIcon />
         New Section
       </Button>

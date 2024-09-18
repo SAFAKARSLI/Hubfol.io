@@ -21,7 +21,7 @@ const Projects = async ({ userUUID, children }: ProjectsProps) => {
   ).then((r) => r.json())) as Project[];
 
   return (
-    <div className="flex w-screen">
+    <div className="flex w-screen h-full">
       <div className="flex-none">
         <ProjectsSidePanel initialProjects={projects} userUUID={userUUID} />
       </div>
