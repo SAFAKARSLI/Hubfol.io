@@ -58,6 +58,7 @@ function FileInput({ editFormData }: Props) {
           <>
             <IconButton
               variant="surface"
+              type="button"
               size={'4'}
               onClick={() => fileInputRef.current?.click()}
             >

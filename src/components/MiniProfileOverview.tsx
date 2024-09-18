@@ -12,9 +12,10 @@ type Props = {
 };
 
 async function MiniProfileOverview({ userUUID }: Props) {
-  const user = (await fetch(`${baseUrl}/api/users/${userUUID}`).then((r) =>
-    r.json()
-  )) as Employee;
+  const user = (await fetch(`${baseUrl}/api/users/${userUUID}`, {
+    cache: 'force-cache',
+    next: { tags: ['users'] },
+  }).then((r) => r.json())) as Employee;
   const projects = (await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects?userUUID=${userUUID}`,
     { cache: 'force-cache', next: { tags: ['projects'] } }

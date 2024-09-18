@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { cloneElement } from 'react';
 
 import Project from '@/types/project';
 import ProjectsSidePanel from '../ProjectsSidePanel';
@@ -8,13 +8,17 @@ import { notFound } from 'next/navigation';
 interface ProjectsProps {
   userUUID: string;
   children?: React.ReactNode;
+  activeProjectId?: string;
 }
 
-const Projects = async ({ userUUID, children }: ProjectsProps) => {
+const Projects = async ({
+  userUUID,
+  children,
+  activeProjectId,
+}: ProjectsProps) => {
   const projects = (await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects?userUUID=${userUUID}`,
     {
-      cache: 'no-store',
       next: {
         tags: ['projects'],
       },
@@ -26,12 +30,19 @@ const Projects = async ({ userUUID, children }: ProjectsProps) => {
     return r.json();
   })) as Project[];
 
+  const props = activeProjectId
+    ? projects.find((project) => project.uuid === activeProjectId)
+    : '';
+
   return (
     <div className="flex w-screen h-full">
       <div className="flex-none">
         <ProjectsSidePanel initialProjects={projects} userUUID={userUUID} />
       </div>
-      <div className="flex-1 m-3">{children}</div>
+
+      <div className="flex-1 m-3">
+        {cloneElement(children as React.ReactElement, { props })}
+      </div>
     </div>
   );
 };

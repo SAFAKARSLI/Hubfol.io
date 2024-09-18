@@ -8,10 +8,8 @@ export default async function page({ params }: SlugProps) {
   const { userUUID, projectUUID } = params;
 
   return (
-    <Projects userUUID={userUUID}>
-      <Suspense fallback={<Spinner />}>
-        <ProjectFrame projectUUID={projectUUID} />
-      </Suspense>
+    <Projects userUUID={userUUID} activeProjectId={projectUUID}>
+      <ProjectFrame />
     </Projects>
   );
 }

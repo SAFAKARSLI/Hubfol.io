@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   logging: {
-    fetches: true,
+    fetches: {
+      enabled: true,
+    },
   },
   reactStrictMode: false,
   // headers: () => [

@@ -4,23 +4,19 @@ import { baseUrl } from '@/utils';
 import { notFound } from 'next/navigation';
 
 type Props = {
-  projectUUID: string;
+  props?: Project;
 };
 
-async function ProjectFrame({ projectUUID }: Props) {
-  const project = (await fetch(`${baseUrl}/api/projects/${projectUUID}`, {
-    next: { tags: ['projects'] },
-  }).then((r) => r.json())) as Project;
-
-  if (!project) {
-    notFound();
-  }
-
+async function ProjectFrame({ props: project }: Props) {
   return (
     <div className="rounded border border-gray-4 h-full w-full overflow-hidden">
-      <iframe className="w-full h-full" src={project.url} key={project.uuid} />
+      <iframe
+        className="w-full h-full"
+        src={project!.url}
+        key={project!.uuid}
+      />
 
-      <ProjectConsole project={project} />
+      <ProjectConsole project={project!} />
     </div>
   );
 }

@@ -8,7 +8,7 @@ import {
   Flex,
   Box,
 } from '@radix-ui/themes';
-import React from 'react';
+import React, { cache } from 'react';
 import ViewContactInfo from './ViewContactInfo';
 import { baseUrl } from '@/utils';
 import Employee from '@/types/employee';
@@ -20,6 +20,7 @@ interface ProfileOverviewProps {
 const ProfileOverview = async ({ userUUID }: ProfileOverviewProps) => {
   const user = (await fetch(`${baseUrl}/api/users/${userUUID}`, {
     cache: 'force-cache',
+    next: { tags: ['users'] },
   }).then((r) => r.json())) as Employee;
 
   return (
