@@ -30,7 +30,7 @@ function ProjectInfoForm({ editFormData }: Props) {
         label="URL"
         name="url"
         placerholder="Enter the project URL"
-        message="You must provide a full valid project URL. (must include http:// or https://)"
+        message="You must provide a valid URL. (must include http:// or https://)"
         type="url"
         required
       />

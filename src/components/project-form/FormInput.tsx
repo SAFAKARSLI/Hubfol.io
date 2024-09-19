@@ -53,6 +53,9 @@ function FormInput({
       >
         {message}
       </Form.Message>
+      <Form.Message match={'valueMissing'} className="text-sm text-red-300">
+        You must provide `<b>{label}</b>`
+      </Form.Message>
     </Form.Field>
   );
 }
