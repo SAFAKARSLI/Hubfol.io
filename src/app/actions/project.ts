@@ -162,7 +162,6 @@ const checkForAuthority = async (
 };
 
 export const upsertGeneralInfo = async (formData: FormData) => {
-  console.log(formData);
   const session = await getServerSession(authOptions);
 
   const iconLink = (await uploadProjectIcon(formData.get('iconLink') as File))

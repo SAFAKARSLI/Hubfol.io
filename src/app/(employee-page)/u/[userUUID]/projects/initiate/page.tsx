@@ -3,6 +3,6 @@ import { SlugProps } from '@/types/slug';
 import React from 'react';
 
 export default async function page({ params, searchParams }: SlugProps) {
-  const activeStep = searchParams?.step!;
-  return <ProjectForm activeStep={activeStep} />;
+  const activeStepIndex = searchParams?.step!;
+  return <ProjectForm activeStepIndex={activeStepIndex} />;
 }

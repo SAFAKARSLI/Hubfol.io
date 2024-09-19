@@ -7,6 +7,58 @@ import { authOptions } from '../api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
 import { validateUUID } from './utils';
 import { extractUUID } from '@/utils';
+import { revalidateTag } from 'next/cache';
+
+export const upsertSections = async (formData: FormData) => {
+  console.log('[actions/sections] FormData ', formData);
+  // const session = await getServerSession(authOptions);
+
+  // const sections = {
+  //   sections: JSON.parse(formData.get('sections') as string) as Section[],
+  // };
+  // const projectUUID = formData.get('projectUUID') as string;
+
+  // if (projectUUID != null && !validateUUID(projectUUID))
+  //   return { status: 400, message: 'Invalid project identifier provided.' };
+
+  // const authorityCheck = await checkForAuthority(projectUUID, session);
+
+  // try {
+  //   if (authorityCheck.status == 200) {
+  //     const resultingProject = await prisma.project.update({
+  //       where: { uuid: projectUUID },
+  //       data: {
+  //         ...projectFromFormData,
+  //       },
+  //       select: {
+  //         uuid: true,
+  //         name: true,
+  //       },
+  //     });
+  //     return { status: 200, data: resultingProject };
+  //   } else if (authorityCheck.status == 201) {
+  //     const resultingProject = await prisma.project.create({
+  //       data: {
+  //         ...projectFromFormData,
+  //         uuid: uuidv4(),
+  //         ownerId: session!.user.uuid,
+  //         createdAt: new Date(),
+  //       },
+  //     });
+  //     return { status: 200, data: resultingProject };
+  //   } else {
+  //     return authorityCheck;
+  //   }
+  // } catch (error) {
+  //   console.error('Error updating project:', error);
+  //   throw new Error(
+  //     'Internal Server Error. An error occurred while updating the project.'
+  //   );
+  // } finally {
+  //   await prisma.$disconnect();
+  //   revalidateTag('projects');
+  // }
+};
 
 export const getSections = async (projectUUID: string) => {
   try {

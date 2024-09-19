@@ -1,6 +1,6 @@
 import { Content } from '@prisma/client';
 import { Brand } from './brand';
-import { InputJsonValue, JsonValue } from '@prisma/client/runtime/library';
+import { InputJsonValue } from '@prisma/client/runtime/library';
 
 export interface Section {
   uuid: string;

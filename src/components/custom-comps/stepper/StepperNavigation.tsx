@@ -24,7 +24,7 @@ function StepperNavigation({ maxStepNum }: Props) {
         color="gray"
         variant="soft"
         type="button"
-        disabled={activeStep == 0}
+        disabled={activeStep == 0 || formStatus.pending}
         onClick={() => router.push(`${pathname}?step=${activeStep - 1}`)}
       >
         Back
@@ -34,7 +34,7 @@ function StepperNavigation({ maxStepNum }: Props) {
           <div>Submit Form</div>
         ) : (
           <>
-            Next Section
+            Next
             <ArrowRightIcon />
           </>
         )}

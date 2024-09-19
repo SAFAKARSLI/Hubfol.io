@@ -1,26 +1,20 @@
 'use client';
-
 import React from 'react';
-import * as Form from '@radix-ui/react-form';
 import ProjectInfoForm from './form-sections/project-info/ProjectInfoForm';
-import FormSection from './form-sections/FormSection';
-import { Separator } from '@radix-ui/themes';
 import SectionsTable from './form-sections/project-sections/SectionsTable';
-import { createProject, upsertGeneralInfo } from '@/app/actions/project';
-import Project from '@/types/project';
-import InputLabel from './InputLabel';
-import FileInput from './form-sections/project-info/FileInput';
-import { usePreloadedFormData } from '@/hooks';
+import { upsertGeneralInfo } from '@/app/actions/project';
 import Stepper from '../custom-comps/stepper/Stepper';
 import FrameOptionsForm from './form-sections/frame-options/FrameOptionsForm';
+import { upsertSections } from '@/app/actions/section';
 
 type Props = {
-  activeStep: number;
+  activeStepIndex: number;
 };
 
-function ProjectForm({ activeStep = 0 }: Props) {
+function ProjectForm({ activeStepIndex }: Props) {
   return (
     <Stepper
+      activeStepIndex={activeStepIndex}
       steps={[
         {
           title: 'General Information',
@@ -28,6 +22,7 @@ function ProjectForm({ activeStep = 0 }: Props) {
             'Enter the project information below. You can edit this information later.',
           content: <ProjectInfoForm />,
           onComplete: upsertGeneralInfo,
+          fetchResource: '',
           index: 0,
         },
         {
@@ -35,7 +30,8 @@ function ProjectForm({ activeStep = 0 }: Props) {
           description:
             'Sections are different ways by which you can flex your project. This information is visible when the project is active.',
           content: <SectionsTable />,
-          onComplete: () => console.log('Skipped General Information'),
+          onComplete: upsertSections,
+          fetchResource: '',
           index: 1,
         },
         {
@@ -43,6 +39,7 @@ function ProjectForm({ activeStep = 0 }: Props) {
           description: 'Choose your frame options.',
           content: <FrameOptionsForm />,
           onComplete: () => console.log('Skipped General Information'),
+          fetchResource: '',
           index: 2,
         },
         {
@@ -50,10 +47,10 @@ function ProjectForm({ activeStep = 0 }: Props) {
           description: 'Review your project details before submission.',
           content: <div>Review your project details here.</div>,
           onComplete: () => console.log('Skipped General Information'),
+          fetchResource: '',
           index: 3,
         },
       ]}
-      activeStep={activeStep}
     />
   );
 }

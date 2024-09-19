@@ -3,5 +3,6 @@ export interface Step {
   index: number;
   description: string;
   content: React.ReactNode;
-  onComplete: (formData: FormData) => void;
+  onComplete: (formData: FormData) => any;
+  fetchResource: string;
 }
