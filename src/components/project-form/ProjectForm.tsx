@@ -20,7 +20,9 @@ function ProjectForm({ activeStepIndex }: Props) {
           title: 'General Information',
           description:
             'Enter the project information below. You can edit this information later.',
-          content: <ProjectInfoForm />,
+          content: (
+            <ProjectInfoForm actionResponse={null} editFormData={null} />
+          ),
           onComplete: upsertGeneralInfo,
           fetchResource: '',
           index: 0,
@@ -29,7 +31,7 @@ function ProjectForm({ activeStepIndex }: Props) {
           title: 'Sections',
           description:
             'Sections are different ways by which you can flex your project. This information is visible when the project is active.',
-          content: <SectionsTable />,
+          content: <SectionsTable editFormData={null} />,
           onComplete: upsertSections,
           fetchResource: '',
           index: 1,

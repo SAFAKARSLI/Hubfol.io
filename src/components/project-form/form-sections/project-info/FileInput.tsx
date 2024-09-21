@@ -5,14 +5,15 @@ import { Cross1Icon, UploadIcon } from '@radix-ui/react-icons';
 import React from 'react';
 import * as Form from '@radix-ui/react-form';
 import '@/app/globals.css';
-import { IconButton, Text } from '@radix-ui/themes';
+import { IconButton } from '@radix-ui/themes';
 
 type Props = {
   editFormData: (key: string, value: string | Blob) => void;
+  defaultValue?: string;
 };
 
-function FileInput({ editFormData }: Props) {
-  const [icon, setIcon] = React.useState<string | null>('');
+function FileInput({ editFormData, defaultValue = '' }: Props) {
+  const [icon, setIcon] = React.useState<string | null>(defaultValue);
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
   const handleFileInput = (file: File) => {

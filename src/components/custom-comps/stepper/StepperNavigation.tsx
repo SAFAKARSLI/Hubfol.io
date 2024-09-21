@@ -25,7 +25,7 @@ function StepperNavigation({ maxStepNum }: Props) {
         variant="soft"
         type="button"
         disabled={activeStep == 0 || formStatus.pending}
-        onClick={() => router.push(`${pathname}?step=${activeStep - 1}`)}
+        onClick={() => router.replace(`${pathname}?step=${activeStep - 1}`)}
       >
         Back
       </Button>

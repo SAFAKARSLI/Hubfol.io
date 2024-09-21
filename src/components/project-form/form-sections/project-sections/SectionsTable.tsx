@@ -16,9 +16,8 @@ import { usePathname } from 'next/navigation';
 
 type Props = {
   // sections: Section[];
-  editFormData?: (key: string, value: string | Blob) => void;
+  editFormData: ((key: string, value: string | Blob) => void) | null;
   actionResponse?: any;
-  sectionData?: any;
 };
 
 function SectionsTable({ editFormData, actionResponse }: Props) {
@@ -27,15 +26,17 @@ function SectionsTable({ editFormData, actionResponse }: Props) {
   const [sections, setSections] = useState<Section[]>([]);
 
   useEffect(() => {
-    const fetchSections = async () => {
-      const res = await fetch(
-        `${baseUrl}/api/sections?projectUUID=${actionResponse[0].data.uuid}`,
-        { next: { tags: ['sections'] } }
-      ).then((res) => res.json());
-      setSections(res);
-    };
+    // const fetchSections = async () => {
+    //   const res = await fetch(
+    //     `${baseUrl}/api/sections?projectUUID=${actionResponse[0].data.uuid}`,
+    //     { next: { tags: ['sections'] } }
+    //   ).then((res) => res.json());
+    //   editFormData!('sections', res);
+    //   setSections(res);
+    // };
+    editFormData!('projectUUID', actionResponse.data.uuid);
 
-    fetchSections();
+    // fetchSections();
   }, []);
 
   return (
@@ -59,7 +60,7 @@ function SectionsTable({ editFormData, actionResponse }: Props) {
         type="button"
         variant="soft"
         className="w-1/4 my-3 h-[2.5rem] float-right"
-        onClick={() => router.push(`${pathname}/sections`)}
+        onClick={() => router.replace(`${pathname}/sections`)}
       >
         <PlusIcon />
         New Section

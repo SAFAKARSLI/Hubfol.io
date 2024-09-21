@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { act, useEffect, useState } from 'react';
 
 type FormDataObject = {
   [key: string]: string | Blob;
@@ -13,15 +13,17 @@ export const usePreloadedFormData = (
   (key: string, value: string | Blob) => void,
   any
 ] => {
+  const [actionResponse, setActionResponse] = useState({});
   const [formData, setFormData] = useState<FormDataObject>({});
-  const [actionResponse, setActionResponse] = useState<any>([]);
 
   const onFormAction = async (formDataLoadedByAction: FormData) => {
+    console.log(formData);
     Object.entries(formData).forEach(([key, value]) => {
       formDataLoadedByAction.append(key, value);
     });
+
     const response = await serverAction(formDataLoadedByAction);
-    setActionResponse([...actionResponse, response]);
+    setActionResponse(response);
   };
 
   // Appends provided object to the FormDataObject state.

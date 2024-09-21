@@ -23,9 +23,13 @@ function StepperContent({ steps }: Props) {
   const searchParams = useSearchParams();
   const activeStepIndex = parseInt(searchParams.get('step')!);
   const activeStep = steps[activeStepIndex];
+  // Bottom query is interpreted as -> The form action will return an actionResponse in the "0"th step
+  // take "uuid" from the actionResponse and pass it as "projectUUID" to the formData in the following steps.
   const [formAction, editFormData, actionResponse] = usePreloadedFormData(
     activeStep.onComplete
   );
+
+  console.log(actionResponse);
 
   return (
     <Form.Root

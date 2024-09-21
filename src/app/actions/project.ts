@@ -153,7 +153,7 @@ const checkForAuthority = async (
     if (!project) {
       return { status: 403, message: 'Not authorized.' };
     }
-    return { status: 200, project };
+    return { status: 200 };
   } catch (error) {
     return { status: 500, message: 'Internal Server Error.' };
   } finally {
@@ -162,6 +162,7 @@ const checkForAuthority = async (
 };
 
 export const upsertGeneralInfo = async (formData: FormData) => {
+  console.log(formData);
   const session = await getServerSession(authOptions);
 
   const iconLink = (await uploadProjectIcon(formData.get('iconLink') as File))
@@ -179,16 +180,13 @@ export const upsertGeneralInfo = async (formData: FormData) => {
 
   const authorityCheck = await checkForAuthority(projectUUID, session);
 
+  console.log(authorityCheck);
   try {
     if (authorityCheck.status == 200) {
       const resultingProject = await prisma.project.update({
         where: { uuid: projectUUID },
         data: {
           ...projectFromFormData,
-        },
-        select: {
-          uuid: true,
-          name: true,
         },
       });
       return { status: 200, data: resultingProject };
