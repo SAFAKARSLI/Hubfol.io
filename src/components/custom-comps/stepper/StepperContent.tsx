@@ -12,6 +12,8 @@ import {
   useRouter,
   useSearchParams,
 } from 'next/navigation';
+import Project from '@/types/project';
+import { validateUUID } from '@/app/actions/utils';
 
 type Props = {
   steps: Step[];
@@ -23,19 +25,21 @@ function StepperContent({ steps }: Props) {
   const searchParams = useSearchParams();
   const activeStepIndex = parseInt(searchParams.get('step')!);
   const activeStep = steps[activeStepIndex];
-  // Bottom query is interpreted as -> The form action will return an actionResponse in the "0"th step
-  // take "uuid" from the actionResponse and pass it as "projectUUID" to the formData in the following steps.
-  const [formAction, editFormData, actionResponse] = usePreloadedFormData(
+  const [formAction, editFormData] = usePreloadedFormData(
     activeStep.onComplete
   );
+  const pid = searchParams.get('pid');
 
-  console.log(actionResponse);
+  if (!pid || !validateUUID(pid)) {
+    console.log(pid);
+    throw new Error('Invalid project ID');
+  }
 
   return (
     <Form.Root
       action={formAction}
       onSubmit={(e) => {
-        router.push(`${pathname}?step=${activeStepIndex + 1}`);
+        router.push(`${pathname}?step=${activeStepIndex + 1}&pid=${pid}`);
       }}
     >
       <FormSection
@@ -44,10 +48,9 @@ function StepperContent({ steps }: Props) {
       >
         {cloneElement(activeStep.content as React.ReactElement, {
           editFormData,
-          actionResponse,
         })}
       </FormSection>
-      <StepperNavigation maxStepNum={steps.length - 1} />
+      <StepperNavigation maxStepNum={steps.length - 1} pid={pid} />
     </Form.Root>
   );
 }

@@ -50,7 +50,7 @@ function FileInput({ editFormData, defaultValue = '' }: Props) {
             className="w-6 h-6 hover:bg-gray-5 text-gray-300 rounded-sm p-1 cursor-pointer"
             onMouseDown={() => {
               setIcon('');
-              editFormData('iconLink', '');
+              editFormData('iconLink', new File([], ''));
             }}
           />
         </div>

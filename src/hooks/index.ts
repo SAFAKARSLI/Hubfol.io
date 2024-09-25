@@ -10,20 +10,18 @@ export const usePreloadedFormData = (
   serverAction: (formData: FormData) => any
 ): [
   (formData: FormData) => Promise<any>,
-  (key: string, value: string | Blob) => void,
-  any
+  (key: string, value: string | Blob) => void
 ] => {
-  const [actionResponse, setActionResponse] = useState({});
   const [formData, setFormData] = useState<FormDataObject>({});
 
   const onFormAction = async (formDataLoadedByAction: FormData) => {
-    console.log(formData);
     Object.entries(formData).forEach(([key, value]) => {
       formDataLoadedByAction.append(key, value);
     });
 
+    console.log(formData);
+
     const response = await serverAction(formDataLoadedByAction);
-    setActionResponse(response);
   };
 
   // Appends provided object to the FormDataObject state.
@@ -31,5 +29,5 @@ export const usePreloadedFormData = (
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
-  return [onFormAction, editFormData, actionResponse];
+  return [onFormAction, editFormData];
 };

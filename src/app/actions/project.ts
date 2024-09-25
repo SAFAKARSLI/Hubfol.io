@@ -19,6 +19,7 @@ import { InputJsonValue } from '@prisma/client/runtime/library';
 import { baseUrl } from '@/utils';
 import { Section } from '@/types/section';
 import { revalidateTag } from 'next/cache';
+import { cookies } from 'next/headers';
 
 const bucketName = process.env.AWS_PROJECT_ICONS_BUCKET_NAME as string;
 
@@ -112,7 +113,7 @@ export const initiateProject = async (userUUID: string) => {
         ownerId: session.user.uuid,
         createdAt: date,
         name: 'New Project',
-        url: `${baseUrl}/api/void`,
+        url: '',
         tagline: '',
         iconLink: '',
         sections: {
@@ -162,11 +163,10 @@ const checkForAuthority = async (
 };
 
 export const upsertGeneralInfo = async (formData: FormData) => {
-  console.log(formData);
   const session = await getServerSession(authOptions);
-
   const iconLink = (await uploadProjectIcon(formData.get('iconLink') as File))
     .data as string;
+  console.log('iconLink', iconLink);
   const projectFromFormData = {
     name: formData.get('name') as string,
     url: formData.get('url') as string,
@@ -180,23 +180,12 @@ export const upsertGeneralInfo = async (formData: FormData) => {
 
   const authorityCheck = await checkForAuthority(projectUUID, session);
 
-  console.log(authorityCheck);
   try {
     if (authorityCheck.status == 200) {
       const resultingProject = await prisma.project.update({
         where: { uuid: projectUUID },
         data: {
           ...projectFromFormData,
-        },
-      });
-      return { status: 200, data: resultingProject };
-    } else if (authorityCheck.status == 201) {
-      const resultingProject = await prisma.project.create({
-        data: {
-          ...projectFromFormData,
-          uuid: uuidv4(),
-          ownerId: session!.user.uuid,
-          createdAt: new Date(),
         },
       });
       return { status: 200, data: resultingProject };
@@ -345,7 +334,7 @@ export const uploadProjectIcon = async (file: File) => {
       await s3Client.destroy();
     }
   } else {
-    return { status: 201, data: undefined };
+    return { status: 201, data: '' };
   }
 };
 

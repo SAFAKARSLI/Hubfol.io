@@ -118,7 +118,7 @@ model Project {
   uuid        String     @id @db.Uuid @unique
   name        String
   tagline     String?
-  url         String
+  url         String?
   iconLink    String?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt

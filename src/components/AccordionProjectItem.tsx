@@ -87,18 +87,28 @@ const AccordionProjectItem = ({
         <Accordion.Content asChild>
           <div className="bg-gray-1 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden z-50">
             <ScrollArea type="auto" className="max-h-[40vh]">
-              {sections?.map((s, i) => {
-                return (
-                  <div key={i}>
-                    <Subsection
-                      title={s.title}
-                      contentType={s.contentType}
-                      content={s.content}
-                    />
-                    {i == sections.length - 1 ? null : <Divider />}
-                  </div>
-                );
-              })}
+              {sections.length ? (
+                sections?.map((s, i) => {
+                  return (
+                    <div key={i}>
+                      <Subsection
+                        title={s.title}
+                        contentType={s.contentType}
+                        content={s.content}
+                      />
+                      {i == sections.length - 1 ? null : <Divider />}
+                    </div>
+                  );
+                })
+              ) : (
+                <Text
+                  size="2"
+                  as="p"
+                  className="italic p-4 text-gray-10 text-sm"
+                >
+                  No section found
+                </Text>
+              )}
             </ScrollArea>
           </div>
         </Accordion.Content>

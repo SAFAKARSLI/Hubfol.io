@@ -14,15 +14,12 @@ type Props = {
 function ProjectForm({ activeStepIndex }: Props) {
   return (
     <Stepper
-      activeStepIndex={activeStepIndex}
       steps={[
         {
           title: 'General Information',
           description:
             'Enter the project information below. You can edit this information later.',
-          content: (
-            <ProjectInfoForm actionResponse={null} editFormData={null} />
-          ),
+          content: <ProjectInfoForm editFormData={null} />,
           onComplete: upsertGeneralInfo,
           fetchResource: '',
           index: 0,

@@ -10,9 +10,10 @@ import { useFormStatus } from 'react-dom';
 
 type Props = {
   maxStepNum: number;
+  pid: string;
 };
 
-function StepperNavigation({ maxStepNum }: Props) {
+function StepperNavigation({ maxStepNum, pid }: Props) {
   const activeStep = Number(useSearchParams().get('step'));
   const router = useRouter();
   const pathname = usePathname();
@@ -25,7 +26,9 @@ function StepperNavigation({ maxStepNum }: Props) {
         variant="soft"
         type="button"
         disabled={activeStep == 0 || formStatus.pending}
-        onClick={() => router.replace(`${pathname}?step=${activeStep - 1}`)}
+        onClick={() =>
+          router.replace(`${pathname}?step=${activeStep - 1}&pid=${pid}`)
+        }
       >
         Back
       </Button>

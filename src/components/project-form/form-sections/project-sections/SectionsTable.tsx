@@ -17,27 +17,12 @@ import { usePathname } from 'next/navigation';
 type Props = {
   // sections: Section[];
   editFormData: ((key: string, value: string | Blob) => void) | null;
-  actionResponse?: any;
 };
 
-function SectionsTable({ editFormData, actionResponse }: Props) {
+function SectionsTable({}: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const [sections, setSections] = useState<Section[]>([]);
-
-  useEffect(() => {
-    // const fetchSections = async () => {
-    //   const res = await fetch(
-    //     `${baseUrl}/api/sections?projectUUID=${actionResponse[0].data.uuid}`,
-    //     { next: { tags: ['sections'] } }
-    //   ).then((res) => res.json());
-    //   editFormData!('sections', res);
-    //   setSections(res);
-    // };
-    editFormData!('projectUUID', actionResponse.data.uuid);
-
-    // fetchSections();
-  }, []);
 
   return (
     <>

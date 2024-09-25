@@ -1,52 +1,71 @@
 'use client';
-import React from 'react';
+import React, { Suspense, useEffect } from 'react';
 import FormInput from '@/components/project-form/FormInput';
 import * as Form from '@radix-ui/react-form';
 import InputLabel from '../../InputLabel';
 import FileInput from './FileInput';
+import { baseUrl } from '@/utils';
+import { useSearchParams } from 'next/navigation';
 import Project from '@/types/project';
+import { Spinner } from '@radix-ui/themes';
 
 type Props = {
   editFormData: ((key: string, value: string | Blob) => void) | null;
-  actionResponse: any | null;
 };
 
-function ProjectInfoForm({ editFormData, actionResponse }: Props) {
-  console.log(actionResponse);
+function ProjectInfoForm({ editFormData }: Props) {
+  const [project, setProject] = React.useState<Project>();
+  const params = useSearchParams();
+  const pid = params.get('pid');
+
+  useEffect(() => {
+    const fetchProject = async () => {
+      const response = await fetch(`${baseUrl}/api/projects/${pid}`);
+      const data = await response.json();
+      setProject(data);
+      console.log('DATA FROM USEEFFECT - PROJECTINFO FORM: ', data);
+      editFormData!('projectUUID', data.uuid);
+    };
+
+    fetchProject();
+  }, []);
+
   return (
     <div className="flex flex-col gap-4">
-      <FormInput
-        label="Name"
-        name="name"
-        placerholder="Enter your project name"
-        defaultValue={actionResponse.data?.name}
-        message="You must provide a valid project name"
-        type="text"
-        required
-      />
-      <FormInput
-        label="Tagline"
-        name="tagline"
-        defaultValue={actionResponse.data?.tagline}
-        placerholder="Describe your project in one sentence"
-        type="text"
-      />
-      <FormInput
-        label="URL"
-        name="url"
-        defaultValue={actionResponse.data?.url}
-        placerholder="Enter the project URL"
-        message="You must provide a valid URL. (must include http:// or https://)"
-        type="url"
-        required
-      />
-      <Form.Field name="project-icon">
-        <InputLabel label="Project Icon" />
-        <FileInput
-          editFormData={editFormData!}
-          defaultValue={actionResponse.data?.iconLink}
+      <Spinner size={'3'} loading={!project}>
+        <FormInput
+          label="Name"
+          name="name"
+          placerholder="Enter your project name"
+          message="You must provide a valid project name"
+          defaultValue={project?.name}
+          type="text"
+          required
         />
-      </Form.Field>
+        <FormInput
+          label="Tagline"
+          name="tagline"
+          placerholder="Describe your project in one sentence"
+          defaultValue={project?.tagline}
+          type="text"
+        />
+        <FormInput
+          label="URL"
+          name="url"
+          placerholder="Enter the project URL"
+          message="You must provide a valid URL. (must include http:// or https://)"
+          defaultValue={project?.url}
+          type="url"
+          required
+        />
+        <Form.Field name="project-icon">
+          <InputLabel label="Project Icon" />
+          <FileInput
+            editFormData={editFormData!}
+            defaultValue={project?.iconLink}
+          />
+        </Form.Field>
+      </Spinner>
     </div>
   );
 }

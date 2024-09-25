@@ -2,12 +2,14 @@ import { validateUUID } from '@/app/actions/utils';
 import { prisma } from '@/db';
 import { NextRequest } from 'next/server';
 
+// GET /api/projects/[projectUUID]
 export async function GET(
   request: NextRequest,
   { params }: { params: { projectUUID: string } }
 ) {
   const { projectUUID } = params;
 
+  console.log('projectUUID:', projectUUID);
   if (!validateUUID(projectUUID as string)) {
     return new Response('Invalid project identifier provided: ' + projectUUID, {
       status: 400,
