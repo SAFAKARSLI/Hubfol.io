@@ -288,7 +288,10 @@ export const deleteProject = async (projectUUID: string) => {
 };
 
 export const uploadProjectIcon = async (file: File) => {
-  if (file && file.size != 0) {
+  if (typeof file == 'string') return { status: 200, data: file }; // Icon is already set
+
+  // Empty icon check
+  if (file.size != 0) {
     try {
       const arrayBuffer = await file.arrayBuffer();
       const body = Buffer.from(arrayBuffer);

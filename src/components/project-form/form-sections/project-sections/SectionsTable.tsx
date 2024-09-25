@@ -46,7 +46,7 @@ function SectionsTable({}: Props) {
         type="button"
         variant="soft"
         className="w-1/4 my-3 h-[2.5rem] float-right"
-        onClick={() => router.push(`${pathname}/sections?${params.toString()}`)}
+        onClick={() => router.push(`${pathname}/123123`)}
       >
         <PlusIcon />
         New Section

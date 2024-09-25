@@ -19,9 +19,6 @@ export const usePreloadedFormData = (
     Object.entries(formData).forEach(([key, value]) => {
       formDataLoadedByAction.append(key, value);
     });
-
-    console.log(formData);
-
     const response = await serverAction(formDataLoadedByAction, callbackUrl);
   };
 

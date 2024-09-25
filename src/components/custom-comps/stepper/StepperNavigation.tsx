@@ -20,6 +20,7 @@ function StepperNavigation({ steps, activeStepIndex }: Props) {
   const pathname = usePathname();
   const formStatus = useFormStatus();
   const { userUUID, projectUUID } = useParams();
+  const [loading, setLoading] = React.useState(false);
 
   return (
     <div className="space-x-2 float-right mt-3">
@@ -28,17 +29,24 @@ function StepperNavigation({ steps, activeStepIndex }: Props) {
         variant="soft"
         type="button"
         disabled={activeStepIndex == 0 || formStatus.pending}
-        onClick={() =>
+        loading={loading}
+        onClick={() => {
+          setLoading(true);
           router.replace(
             `${baseUrl}/u/${userUUID}/projects/${projectUUID}/${
               steps[activeStepIndex - 1].slug
             }`
-          )
-        }
+          );
+        }}
       >
         Back
       </Button>
-      <Button variant="solid" type="submit" loading={formStatus.pending}>
+      <Button
+        variant="solid"
+        type="submit"
+        disabled={loading}
+        loading={formStatus.pending}
+      >
         {activeStepIndex == steps.length - 1 ? (
           <div>Submit Form</div>
         ) : (

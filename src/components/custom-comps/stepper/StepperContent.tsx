@@ -36,16 +36,7 @@ function StepperContent({ steps, activeStepIndex }: Props) {
   }
 
   return (
-    <Form.Root
-      action={formAction}
-      // onSubmit={async (e) => {
-      //   router.push(
-      //     `${baseUrl}/u/${userUUID}/projects/${projectUUID}/${
-      //       steps[activeStepIndex + 1].slug
-      //     }`
-      //   );
-      // }}
-    >
+    <Form.Root action={formAction}>
       <FormSection
         title={activeStep.title}
         description={activeStep.description}
