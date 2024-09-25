@@ -6,6 +6,6 @@ export interface Params {
 
 export interface SlugProps {
   params: Params;
-  searchParams?: { step?: number };
+  searchParams?: { step?: number; error: string };
   children: React.ReactNode;
 }

@@ -8,12 +8,14 @@ import StepperNavigation from './StepperNavigation';
 import { Separator } from '@radix-ui/themes';
 import {
   redirect,
+  useParams,
   usePathname,
   useRouter,
   useSearchParams,
 } from 'next/navigation';
 import Project from '@/types/project';
 import { validateUUID } from '@/app/actions/utils';
+import { baseUrl } from '@/utils';
 
 type Props = {
   steps: Step[];
@@ -23,6 +25,7 @@ function StepperContent({ steps }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { userUUID } = useParams();
   const activeStepIndex = parseInt(searchParams.get('step')!);
   const activeStep = steps[activeStepIndex];
   const [formAction, editFormData] = usePreloadedFormData(
@@ -31,8 +34,7 @@ function StepperContent({ steps }: Props) {
   const pid = searchParams.get('pid');
 
   if (!pid || !validateUUID(pid)) {
-    console.log(pid);
-    throw new Error('Invalid project ID');
+    redirect(`${baseUrl}/u/${userUUID}/projects?error=invalid-id`);
   }
 
   return (

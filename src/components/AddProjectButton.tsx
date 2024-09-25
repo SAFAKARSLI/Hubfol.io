@@ -22,7 +22,6 @@ function AddProjectButton({ variant = 'soft' }: Props) {
         initiatedProject.data!.uuid
       }`
     );
-    // await initiateProject(userUUID as string);
   }
 
   return (

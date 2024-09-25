@@ -9,6 +9,13 @@ export const extractUUID = (url: string, identifier: string) => {
   return url.split('/')[index];
 };
 
+export const errorCodes = [
+  {
+    code: 'invalid-id',
+    message: 'Invalid project identifier provided.',
+  },
+];
+
 export const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const preferredColorOptions: {
