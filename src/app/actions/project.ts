@@ -85,26 +85,6 @@ export const initiateProject = async (userUUID: string) => {
     return { status: 403, message: 'Not authorized.' };
 
   const date = new Date();
-  const sections = [
-    {
-      title: 'Project Description',
-      createdAt: date,
-      updatedAt: date,
-      uuid: uuidv4() as string,
-      isActive: true,
-      contentType: Content.TEXT,
-      content: 'This is the project description.' as InputJsonValue,
-    },
-    {
-      title: 'Tech Stack',
-      createdAt: date,
-      updatedAt: date,
-      uuid: uuidv4() as string,
-      isActive: true,
-      contentType: Content.BRAND_STACK,
-      content: ['nextdotjs', 'typescript', 'tailwindcss'] as InputJsonValue,
-    },
-  ] as Section[];
 
   try {
     const initiatedProject = await prisma.project.create({
@@ -116,13 +96,7 @@ export const initiateProject = async (userUUID: string) => {
         url: '',
         tagline: '',
         iconLink: '',
-        sections: {
-          createMany: {
-            data: sections,
-          },
-        },
       },
-      include: { sections: true },
     });
 
     return { status: 200, data: initiatedProject };

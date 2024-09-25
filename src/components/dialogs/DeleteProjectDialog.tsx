@@ -45,7 +45,7 @@ function DeleteProjectDialog({ title, projectUUID }: Props) {
         <AlertDialog.Title size={'5'} className="truncate">
           Delete <p className="inline text-violet-11">`{title}`</p>
         </AlertDialog.Title>
-        <AlertDialog.Cancel>
+        <AlertDialog.Cancel disabled={isDeleting}>
           <IconButton variant="ghost" color="gray">
             <Cross1Icon />
           </IconButton>
@@ -71,7 +71,7 @@ function DeleteProjectDialog({ title, projectUUID }: Props) {
       />
       <Flex gap="3" justify="end">
         <AlertDialog.Cancel>
-          <Button variant="soft" color="gray">
+          <Button variant="soft" color="gray" disabled={isDeleting}>
             Cancel
           </Button>
         </AlertDialog.Cancel>
