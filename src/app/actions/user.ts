@@ -3,14 +3,17 @@
 import { prisma } from '@/db';
 import { Employee, User } from '@prisma/client';
 import { signIn, signOut } from 'next-auth/react';
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 
 export const logIn = async (userUUID: string) => {
+  cookies().set('uid', userUUID);
   await signIn('google', { callbackUrl: `/users/${userUUID}/projects` });
 };
 
 export const logOut = async (userUUID: string) => {
+  cookies().delete('uid');
   await signOut({ callbackUrl: `/users/${userUUID}/projects` });
 };
 

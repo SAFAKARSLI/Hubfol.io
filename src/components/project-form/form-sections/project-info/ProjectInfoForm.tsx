@@ -23,7 +23,6 @@ function ProjectInfoForm({ editFormData }: Props) {
       const response = await fetch(`${baseUrl}/api/projects/${pid}`);
       const data = await response.json();
       setProject(data);
-      console.log('DATA FROM USEEFFECT - PROJECTINFO FORM: ', data);
       editFormData!('projectUUID', data.uuid);
     };
 

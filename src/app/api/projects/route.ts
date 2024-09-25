@@ -1,5 +1,6 @@
 import { validateUUID } from '@/app/actions/utils';
 import { prisma } from '@/db';
+import { cookies } from 'next/headers';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -10,6 +11,8 @@ export async function GET(request: Request) {
       { status: 400 }
     );
   }
+
+  cookies().set('uid', userUUID as string);
 
   try {
     const projects = await prisma.project.findMany({

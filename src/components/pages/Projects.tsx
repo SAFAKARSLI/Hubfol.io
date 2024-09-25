@@ -40,7 +40,7 @@ const Projects = async ({
         <ProjectsSidePanel initialProjects={projects} userUUID={userUUID} />
       </div>
 
-      <div className="flex-1 m-3">
+      <div className="flex-1 m-3 relative">
         {cloneElement(children as React.ReactElement, { props })}
       </div>
     </div>
