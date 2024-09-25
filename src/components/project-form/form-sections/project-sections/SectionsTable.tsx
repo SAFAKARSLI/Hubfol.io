@@ -11,7 +11,7 @@ import { baseUrl } from '@/utils';
 import { cookies } from 'next/headers';
 import { Section } from '@/types/section';
 import FormSection from '../FormSection';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 
 type Props = {
@@ -23,6 +23,7 @@ function SectionsTable({}: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const [sections, setSections] = useState<Section[]>([]);
+  const params = useSearchParams();
 
   return (
     <>
@@ -45,7 +46,7 @@ function SectionsTable({}: Props) {
         type="button"
         variant="soft"
         className="w-1/4 my-3 h-[2.5rem] float-right"
-        onClick={() => router.replace(`${pathname}/sections`)}
+        onClick={() => router.push(`${pathname}/sections?${params.toString()}`)}
       >
         <PlusIcon />
         New Section

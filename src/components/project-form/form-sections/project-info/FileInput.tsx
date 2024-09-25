@@ -2,7 +2,7 @@
 
 import { allowedIconTypes } from '@/utils';
 import { Cross1Icon, UploadIcon } from '@radix-ui/react-icons';
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as Form from '@radix-ui/react-form';
 import '@/app/globals.css';
 import { IconButton } from '@radix-ui/themes';
@@ -13,7 +13,7 @@ type Props = {
 };
 
 function FileInput({ editFormData, defaultValue = '' }: Props) {
-  const [icon, setIcon] = React.useState<string | null>(defaultValue);
+  const [icon, setIcon] = React.useState<string | Blob>(defaultValue);
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
   const handleFileInput = (file: File) => {
@@ -32,6 +32,10 @@ function FileInput({ editFormData, defaultValue = '' }: Props) {
       setIcon(URL.createObjectURL(file));
     };
   };
+
+  useEffect(() => {
+    editFormData('iconLink', defaultValue);
+  }, []);
 
   return (
     <div className="mt-1">

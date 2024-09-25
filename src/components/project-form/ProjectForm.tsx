@@ -6,14 +6,18 @@ import { upsertGeneralInfo } from '@/app/actions/project';
 import Stepper from '../custom-comps/stepper/Stepper';
 import FrameOptionsForm from './form-sections/frame-options/FrameOptionsForm';
 import { upsertSections } from '@/app/actions/section';
+import { useParams } from 'next/navigation';
+import { baseUrl } from '@/utils';
 
 type Props = {
   activeStepIndex: number;
 };
 
 function ProjectForm({ activeStepIndex }: Props) {
+  const { userUUID, projectUUID } = useParams();
   return (
     <Stepper
+      activeStepIndex={activeStepIndex}
       steps={[
         {
           title: 'General Information',
@@ -22,6 +26,8 @@ function ProjectForm({ activeStepIndex }: Props) {
           content: <ProjectInfoForm editFormData={null} />,
           onComplete: upsertGeneralInfo,
           fetchResource: '',
+          callback: `${baseUrl}/u/${userUUID}/projects/${projectUUID}/sections`,
+          slug: 'general-information',
           index: 0,
         },
         {
@@ -31,6 +37,8 @@ function ProjectForm({ activeStepIndex }: Props) {
           content: <SectionsTable editFormData={null} />,
           onComplete: upsertSections,
           fetchResource: '',
+          callback: `${baseUrl}/u/${userUUID}/projects/${projectUUID}/frame-options`,
+          slug: 'sections',
           index: 1,
         },
         {
@@ -39,6 +47,8 @@ function ProjectForm({ activeStepIndex }: Props) {
           content: <FrameOptionsForm />,
           onComplete: () => console.log('Skipped General Information'),
           fetchResource: '',
+          callback: `${baseUrl}/u/${userUUID}/projects/${projectUUID}/review`,
+          slug: 'frame-options',
           index: 2,
         },
         {
@@ -47,6 +57,8 @@ function ProjectForm({ activeStepIndex }: Props) {
           content: <div>Review your project details here.</div>,
           onComplete: () => console.log('Skipped General Information'),
           fetchResource: '',
+          callback: `${baseUrl}/u/${userUUID}/projects`,
+          slug: 'review',
           index: 3,
         },
       ]}

@@ -18,9 +18,9 @@ function AddProjectButton({ variant = 'soft' }: Props) {
   async function handleAddButtonClick() {
     const initiatedProject = await initiateProject(userUUID as string);
     router.push(
-      `/u/${userUUID}/projects/initiate?step=0&pid=${
+      `/u/${userUUID}/projects/${
         initiatedProject.data!.uuid
-      }`
+      }/general-information`
     );
   }
 

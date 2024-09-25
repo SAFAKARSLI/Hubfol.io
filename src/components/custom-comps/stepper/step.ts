@@ -4,5 +4,7 @@ export interface Step {
   description: string;
   content: React.ReactNode;
   onComplete: (formData: FormData) => any;
+  callback: string;
   fetchResource: string;
+  slug: string;
 }

@@ -1,4 +1,5 @@
 'use client';
+import { baseUrl } from '@/utils';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import { Button, IconButton } from '@radix-ui/themes';
 import { set } from 'lodash';
@@ -7,17 +8,18 @@ import { useParams, usePathname, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import React, { act, useEffect } from 'react';
 import { useFormStatus } from 'react-dom';
+import { Step } from './step';
 
 type Props = {
-  maxStepNum: number;
-  pid: string;
+  steps: Step[];
+  activeStepIndex: number;
 };
 
-function StepperNavigation({ maxStepNum, pid }: Props) {
-  const activeStep = Number(useSearchParams().get('step'));
+function StepperNavigation({ steps, activeStepIndex }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const formStatus = useFormStatus();
+  const { userUUID, projectUUID } = useParams();
 
   return (
     <div className="space-x-2 float-right mt-3">
@@ -25,15 +27,19 @@ function StepperNavigation({ maxStepNum, pid }: Props) {
         color="gray"
         variant="soft"
         type="button"
-        disabled={activeStep == 0 || formStatus.pending}
+        disabled={activeStepIndex == 0 || formStatus.pending}
         onClick={() =>
-          router.replace(`${pathname}?step=${activeStep - 1}&pid=${pid}`)
+          router.replace(
+            `${baseUrl}/u/${userUUID}/projects/${projectUUID}/${
+              steps[activeStepIndex - 1].slug
+            }`
+          )
         }
       >
         Back
       </Button>
       <Button variant="solid" type="submit" loading={formStatus.pending}>
-        {activeStep == maxStepNum ? (
+        {activeStepIndex == steps.length - 1 ? (
           <div>Submit Form</div>
         ) : (
           <>

@@ -19,30 +19,32 @@ import { baseUrl } from '@/utils';
 
 type Props = {
   steps: Step[];
+  activeStepIndex: number;
 };
 
-function StepperContent({ steps }: Props) {
+function StepperContent({ steps, activeStepIndex }: Props) {
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const { userUUID } = useParams();
-  const activeStepIndex = parseInt(searchParams.get('step')!);
+  const { userUUID, projectUUID } = useParams();
   const activeStep = steps[activeStepIndex];
   const [formAction, editFormData] = usePreloadedFormData(
-    activeStep.onComplete
+    activeStep.onComplete,
+    activeStep.callback
   );
-  const pid = searchParams.get('pid');
 
-  if (!pid || !validateUUID(pid)) {
+  if (!projectUUID || !validateUUID(projectUUID as string)) {
     redirect(`${baseUrl}/u/${userUUID}/projects?error=invalid-id`);
   }
 
   return (
     <Form.Root
       action={formAction}
-      onSubmit={(e) => {
-        router.push(`${pathname}?step=${activeStepIndex + 1}&pid=${pid}`);
-      }}
+      // onSubmit={async (e) => {
+      //   router.push(
+      //     `${baseUrl}/u/${userUUID}/projects/${projectUUID}/${
+      //       steps[activeStepIndex + 1].slug
+      //     }`
+      //   );
+      // }}
     >
       <FormSection
         title={activeStep.title}
@@ -52,7 +54,7 @@ function StepperContent({ steps }: Props) {
           editFormData,
         })}
       </FormSection>
-      <StepperNavigation maxStepNum={steps.length - 1} pid={pid} />
+      <StepperNavigation steps={steps} activeStepIndex={activeStepIndex} />
     </Form.Root>
   );
 }

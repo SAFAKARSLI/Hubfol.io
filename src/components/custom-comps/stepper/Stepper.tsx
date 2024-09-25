@@ -5,13 +5,14 @@ import StepperContent from './StepperContent';
 
 type Props = {
   steps: Step[];
+  activeStepIndex: number;
 };
 
-function Stepper({ steps }: Props) {
+function Stepper({ steps, activeStepIndex }: Props) {
   return (
     <div className="m-auto max-w-[900px]  px-8 -md:px-3">
-      <StepperHeader steps={steps} />
-      <StepperContent steps={steps} />
+      <StepperHeader steps={steps} activeStepIndex={activeStepIndex} />
+      <StepperContent steps={steps} activeStepIndex={activeStepIndex} />
     </div>
   );
 }

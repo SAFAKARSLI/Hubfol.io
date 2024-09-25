@@ -5,7 +5,7 @@ import * as Form from '@radix-ui/react-form';
 import InputLabel from '../../InputLabel';
 import FileInput from './FileInput';
 import { baseUrl } from '@/utils';
-import { useSearchParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import Project from '@/types/project';
 import { Spinner } from '@radix-ui/themes';
 
@@ -15,12 +15,11 @@ type Props = {
 
 function ProjectInfoForm({ editFormData }: Props) {
   const [project, setProject] = React.useState<Project>();
-  const params = useSearchParams();
-  const pid = params.get('pid');
+  const { projectUUID } = useParams();
 
   useEffect(() => {
     const fetchProject = async () => {
-      const response = await fetch(`${baseUrl}/api/projects/${pid}`);
+      const response = await fetch(`${baseUrl}/api/projects/${projectUUID}`);
       const data = await response.json();
       setProject(data);
       editFormData!('projectUUID', data.uuid);

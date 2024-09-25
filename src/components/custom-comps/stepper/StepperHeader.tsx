@@ -8,11 +8,10 @@ import { preferredColorOptions } from '@/utils';
 
 type Props = {
   steps: StepType[];
+  activeStepIndex: number;
 };
 
-function StepperHeader({ steps }: Props) {
-  const activeStep = Number(useSearchParams().get('step') || '0');
-
+function StepperHeader({ steps, activeStepIndex }: Props) {
   return (
     <Flex justify={'center'} align={'center'} gap={'3'} className="my-[3rem]">
       {steps.map((step, index) => (
@@ -28,7 +27,9 @@ function StepperHeader({ steps }: Props) {
               key={`line-${index}`}
               size={'4'}
               color={
-                index < activeStep ? preferredColorOptions.accentColor : 'gray'
+                index < activeStepIndex
+                  ? preferredColorOptions.accentColor
+                  : 'gray'
               }
             />
           )}

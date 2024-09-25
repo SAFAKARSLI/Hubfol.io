@@ -7,7 +7,8 @@ type FormDataObject = {
 };
 
 export const usePreloadedFormData = (
-  serverAction: (formData: FormData) => any
+  serverAction: (formData: FormData, callbackUrl: string) => any,
+  callbackUrl: string
 ): [
   (formData: FormData) => Promise<any>,
   (key: string, value: string | Blob) => void
@@ -21,7 +22,7 @@ export const usePreloadedFormData = (
 
     console.log(formData);
 
-    const response = await serverAction(formDataLoadedByAction);
+    const response = await serverAction(formDataLoadedByAction, callbackUrl);
   };
 
   // Appends provided object to the FormDataObject state.
