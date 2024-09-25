@@ -145,10 +145,8 @@ model Section {
 }
 
 model BrandIcons {
-  id          Int      @id @default(autoincrement())
-  uuid        String   @db.Uuid @unique
   brand_name  String
-  slug        String
+  slug        String @id @unique
 }
 
 

@@ -1,10 +1,10 @@
-import { SearchResult } from '@/types/brand';
 import { Flex, ScrollArea } from '@radix-ui/themes';
 import React from 'react';
 import SearchResultCard from './SearchResultCard';
+import { Brand } from '@/types/brand';
 
 type Props = {
-  iconList: SearchResult[];
+  iconList: Brand[];
   onTechAdd: (brandName: string, slug: string) => void;
 };
 
@@ -15,7 +15,7 @@ function SearchResultList({ iconList, onTechAdd }: Props) {
         <SearchResultCard
           key={i}
           onTechAdd={onTechAdd}
-          brandName={icon.brandName}
+          brandName={icon.brand_name}
           slug={icon.slug}
         />
       );

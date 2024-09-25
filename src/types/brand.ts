@@ -1,4 +1,4 @@
 export interface Brand {
-  brandName: string;
+  brand_name: string;
   slug: string;
 }

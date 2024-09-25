@@ -11,8 +11,9 @@ import { baseUrl } from '@/utils';
 import { cookies } from 'next/headers';
 import { Section } from '@/types/section';
 import FormSection from '../FormSection';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { usePathname } from 'next/navigation';
+import { initiateSection } from '@/app/actions/section';
 
 type Props = {
   // sections: Section[];
@@ -20,10 +21,9 @@ type Props = {
 };
 
 function SectionsTable({}: Props) {
-  const router = useRouter();
-  const pathname = usePathname();
   const [sections, setSections] = useState<Section[]>([]);
-  const params = useSearchParams();
+  const router = useRouter();
+  const { userUUID, projectUUID } = useParams();
 
   return (
     <>
@@ -46,7 +46,18 @@ function SectionsTable({}: Props) {
         type="button"
         variant="soft"
         className="w-1/4 my-3 h-[2.5rem] float-right"
-        onClick={() => router.push(`${pathname}/123123`)}
+        onClick={async () => {
+          const newSection = await initiateSection(projectUUID as string);
+          if (!newSection || newSection.status != 200) {
+            router.push(`/u/${userUUID}/projects?error=section-failure`);
+          }
+          router.push(
+            `/u/${userUUID}/projects/${projectUUID}/sections/${
+              newSection!.data!.uuid
+            }`
+          );
+          // setSections([...sections, newSection.data!]);
+        }}
       >
         <PlusIcon />
         New Section

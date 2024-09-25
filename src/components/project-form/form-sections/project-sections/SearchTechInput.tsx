@@ -1,43 +1,24 @@
 import React from 'react';
 import { Flex, TextField, Spinner } from '@radix-ui/themes';
 import { MagnifyingGlassIcon, Cross2Icon } from '@radix-ui/react-icons';
-import { SearchResult } from '@/types/brand';
 import SearchResultList from './SearchResultList';
-import { cloneDeep } from 'lodash';
 import { useEffect, useState } from 'react';
-import { getTechs } from '@/app/actions';
-import { defultSearchTechValues } from '@/utils';
-import Project from '@/types/project';
+import { baseUrl, defultSearchTechValues } from '@/utils';
+import { Brand } from '@/types/brand';
+type Props = {};
 
-type Props = {
-  project: Project;
-  setProject: (project: Project) => void;
-  sectionNo: number;
-};
-
-function SearchTechInput({ project, setProject, sectionNo }: Props) {
+function SearchTechInput({}: Props) {
   const [query, setQuery] = useState('');
   const [queryBounce, setQueryBounce] = useState('');
-  const [search, setSearch] = useState(defultSearchTechValues);
+  const [search, setSearch] = useState({
+    loading: false,
+    resultVisible: false,
+    result: [] as Brand[],
+  });
 
   const handleAddTechStack = (brandName: string, slug: string) => {
-    const newSections = cloneDeep(project.sections!);
-    (newSections[sectionNo].content as SearchResult[]).push({
-      brandName,
-      slug,
-    });
-    setProject({ ...project, sections: newSections });
     setQueryBounce('');
   };
-
-  useEffect(() => {
-    // Cleanup function that sets the state to default values.
-    return () => {
-      setSearch({ ...search, result: [], resultVisible: false });
-      setQueryBounce('');
-      // setActiveSection(0);
-    };
-  }, []);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -49,7 +30,7 @@ function SearchTechInput({ project, setProject, sectionNo }: Props) {
 
     if (queryBounce === '') {
       setQuery('');
-      setSearch(defultSearchTechValues);
+      setSearch({ ...search, resultVisible: false });
     }
 
     return () => {
@@ -62,8 +43,11 @@ function SearchTechInput({ project, setProject, sectionNo }: Props) {
   useEffect(() => {
     const fetchTech = async () => {
       try {
-        let result = (await getTechs(query)) as SearchResult[];
-        setSearch({ ...search, result, resultVisible: true });
+        let res = (await fetch(`${baseUrl}/api/brands?query=${query}`).then(
+          (res) => res.json()
+        )) as Brand[];
+        console.log('res:', res);
+        setSearch({ ...search, result: res, resultVisible: true });
       } catch (error) {
         console.error('Error fetching techs:', error);
       }

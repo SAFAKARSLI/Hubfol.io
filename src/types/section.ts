@@ -10,7 +10,7 @@ export interface Section {
   description: string | null;
   isActive: boolean | null;
   contentType: Content;
-  content: InputJsonValue;
+  content: InputJsonValue | null;
   projectId: string;
   // tags: string[];
 }

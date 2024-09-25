@@ -1,3 +1,6 @@
+import { prisma } from '@/db';
+import { Brand } from '@/types/brand';
+
 export function validateUUID(uuid: string): boolean {
   const regex =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;

@@ -8,6 +8,7 @@ import { getServerSession } from 'next-auth';
 import { validateUUID } from './utils';
 import { extractUUID } from '@/utils';
 import { revalidateTag } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 export const upsertSections = async (formData: FormData) => {
   console.log('[actions/sections] FormData ', formData);
@@ -58,6 +59,46 @@ export const upsertSections = async (formData: FormData) => {
   //   await prisma.$disconnect();
   //   revalidateTag('projects');
   // }
+};
+
+export const initiateSection = async (projectUUID: string) => {
+  const session = await getServerSession(authOptions);
+
+  if (!session || !session.user) {
+    return {
+      status: 401,
+      message: 'You must be logged in to initiate a section.',
+    };
+  }
+
+  try {
+    const project = await prisma.project.findUnique({
+      where: { uuid: projectUUID, ownerId: session.user.uuid },
+    });
+
+    if (!project) {
+      return { status: 404, message: 'Project not found.' };
+    }
+  } catch (error) {
+    console.error('Error initiating section:', error);
+  }
+
+  try {
+    const section = await prisma.section.create({
+      data: {
+        uuid: uuidv4(),
+        projectId: projectUUID,
+        title: 'New Section',
+        contentType: Content.TEXT,
+        content: '',
+      },
+    });
+    return { status: 200, data: section };
+  } catch (error) {
+    console.error('Error initiating section:', error);
+  } finally {
+    prisma.$disconnect();
+  }
 };
 
 export const getSections = async (projectUUID: string) => {
