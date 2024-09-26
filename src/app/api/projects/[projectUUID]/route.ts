@@ -9,7 +9,6 @@ export async function GET(
 ) {
   const { projectUUID } = params;
 
-  console.log('projectUUID:', projectUUID);
   if (!validateUUID(projectUUID as string)) {
     return new Response('Invalid project identifier provided: ' + projectUUID, {
       status: 400,
