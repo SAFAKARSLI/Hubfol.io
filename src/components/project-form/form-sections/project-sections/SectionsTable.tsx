@@ -21,10 +21,15 @@ type Props = {
 
 function SectionsTable({}: Props) {
   const [sections, setSections] = useState<Section[]>([]);
+  const init = useSearchParams().get('initialize');
   const router = useRouter();
   const { userUUID, projectUUID } = useParams();
 
   useEffect(() => {
+    if (init) {
+      return;
+    }
+
     const fetchSections = async () => {
       const response = await fetch(
         `${baseUrl}/api/sections?projectUUID=${projectUUID}`
@@ -65,7 +70,7 @@ function SectionsTable({}: Props) {
           router.push(
             `/u/${userUUID}/projects/${projectUUID}/sections/${
               newSection!.data!.uuid
-            }`
+            }?initialize=true`
           );
           // setSections([...sections, newSection.data!]);
         }}

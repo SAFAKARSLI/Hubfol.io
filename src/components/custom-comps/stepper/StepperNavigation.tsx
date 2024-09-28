@@ -17,7 +17,6 @@ type Props = {
 
 function StepperNavigation({ steps, activeStepIndex }: Props) {
   const router = useRouter();
-  const pathname = usePathname();
   const formStatus = useFormStatus();
   const { userUUID, projectUUID } = useParams();
   const [loading, setLoading] = React.useState(false);
@@ -32,7 +31,7 @@ function StepperNavigation({ steps, activeStepIndex }: Props) {
         loading={loading}
         onClick={() => {
           setLoading(true);
-          router.replace(
+          router.push(
             `${baseUrl}/u/${userUUID}/projects/${projectUUID}/${
               steps[activeStepIndex - 1].slug
             }`

@@ -20,7 +20,7 @@ function AddProjectButton({ variant = 'soft' }: Props) {
     router.push(
       `/u/${userUUID}/projects/${
         initiatedProject.data!.uuid
-      }/general-information?initialize=true`
+      }/general-information`
     );
   }
 

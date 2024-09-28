@@ -4,7 +4,7 @@ import React, { Suspense, useEffect } from 'react';
 import FormInput from '../../FormInput';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Section } from '@/types/section';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import * as Form from '@radix-ui/react-form';
 import SearchTechInput from './SearchTechInput';
 import InputLabel from '../../InputLabel';
@@ -18,13 +18,19 @@ type Props = {};
 
 function SectionForm({}: Props) {
   const [section, setSection] = React.useState<Section>();
+  const init = useSearchParams().get('initialize');
   const { sectionUUID, userUUID, projectUUID } = useParams();
   const [formAction, editFormData] = usePreloadedFormData(
     upsertSections,
     `${baseUrl}/u/${userUUID}/projects/${projectUUID}/sections`
   );
+  const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
+    if (init) {
+      setLoading(false);
+      return;
+    }
     const fetchSection = async () => {
       const response = await fetch(`/api/sections/${sectionUUID}`);
       const data = await response.json();
@@ -32,10 +38,11 @@ function SectionForm({}: Props) {
     };
 
     fetchSection();
+    setLoading(false);
   }, []);
 
   return (
-    <Suspense fallback={<Spinner />}>
+    <Spinner loading={loading}>
       <Form.Root
         className="m-auto max-w-[900px]  p-8 -md:px-3 flex flex-col gap-3"
         action={formAction}
@@ -82,7 +89,7 @@ function SectionForm({}: Props) {
 
         <Button type="submit">Save Section</Button>
       </Form.Root>
-    </Suspense>
+    </Spinner>
   );
 }
 

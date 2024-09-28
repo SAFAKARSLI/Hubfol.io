@@ -32,7 +32,7 @@ function StepperContent({ steps, activeStepIndex }: Props) {
   );
 
   if (!projectUUID || !validateUUID(projectUUID as string)) {
-    redirect(`${baseUrl}/u/${userUUID}/projects?error=invalid-id`);
+    router.push(`${baseUrl}/u/${userUUID}/projects?error=invalid-id`);
   }
 
   return (
