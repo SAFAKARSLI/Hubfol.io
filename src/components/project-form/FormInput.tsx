@@ -23,7 +23,6 @@ function FormInput({
   placerholder,
   defaultValue,
   message,
-
   required = false,
 }: Props) {
   return (

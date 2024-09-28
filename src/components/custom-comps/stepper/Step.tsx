@@ -1,7 +1,6 @@
 import { preferredColorOptions } from '@/utils';
 import { Badge, Box, Button } from '@radix-ui/themes';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import path from 'path';
 import React from 'react';
 
 type Props = {

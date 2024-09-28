@@ -25,6 +25,18 @@ function SectionsTable({}: Props) {
   const router = useRouter();
   const { userUUID, projectUUID } = useParams();
 
+  useEffect(() => {
+    const fetchSections = async () => {
+      const response = await fetch(
+        `${baseUrl}/api/sections?projectUUID=${projectUUID}`
+      );
+      const data = await response.json();
+      setSections(data);
+    };
+
+    fetchSections();
+  }, []);
+
   return (
     <>
       <Table.Root size={'1'}>
