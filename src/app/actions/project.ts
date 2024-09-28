@@ -136,11 +136,7 @@ const checkForAuthority = async (
   }
 };
 
-export const upsertGeneralInfo = async (
-  formData: FormData,
-  callback?: string
-) => {
-  console.log(callback);
+export const upsertGeneralInfo = async (formData: FormData) => {
   const session = await getServerSession(authOptions);
   const iconLink = (await uploadProjectIcon(formData.get('iconLink') as File))
     .data as string;
@@ -177,7 +173,6 @@ export const upsertGeneralInfo = async (
     );
   } finally {
     await prisma.$disconnect();
-    if (callback) redirect(callback);
     revalidateTag('projects');
   }
 };

@@ -1,4 +1,5 @@
 import ProjectForm from '@/components/project-form/ProjectForm';
+import { SlugProps } from '@/types/slug';
 import React from 'react';
 
 type Props = {};

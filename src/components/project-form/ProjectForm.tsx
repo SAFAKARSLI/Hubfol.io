@@ -5,8 +5,7 @@ import SectionsTable from './form-sections/project-sections/SectionsTable';
 import { upsertGeneralInfo } from '@/app/actions/project';
 import Stepper from '../custom-comps/stepper/Stepper';
 import FrameOptionsForm from './form-sections/frame-options/FrameOptionsForm';
-import { upsertSections } from '@/app/actions/section';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { baseUrl } from '@/utils';
 
 type Props = {
@@ -14,6 +13,8 @@ type Props = {
 };
 
 function ProjectForm({ activeStepIndex }: Props) {
+  // Will allow me to set the initialize query param such that in the intial form, we get around with the initial fethcing of the data.
+  const searchParams = useSearchParams();
   const { userUUID, projectUUID } = useParams();
   return (
     <Stepper
@@ -26,7 +27,7 @@ function ProjectForm({ activeStepIndex }: Props) {
           content: <ProjectInfoForm editFormData={null} />,
           onComplete: upsertGeneralInfo,
           fetchResource: '',
-          callback: `${baseUrl}/u/${userUUID}/projects/${projectUUID}/sections`,
+          callback: `${baseUrl}/u/${userUUID}/projects/${projectUUID}/sections?${searchParams.toString()}`,
           slug: 'general-information',
           index: 0,
         },
@@ -34,10 +35,10 @@ function ProjectForm({ activeStepIndex }: Props) {
           title: 'Sections',
           description:
             'Sections are different ways by which you can flex your project. This information is visible when the project is active.',
-          content: <SectionsTable editFormData={null} />,
-          onComplete: upsertSections,
+          content: <SectionsTable />,
+          onComplete: () => console.log('skip'),
           fetchResource: '',
-          callback: `${baseUrl}/u/${userUUID}/projects/${projectUUID}/frame-options`,
+          callback: `${baseUrl}/u/${userUUID}/projects/${projectUUID}/frame-options?${searchParams.toString()}`,
           slug: 'sections',
           index: 1,
         },
@@ -47,7 +48,7 @@ function ProjectForm({ activeStepIndex }: Props) {
           content: <FrameOptionsForm />,
           onComplete: () => console.log('Skipped General Information'),
           fetchResource: '',
-          callback: `${baseUrl}/u/${userUUID}/projects/${projectUUID}/review`,
+          callback: `${baseUrl}/u/${userUUID}/projects/${projectUUID}/review?${searchParams.toString()}`,
           slug: 'frame-options',
           index: 2,
         },

@@ -18,6 +18,7 @@ function StepperHeader({ steps, activeStepIndex }: Props) {
         <React.Fragment key={index}>
           <Step
             index={index}
+            activeStepIndex={activeStepIndex}
             title={step.title}
             description={step.description}
             maxStepNum={steps.length - 1}

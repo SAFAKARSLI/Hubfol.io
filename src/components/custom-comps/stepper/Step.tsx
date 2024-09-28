@@ -7,25 +7,31 @@ type Props = {
   title: string;
   description: string;
   index: number;
+  activeStepIndex: number;
   maxStepNum: number;
 };
 
-function Step({ title, description, index, maxStepNum }: Props) {
+function Step({
+  title,
+  description,
+  index,
+  maxStepNum,
+  activeStepIndex,
+}: Props) {
   const router = useRouter();
   const pathname = usePathname();
-  const activeStep = Number(useSearchParams().get('step') || '0');
 
-  if (activeStep > maxStepNum) {
+  if (activeStepIndex > maxStepNum) {
     router.push(`${pathname}?step=0`);
   }
 
-  const isActive = activeStep === index;
+  const isActive = activeStepIndex === index;
 
   return (
     <Badge
-      variant={activeStep === index ? 'solid' : 'outline'}
+      variant={activeStepIndex === index ? 'solid' : 'outline'}
       color={
-        isActive || activeStep > index
+        isActive || activeStepIndex > index
           ? preferredColorOptions.accentColor
           : 'gray'
       }

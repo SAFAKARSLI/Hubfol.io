@@ -17,7 +17,6 @@ import { initiateSection } from '@/app/actions/section';
 
 type Props = {
   // sections: Section[];
-  editFormData: ((key: string, value: string | Blob) => void) | null;
 };
 
 function SectionsTable({}: Props) {

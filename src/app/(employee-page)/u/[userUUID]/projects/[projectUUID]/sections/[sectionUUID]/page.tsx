@@ -5,8 +5,6 @@ import React from 'react';
 type Props = {};
 
 function page({ params }: SlugProps) {
-  const { sectionUUID, projectUUID, userUUID } = params;
-
   return <SectionForm />;
 }
 

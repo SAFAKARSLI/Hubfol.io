@@ -4,6 +4,7 @@ import Project from '@/types/project';
 import ProjectsSidePanel from '../ProjectsSidePanel';
 import next from 'next';
 import { notFound } from 'next/navigation';
+import { baseUrl } from '@/utils';
 
 interface ProjectsProps {
   userUUID: string;
@@ -17,7 +18,7 @@ const Projects = async ({
   activeProjectId,
 }: ProjectsProps) => {
   const projects = (await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects?userUUID=${userUUID}`,
+    `${baseUrl}/api/projects?userUUID=${userUUID}`,
     {
       next: {
         tags: ['projects'],

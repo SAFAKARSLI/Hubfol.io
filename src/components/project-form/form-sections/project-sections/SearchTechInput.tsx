@@ -5,7 +5,9 @@ import SearchResultList from './SearchResultList';
 import { useEffect, useState } from 'react';
 import { baseUrl, defultSearchTechValues } from '@/utils';
 import { Brand } from '@/types/brand';
-type Props = {};
+type Props = {
+  onTechAdd: (key: string, value: string | Blob) => void;
+};
 
 function SearchTechInput({}: Props) {
   const [query, setQuery] = useState('');

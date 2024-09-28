@@ -17,7 +17,6 @@ export async function GET(
   try {
     const projects = await prisma.project.findUnique({
       where: { uuid: projectUUID as string },
-      include: { sections: true },
     });
 
     if (!projects) {

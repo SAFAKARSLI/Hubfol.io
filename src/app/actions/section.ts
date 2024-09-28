@@ -7,6 +7,7 @@ import { authOptions } from '../api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
 import { validateUUID } from './utils';
 import { extractUUID } from '@/utils';
+import { redirect } from 'next/navigation';
 
 export const upsertSections = async (formData: FormData) => {
   console.log('[actions/sections] FormData ', formData);

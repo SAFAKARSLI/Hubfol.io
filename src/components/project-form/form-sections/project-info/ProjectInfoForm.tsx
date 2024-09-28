@@ -14,23 +14,32 @@ type Props = {
 };
 
 function ProjectInfoForm({ editFormData }: Props) {
+  const init = useSearchParams().get('initialize');
   const [project, setProject] = React.useState<Project>();
   const { projectUUID } = useParams();
+  const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
+    if (init) {
+      setLoading(false);
+      return;
+    }
     const fetchProject = async () => {
-      const response = await fetch(`${baseUrl}/api/projects/${projectUUID}`);
+      const response = await fetch(`${baseUrl}/api/projects/${projectUUID}`, {
+        next: { tags: ['projects'] },
+      });
       const data = await response.json();
       setProject(data);
       editFormData!('projectUUID', data.uuid);
     };
 
     fetchProject();
+    setLoading(false);
   }, []);
 
   return (
     <div className="flex flex-col gap-4">
-      <Spinner size={'3'} loading={!project}>
+      <Spinner size={'3'} loading={loading}>
         <FormInput
           label="Name"
           name="name"
