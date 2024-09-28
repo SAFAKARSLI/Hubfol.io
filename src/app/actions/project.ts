@@ -109,16 +109,12 @@ export const initiateProject = async (userUUID: string) => {
   }
 };
 
-const checkForAuthority = async (
+export const checkForAuthority = async (
   projectUUID: string,
   session: Session | null
 ) => {
   if (!session || !session.user) {
     return { status: 401, message: 'You must be signed in to do that.' };
-  }
-
-  if (projectUUID == null) {
-    return { status: 201, message: 'Uninitiated project.' };
   }
 
   try {
@@ -140,7 +136,6 @@ export const upsertGeneralInfo = async (formData: FormData) => {
   const session = await getServerSession(authOptions);
   const iconLink = (await uploadProjectIcon(formData.get('iconLink') as File))
     .data as string;
-  console.log('iconLink', iconLink);
   const projectFromFormData = {
     name: formData.get('name') as string,
     url: formData.get('url') as string,
@@ -148,26 +143,21 @@ export const upsertGeneralInfo = async (formData: FormData) => {
     iconLink,
   };
   const projectUUID = formData.get('projectUUID') as string;
-  console.log(formData);
-  console.log(projectUUID);
 
   if (projectUUID != null && !validateUUID(projectUUID))
     return { status: 400, message: 'Invalid project identifier provided.' };
 
   const authorityCheck = await checkForAuthority(projectUUID, session);
+  if (authorityCheck.status != 200) return authorityCheck;
 
   try {
-    if (authorityCheck.status == 200) {
-      const resultingProject = await prisma.project.update({
-        where: { uuid: projectUUID },
-        data: {
-          ...projectFromFormData,
-        },
-      });
-      return { status: 200, data: resultingProject };
-    } else {
-      return authorityCheck;
-    }
+    const resultingProject = await prisma.project.update({
+      where: { uuid: projectUUID },
+      data: {
+        ...projectFromFormData,
+      },
+    });
+    return { status: 200, data: resultingProject };
   } catch (error) {
     console.error('Error updating project:', error);
     throw new Error(

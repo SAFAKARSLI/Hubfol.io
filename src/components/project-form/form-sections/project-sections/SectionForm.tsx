@@ -13,6 +13,8 @@ import { Content } from '@prisma/client';
 import { upsertSections } from '@/app/actions/section';
 import { usePreloadedFormData } from '@/hooks';
 import { baseUrl } from '@/utils';
+import { useFormStatus } from 'react-dom';
+import SubmitButton from '@/components/SubmitButton';
 
 type Props = {};
 
@@ -24,40 +26,51 @@ function SectionForm({}: Props) {
     upsertSections,
     `${baseUrl}/u/${userUUID}/projects/${projectUUID}/sections`
   );
-  const [loading, setLoading] = React.useState(true);
+  const [contentType, setContentType] = React.useState<Content>(Content.TEXT);
+  const { pending } = useFormStatus();
+
+  console.log(pending);
 
   useEffect(() => {
-    if (init) {
-      setLoading(false);
-      return;
-    }
     const fetchSection = async () => {
-      const response = await fetch(`/api/sections/${sectionUUID}`);
+      const response = await fetch(`/api/sections/${sectionUUID}`, {
+        next: { tags: ['sections'] },
+      });
       const data = await response.json();
       setSection(data);
+      setContentType(data.contentType);
     };
 
     fetchSection();
-    setLoading(false);
   }, []);
 
+  useEffect(() => {
+    editFormData('projectId', projectUUID as string);
+    editFormData('uuid', sectionUUID as string);
+  }, []);
+
+  useEffect(() => {
+    editFormData('contentType', contentType);
+  }, [contentType]);
+
   return (
-    <Spinner loading={loading}>
+    <Spinner loading={!section}>
       <Form.Root
         className="m-auto max-w-[900px]  p-8 -md:px-3 flex flex-col gap-3"
         action={formAction}
       >
         <FormInput
-          label="Header"
+          label="Title"
+          required
           defaultValue={section?.title}
-          name="header"
-          placerholder='Enter the section header here. (e.g "Project Description")'
+          name="title"
+          placerholder='Enter the section title here. (e.g "Project Description")'
           type={'text'}
         />
 
         <FormInput
           label="Description"
-          defaultValue={section?.title}
+          defaultValue={section?.description!}
           name="description"
           placerholder="Enter the section description"
           type={'text'}
@@ -66,9 +79,10 @@ function SectionForm({}: Props) {
         <Form.FormField name="content-type">
           <InputLabel label="Content Type" />
           <Select.Root
-            defaultValue={Content.TEXT}
-            onValueChange={(e) => {
+            value={contentType}
+            onValueChange={(e: keyof typeof Content) => {
               editFormData!('contentType', e);
+              setContentType(Content[e]);
             }}
           >
             <Select.Trigger />
@@ -87,7 +101,7 @@ function SectionForm({}: Props) {
           <SearchTechInput onTechAdd={(e) => {}} />
         </div>
 
-        <Button type="submit">Save Section</Button>
+        <SubmitButton label="Save Section" />
       </Form.Root>
     </Spinner>
   );

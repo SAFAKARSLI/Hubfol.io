@@ -47,7 +47,7 @@ function StepperNavigation({ steps, activeStepIndex }: Props) {
         loading={formStatus.pending}
       >
         {activeStepIndex == steps.length - 1 ? (
-          <div>Submit Form</div>
+          <>Submit Form</>
         ) : (
           <>
             Next

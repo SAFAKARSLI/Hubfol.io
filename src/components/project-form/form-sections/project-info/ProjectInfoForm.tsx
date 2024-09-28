@@ -19,8 +19,6 @@ function ProjectInfoForm({ editFormData }: Props) {
   const [project, setProject] = React.useState<Project>();
   const [loading, setLoading] = React.useState(true);
 
-  console.log(loading);
-
   useEffect(() => {
     const fetchProject = async () => {
       const response = await fetch(`${baseUrl}/api/projects/${projectUUID}`, {
@@ -35,7 +33,7 @@ function ProjectInfoForm({ editFormData }: Props) {
     }
 
     editFormData!('projectUUID', projectUUID as string);
-    // setLoading(false);
+    setLoading(false);
   }, []);
 
   return (

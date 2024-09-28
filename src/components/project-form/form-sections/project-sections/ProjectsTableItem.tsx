@@ -14,7 +14,7 @@ function ProjectsTableItem({ section }: Props) {
     <Table.Row className="hover:bg-gray-2">
       <Table.RowHeaderCell>
         <Link
-          href={`initiate/sections/${section.uuid}`}
+          href={`sections/${section.uuid}`}
           className="text-violet-11 hover:underline font-medium truncate w-1/3"
         >
           {section.title}

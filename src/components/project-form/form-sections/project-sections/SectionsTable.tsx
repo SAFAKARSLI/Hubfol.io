@@ -14,6 +14,7 @@ import FormSection from '../FormSection';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { initiateSection } from '@/app/actions/section';
+import next from 'next';
 
 type Props = {
   // sections: Section[];
@@ -32,7 +33,8 @@ function SectionsTable({}: Props) {
 
     const fetchSections = async () => {
       const response = await fetch(
-        `${baseUrl}/api/sections?projectUUID=${projectUUID}`
+        `${baseUrl}/api/sections?projectUUID=${projectUUID}`,
+        { next: { tags: ['sections'] } }
       );
       const data = await response.json();
       setSections(data);

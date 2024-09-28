@@ -8,56 +8,74 @@ import { getServerSession } from 'next-auth';
 import { validateUUID } from './utils';
 import { extractUUID } from '@/utils';
 import { redirect } from 'next/navigation';
+import { checkForAuthority } from './project';
+import { revalidateTag } from 'next/cache';
 
 export const upsertSections = async (formData: FormData) => {
   console.log('[actions/sections] FormData ', formData);
-  // const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
 
-  // const sections = {
-  //   sections: JSON.parse(formData.get('sections') as string) as Section[],
-  // };
-  // const projectUUID = formData.get('projectUUID') as string;
+  if (!session || !session.user) {
+    return {
+      status: 401,
+      message: 'You must be logged in to create a section.',
+    };
+  }
 
-  // if (projectUUID != null && !validateUUID(projectUUID))
-  //   return { status: 400, message: 'Invalid project identifier provided.' };
+  const projectId = formData.get('projectId') as string;
+  const authorityCheck = await checkForAuthority(projectId, session);
+  console.log('authorityCheck', authorityCheck);
+  if (authorityCheck.status !== 200) {
+    return authorityCheck;
+  }
 
-  // const authorityCheck = await checkForAuthority(projectUUID, session);
+  const sectionInfo = {
+    title: formData.get('title') as string,
+    description: formData.get('description') as string,
+    contentType: formData.get('contentType') as Content,
+    content: formData.get('content') as Prisma.InputJsonValue,
+  };
+  const sectionUUID = formData.get('uuid') as string;
 
-  // try {
-  //   if (authorityCheck.status == 200) {
-  //     const resultingProject = await prisma.project.update({
-  //       where: { uuid: projectUUID },
-  //       data: {
-  //         ...projectFromFormData,
-  //       },
-  //       select: {
-  //         uuid: true,
-  //         name: true,
-  //       },
-  //     });
-  //     return { status: 200, data: resultingProject };
-  //   } else if (authorityCheck.status == 201) {
-  //     const resultingProject = await prisma.project.create({
-  //       data: {
-  //         ...projectFromFormData,
-  //         uuid: uuidv4(),
-  //         ownerId: session!.user.uuid,
-  //         createdAt: new Date(),
-  //       },
-  //     });
-  //     return { status: 200, data: resultingProject };
-  //   } else {
-  //     return authorityCheck;
-  //   }
-  // } catch (error) {
-  //   console.error('Error updating project:', error);
-  //   throw new Error(
-  //     'Internal Server Error. An error occurred while updating the project.'
-  //   );
-  // } finally {
-  //   await prisma.$disconnect();
-  //   revalidateTag('projects');
+  // const schema = z.object({
+  //   title: z
+  //     .string()
+  //     .min(1, { message: 'Header must be at least 1 character long.' }),
+  //   projectId: z.string(),
+  // });
+
+  // const parse = schema.safeParse(sectionInfo);
+
+  // const errors = [] as string[];
+  // if (!parse.success) {
+  //   parse.error.errors.forEach((err) => {
+  //     errors.push(err.message);
+  //   });
+  //   return errors;
   // }
+
+  try {
+    console.log('sectionUUID', sectionUUID);
+    const resultingSection = await prisma.section.update({
+      where: { uuid: sectionUUID },
+      data: {
+        ...sectionInfo,
+      },
+      include: { project: true },
+    });
+
+    console.log('resultingSection', resultingSection);
+  } catch (error) {
+    console.error('Error updating section:', error);
+    return {
+      status: 500,
+      message: 'Failed to update/create section',
+    };
+  } finally {
+    await prisma.$disconnect;
+    revalidateTag('sections');
+    return { status: 200, data: sectionInfo };
+  }
 };
 
 export const initiateSection = async (projectUUID: string) => {
