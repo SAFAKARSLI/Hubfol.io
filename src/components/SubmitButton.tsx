@@ -7,12 +7,19 @@ type Props = {
   children: React.ReactNode;
   color?: colorOptions;
   variant?: buttonVariants;
+  style?: string;
 };
 
-function SubmitButton({ children, color, variant }: Props) {
+function SubmitButton({ children, color, variant, style }: Props) {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" loading={pending} color={color} variant={variant}>
+    <Button
+      type="submit"
+      loading={pending}
+      color={color}
+      variant={variant}
+      className={style}
+    >
       {children}
     </Button>
   );

@@ -62,7 +62,6 @@ function ProjectInfoForm({ editFormData }: Props) {
           message="You must provide a valid URL. (must include http:// or https://)"
           defaultValue={project?.url}
           type="url"
-          required
         />
         <Form.Field name="project-icon">
           <InputLabel label="Project Icon" />

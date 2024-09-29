@@ -75,21 +75,23 @@ export const createProject = async (formData: FormData) => {
   redirect(`/u/${session.user.uuid}/projects/${projectFromFormData.uuid}`);
 };
 
-export const initiateProject = async (userUUID: string) => {
+export const initiateProject = async (formData: FormData) => {
   const session = await getServerSession(authOptions);
   if (!session || !session.user) {
     return { status: 401, message: 'You must be signed in to do that.' };
   }
 
+  const userUUID = formData.get('userUUID') as string;
+
   if (session.user.uuid != userUUID)
     return { status: 403, message: 'Not authorized.' };
 
   const date = new Date();
-
+  const projectUUID = uuidv4();
   try {
     const initiatedProject = await prisma.project.create({
       data: {
-        uuid: uuidv4(),
+        uuid: projectUUID,
         ownerId: session.user.uuid,
         createdAt: date,
         name: 'New Project',
@@ -106,6 +108,9 @@ export const initiateProject = async (userUUID: string) => {
   } finally {
     await prisma.$disconnect();
     revalidateTag('projects');
+    redirect(
+      `/u/${session.user.uuid}/projects/${projectUUID}/general-information?initialize=true`
+    );
   }
 };
 
