@@ -19,6 +19,7 @@ import {
 import { useParams } from 'next/navigation';
 
 import DeleteProjectDialog from './dialogs/DeleteProjectDialog';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   projectUUID: string;
@@ -27,6 +28,7 @@ type Props = {
 };
 
 function ProjectMenu({ projectUUID, title }: Props) {
+  const router = useRouter();
   const { userUUID } = useParams<{ userUUID: string }>();
 
   const [deleteDialogeOpen, setDeleteDialogeOpen] = useState(false);
@@ -45,9 +47,7 @@ function ProjectMenu({ projectUUID, title }: Props) {
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
           <DropdownMenu.Item
-            onMouseDown={() => {
-              // setEditDialogeOpen(true);
-            }}
+            onClick={() => router.push(`${projectUUID}/general-information`)}
           >
             <Pencil2Icon />
             Edit

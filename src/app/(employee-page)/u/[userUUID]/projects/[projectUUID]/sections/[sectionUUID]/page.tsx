@@ -11,9 +11,7 @@ type Props = {};
 function page({ params }: SlugProps) {
   return (
     <FormWrapper
-      backButtonAction={() =>
-        employeeSectionsRedirect(params.userUUID, params.projectUUID)
-      }
+      backButtonUrl={`/u/${params.userUUID}/projects/${params.projectUUID}/sections`}
     >
       <FormSection
         title="Edit Section"

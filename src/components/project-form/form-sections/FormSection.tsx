@@ -1,5 +1,5 @@
-import { Heading, Text } from '@radix-ui/themes';
-import React from 'react';
+import { Heading, Spinner, Text } from '@radix-ui/themes';
+import React, { Suspense } from 'react';
 
 type Props = {
   title: string;
@@ -16,7 +16,7 @@ function FormSection({ title, description, children }: Props) {
           {description}
         </Text>
       )}
-      {children}
+      <Suspense fallback={<Spinner />}>{children}</Suspense>
     </div>
   );
 }

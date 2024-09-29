@@ -15,9 +15,7 @@ type Props = {
 function Stepper({ steps, activeStepIndex }: Props) {
   const { userUUID } = useParams();
   return (
-    <FormWrapper
-      backButtonAction={() => employeeHomeRedirect(userUUID as string)}
-    >
+    <FormWrapper backButtonUrl={`${baseUrl}/u/${userUUID}/projects`}>
       <StepperHeader steps={steps} activeStepIndex={activeStepIndex} />
       <StepperContent steps={steps} activeStepIndex={activeStepIndex} />
     </FormWrapper>

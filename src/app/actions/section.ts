@@ -12,7 +12,6 @@ import { checkForAuthority } from './project';
 import { revalidateTag } from 'next/cache';
 
 export const upsertSections = async (formData: FormData) => {
-  console.log('[actions/sections] FormData ', formData);
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user) {
@@ -23,8 +22,8 @@ export const upsertSections = async (formData: FormData) => {
   }
 
   const projectId = formData.get('projectId') as string;
+
   const authorityCheck = await checkForAuthority(projectId, session);
-  console.log('authorityCheck', authorityCheck);
   if (authorityCheck.status !== 200) {
     return authorityCheck;
   }
@@ -55,7 +54,6 @@ export const upsertSections = async (formData: FormData) => {
   // }
 
   try {
-    console.log('sectionUUID', sectionUUID);
     const resultingSection = await prisma.section.update({
       where: { uuid: sectionUUID },
       data: {
@@ -63,8 +61,6 @@ export const upsertSections = async (formData: FormData) => {
       },
       include: { project: true },
     });
-
-    console.log('resultingSection', resultingSection);
   } catch (error) {
     console.error('Error updating section:', error);
     return {

@@ -31,14 +31,16 @@ function ProjectInfoForm({ editFormData }: Props) {
     if (!init) {
       fetchProject();
     }
-
-    editFormData!('projectUUID', projectUUID as string);
-    setLoading(false);
   }, []);
 
+  useEffect(() => {
+    setLoading(false);
+  }, [project]);
+
   return (
-    <div className="flex flex-col gap-4">
-      <Spinner loading={loading}>
+    <Spinner loading={loading}>
+      <div className="flex flex-col gap-4">
+        <input type="hidden" name="uuid" value={projectUUID} />
         <FormInput
           label="Name"
           name="name"
@@ -70,8 +72,8 @@ function ProjectInfoForm({ editFormData }: Props) {
             defaultValue={project?.iconLink}
           />
         </Form.Field>
-      </Spinner>
-    </div>
+      </div>
+    </Spinner>
   );
 }
 

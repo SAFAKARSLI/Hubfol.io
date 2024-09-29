@@ -147,7 +147,7 @@ export const upsertGeneralInfo = async (formData: FormData) => {
     tagline: formData.get('tagline') as string,
     iconLink,
   };
-  const projectUUID = formData.get('projectUUID') as string;
+  const projectUUID = formData.get('uuid') as string;
 
   if (projectUUID != null && !validateUUID(projectUUID))
     return { status: 400, message: 'Invalid project identifier provided.' };

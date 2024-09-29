@@ -2,14 +2,16 @@
 
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import { IconButton } from '@radix-ui/themes';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 type Props = {
   children: React.ReactNode;
-  backButtonAction: () => Promise<never>;
+  backButtonUrl: string;
 };
 
-function FormWrapper({ children, backButtonAction }: Props) {
+function FormWrapper({ children, backButtonUrl }: Props) {
+  const router = useRouter();
   return (
     <div>
       <div className="float-left m-10">
@@ -17,7 +19,7 @@ function FormWrapper({ children, backButtonAction }: Props) {
           className="rounded-full cursor-pointer"
           variant="ghost"
           size={'3'}
-          onClick={backButtonAction}
+          onClick={() => router.push(backButtonUrl)}
         >
           <ArrowLeftIcon className="w-5 h-5" />
         </IconButton>

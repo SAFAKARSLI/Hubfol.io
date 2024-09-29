@@ -47,9 +47,9 @@ function SectionForm({}: Props) {
 
   return (
     <Spinner loading={!section}>
-      <input type="hidden" name="projectId" value={projectUUID} />
-      <input type="hidden" name="uuid" value={sectionUUID} />
       <Form.Root action={formAction} className="flex flex-col gap-2">
+        <input type="hidden" name="projectId" value={projectUUID} />
+        <input type="hidden" name="uuid" value={sectionUUID} />
         <FormInput
           label="Title"
           required

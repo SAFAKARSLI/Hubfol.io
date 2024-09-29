@@ -22,7 +22,7 @@ function DeleteSection({ section }: Props) {
   );
 
   return (
-    <form action={formAction}>
+    <form action={formAction} onSubmit={() => location.reload()}>
       <input type="hidden" name="uuid" value={section.uuid} />
       <SubmitButton color="red">Delete</SubmitButton>
     </form>
