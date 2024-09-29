@@ -24,16 +24,10 @@ const Projects = async ({
         tags: ['projects'],
       },
     }
-  ).then((r) => {
-    if (!r.ok) {
-      notFound();
-    }
-    return r.json();
-  })) as Project[];
+  ).then((r) => r.json())) as Project[];
 
-  const props = activeProjectId
-    ? projects.find((project) => project.uuid === activeProjectId)
-    : '';
+  const props = projects.find((project) => project.uuid === activeProjectId);
+  console.log(props);
 
   return (
     <div className="flex w-screen h-full">
@@ -41,7 +35,7 @@ const Projects = async ({
         <ProjectsSidePanel initialProjects={projects} userUUID={userUUID} />
       </div>
 
-      <div className="flex-1 m-3 relative">
+      <div className="flex-1 m-3">
         {cloneElement(children as React.ReactElement, { props })}
       </div>
     </div>

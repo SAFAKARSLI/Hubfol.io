@@ -38,7 +38,7 @@ function StepperNavigation({ steps, activeStepIndex }: Props) {
           );
         }}
       >
-        Back
+        Previous
       </Button>
       <Button
         variant="solid"

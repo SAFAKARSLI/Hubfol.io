@@ -25,6 +25,7 @@ function SectionsTable({}: Props) {
   const init = useSearchParams().get('initialize');
   const router = useRouter();
   const { userUUID, projectUUID } = useParams();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (init) {
@@ -66,7 +67,9 @@ function SectionsTable({}: Props) {
         type="button"
         variant="soft"
         className="w-1/4 my-3 h-[2.5rem] float-right"
+        loading={loading}
         onClick={async () => {
+          setLoading(true);
           const newSection = await initiateSection(projectUUID as string);
           if (!newSection || newSection.status != 200) {
             router.push(`/u/${userUUID}/projects?error=section-failure`);

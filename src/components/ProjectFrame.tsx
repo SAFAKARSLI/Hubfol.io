@@ -8,8 +8,9 @@ type Props = {
 };
 
 async function ProjectFrame({ props: project }: Props) {
+  console.log(project);
   return (
-    <div className="rounded border border-gray-4 h-full w-full overflow-hidden">
+    <div className="rounded border border-gray-4 h-full w-full">
       <iframe
         className="w-full h-full"
         src={project!.url}

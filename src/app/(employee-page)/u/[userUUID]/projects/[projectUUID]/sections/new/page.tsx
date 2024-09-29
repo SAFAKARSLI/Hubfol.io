@@ -1,3 +1,4 @@
+'use client';
 import FormWrapper from '@/components/FormWrapper';
 import FormSection from '@/components/project-form/form-sections/FormSection';
 import SectionForm from '@/components/project-form/form-sections/project-sections/SectionForm';

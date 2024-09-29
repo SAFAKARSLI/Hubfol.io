@@ -34,7 +34,9 @@ function ProjectInfoForm({ editFormData }: Props) {
   }, []);
 
   useEffect(() => {
-    setLoading(false);
+    if (project || init) {
+      setLoading(false);
+    }
   }, [project]);
 
   return (

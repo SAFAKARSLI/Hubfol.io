@@ -22,12 +22,12 @@ function ProjectConsole({ project }: Props) {
   };
 
   return (
-    <div key={project.uuid} className="z-10">
+    <div key={project.uuid}>
       <Accordion.Root
         type="single"
         value={isConsoleOpen ? project.uuid : ''}
         className={`xl:hidden w-[25rem] absolute right-0  
-         -sm:w-full bottom-0  flex flex-col justify-end duration-300 overflow-hidden  rounded-t`}
+         -sm:w-full bottom-0  flex flex-col justify-end duration-300 overflow-hidden rounded-t`}
       >
         <Accordion.Item value={project!.uuid!}>
           <Accordion.Trigger asChild>
@@ -69,7 +69,7 @@ function ProjectConsole({ project }: Props) {
         </Accordion.Item>
       </Accordion.Root>
       {/* <div
-        className={`xl:hidden fixed left-0 top-0 right-0 bottom-0 bg-violet-a13 z-10 ${
+        className={`xl:hidden fixed left-0 top-0 right-0 bottom-0 bg-violet-a13 ${
           !isConsoleOpen && 'hidden'
         }`}
         onClick={() => setConsoleOpen(false)}

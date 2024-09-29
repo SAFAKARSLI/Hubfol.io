@@ -76,7 +76,7 @@ const AccordionProjectItem = ({
               </Text>
             </div>
 
-            <div className="h-full z-50">
+            <div className="h-full">
               {uuid === activeProjectId && (
                 <ProjectMenu title={name} projectUUID={uuid} />
               )}
@@ -85,7 +85,7 @@ const AccordionProjectItem = ({
         </Accordion.Trigger>
 
         <Accordion.Content asChild>
-          <div className="bg-gray-1 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden z-50">
+          <div className="bg-gray-1 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden">
             <ScrollArea type="auto" className="max-h-[40vh]">
               {sections.length ? (
                 sections?.map((s, i) => {

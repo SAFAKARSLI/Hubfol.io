@@ -7,10 +7,10 @@ import React from 'react';
 type Props = {};
 
 export default async function page({ params, searchParams }: SlugProps) {
-  const { userUUID } = params;
+  const { userUUID, projectUUID } = params;
 
   return (
-    <Projects userUUID={userUUID}>
+    <Projects userUUID={userUUID} activeProjectId={projectUUID}>
       <ProjectFrame />
     </Projects>
   );
