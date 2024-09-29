@@ -212,3 +212,41 @@ export const createSection = async (
     return section;
   }
 };
+
+export const deleteSection = async (formData: FormData) => {
+  const session = await getServerSession(authOptions);
+
+  const sectionUUID = formData.get('uuid') as string;
+
+  if (!session || !session.user) {
+    return {
+      status: 401,
+      message: 'You must be logged in to delete a section.',
+    };
+  }
+  const section = await prisma.section.findUnique({
+    where: { uuid: sectionUUID },
+    select: { projectId: true },
+  });
+
+  if (!section) {
+    return { status: 404, message: 'Section not found.' };
+  }
+
+  const authorityCheck = await checkForAuthority(section.projectId, session);
+
+  if (authorityCheck.status !== 200) {
+    return authorityCheck;
+  }
+
+  try {
+    await prisma.section.delete({
+      where: { uuid: sectionUUID },
+    });
+  } catch (error) {
+    console.error('Error deleting section:', error);
+  } finally {
+    revalidateTag('sections');
+    await prisma.$disconnect;
+  }
+};

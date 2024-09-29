@@ -35,7 +35,6 @@ function Step({
           ? preferredColorOptions.accentColor
           : 'gray'
       }
-      // onClick={() => router.push(`${pathname}?step=${index}`)}
       className="h-10 w-1/6  rounded-full px-3"
       size={'1'}
     >

@@ -2,10 +2,13 @@
 
 import { prisma } from '@/db';
 import { Employee, User } from '@prisma/client';
+import { getServerSession } from 'next-auth';
 import { signIn, signOut } from 'next-auth/react';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
+import { authOptions } from '../api/auth/[...nextauth]/route';
+import { baseUrl } from '@/utils';
 
 export const logIn = async (userUUID: string) => {
   cookies().set('uid', userUUID);
@@ -15,6 +18,17 @@ export const logIn = async (userUUID: string) => {
 export const logOut = async (userUUID: string) => {
   cookies().delete('uid');
   await signOut({ callbackUrl: `/users/${userUUID}/projects` });
+};
+
+export const employeeHomeRedirect = async (userUUID: string) => {
+  redirect(`${baseUrl}/u/${userUUID}/projects`);
+};
+
+export const employeeSectionsRedirect = async (
+  userUUID: string,
+  projectUUID: string
+) => {
+  redirect(`${baseUrl}/u/${userUUID}/projects/${projectUUID}/sections`);
 };
 
 export const checkExistingUser = async (email: string) => {

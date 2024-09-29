@@ -51,6 +51,7 @@ function SectionsTable({}: Props) {
             <Table.ColumnHeaderCell>Header</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Type</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Tags</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
           </Table.Row>
         </Table.Header>
 
@@ -58,6 +59,7 @@ function SectionsTable({}: Props) {
           {sections.map((section, i) => (
             <ProjectsTableItem section={section} key={i} />
           ))}
+          <Table.Row></Table.Row>
         </Table.Body>
       </Table.Root>
       <Button

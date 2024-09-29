@@ -27,9 +27,6 @@ function SectionForm({}: Props) {
     `${baseUrl}/u/${userUUID}/projects/${projectUUID}/sections`
   );
   const [contentType, setContentType] = React.useState<Content>(Content.TEXT);
-  const { pending } = useFormStatus();
-
-  console.log(pending);
 
   useEffect(() => {
     const fetchSection = async () => {
@@ -45,20 +42,14 @@ function SectionForm({}: Props) {
   }, []);
 
   useEffect(() => {
-    editFormData('projectId', projectUUID as string);
-    editFormData('uuid', sectionUUID as string);
-  }, []);
-
-  useEffect(() => {
     editFormData('contentType', contentType);
   }, [contentType]);
 
   return (
     <Spinner loading={!section}>
-      <Form.Root
-        className="m-auto max-w-[900px]  p-8 -md:px-3 flex flex-col gap-3"
-        action={formAction}
-      >
+      <input type="hidden" name="projectId" value={projectUUID} />
+      <input type="hidden" name="uuid" value={sectionUUID} />
+      <Form.Root action={formAction} className="flex flex-col gap-2">
         <FormInput
           label="Title"
           required
@@ -101,7 +92,9 @@ function SectionForm({}: Props) {
           <SearchTechInput onTechAdd={(e) => {}} />
         </div>
 
-        <SubmitButton label="Save Section" />
+        <div className="float-right">
+          <SubmitButton>Save</SubmitButton>
+        </div>
       </Form.Root>
     </Spinner>
   );

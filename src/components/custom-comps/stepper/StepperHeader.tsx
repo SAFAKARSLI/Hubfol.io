@@ -13,7 +13,7 @@ type Props = {
 
 function StepperHeader({ steps, activeStepIndex }: Props) {
   return (
-    <Flex justify={'center'} align={'center'} gap={'3'} className="my-[3rem]">
+    <Flex justify={'center'} align={'center'} gap={'3'} className="my-[2rem]">
       {steps.map((step, index) => (
         <React.Fragment key={index}>
           <Step

@@ -104,7 +104,7 @@ function SearchTechInput({}: Props) {
           />
         )}
       </div>
-      <div className="flex flex-wrap gap-2 py-3">
+      <div className="flex flex-wrap gap-2 py-2">
         {techStack.map((tech) => (
           <Badge color="gray" variant="soft" highContrast className="h-8">
             <img
