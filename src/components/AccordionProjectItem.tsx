@@ -93,6 +93,7 @@ const AccordionProjectItem = ({
                     <div key={i}>
                       <Subsection
                         title={s.title}
+                        description={s.description}
                         contentType={s.contentType}
                         content={s.content}
                       />

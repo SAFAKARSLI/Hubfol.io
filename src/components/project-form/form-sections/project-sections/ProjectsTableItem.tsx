@@ -11,7 +11,7 @@ import {
   Table,
 } from '@radix-ui/themes';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { FaEdit } from 'react-icons/fa';
 
@@ -20,6 +20,7 @@ type Props = {
 };
 
 function ProjectsTableItem({ section }: Props) {
+  const router = useRouter();
   return (
     <Table.Row className="hover:bg-gray-2">
       <Table.RowHeaderCell>
@@ -42,7 +43,9 @@ function ProjectsTableItem({ section }: Props) {
             </IconButton>
           </DropdownMenu.Trigger>
           <DropdownMenu.Content>
-            <DropdownMenu.Item>
+            <DropdownMenu.Item
+              onClick={() => router.push(`sections/${section.uuid}`)}
+            >
               <FaEdit /> Edit
             </DropdownMenu.Item>
             <DropdownMenu.Item asChild>

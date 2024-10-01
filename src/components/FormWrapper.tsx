@@ -1,9 +1,13 @@
 'use client';
 
 import { ArrowLeftIcon, HomeIcon } from '@radix-ui/react-icons';
-import { Button, IconButton, Link } from '@radix-ui/themes';
-import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { TiHome } from 'react-icons/ti';
+
+import Link from 'next/link';
+import { useParams, useRouter } from 'next/navigation';
 import React from 'react';
+import { IconButton } from '@radix-ui/themes';
 
 type Props = {
   children: React.ReactNode;
@@ -12,18 +16,20 @@ type Props = {
 
 function FormWrapper({ children, backButtonUrl }: Props) {
   const router = useRouter();
+  const { userUUID } = useParams();
   return (
     <div className="-md:mx-3 wf-">
       <div className="md:m-10  -md:mt-6 ">
-        <Link
-          className="rounded-full cursor-pointer flex gap-1 hover:underline text-xs justiy-center items-center"
+        <IconButton
+          onClick={() => router.push(`/u/${userUUID}/projects`)}
+          variant="ghost"
           size={'3'}
-          onClick={() => router.push(backButtonUrl)}
+          className="rounded-full cursor-pointer hover:underline text-xs"
         >
           <>
-            <ArrowLeftIcon className="w-4 h-4" /> Cancel
+            <TiHome className="w-5 h-5" />
           </>
-        </Link>
+        </IconButton>
       </div>
       <div className="m-auto max-w-[900px] px-6">{children}</div>
     </div>

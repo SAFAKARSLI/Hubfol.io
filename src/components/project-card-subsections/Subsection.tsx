@@ -7,6 +7,7 @@ import { Box, Heading, Text } from '@radix-ui/themes';
 
 type Props = {
   title: string;
+  description: string | null;
   contentType: string;
   content: any;
   width?: string;
@@ -14,6 +15,7 @@ type Props = {
 
 const Subsection = ({
   title,
+  description,
   content,
   width = 'w-full',
   contentType,
@@ -32,6 +34,9 @@ const Subsection = ({
       <Heading as="h3" my={'5'} className="text-lg -2xl:text-sm">
         {title}
       </Heading>
+      <Text as="p" className="text-gray-11 -2xl:text-xs">
+        {description}
+      </Text>
       <div className={`${width}`}>{renderContent()}</div>
     </div>
   );

@@ -46,7 +46,7 @@ async function TopBar({ params }: TopBarProps) {
             <DropdownMenu.Root>
               <DropdownMenu.Trigger>
                 <IconButton variant="ghost" className="flex gap-1">
-                  <ProfileMenuDropdownButton />
+                  <ProfileMenuDropdownButton session={session} />
                   <DropdownMenu.TriggerIcon />
                 </IconButton>
               </DropdownMenu.Trigger>
