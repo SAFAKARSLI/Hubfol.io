@@ -13,8 +13,7 @@ type Props = {
 };
 
 function FileInput({ editFormData, defaultValue }: Props) {
-  console.log(defaultValue);
-  const [icon, setIcon] = React.useState<string | Blob>();
+  const [icon, setIcon] = React.useState<string | Blob>(defaultValue!);
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
   const handleFileInput = (file: File) => {
@@ -33,10 +32,6 @@ function FileInput({ editFormData, defaultValue }: Props) {
       setIcon(URL.createObjectURL(file));
     };
   };
-
-  useEffect(() => {
-    console.log('icon is this one', icon);
-  }, []);
 
   useEffect(() => {
     editFormData('iconLink', defaultValue!);

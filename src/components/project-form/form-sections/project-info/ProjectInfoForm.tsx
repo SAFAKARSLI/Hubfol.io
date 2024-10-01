@@ -19,6 +19,8 @@ function ProjectInfoForm({ editFormData }: Props) {
   const [project, setProject] = React.useState<Project>();
   const [loading, setLoading] = React.useState(true);
 
+  console.log(project);
+
   useEffect(() => {
     const fetchProject = async () => {
       const response = await fetch(`${baseUrl}/api/projects/${projectUUID}`, {
