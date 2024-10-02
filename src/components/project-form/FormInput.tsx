@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import * as Form from '@radix-ui/react-form';
 import { Heading, Flex, TextField } from '@radix-ui/themes';
@@ -13,6 +15,7 @@ type Props = {
   defaultValue?: string | number;
   message?: string;
   required?: boolean;
+  charLimit?: number;
 };
 
 function FormInput({
@@ -24,17 +27,29 @@ function FormInput({
   defaultValue,
   message,
   required = false,
+  charLimit,
 }: Props) {
+  const [value, setValue] = React.useState<string | number | undefined>(
+    defaultValue
+  );
+
   return (
     <Form.Field name={name}>
-      <InputLabel label={label} required={required} />
+      <InputLabel
+        label={label}
+        required={required}
+        charLimit={charLimit}
+        currentCharCount={String(value).length}
+      />
 
       <Flex align={'center'} gap={'1'}>
         {logo}
         <Form.Control asChild>
           <input
             min={0}
+            maxLength={charLimit}
             name={name}
+            onChange={(e) => setValue(e.target.value)}
             placeholder={placerholder}
             type={type as InputType}
             defaultValue={defaultValue}

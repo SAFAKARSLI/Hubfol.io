@@ -26,7 +26,7 @@ function ProjectsTableItem({ section }: Props) {
       <Table.RowHeaderCell>
         <Link
           href={`sections/${section.uuid}`}
-          className="text-violet-11 hover:underline font-medium truncate "
+          className="text-violet-11 hover:underline font-medium truncate inline-block"
         >
           {section.title}
         </Link>
@@ -35,7 +35,7 @@ function ProjectsTableItem({ section }: Props) {
         <p>{section.contentType}</p>
       </Table.Cell>
       <Table.Cell className="text-gray-11">[Tags]</Table.Cell>
-      <Table.Cell className="w-10 ">
+      <Table.Cell>
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <IconButton variant="ghost" color="gray" className="m-auto">

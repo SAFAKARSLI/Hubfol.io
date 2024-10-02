@@ -65,7 +65,7 @@ function SectionsTable({}: Props) {
       <Button
         type="button"
         variant="soft"
-        className="w-1/4 my-3 h-[2.5rem] float-right"
+        className="w-1/4  h-[2.5rem] float-right"
         loading={loading}
         onClick={async () => {
           setLoading(true);

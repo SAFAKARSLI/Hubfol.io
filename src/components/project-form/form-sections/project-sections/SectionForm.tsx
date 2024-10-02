@@ -12,7 +12,6 @@ import { Content } from '@prisma/client';
 import { upsertSections } from '@/app/actions/section';
 import { usePreloadedFormData } from '@/hooks';
 import { baseUrl } from '@/utils';
-import { useFormStatus } from 'react-dom';
 import SubmitButton from '@/components/SubmitButton';
 import { useRouter } from 'next/navigation';
 
@@ -52,6 +51,25 @@ function SectionForm({ initial = false }: Props) {
     editFormData('contentType', contentType);
   }, [contentType]);
 
+  function renderContentInput() {
+    switch (contentType) {
+      case Content.TEXT:
+        return <></>;
+      case Content.BRAND_STACK:
+        return <></>;
+      case Content.CAROUSEL: // Can be used to show code snippets (Code Snippet Section)
+        return <></>;
+      case Content.VIDEO:
+        return <></>;
+      case Content.ATTACHMENT:
+        return <></>;
+      // case Content.ANALYTICS:
+      //   return <></>;
+      // case Content.TESTIOMONIALS:
+      //   return <></>;
+    }
+  }
+
   return (
     <Spinner loading={loading}>
       <Form.Root action={formAction} className="flex flex-col gap-2">
@@ -64,6 +82,7 @@ function SectionForm({ initial = false }: Props) {
           name="title"
           placerholder='Enter the section title here. (e.g "Project Description")'
           type={'text'}
+          charLimit={50}
         />
 
         <FormInput
@@ -106,9 +125,11 @@ function SectionForm({ initial = false }: Props) {
             type="button"
             onClick={() => router.back()}
           >
-            Back
+            {initial ? <>Cancel</> : <>Back</>}
           </Button>
-          <SubmitButton>Save Section</SubmitButton>
+          <SubmitButton>
+            {initial ? <>Create Section</> : <>Save</>}
+          </SubmitButton>
         </div>
       </Form.Root>
     </Spinner>
