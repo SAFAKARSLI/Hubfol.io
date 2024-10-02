@@ -1,10 +1,10 @@
-import { SearchResult } from '@/types/brand';
 import { Tooltip } from '@radix-ui/themes';
 import React from 'react';
 import TechCard from '../project-form/form-sections/project-sections/TechCard';
+import { Brand } from '@/types/brand';
 
 type Props = {
-  techStack: SearchResult[];
+  techStack: Brand[];
 };
 
 const TechStack = ({ techStack }: Props) => {

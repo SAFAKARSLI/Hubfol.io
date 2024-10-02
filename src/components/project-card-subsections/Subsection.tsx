@@ -31,13 +31,15 @@ const Subsection = ({
   };
 
   return (
-    <div className="p-5">
-      <Heading as="h4" className="text-lg -2xl:text-md mb-2">
+    <div className="p-5 flex flex-col gap-2">
+      <Heading as="h4" className="text-lg -2xl:text-md">
         {title}
       </Heading>
-      <Text as="p" className="text-gray-9 text-md mb-2 ">
-        {description}
-      </Text>
+      {description && (
+        <Text as="p" className="text-gray-9 text-md mb-2">
+          {description}
+        </Text>
+      )}
       <div className={`${width}`}>{renderContent()}</div>
     </div>
   );

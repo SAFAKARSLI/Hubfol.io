@@ -66,13 +66,15 @@ const AccordionProjectItem = ({
               >
                 {name}
               </Heading>
-              <Text
-                size={'2'}
-                as="p"
-                className="text-gray-11 -2xl:text-xs truncate"
-              >
-                {tagline}
-              </Text>
+              {tagline && (
+                <Text
+                  size={'2'}
+                  as="p"
+                  className="text-gray-11 -2xl:text-xs truncate"
+                >
+                  {tagline}
+                </Text>
+              )}
             </div>
 
             <div className="h-full py-3">
