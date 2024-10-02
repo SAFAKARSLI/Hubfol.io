@@ -9,8 +9,35 @@ import { validateUUID } from './utils';
 import { extractUUID } from '@/utils';
 import { checkForAuthority } from './project';
 import { revalidateTag } from 'next/cache';
+import { Section } from '@/types/section';
 
 export const upsertSections = async (formData: FormData) => {
+  const sectionInfo = {
+    title: formData.get('title') as string,
+    description: formData.get('description') as string,
+    contentType: formData.get('contentType') as Content,
+    content: formData.get('content') as Prisma.InputJsonValue,
+  };
+  const sectionUUID = formData.get('uuid') as string;
+  const projectId = formData.get('projectId') as string;
+
+  if (formData.get('prev-section')) {
+    const prevSection = JSON.parse(
+      formData.get('prev-section') as string
+    ) as Section;
+    const keys = Object.keys(sectionInfo) as (keyof typeof sectionInfo)[];
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      if (sectionInfo[key] !== prevSection[key]) {
+        break;
+      }
+      if (i === keys.length - 1) {
+        console.log('No changes detected.');
+        return { status: 200, message: 'No changes detected.' };
+      }
+    }
+  }
+
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user) {
@@ -20,20 +47,10 @@ export const upsertSections = async (formData: FormData) => {
     };
   }
 
-  const projectId = formData.get('projectId') as string;
-
   const authorityCheck = await checkForAuthority(projectId, session);
   if (authorityCheck.status !== 200) {
     return authorityCheck;
   }
-
-  const sectionInfo = {
-    title: formData.get('title') as string,
-    description: formData.get('description') as string,
-    contentType: formData.get('contentType') as Content,
-    content: formData.get('content') as Prisma.InputJsonValue,
-  };
-  const sectionUUID = formData.get('uuid') as string;
 
   let resultingSection;
   try {

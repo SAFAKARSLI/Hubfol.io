@@ -75,6 +75,11 @@ function SectionForm({ initial = false }: Props) {
       <Form.Root action={formAction} className="flex flex-col gap-2">
         <input type="hidden" name="projectId" value={projectUUID} />
         <input type="hidden" name="uuid" value={sectionUUID} />
+        <input
+          type="hidden"
+          name="prev-section"
+          value={JSON.stringify(section)}
+        />
         <FormInput
           label="Title"
           required
