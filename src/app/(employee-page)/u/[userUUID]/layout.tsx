@@ -36,7 +36,7 @@ export default function RootLayout({ children, params }: Readonly<SlugProps>) {
         asChild
       >
         <body>
-          <div className="h-[100dvh] flex flex-col overflow-x-hidden">
+          <div className="h-[100dvh] overflow-x-hidden">
             <TopBar params={params} />
             <div className="h-[calc(100dvh-6rem)]">{children}</div>
           </div>

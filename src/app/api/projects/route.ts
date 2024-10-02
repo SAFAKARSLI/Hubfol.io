@@ -1,6 +1,5 @@
 import { validateUUID } from '@/app/actions/utils';
 import { prisma } from '@/db';
-import { cookies } from 'next/headers';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -12,8 +11,6 @@ export async function GET(request: Request) {
     );
   }
 
-  cookies().set('uid', userUUID as string);
-
   try {
     const projects = await prisma.project.findMany({
       where: { ownerId: userUUID as string },
@@ -22,7 +19,7 @@ export async function GET(request: Request) {
     });
 
     if (!projects) {
-      return new Response('No projects found', { status: 404 });
+      return new Response(JSON.stringify([]), { status: 200 });
     }
 
     return new Response(JSON.stringify(projects), { status: 200 });

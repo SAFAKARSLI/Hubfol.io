@@ -1,12 +1,14 @@
 import NoActiveProjectBanner from '@/components/NoActiveProjectBanner';
 import Projects from '@/components/pages/Projects';
 import ProjectFrame from '@/components/ProjectFrame';
+import Project from '@/types/project';
 import { SlugProps } from '@/types/slug';
+import { baseUrl } from '@/utils';
 import React from 'react';
 
 type Props = {};
 
-export default async function page({ params, searchParams }: SlugProps) {
+export default async function page({ params }: SlugProps) {
   const { userUUID, projectUUID } = params;
 
   return (

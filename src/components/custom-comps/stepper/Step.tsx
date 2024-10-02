@@ -35,7 +35,7 @@ function Step({
           ? preferredColorOptions.accentColor
           : 'gray'
       }
-      className="h-10 w-1/6  rounded-full px-3"
+      className="h-10 w-1/5  rounded-full px-3"
       size={'1'}
     >
       <p className="text-xxs truncate text-center w-full">

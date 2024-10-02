@@ -92,8 +92,11 @@ function SectionForm({}: Props) {
           <SearchTechInput onTechAdd={(e) => {}} />
         </div>
 
-        <div className="float-right">
-          <SubmitButton>Save</SubmitButton>
+        <div className="flex justify-end gap-2">
+          <Button variant="soft" highContrast color="gray">
+            Back
+          </Button>
+          <SubmitButton>Save Section</SubmitButton>
         </div>
       </Form.Root>
     </Spinner>

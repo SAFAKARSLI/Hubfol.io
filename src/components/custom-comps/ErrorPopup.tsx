@@ -16,7 +16,7 @@ function ErrorPopup({ code }: Props) {
 
   return (
     <div
-      className={`absolute top-0 right-0 m-3 bg-red-2 p-3 rounded-md border border-red-5 ${
+      className={`absolute top-0 max-w-[15rem] right-0 m-3 bg-red-2 p-3 rounded-md border border-red-5 ${
         !show && 'hidden'
       }`}
     >

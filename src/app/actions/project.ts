@@ -24,7 +24,6 @@ import { cookies } from 'next/headers';
 const bucketName = process.env.AWS_PROJECT_ICONS_BUCKET_NAME as string;
 
 export const createProject = async (formData: FormData) => {
-  console.log(formData);
   const session = await getServerSession(authOptions);
   if (!session || !session.user) {
     throw new Error('You must be signed in to do that.');
@@ -138,7 +137,6 @@ export const checkForAuthority = async (
 };
 
 export const upsertGeneralInfo = async (formData: FormData) => {
-  const session = await getServerSession(authOptions);
   const iconLink = (await uploadProjectIcon(formData.get('iconLink') as File))
     .data as string;
   const projectFromFormData = {
@@ -148,6 +146,22 @@ export const upsertGeneralInfo = async (formData: FormData) => {
     iconLink,
   };
   const projectUUID = formData.get('uuid') as string;
+
+  const prevProject = JSON.parse(formData.get('prev-project') as string);
+  const keys = Object.keys(
+    projectFromFormData
+  ) as (keyof typeof projectFromFormData)[];
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+    if (projectFromFormData[key] !== prevProject[key]) {
+      break;
+    }
+    if (i === keys.length - 1) {
+      return { status: 200, message: 'No changes detected.' };
+    }
+  }
+
+  const session = await getServerSession(authOptions);
 
   if (projectUUID != null && !validateUUID(projectUUID))
     return { status: 400, message: 'Invalid project identifier provided.' };
@@ -172,73 +186,6 @@ export const upsertGeneralInfo = async (formData: FormData) => {
     await prisma.$disconnect();
     revalidateTag('projects');
   }
-};
-
-export const createInitiatedProject = async (
-  project: Project,
-  formData: FormData
-) => {
-  const session = await getServerSession(authOptions);
-
-  if (!session || !session.user) {
-    return {
-      status: 401,
-      message: 'You must be signed in to perform this action.',
-    };
-  }
-  if (project.ownerId !== session.user.uuid)
-    return { status: 403, message: 'Not authorized.' };
-
-  if (!validateUUID(project.ownerId))
-    return { status: 400, message: 'Invalid project identifier provided.' };
-
-  const projectFromFormData = {
-    name: formData.get('name') as string,
-    url: formData.get('url') as string,
-    iconLink: formData.get('iconLink') as string,
-    tagline: formData.get('tagline') as string,
-    createdAt: new Date(),
-    ownerId: project.ownerId,
-    uuid: project.uuid,
-  };
-
-  // const schema = z.object({
-  //   title: z
-  //     .string()
-  //     .min(1, { message: 'Title must be at least 1 character long.' }),
-  //   url: z
-  //     .string()
-  //     .url({ message: "Invalid URL (Must include 'http://' or 'https://')" }),
-  //   tagline: z.string().optional(),
-  //   iconLink: z.string().url().optional(),
-  // });
-
-  // const parse = schema.safeParse(project);
-
-  // const errors = [] as string[];
-
-  // if (!parse.success) {
-  //   parse.error.errors.forEach((err) => {
-  //     errors.push(`${err.path.join(' -> ')}: ${err.message}`);
-  //   });
-  // } else {
-  try {
-    await prisma.project.upsert({
-      where: { uuid: project.uuid },
-      create: projectFromFormData,
-      update: projectFromFormData,
-    });
-  } catch (error) {
-    // errors.push('Failed to create project');
-    throw new Error('An error occurred while creating the project.');
-  } finally {
-    await prisma.$disconnect();
-    revalidateTag('projects');
-    // redirect(`/u/${project.ownerId}/projects/${project.uuid}`);
-  }
-
-  // }
-  // return [project, errors];
 };
 
 export const deleteProject = async (projectUUID: string) => {

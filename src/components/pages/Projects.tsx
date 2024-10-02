@@ -3,8 +3,9 @@ import React, { cloneElement } from 'react';
 import Project from '@/types/project';
 import ProjectsSidePanel from '../ProjectsSidePanel';
 import next from 'next';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { baseUrl } from '@/utils';
+import NoActiveProjectBanner from '../NoActiveProjectBanner';
 
 interface ProjectsProps {
   userUUID: string;
@@ -26,17 +27,21 @@ const Projects = async ({
     }
   ).then((r) => r.json())) as Project[];
 
-  const props = projects.find((project) => project.uuid === activeProjectId);
-  console.log(props);
+  let project: Project | undefined;
+  if (activeProjectId) {
+    project = projects.find((project) => project.uuid === activeProjectId);
+
+    if (!project) redirect(`/u/${userUUID}/projects?error=project-not-found`);
+  }
 
   return (
-    <div className="flex w-screen h-full">
+    <div className="flex">
       <div className="flex-none">
         <ProjectsSidePanel initialProjects={projects} userUUID={userUUID} />
       </div>
 
-      <div className="flex-1 m-3">
-        {cloneElement(children as React.ReactElement, { props })}
+      <div className="flex-1 m-3 relative">
+        {cloneElement(children as React.ReactElement, { project })}
       </div>
     </div>
   );

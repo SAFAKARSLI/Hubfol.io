@@ -1,5 +1,5 @@
 'use client';
-import React, { Suspense, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import FormInput from '@/components/project-form/FormInput';
 import * as Form from '@radix-ui/react-form';
 import InputLabel from '../../InputLabel';
@@ -18,8 +18,6 @@ function ProjectInfoForm({ editFormData }: Props) {
   const { projectUUID } = useParams();
   const [project, setProject] = React.useState<Project>();
   const [loading, setLoading] = React.useState(true);
-
-  console.log(project);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -45,6 +43,11 @@ function ProjectInfoForm({ editFormData }: Props) {
     <Spinner loading={loading}>
       <div className="flex flex-col gap-4">
         <input type="hidden" name="uuid" value={projectUUID} />
+        <input
+          type="hidden"
+          name="prev-project"
+          value={JSON.stringify(project)}
+        />
         <FormInput
           label="Name"
           name="name"

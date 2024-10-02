@@ -11,8 +11,8 @@ export const extractUUID = (url: string, identifier: string) => {
 
 export const errorCodes = [
   {
-    code: 'invalid-id',
-    message: 'Invalid project identifier provided.',
+    code: 'project-not-found',
+    message: 'Project not found or invalid project indentifier provided.',
   },
 ];
 

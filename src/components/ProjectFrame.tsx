@@ -1,14 +1,11 @@
 import Project from '@/types/project';
 import ProjectConsole from './ProjectConsole';
-import { baseUrl } from '@/utils';
-import { notFound } from 'next/navigation';
 
 type Props = {
-  props?: Project;
+  project?: Project;
 };
 
-async function ProjectFrame({ props: project }: Props) {
-  console.log(project);
+async function ProjectFrame({ project }: Props) {
   return (
     <div className="rounded border border-gray-4 h-full w-full">
       <iframe
