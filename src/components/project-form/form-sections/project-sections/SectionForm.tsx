@@ -27,6 +27,7 @@ function SectionForm({}: Props) {
     `${baseUrl}/u/${userUUID}/projects/${projectUUID}/sections`
   );
   const [contentType, setContentType] = React.useState<Content>(Content.TEXT);
+  const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
     const fetchSection = async () => {
@@ -38,15 +39,19 @@ function SectionForm({}: Props) {
       setContentType(data.contentType);
     };
 
-    fetchSection();
+    if (!init) fetchSection();
   }, []);
+
+  useEffect(() => {
+    if (section || init) setLoading(false);
+  }, [section]);
 
   useEffect(() => {
     editFormData('contentType', contentType);
   }, [contentType]);
 
   return (
-    <Spinner loading={!section}>
+    <Spinner loading={loading}>
       <Form.Root action={formAction} className="flex flex-col gap-2">
         <input type="hidden" name="projectId" value={projectUUID} />
         <input type="hidden" name="uuid" value={sectionUUID} />

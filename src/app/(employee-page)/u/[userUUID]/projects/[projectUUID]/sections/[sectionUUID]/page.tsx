@@ -8,9 +8,7 @@ type Props = {};
 
 function page({ params }: SlugProps) {
   return (
-    <FormWrapper
-      backButtonUrl={`/u/${params.userUUID}/projects/${params.projectUUID}/sections`}
-    >
+    <FormWrapper>
       <FormSection
         title="Edit Section"
         description="Edit the section information below. You can change this information later."
