@@ -2,7 +2,6 @@
 
 import React, { Suspense, useEffect } from 'react';
 import FormInput from '../../FormInput';
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Section } from '@/types/section';
 import { useParams, useSearchParams } from 'next/navigation';
 import * as Form from '@radix-ui/react-form';
@@ -15,12 +14,15 @@ import { usePreloadedFormData } from '@/hooks';
 import { baseUrl } from '@/utils';
 import { useFormStatus } from 'react-dom';
 import SubmitButton from '@/components/SubmitButton';
+import { useRouter } from 'next/navigation';
 
-type Props = {};
+type Props = {
+  initial?: boolean;
+};
 
-function SectionForm({}: Props) {
+function SectionForm({ initial = false }: Props) {
   const [section, setSection] = React.useState<Section>();
-  const init = useSearchParams().get('initialize');
+  const router = useRouter();
   const { sectionUUID, userUUID, projectUUID } = useParams();
   const [formAction, editFormData] = usePreloadedFormData(
     upsertSections,
@@ -39,11 +41,11 @@ function SectionForm({}: Props) {
       setContentType(data.contentType);
     };
 
-    if (!init) fetchSection();
+    if (!initial) fetchSection();
   }, []);
 
   useEffect(() => {
-    if (section || init) setLoading(false);
+    if (section || initial) setLoading(false);
   }, [section]);
 
   useEffect(() => {
@@ -98,7 +100,12 @@ function SectionForm({}: Props) {
         </div>
 
         <div className="flex justify-end gap-2">
-          <Button variant="soft" highContrast color="gray">
+          <Button
+            variant="soft"
+            color="gray"
+            type="button"
+            onClick={() => router.back()}
+          >
             Back
           </Button>
           <SubmitButton>Save Section</SubmitButton>

@@ -6,7 +6,8 @@ import React from 'react';
 
 type Props = {};
 
-function page({ params }: SlugProps) {
+function page({ params, searchParams }: SlugProps) {
+  console.log(searchParams!.initialize);
   return (
     <FormWrapper>
       <FormSection

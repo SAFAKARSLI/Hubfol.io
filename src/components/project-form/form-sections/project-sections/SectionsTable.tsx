@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 
-import { Button, Table } from '@radix-ui/themes';
+import { Button, Spinner, Table } from '@radix-ui/themes';
 
 import Project from '@/types/project';
 import ProjectsTableItem from './ProjectsTableItem';
@@ -25,13 +25,9 @@ function SectionsTable({}: Props) {
   const init = useSearchParams().get('initialize');
   const router = useRouter();
   const { userUUID, projectUUID } = useParams();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (init) {
-      return;
-    }
-
     const fetchSections = async () => {
       const response = await fetch(
         `${baseUrl}/api/sections?projectUUID=${projectUUID}`,
@@ -41,8 +37,12 @@ function SectionsTable({}: Props) {
       setSections(data);
     };
 
-    fetchSections();
+    if (!init) fetchSections();
   }, []);
+
+  useEffect(() => {
+    if (sections || init) setLoading(false);
+  }, [sections]);
 
   return (
     <>
@@ -60,7 +60,6 @@ function SectionsTable({}: Props) {
           {sections.map((section, i) => (
             <ProjectsTableItem section={section} key={i} />
           ))}
-          <Table.Row></Table.Row>
         </Table.Body>
       </Table.Root>
       <Button
@@ -70,15 +69,11 @@ function SectionsTable({}: Props) {
         loading={loading}
         onClick={async () => {
           setLoading(true);
-          const newSection = await initiateSection(projectUUID as string);
-          if (!newSection || newSection.status != 200) {
-            router.push(`/u/${userUUID}/projects?error=section-failure`);
-          }
-          router.push(
-            `/u/${userUUID}/projects/${projectUUID}/sections/${
-              newSection!.data!.uuid
-            }?initialize=true`
-          );
+          // const newSection = await initiateSection(projectUUID as string);
+          // if (!newSection || newSection.status != 200) {
+          //   router.push(`/u/${userUUID}/projects?error=section-failure`);
+          // }
+          router.push(`/u/${userUUID}/projects/${projectUUID}/sections/new`);
           // setSections([...sections, newSection.data!]);
         }}
       >

@@ -1,13 +1,12 @@
 'use server';
 import { prisma } from '@/db';
-import { Content, Prisma, Section } from '@prisma/client';
+import { Content, Prisma } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
 import { validateUUID } from './utils';
 import { extractUUID } from '@/utils';
-import { redirect } from 'next/navigation';
 import { checkForAuthority } from './project';
 import { revalidateTag } from 'next/cache';
 
@@ -36,31 +35,23 @@ export const upsertSections = async (formData: FormData) => {
   };
   const sectionUUID = formData.get('uuid') as string;
 
-  // const schema = z.object({
-  //   title: z
-  //     .string()
-  //     .min(1, { message: 'Header must be at least 1 character long.' }),
-  //   projectId: z.string(),
-  // });
-
-  // const parse = schema.safeParse(sectionInfo);
-
-  // const errors = [] as string[];
-  // if (!parse.success) {
-  //   parse.error.errors.forEach((err) => {
-  //     errors.push(err.message);
-  //   });
-  //   return errors;
-  // }
-
+  let resultingSection;
   try {
-    const resultingSection = await prisma.section.update({
-      where: { uuid: sectionUUID },
-      data: {
-        ...sectionInfo,
-      },
-      include: { project: true },
-    });
+    if (!sectionUUID) {
+      resultingSection = await prisma.section.create({
+        data: {
+          uuid: uuidv4(),
+          ...sectionInfo,
+          projectId,
+        },
+      });
+    } else
+      resultingSection = await prisma.section.update({
+        where: { uuid: sectionUUID },
+        data: {
+          ...sectionInfo,
+        },
+      });
   } catch (error) {
     console.error('Error updating section:', error);
     return {
@@ -70,7 +61,7 @@ export const upsertSections = async (formData: FormData) => {
   } finally {
     await prisma.$disconnect;
     revalidateTag('sections');
-    return { status: 200, data: sectionInfo };
+    return { status: 200, data: resultingSection };
   }
 };
 
