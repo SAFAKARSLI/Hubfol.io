@@ -10,6 +10,7 @@ type Props = {
   label: string;
   type: string;
   logo?: JSX.Element;
+  description?: string;
   placerholder: string;
   name: string;
   defaultValue?: string | number;
@@ -24,6 +25,7 @@ function FormInput({
   logo,
   name,
   placerholder,
+  description,
   defaultValue,
   message,
   required = false,
@@ -41,7 +43,7 @@ function FormInput({
         charLimit={charLimit}
         currentCharCount={String(value).length}
       />
-
+      <p className="text-xs text-gray-11 mb-1">{description}</p>
       <Flex align={'center'} gap={'1'}>
         {logo}
         <Form.Control asChild>

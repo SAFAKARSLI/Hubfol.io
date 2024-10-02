@@ -27,7 +27,7 @@ function ProjectConsole({ project }: Props) {
         type="single"
         value={isConsoleOpen ? project.uuid : ''}
         className={`xl:hidden w-[25rem] absolute right-0  
-         -sm:w-full bottom-0  flex flex-col justify-end duration-300 overflow-hidden rounded-t`}
+         -sm:w-full bottom-0  flex flex-col justify-end duration-300 overflow-hidden rounded`}
       >
         <Accordion.Item value={project!.uuid!}>
           <Accordion.Trigger asChild>

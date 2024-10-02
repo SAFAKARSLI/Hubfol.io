@@ -67,7 +67,7 @@ function SectionsTable({}: Props) {
         variant="soft"
         className="w-1/4  h-[2.5rem] float-right"
         loading={loading}
-        onClick={async () => {
+        onClick={() => {
           setLoading(true);
           // const newSection = await initiateSection(projectUUID as string);
           // if (!newSection || newSection.status != 200) {

@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { act, useEffect, useState } from 'react';
 
 type FormDataObject = {
-  [key: string]: string | Blob;
+  [key: string]: string | Blob | any[];
 };
 
 export const usePreloadedFormData = (
@@ -19,7 +19,9 @@ export const usePreloadedFormData = (
 
   const onFormAction = async (formDataLoadedByAction: FormData) => {
     Object.entries(formData).forEach(([key, value]) => {
-      formDataLoadedByAction.append(key, value);
+      if (Array.isArray(value)) {
+        formDataLoadedByAction.append(key, JSON.stringify(value));
+      } else formDataLoadedByAction.append(key, value);
     });
     await serverAction(formDataLoadedByAction);
     router.push(callbackUrl);
@@ -27,7 +29,18 @@ export const usePreloadedFormData = (
 
   // Appends provided object to the FormDataObject state.
   const editFormData = (key: string, value: string | Blob) => {
-    setFormData((prev) => ({ ...prev, [key]: value }));
+    setFormData((prev) => {
+      const existingValue = prev[key];
+      if (Array.isArray(existingValue) && key === 'content') {
+        return { ...prev, [key]: [...existingValue, value] };
+      }
+      // If the key exists and the value is not an array, convert it to an array
+      else if (existingValue !== undefined && key === 'content') {
+        return { ...prev, [key]: [existingValue, value] };
+      }
+      // If the key does not exist, simply set it with the new value
+      return { ...prev, [key]: value };
+    });
   };
 
   return [onFormAction, editFormData];

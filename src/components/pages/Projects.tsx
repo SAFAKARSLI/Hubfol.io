@@ -22,7 +22,7 @@ const Projects = async ({
     `${baseUrl}/api/projects?userUUID=${userUUID}`,
     {
       next: {
-        tags: ['projects'],
+        tags: ['projects', 'sections'],
       },
     }
   ).then((r) => r.json())) as Project[];
@@ -40,7 +40,7 @@ const Projects = async ({
         <ProjectsSidePanel initialProjects={projects} userUUID={userUUID} />
       </div>
 
-      <div className="flex-1 m-3 relative">
+      <div className="flex-1 m-3 relative h-[calc(100dvh-8rem)] rounded overflow-hidden">
         {cloneElement(children as React.ReactElement, { project })}
       </div>
     </div>

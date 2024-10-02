@@ -1,12 +1,11 @@
 'use client';
 import * as Accordion from '@radix-ui/react-accordion';
-import { Text, Heading, ScrollArea } from '@radix-ui/themes';
+import { Text, Heading, ScrollArea, Separator } from '@radix-ui/themes';
 import ProjectMenu from './ProjectMenu';
 import { useEffect, useRef } from 'react';
 import { defaultIconLink } from '@/utils';
 import { Section } from '@/types/section';
 import Subsection from './project-card-subsections/Subsection';
-import Divider from './project-card-subsections/Divider';
 
 interface AccordionProjectItemProps {
   uuid: string;
@@ -47,9 +46,9 @@ const AccordionProjectItem = ({
       >
         <Accordion.Trigger asChild>
           <div
-            className={`flex py-3 sm:px-7 px-4 
+            className={`flex sm:px-7 px-4 
           ${activeProjectId == uuid && 'bg-gray-2'} bg-gray-1 hover:bg-gray-2
-          data-[state=closed]:cursor-pointer w-full items-center h-[4rem]`}
+          data-[state=closed]:cursor-pointer w-full items-center h-[4.5rem]`}
             ref={cardRef}
           >
             <img
@@ -76,7 +75,7 @@ const AccordionProjectItem = ({
               </Text>
             </div>
 
-            <div className="h-full">
+            <div className="h-full py-3">
               {uuid === activeProjectId && (
                 <ProjectMenu title={name} projectUUID={uuid} />
               )}
@@ -97,7 +96,9 @@ const AccordionProjectItem = ({
                         contentType={s.contentType}
                         content={s.content}
                       />
-                      {i == sections.length - 1 ? null : <Divider />}
+                      {i == sections.length - 1 ? null : (
+                        <Separator size={'4'} />
+                      )}
                     </div>
                   );
                 })

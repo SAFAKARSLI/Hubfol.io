@@ -1,15 +1,15 @@
 import React from 'react';
-import { Flex, TextField, Spinner, Badge } from '@radix-ui/themes';
+import { Flex, TextField, Spinner, Badge, Tooltip } from '@radix-ui/themes';
 import { MagnifyingGlassIcon, Cross2Icon } from '@radix-ui/react-icons';
 import SearchResultList from './SearchResultList';
 import { useEffect, useState } from 'react';
 import { baseUrl, defultSearchTechValues } from '@/utils';
 import { Brand } from '@/types/brand';
 type Props = {
-  onTechAdd: (key: string, value: string | Blob) => void;
+  initialValue?: any[];
 };
 
-function SearchTechInput({}: Props) {
+function SearchTechInput({ initialValue = [] }: Props) {
   const [query, setQuery] = useState('');
   const [queryBounce, setQueryBounce] = useState('');
   const [search, setSearch] = useState({
@@ -17,12 +17,13 @@ function SearchTechInput({}: Props) {
     resultVisible: false,
     result: [] as Brand[],
   });
-  const [techStack, setTechStack] = useState<Brand[]>([]);
+  const [techStack, setTechStack] = React.useState<Brand[]>(initialValue);
 
   const handleAddTechStack = (brandName: string, slug: string) => {
     setQueryBounce('');
+    console.log(techStack);
     // add the tech if not existing already on a single line
-    if (!techStack.find((t) => t.slug === slug)) {
+    if (!techStack.find((t) => t.slug === slug) && techStack.length < 17) {
       setTechStack([...techStack, { brand_name: brandName, slug }]);
     }
   };
@@ -53,7 +54,6 @@ function SearchTechInput({}: Props) {
         let res = (await fetch(`${baseUrl}/api/brands?query=${query}`).then(
           (res) => res.json()
         )) as Brand[];
-        console.log('res:', res);
         setSearch({ ...search, result: res, resultVisible: true });
       } catch (error) {
         console.error('Error fetching techs:', error);
@@ -68,6 +68,8 @@ function SearchTechInput({}: Props) {
   return (
     <div>
       <div className="flex flex-col w-full relative flex-none ">
+        <input type="hidden" name="content" value={JSON.stringify(techStack)} />
+
         <TextField.Root
           onFocus={() => setSearch({ ...search, resultVisible: true })}
           onBlur={(e) => {
@@ -104,24 +106,36 @@ function SearchTechInput({}: Props) {
           />
         )}
       </div>
-      <div className="flex flex-wrap gap-2 py-2">
-        {techStack.map((tech) => (
-          <Badge color="gray" variant="soft" highContrast className="h-8">
-            <img
-              src={`https://cdn.simpleicons.org/${tech.slug}?viewbox=auto`}
-              alt={tech.brand_name}
-              className="h-4"
-            />
-            <p className="text-xs">{tech.brand_name}</p>
-            <Cross2Icon
-              className="cursor-pointer hover:bg-gray-6"
-              onClick={() =>
-                setTechStack(techStack.filter((t) => t.slug !== tech.slug))
-              }
-            />
-          </Badge>
-        ))}
-      </div>
+      {techStack.length > 0 && (
+        <div className="flex flex-wrap gap-2 p-2 mt-2 rounded-md border border-gray-4 bg-[#000] justify-center">
+          {techStack.map((tech) => (
+            <Tooltip content={tech.brand_name} key={tech.slug}>
+              <Badge
+                color="gray"
+                variant="soft"
+                highContrast
+                className="flex flex-col items-center justify-center gap-2 w-[6rem] h-[6rem] p-3 relative text-center"
+              >
+                <img
+                  src={`https://cdn.simpleicons.org/${tech.slug}?viewbox=auto`}
+                  alt={tech.brand_name}
+                  className="h-8"
+                />
+
+                <p className="text-xs truncate w-full text-gray-11">
+                  {tech.brand_name}
+                </p>
+                <Cross2Icon
+                  className="cursor-pointer hover:bg-gray-6 absolute top-1 right-1"
+                  onClick={() =>
+                    setTechStack(techStack.filter((t) => t.slug !== tech.slug))
+                  }
+                />
+              </Badge>
+            </Tooltip>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

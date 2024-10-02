@@ -106,12 +106,14 @@ input[type='file'] {
 /* width */
 ::-webkit-scrollbar {
   width: 4px;
+  background: var(--gray-1);
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
   background: var(--gray-1);
   border-radius: 2px;
+  display: none;
 }
 
 /* Handle */
@@ -120,10 +122,10 @@ input[type='file'] {
   border-radius: 2px;
 }
 
-/* Handle on hover
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
-} */
+  background: var(--violet-a6);
+  cursor: default;
+}
 
 .dark,
 .dark-theme {

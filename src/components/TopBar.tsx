@@ -27,7 +27,7 @@ async function TopBar({ params }: TopBarProps) {
   const session = await getServerSession(authOptions);
 
   return (
-    <Flex className="w-screen border-y border-gray-5 bg-gray-1 justify-between items-center -xl:py-5">
+    <Flex className="w-screen border-b border-gray-5 bg-gray-1 justify-between items-center -xl:py-5">
       <ProfileOverview userUUID={userUUID} />
       <div className="flex grow   px-8 -md:px-3   h-full items-center ">
         <MiniProfileOverview userUUID={userUUID} activeProject={projectUUID} />

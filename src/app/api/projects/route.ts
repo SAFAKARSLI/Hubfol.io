@@ -15,7 +15,11 @@ export async function GET(request: Request) {
     const projects = await prisma.project.findMany({
       where: { ownerId: userUUID as string },
       orderBy: { createdAt: 'asc' },
-      include: { sections: true },
+      include: {
+        sections: {
+          orderBy: { createdAt: 'asc' },
+        },
+      },
     });
 
     if (!projects) {

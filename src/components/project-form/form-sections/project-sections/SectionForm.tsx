@@ -14,6 +14,10 @@ import { usePreloadedFormData } from '@/hooks';
 import { baseUrl } from '@/utils';
 import SubmitButton from '@/components/SubmitButton';
 import { useRouter } from 'next/navigation';
+import CarouselForm from './CarouselForm';
+import TextSectionInput from './TextSectionInput';
+import { Brand } from '@/types/brand';
+import { parse } from 'path';
 
 type Props = {
   initial?: boolean;
@@ -52,17 +56,27 @@ function SectionForm({ initial = false }: Props) {
   }, [contentType]);
 
   function renderContentInput() {
+    const initialValue =
+      section?.contentType === contentType ? section.content : undefined;
+
     switch (contentType) {
       case Content.TEXT:
-        return <></>;
+        return <TextSectionInput content={(initialValue as string) ?? ''} />;
       case Content.BRAND_STACK:
-        return <></>;
+        return <SearchTechInput initialValue={(initialValue as any[]) ?? []} />;
       case Content.CAROUSEL: // Can be used to show code snippets (Code Snippet Section)
-        return <></>;
+        return <CarouselForm editFormData={editFormData} />;
       case Content.VIDEO:
-        return <></>;
-      case Content.ATTACHMENT:
-        return <></>;
+        return (
+          <FormInput
+            placerholder="Enter the video URL"
+            label="Video URL"
+            name="videoUrl"
+            type="text"
+          />
+        );
+      // case Content.ATTACHMENT:
+      //   return <></>;
       // case Content.ANALYTICS:
       //   return <></>;
       // case Content.TESTIOMONIALS:
@@ -72,7 +86,7 @@ function SectionForm({ initial = false }: Props) {
 
   return (
     <Spinner loading={loading}>
-      <Form.Root action={formAction} className="flex flex-col gap-2">
+      <Form.Root action={formAction} className="flex flex-col gap-3">
         <input type="hidden" name="projectId" value={projectUUID} />
         <input type="hidden" name="uuid" value={sectionUUID} />
         <input
@@ -92,6 +106,7 @@ function SectionForm({ initial = false }: Props) {
 
         <FormInput
           label="Description"
+          description='Descriptions are used to provide a brief overview of the section content. Although there is no character limit for the description, we recommend using "TEXT" section for lengthy texts.'
           defaultValue={section?.description!}
           name="description"
           placerholder="Enter the section description"
@@ -99,7 +114,7 @@ function SectionForm({ initial = false }: Props) {
         />
 
         <Form.FormField name="content-type">
-          <InputLabel label="Content Type" />
+          <InputLabel label="Content" />
           <Select.Root
             value={contentType}
             onValueChange={(e: keyof typeof Content) => {
@@ -119,8 +134,8 @@ function SectionForm({ initial = false }: Props) {
         </Form.FormField>
 
         <div>
-          <InputLabel label="Content" />
-          <SearchTechInput onTechAdd={(e) => {}} />
+          {/* <InputLabel label="Content" /> */}
+          {renderContentInput()}
         </div>
 
         <div className="flex justify-end gap-2">

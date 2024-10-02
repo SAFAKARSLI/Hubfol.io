@@ -17,6 +17,7 @@ export async function GET(request: Request) {
   try {
     const sections = await prisma.section.findMany({
       where: { projectId: projectUUID as string },
+      orderBy: { createdAt: 'asc' },
     });
 
     if (!sections) {
