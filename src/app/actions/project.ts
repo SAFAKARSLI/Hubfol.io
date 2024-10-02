@@ -147,17 +147,21 @@ export const upsertGeneralInfo = async (formData: FormData) => {
   };
   const projectUUID = formData.get('uuid') as string;
 
-  const prevProject = JSON.parse(formData.get('prev-project') as string);
-  const keys = Object.keys(
-    projectFromFormData
-  ) as (keyof typeof projectFromFormData)[];
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i];
-    if (projectFromFormData[key] !== prevProject[key]) {
-      break;
-    }
-    if (i === keys.length - 1) {
-      return { status: 200, message: 'No changes detected.' };
+  // If the project previously created, check if any of the field have changed.
+  // If not, bypass the update
+  if (formData.get('prev-project')) {
+    const prevProject = JSON.parse(formData.get('prev-project') as string);
+    const keys = Object.keys(
+      projectFromFormData
+    ) as (keyof typeof projectFromFormData)[];
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      if (projectFromFormData[key] !== prevProject[key]) {
+        break;
+      }
+      if (i === keys.length - 1) {
+        return { status: 200, message: 'No changes detected.' };
+      }
     }
   }
 

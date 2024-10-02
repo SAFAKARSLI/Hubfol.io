@@ -17,16 +17,14 @@ function FormWrapper({ children, backButtonUrl }: Props) {
   const router = useRouter();
   const { userUUID } = useParams();
   return (
-    <div className="p-5 -md:p-3">
-      <div className="  ">
-        <Link
-          onClick={() => router.push(`/u/${userUUID}/projects`)}
-          className="rounded-full cursor-pointer flex gap-1 items-center hover:underline text-xs "
-        >
-          <TiHome className="w-4 h-4" /> Home Page
-        </Link>
-      </div>
-      <div className="m-auto max-w-[900px] mt-5">{children}</div>
+    <div className="p-5 -md:p-3 flex flex-col gap-5">
+      <Link
+        href="/u/${userUUID}/projects"
+        className="cursor-pointer hover:underline text-xs flex gap-1"
+      >
+        <TiHome className="w-4 h-4" /> Home Page
+      </Link>
+      <div className="m-auto max-w-[900px]">{children}</div>
     </div>
   );
 }
