@@ -61,22 +61,25 @@ function SectionForm({ initial = false }: Props) {
 
     switch (contentType) {
       case Content.TEXT:
-        return <TextSectionInput content={(initialValue as string) ?? ''} />;
+        return (
+          <TextSectionInput initialValue={(initialValue as string) ?? ''} />
+        );
       case Content.BRAND_STACK:
         return <SearchTechInput initialValue={(initialValue as any[]) ?? []} />;
       case Content.CAROUSEL: // Can be used to show code snippets (Code Snippet Section)
         return <CarouselForm editFormData={editFormData} />;
-      case Content.VIDEO:
-        return (
-          <FormInput
-            placerholder="Enter the video URL"
-            label="Video URL"
-            name="videoUrl"
-            type="text"
-          />
-        );
       // case Content.ATTACHMENT:
       //   return <></>;
+      // case Content.VIDEO:
+      //   return (
+      //     <FormInput
+      //       placerholder="Enter the video URL"
+      //       label="Video URL"
+      //       name="videoUrl"
+      //       type="text"
+      //     />
+      //   );
+
       // case Content.ANALYTICS:
       //   return <></>;
       // case Content.TESTIOMONIALS:
