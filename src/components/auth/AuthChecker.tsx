@@ -17,7 +17,7 @@ async function AuthChecker({ children, userUUID }: Props) {
   }
 
   if (session.user?.uuid !== userUUID) {
-    redirect(`${baseUrl}/u/${session.user?.uuid}/projects`);
+    redirect(`${baseUrl}/u/${userUUID}/projects`);
   }
 
   return <>{children}</>;

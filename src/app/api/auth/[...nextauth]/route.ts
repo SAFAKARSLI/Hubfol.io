@@ -7,9 +7,9 @@ import { prisma } from '@/db';
 
 const authOptions: NextAuthOptions = {
   pages: {
-    // signIn: '/auth/signin',
+    signIn: '/login',
     // signOut: '/auth/signout',
-    // error: '/auth/error',
+    error: '/login?error=true',
     // verifyRequest: '/auth/verify-request',
     newUser: '/auth/new-user',
   },
