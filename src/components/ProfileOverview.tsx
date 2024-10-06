@@ -25,7 +25,7 @@ const ProfileOverview = async ({ userUUID }: ProfileOverviewProps) => {
   }).then((r) => r.json())) as Employee;
 
   return (
-    <div className="flex bg-gray-1 h-[6rem] -sm:hidden p-5 relative shadow-[-5px_10px_20px_1px_rgba(0,0,0,1)]">
+    <div className="flex bg-gray-1 h-[6rem] -sm:hidden items-center p-5  shadow-[-5px_8px_20px_1px_rgba(0,0,0,1)]">
       <Image
         alt="pp"
         src={'/hubfolio-dark-logo.png'}
@@ -53,7 +53,7 @@ const ProfileOverview = async ({ userUUID }: ProfileOverviewProps) => {
         direction={'column'}
         justify={'between'}
         align={'end'}
-        height={'full'}
+        height={'100%'}
       >
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>

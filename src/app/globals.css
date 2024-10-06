@@ -75,6 +75,17 @@ input[type='file'] {
 
 .header-link {
   position: relative;
+  color: var(--gray-10);
+  font-size: 0.8rem;
+}
+
+.header-link-active {
+  color: white;
+  font-size: 0.9rem;
+}
+
+.header-highlighted-link {
+  color: var(--violet-11);
 }
 
 .header-link:hover::before {
@@ -82,7 +93,6 @@ input[type='file'] {
 }
 
 .header-link-active::before {
-  color: white;
   transform: scaleX(1);
 }
 

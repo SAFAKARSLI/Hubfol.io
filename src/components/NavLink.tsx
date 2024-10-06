@@ -9,21 +9,24 @@ type Props = {
     url: string;
   };
   onClick?: () => void;
+  active?: boolean;
 };
 
-function NavLink({ link, onClick }: Props) {
+function NavLink({ link, onClick, active }: Props) {
   const { userUUID } = useParams();
-  const url = usePathname();
-  const color = url.includes(link.url)
-    ? 'text-white header-link-active'
-    : 'text-gray-10';
   return (
     <Link
       href={`/u/${userUUID}/${link.url}`}
-      className={`text-center flex items-center  text-xs `}
+      className={` ${active ? 'text-sm' : 'text-xs'}`}
       onClick={onClick}
     >
-      <p className={`hover:text-white header-link ${color}`}>{link.title}</p>
+      <p
+        className={`hover:text-white header-link ${
+          active && 'header-link-active'
+        }`}
+      >
+        {link.title}
+      </p>
     </Link>
   );
 }

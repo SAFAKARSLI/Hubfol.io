@@ -15,22 +15,18 @@ async function TopBar({ params }: TopBarProps) {
   const session = await getServerSession(authOptions);
 
   return (
-    <Flex className="border-b border-gray-5 bg-gray-0 justify-end items-center h-[3rem]">
+    <Flex className="border-b border-gray-5 bg-gray-0 justify-end items-center h-[3.5rem]">
       {/* <ProfileOverview userUUID={userUUID} /> */}
-      <div className="flex px-5 -md:px-3 justify-between w-full items-center">
+      <div className="flex  justify-between w-full items-center">
         {/* <MiniProfileOverview userUUID={userUUID} activeProject={projectUUID} /> */}
 
-        <NavigationLinks />
+        <NavigationLinks authenticated={session?.user.uuid == userUUID} />
 
         <Flex align={'center'}>
           <Separator orientation="vertical" size="1" className="mx-5" />
 
           <div>
-            <SidebarButton
-              session={session}
-              iconVariant="surface"
-              position="right"
-            />
+            <SidebarButton session={session} position="right" />
           </div>
         </Flex>
       </div>

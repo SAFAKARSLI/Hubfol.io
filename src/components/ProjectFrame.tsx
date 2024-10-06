@@ -2,59 +2,181 @@
 
 import Project from '@/types/project';
 import ProjectConsole from './ProjectConsole';
-import { DropdownMenu, IconButton, Text } from '@radix-ui/themes';
+import { DropdownMenu, IconButton, Separator, Text } from '@radix-ui/themes';
+import * as Select from '@radix-ui/react-select';
+
 import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  CodeIcon,
   DesktopIcon,
+  DimensionsIcon,
   DotsHorizontalIcon,
   ExternalLinkIcon,
+  LaptopIcon,
+  Link1Icon,
   MobileIcon,
   ReloadIcon,
+  SizeIcon,
+  StarFilledIcon,
 } from '@radix-ui/react-icons';
-import React from 'react';
+import React, { useEffect } from 'react';
+import classnames from 'classnames';
 
 type Props = {
   project?: Project;
 };
 
+type SelectItemProps = {
+  children: React.ReactNode;
+  className?: string;
+} & React.ComponentPropsWithoutRef<typeof Select.Item>;
+
+const SelectItem = React.forwardRef<HTMLDivElement, SelectItemProps>(
+  ({ children, className, ...props }, forwardedRef) => {
+    return (
+      <Select.Item
+        className={classnames(
+          'relative flex h-[2.5rem] truncate select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-gray-11 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet-9 data-[disabled]:text-mauve-8 data-[highlighted]:text-violet1 data-[highlighted]:outline-none',
+          className
+        )}
+        {...props}
+        ref={forwardedRef}
+      >
+        <Select.ItemText>{children}</Select.ItemText>
+        <Select.ItemIndicator className="absolute left-0 inline-flex w-[25px] items-center justify-center">
+          <CheckIcon />
+        </Select.ItemIndicator>
+      </Select.Item>
+    );
+  }
+);
+
 function ProjectFrame({ project }: Props) {
   const iframeRef = React.useRef<HTMLIFrameElement>(null);
   const [url, setUrl] = React.useState(project!.url);
+  const [dimensions, setDimensions] = React.useState({
+    width: 0,
+    height: 0,
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setDimensions({
+        width: iframeRef.current?.clientWidth!,
+        height: iframeRef.current?.clientHeight!,
+      });
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    setDimensions({
+      width: iframeRef.current?.clientWidth!,
+      height: iframeRef.current?.clientHeight!,
+    });
+  }, []);
 
   return (
     <div className="h-full flex flex-col">
-      <div className="h-[6rem] mx-5 ship flex-none flex flex-col justify-center">
-        <div className="w-full bg-gray-2 h-[2rem] rounded-full flex items-center border border-gray-4">
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
+      <div className="h-[6rem] mx-5 ship flex-none flex flex-col justify-between py-3">
+        <div className=" bg-gray-2  rounded-full flex items-center border border-gray-4 ">
+          <Text className="text-gray-10 flex  items-center ml-5">
+            <StarFilledIcon />:
+          </Text>
+          <Select.Root defaultValue="banana">
+            <Select.Trigger
+              className="m-1  inline-flex h-[2.2rem] max-w-[10rem] items-center justify-between gap-[5px] rounded-full bg-gray-0 hover:bg-gray-1 px-[15px] text-xs leading-none text-violet-11  outline-none"
+              aria-label="pages"
+            >
+              <div className="w-9/10 truncate">
+                <Select.Value />
+              </div>
+              <Select.Icon className="text-violet-11">
+                <ChevronDownIcon />
+              </Select.Icon>
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Content
+                position="popper"
+                side="right"
+                className="overflow-hidden w-[15rem] rounded border border-gray-4 m-1 bg-gray-0 shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
+              >
+                <Select.Viewport className="p-[5px]">
+                  <Select.Group>
+                    <Select.Label className="px-[25px] text-xs font-medium leading-[25px] text-gray-9">
+                      Highlighted Routes
+                    </Select.Label>
+                    <SelectItem value="banana">
+                      Bananakasdfhldsakjfkasd;l;ksd;laflasdfsadlfllkdjlksjalfl
+                    </SelectItem>
+                    <SelectItem value="blueberry">Blueberry</SelectItem>
+                    <SelectItem value="grapes">Grapes</SelectItem>
+                    <SelectItem value="pineapple">Pineapple</SelectItem>
+                  </Select.Group>
+                </Select.Viewport>
+              </Select.Content>
+            </Select.Portal>
+          </Select.Root>
+          <div className="flex w-full justify-between  items-center px-5">
+            <div className="flex items-center gap-4">
               <IconButton variant="ghost" radius="full">
-                <DotsHorizontalIcon />
+                <ArrowLeftIcon />
               </IconButton>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Content>
-              <DropdownMenu.Item>
-                <div>Edit</div>
-              </DropdownMenu.Item>
-              <DropdownMenu.Item>
-                <div>Delete</div>
-              </DropdownMenu.Item>
-            </DropdownMenu.Content>
-          </DropdownMenu.Root>
-          <IconButton variant="ghost" radius="full">
-            <ReloadIcon />
-          </IconButton>
-          <IconButton variant="ghost" radius="full">
-            <DesktopIcon />
-          </IconButton>
-          <IconButton variant="ghost" radius="full">
-            <MobileIcon />
-          </IconButton>
-          <IconButton variant="ghost" radius="full">
-            <ExternalLinkIcon />
-          </IconButton>
+              <IconButton variant="ghost" radius="full">
+                <ReloadIcon />
+              </IconButton>
+              <IconButton variant="ghost" radius="full">
+                <ArrowRightIcon />
+              </IconButton>
+            </div>
+            <div className="flex gap-10">
+              <div className="flex items-center gap-4">
+                <Text size={'1'} className="text-gray-9">
+                  Viewport Options:
+                </Text>
+                <IconButton variant="ghost" radius="full">
+                  <DesktopIcon />
+                </IconButton>
+                <IconButton variant="ghost" radius="full">
+                  <LaptopIcon />
+                </IconButton>
+                <IconButton variant="ghost" radius="full">
+                  <MobileIcon />
+                </IconButton>
+              </div>
+              <Separator orientation="vertical" size="1" />
+
+              <div className="flex items-center gap-4">
+                <Text size={'1'} className="text-gray-9">
+                  Links:
+                </Text>
+                <IconButton variant="ghost" radius="full">
+                  <ExternalLinkIcon />
+                </IconButton>
+                <IconButton variant="ghost" radius="full">
+                  <CodeIcon />
+                </IconButton>
+              </div>
+            </div>
+          </div>
         </div>
-        <Text size={'1'} className="text-gray-10 mt-2">
-          {url}
-        </Text>
+        <div className="text-gray-10 mx-5 text-xs">
+          <Text>
+            <Link1Icon className="h-4 w-4 inline-block mr-2" />
+            {url}
+          </Text>
+          <Text className="float-right">
+            <DimensionsIcon className="h-4 w-4 inline-block mr-2" />
+            {dimensions.width} x {dimensions.height}
+          </Text>
+        </div>
       </div>
       <div className="rounded border border-gray-4 overflow-hidden flex-grow mx-5 mb-5">
         <iframe

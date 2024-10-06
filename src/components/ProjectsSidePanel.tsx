@@ -17,7 +17,7 @@ async function ProjectsSidePanel({ initialProjects, userUUID }: Props) {
   const session = await getServerSession(authOptions);
 
   return (
-    <div className="flex flex-col h-[100dvh] bg-gray-1 border-r  border-gray-4 w-[24rem]">
+    <div className="flex flex-col h-[100dvh] bg-gray-1 border-r  border-gray-4 w-[27rem]">
       <ProfileOverview userUUID={userUUID} />
       <div className="overflow-y-scroll flex-1  scroll-smooth border-t border-gray-4">
         <ProjectListHeader projectCount={initialProjects.length} />

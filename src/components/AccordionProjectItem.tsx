@@ -42,7 +42,7 @@ const AccordionProjectItem = ({
   return (
     <Accordion.Item value={uuid} asChild>
       <div
-        className={`rounded border overflow-hidden data-[state=open]:shadow-gray-3 border-gray-4 shadow-md w-full m-auto`}
+        className={`rounded border overflow-hidden data-[state=open]:shadow-gray-0 border-gray-4 shadow-lg w-full m-auto`}
       >
         <Accordion.Trigger asChild>
           <div
@@ -86,7 +86,7 @@ const AccordionProjectItem = ({
         </Accordion.Trigger>
 
         <Accordion.Content asChild>
-          <div className="bg-gray-1 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden">
+          <div className="bg-gray-0 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp">
             <ScrollArea type="auto" className="max-h-[60vh]">
               {sections.length ? (
                 sections?.map((s, i) => {

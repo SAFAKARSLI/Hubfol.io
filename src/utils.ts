@@ -1,4 +1,5 @@
 import { Brand } from './types/brand';
+import { PersonIcon } from '@radix-ui/react-icons';
 
 export const extractUUID = (url: string, identifier: string) => {
   const index = url.split('/').indexOf(identifier) + 1; // returns -1 if not found. Hence checking for 0 at the bottom.
@@ -113,16 +114,18 @@ export const links = [
     url: 'projects',
   },
   {
-    title: 'Templates',
-    url: 'templates',
-    highlight: true,
-  },
-  {
-    title: 'Publishings',
-    url: 'publishings',
-  },
-  {
     title: 'Reviews',
     url: 'reviews',
   },
 ];
+
+export const highlightedLinks = [
+  {
+    title: 'Templates',
+    url: 'templates',
+  },
+];
+
+export const activeLink = (url: string) => {
+  return url.split('/')[3];
+};

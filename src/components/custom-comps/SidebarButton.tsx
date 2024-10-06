@@ -11,24 +11,28 @@ import {
 import {
   Cross1Icon,
   Cross2Icon,
+  FileIcon,
   HamburgerMenuIcon,
   PersonIcon,
+  RocketIcon,
+  StarIcon,
 } from '@radix-ui/react-icons';
-import { baseUrl, links, preferredColorOptions } from '@/utils';
+import { baseUrl, preferredColorOptions } from '@/utils';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import NavLink from '../NavLink';
 import { Session } from 'next-auth';
 import ProfileMenuDropdownButton from '../ProfileMenuDropdownButton';
 import SidebarMenuLink from '../SidebarMenuLink';
+import SignOutButton from '../SignOutButton';
+import ReactDOM from 'react-dom';
 
 type Props = {
   position: 'left' | 'right';
-  iconVariant: 'soft' | 'surface';
   session: Session | null;
 };
 
-function SidebarButton({ iconVariant, position, session }: Props) {
+function SidebarButton({ position, session }: Props) {
   const [visible, setVisible] = React.useState(false);
   const menuPosition = position === 'left' ? `left-0` : 'right-0';
   const menuSlideAnimation =
@@ -42,7 +46,7 @@ function SidebarButton({ iconVariant, position, session }: Props) {
   return (
     <div>
       <div
-        className="hover:border-gray-6 border border-gray-1 rounded-md overflow-hidden hover:cursor-pointer"
+        className="hover:border-gray-6 border border-gray-1 rounded-md overflow-hidden hover:cursor-pointer mr-5"
         onClick={() => setVisible(!visible)}
       >
         <Avatar
@@ -53,7 +57,8 @@ function SidebarButton({ iconVariant, position, session }: Props) {
       </div>
 
       <div
-        className={`flex flex-col p-5 fixed bottom-0 ${menuPosition} ${menuSlideAnimation} h-full bg-gray-2 border border-gray-4 w-[18rem] duration-300 z-20`}
+        className={`flex flex-col p-5 fixed bottom-0 ${menuPosition} ${menuSlideAnimation} h-full bg-gray-2 border border-gray-4 w-[18rem] duration-300 `}
+        style={{ zIndex: 1 }}
       >
         <div className="flex justify-end">
           <Cross2Icon
@@ -79,18 +84,39 @@ function SidebarButton({ iconVariant, position, session }: Props) {
           </div>
         </div>
         <Separator size={'4'} className="my-5" />
-        <SidebarMenuLink
-          icon={<PersonIcon color="gray" />}
-          text="My Profile"
-          link={`${baseUrl}/u/${session?.user.uuid}/projects`}
-        />
+        <div className="flex flex-col gap-1">
+          <SidebarMenuLink
+            icon={<PersonIcon color="gray" className="w-5 h-5" />}
+            text="My Profile"
+            link={`${baseUrl}/u/${session?.user.uuid}/profile`}
+            onClick={() => setVisible(false)}
+          />
+          <SidebarMenuLink
+            icon={<RocketIcon color="gray" className="w-5 h-5" />}
+            text="My Projects"
+            link={`${baseUrl}/u/${session?.user.uuid}/projects`}
+            onClick={() => setVisible(false)}
+          />
+          <SidebarMenuLink
+            icon={<StarIcon color="gray" className="w-5 h-5" />}
+            text="My Reviews"
+            link={`${baseUrl}/u/${session?.user.uuid}/reviews`}
+            onClick={() => setVisible(false)}
+          />
+        </div>
+        <Separator size={'4'} className="my-5" />
+
+        <SignOutButton />
       </div>
-      <div
-        className={` fixed left-0 top-0 right-0 bottom-0 bg-violet-a13 z-10 ${
-          !visible && 'hidden'
-        }`}
-        onClick={() => setVisible(false)}
-      />
+      {ReactDOM.createPortal(
+        <div
+          className={` fixed left-0 top-0 right-0 bottom-0 bg-violet-a13  ${
+            !visible && 'hidden'
+          }`}
+          onClick={() => setVisible(false)}
+        />,
+        document.body
+      )}
     </div>
   );
 }
