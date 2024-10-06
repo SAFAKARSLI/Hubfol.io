@@ -64,22 +64,20 @@ function SectionForm({ initial = false }: Props) {
         return (
           <TextSectionInput initialValue={(initialValue as string) ?? ''} />
         );
+
       case Content.BRAND_STACK:
         return <SearchTechInput initialValue={(initialValue as any[]) ?? []} />;
       case Content.CAROUSEL: // Can be used to show code snippets (Code Snippet Section)
-        return <CarouselForm editFormData={editFormData} />;
+        return (
+          <CarouselForm
+            editFormData={editFormData}
+            initialValue={(initialValue as any[]) ?? []}
+          />
+        );
       // case Content.ATTACHMENT:
       //   return <></>;
       // case Content.VIDEO:
-      //   return (
-      //     <FormInput
-      //       placerholder="Enter the video URL"
-      //       label="Video URL"
-      //       name="videoUrl"
-      //       type="text"
-      //     />
-      //   );
-
+      //   return <></>;
       // case Content.ANALYTICS:
       //   return <></>;
       // case Content.TESTIOMONIALS:
@@ -109,7 +107,7 @@ function SectionForm({ initial = false }: Props) {
 
         <FormInput
           label="Description"
-          description='Descriptions are used to provide a brief overview of the section content. Although there is no character limit for the description, we recommend using "TEXT" section for lengthy texts.'
+          description='Use descriptions to provide a brief overview of the section content. Although there is no character limit for the description, we recommend using "TEXT" section for lengthy texts.'
           defaultValue={section?.description!}
           name="description"
           placerholder="Enter the section description"

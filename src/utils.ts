@@ -105,12 +105,17 @@ export const allowedIconTypes =
 
 export const links = [
   {
-    title: 'Profile Overview',
-    url: 'profile-overview',
+    title: 'Profile',
+    url: 'profile',
   },
   {
     title: 'Projects',
     url: 'projects',
+  },
+  {
+    title: 'Templates',
+    url: 'templates',
+    highlight: true,
   },
   {
     title: 'Publishings',

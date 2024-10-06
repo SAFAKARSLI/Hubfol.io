@@ -29,7 +29,6 @@ function TextSectionInput({ initialValue }: Props) {
         }}
         maxLength={2000}
         name="content"
-        defaultValue={initialValue as string}
         className="w-full resize-none rounded w-full min-h-[10rem] max-h-[20rem] p-2 outline-none bg-gray-1 focus:shadow-outline 
       focus:border-violet-7 rounded-md text-sm border border-gray-6"
       />

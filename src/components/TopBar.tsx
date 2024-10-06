@@ -1,20 +1,9 @@
 import React from 'react';
-import ProfileOverview from './ProfileOverview';
-import { Flex, Separator, DropdownMenu, IconButton } from '@radix-ui/themes';
-import { FaGoogle } from 'react-icons/fa';
-import {
-  EnvelopeClosedIcon,
-  HamburgerMenuIcon,
-  PersonIcon,
-} from '@radix-ui/react-icons';
-import { Params, SlugProps } from '@/types/slug';
-import SignOutButton from './SignOutButton';
-import MiniProfileOverview from './MiniProfileOverview';
-import OAuthSignInButton from './OAuthSignInButton';
+import { Flex, Separator } from '@radix-ui/themes';
+import { Params } from '@/types/slug';
 import NavigationLinks from './NavigationLinks';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import ProfileMenuDropdownButton from './ProfileMenuDropdownButton';
 import SidebarButton from './custom-comps/SidebarButton';
 
 interface TopBarProps {
@@ -23,54 +12,22 @@ interface TopBarProps {
 
 async function TopBar({ params }: TopBarProps) {
   const { userUUID, projectUUID } = params;
-  console.log(params);
   const session = await getServerSession(authOptions);
 
   return (
-    <Flex className="w-screen border-b border-gray-5 bg-gray-1 justify-between items-center -xl:py-5">
-      <ProfileOverview userUUID={userUUID} />
-      <div className="flex grow   px-8 -md:px-3   h-full items-center ">
-        <MiniProfileOverview userUUID={userUUID} activeProject={projectUUID} />
-        <div className="grow flex justify-center -lg:hidden">
-          <div className="max-w-[45rem] w-[40rem]  -xl:w-[25rem]">
-            <NavigationLinks />
-          </div>
-        </div>
+    <Flex className="border-b border-gray-5 bg-gray-0 justify-end items-center h-[3rem]">
+      {/* <ProfileOverview userUUID={userUUID} /> */}
+      <div className="flex px-5 -md:px-3 justify-between w-full items-center">
+        {/* <MiniProfileOverview userUUID={userUUID} activeProject={projectUUID} /> */}
+
+        <NavigationLinks />
 
         <Flex align={'center'}>
-          {/* <SendProposalButton /> */}
+          <Separator orientation="vertical" size="1" className="mx-5" />
 
-          <Separator orientation="vertical" size="2" className="mx-3" />
-
-          <div className="-lg:hidden mr-3">
-            <DropdownMenu.Root>
-              <DropdownMenu.Trigger>
-                <IconButton variant="ghost" className="flex gap-1">
-                  <ProfileMenuDropdownButton session={session} />
-                  <DropdownMenu.TriggerIcon />
-                </IconButton>
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Content>
-                <DropdownMenu.Item asChild>
-                  <div className="flex justify-start items-center ">
-                    {!session?.user ? (
-                      <OAuthSignInButton
-                        OAuthType="google"
-                        label="Sign in with Google"
-                        logo={<FaGoogle />}
-                      />
-                    ) : (
-                      <SignOutButton userUUID={userUUID} />
-                    )}
-                  </div>
-                </DropdownMenu.Item>
-              </DropdownMenu.Content>
-            </DropdownMenu.Root>
-          </div>
-
-          <div className="lg:hidden">
+          <div>
             <SidebarButton
-              icon={<HamburgerMenuIcon />}
+              session={session}
               iconVariant="surface"
               position="right"
             />

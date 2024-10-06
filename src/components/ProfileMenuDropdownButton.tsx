@@ -8,7 +8,7 @@ type Props = {
   session: Session | null;
 };
 
-async function ProfileMenuDropdownButton({ session }: Props) {
+function ProfileMenuDropdownButton({ session }: Props) {
   const comp = session?.user ? (
     <Avatar
       size={'2'}

@@ -3,6 +3,7 @@ import { links } from '@/utils';
 import React from 'react';
 import { useParams, usePathname } from 'next/navigation';
 import NavLink from './NavLink';
+import Link from 'next/link';
 
 interface NavigationLinksProps {
   isCol?: boolean;
@@ -15,11 +16,12 @@ function NavigationLinks({ isCol = false, onClick }: NavigationLinksProps) {
     <div
       className={`flex ${
         isCol && 'flex-col '
-      } h-full text-center justify-between items-center`}
+      } h-[3rem] flex-wrap text-center items-center gap-8`}
     >
       {links.map((link, i) => (
         <NavLink link={link} key={i} onClick={onClick} />
       ))}
+      <Link href={`/`}>Templates</Link>
     </div>
   );
 }

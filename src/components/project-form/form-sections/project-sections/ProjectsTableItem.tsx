@@ -32,7 +32,7 @@ function ProjectsTableItem({ section }: Props) {
         </Link>
       </Table.RowHeaderCell>
       <Table.Cell className="text-gray-11">
-        <p>{section.contentType}</p>
+        <p>{section.contentType.replaceAll('_', ' ')}</p>
       </Table.Cell>
       <Table.Cell className="text-gray-11">[Tags]</Table.Cell>
       <Table.Cell>

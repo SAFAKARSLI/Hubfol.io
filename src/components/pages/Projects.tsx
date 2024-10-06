@@ -35,12 +35,12 @@ const Projects = async ({
   }
 
   return (
-    <div className="flex">
+    <div className="flex ">
       <div className="flex-none">
         <ProjectsSidePanel initialProjects={projects} userUUID={userUUID} />
       </div>
 
-      <div className="flex-1 m-3 relative h-[calc(100dvh-8rem)] rounded overflow-hidden">
+      <div className="flex-1 bg-gray-0 relative">
         {cloneElement(children as React.ReactElement, { project })}
       </div>
     </div>

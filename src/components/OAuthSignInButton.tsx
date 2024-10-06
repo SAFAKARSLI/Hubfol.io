@@ -7,20 +7,24 @@ type Props = {
   logo: JSX.Element;
   label: string;
   OAuthType: 'google' | 'github';
+  variant: 'solid' | 'ghost' | 'outline' | 'surface';
+  color: 'violet' | 'red' | 'gray';
 };
 
-function OAuthSignInButton({ logo, label, OAuthType }: Props) {
+function OAuthSignInButton({ logo, label, OAuthType, variant, color }: Props) {
   const handleSignInButtonClick = async () => {
     signIn(OAuthType, { callbackUrl: '/fully-signed-in' });
   };
 
   return (
-    <div
-      className="flex gap-1 h-full justify-center items-center hover:cursor-pointer"
+    <Button
+      variant={variant}
+      color={color}
+      className="flex gap-1 h-[2.5rem] justify-center items-center hover:cursor-pointer w-full"
       onClick={handleSignInButtonClick}
     >
       {logo} <Text className="text-white">{label}</Text>
-    </div>
+    </Button>
   );
 }
 

@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Button, Box, Flex, Heading, Text } from '@radix-ui/themes';
-import Divider from '@/components/project-card-subsections/Divider';
+import { Button, Box, Flex, Heading, Text, Separator } from '@radix-ui/themes';
 
 import * as Form from '@radix-ui/react-form';
 
@@ -26,16 +25,13 @@ async function page({}: Props) {
     <Form.Root action={createEmployeeWithEmail}>
       <Flex
         direction={'column'}
-        justify={'between'}
-        align={'center'}
-        height={'40rem'}
         width={'30rem'}
         p={'5'}
-        className="bg-gray-3 rounded border border-gray-5"
+        className="bg-gray-2 rounded border border-gray-5"
       >
         <Box width={'100%'} className="flex flex-col items-center gap-1">
           <Heading size={'6'}>Complete Sign Up</Heading>
-          <Divider />
+          <Separator size={'4'} />
           <div className="flex flex-col items-center pt-3">
             <Text size={'4'}>Welcome to the community!</Text>
             <Text size={'4'}>Please complete the form below to sign up.</Text>
@@ -73,7 +69,7 @@ async function page({}: Props) {
           />
 
           <FormInput
-            label="Phone Number (optional)"
+            label="Phone Number"
             placerholder="+1 (123) 456-7890"
             type="text"
             name="phoneNumber"

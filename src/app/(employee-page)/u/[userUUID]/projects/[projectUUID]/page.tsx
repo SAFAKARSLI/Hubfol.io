@@ -8,7 +8,7 @@ import React from 'react';
 
 type Props = {};
 
-export default async function page({ params }: SlugProps) {
+export default function page({ params }: SlugProps) {
   const { userUUID, projectUUID } = params;
 
   return (

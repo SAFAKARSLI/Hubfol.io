@@ -16,14 +16,14 @@ function NavLink({ link, onClick }: Props) {
   const url = usePathname();
   const color = url.includes(link.url)
     ? 'text-white header-link-active'
-    : 'text-gray-400';
+    : 'text-gray-10';
   return (
     <Link
       href={`/u/${userUUID}/${link.url}`}
-      className={`text-center flex items-center text-sm -2xl:text-xs `}
+      className={`text-center flex items-center  text-xs `}
       onClick={onClick}
     >
-      <p className={` hover:text-white header-link  ${color}`}>{link.title}</p>
+      <p className={`hover:text-white header-link ${color}`}>{link.title}</p>
     </Link>
   );
 }

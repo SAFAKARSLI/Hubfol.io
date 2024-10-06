@@ -36,7 +36,7 @@ const Subsection = ({
         {title}
       </Heading>
       {description && (
-        <Text as="p" className="text-gray-9 text-md mb-2">
+        <Text as="p" className="text-gray-9 text-md mb-1">
           {description}
         </Text>
       )}

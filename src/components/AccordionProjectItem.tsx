@@ -87,7 +87,7 @@ const AccordionProjectItem = ({
 
         <Accordion.Content asChild>
           <div className="bg-gray-1 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden">
-            <ScrollArea type="auto" className="max-h-[40vh]">
+            <ScrollArea type="auto" className="max-h-[60vh]">
               {sections.length ? (
                 sections?.map((s, i) => {
                   return (

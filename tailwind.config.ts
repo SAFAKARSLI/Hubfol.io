@@ -407,6 +407,7 @@ const config: Config = {
           contrast: 'var(--violet-contrast)',
         },
         gray: {
+          0: 'var(--gray-0)',
           1: 'var(--gray-1)',
           2: 'var(--gray-2)',
           3: 'var(--gray-3)',

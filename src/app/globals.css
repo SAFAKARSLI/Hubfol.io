@@ -61,7 +61,7 @@ input[type='file'] {
 .header-link::before {
   content: '';
   position: absolute;
-  bottom: -6px;
+  bottom: -2px;
   left: 0; /* Adjusted to start from the left */
   width: 100%;
   color: gray;
@@ -105,7 +105,7 @@ input[type='file'] {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
   background: var(--gray-1);
 }
 
@@ -129,6 +129,7 @@ input[type='file'] {
 
 .dark,
 .dark-theme {
+  --gray-0: #080809;
   --gray-1: #111113;
   --gray-2: #19191b;
   --gray-3: #222325;

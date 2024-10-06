@@ -9,11 +9,16 @@ import {
   Separator,
   IconButton,
 } from '@radix-ui/themes';
-import { Cross1Icon, PersonIcon } from '@radix-ui/react-icons';
+import {
+  Cross1Icon,
+  EnvelopeClosedIcon,
+  PersonIcon,
+} from '@radix-ui/react-icons';
 import { getServerSession, User } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import Employee from '@/types/employee';
 import { FaDollarSign, FaMailBulk, FaPhone, FaPhoneAlt } from 'react-icons/fa';
+import { IconBase } from 'react-icons';
 
 type Props = {
   user: Employee;
@@ -59,22 +64,21 @@ async function ViewContactInfo({ user }: Props) {
 
   return (
     <Dialog.Root>
-      <Flex gap={'1'} align={'center'}>
-        <PersonIcon className="h-3 w-3" />
+      <Flex gap={'2'} align={'center'}>
+        <EnvelopeClosedIcon color="gray" />
         <Dialog.Trigger>
           <Text
             size={'1'}
-            color="gray"
-            className="hover:underline cursor-pointer"
+            className="hover:underline cursor-pointer text-gray-11"
           >
-            Contact Info
+            Contact
           </Text>
         </Dialog.Trigger>
       </Flex>
 
       <Dialog.Content maxWidth="450px">
         <Flex className="w-full justify-between">
-          <Dialog.Title>Profile Information</Dialog.Title>
+          <Dialog.Title>Contact Information</Dialog.Title>
           <Dialog.Close>
             <IconButton variant="ghost">
               <Cross1Icon />

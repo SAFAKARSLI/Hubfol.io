@@ -27,7 +27,7 @@ export default function RootLayout({
             accentColor={preferredColorOptions.accentColor}
             appearance={preferredColorOptions.appearance}
           >
-            <div className="h-screen w-screen bg-gray-2 flex justify-center items-center">
+            <div className="h-screen w-screen flex justify-center items-center">
               {children}
             </div>
           </Theme>

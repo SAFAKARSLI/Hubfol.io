@@ -6,6 +6,7 @@ import ProjectListHeader from './ProjectListHeader';
 import AddProjectButton from './AddProjectButton';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
+import ProfileOverview from './ProfileOverview';
 
 type Props = {
   initialProjects: Project[];
@@ -16,11 +17,14 @@ async function ProjectsSidePanel({ initialProjects, userUUID }: Props) {
   const session = await getServerSession(authOptions);
 
   return (
-    <div className="flex flex-col gap-5 h-[calc(100vh-6rem)] py-5 gap-5 bg-gray-1 border-r border-gray-4 w-[27rem] -2xl:w-[24rem] -xl:hidden overflow-y-scroll scroll-smooth">
-      <ProjectListHeader projectCount={initialProjects.length} />
-      <AccordionProjectList initialProjects={initialProjects} />
-      <div className="mb-[15rem] px-5">
-        {session?.user.uuid == userUUID && <AddProjectButton />}
+    <div className="flex flex-col h-[100dvh] bg-gray-1 border-r  border-gray-4 w-[24rem]">
+      <ProfileOverview userUUID={userUUID} />
+      <div className="overflow-y-scroll flex-1  scroll-smooth border-t border-gray-4">
+        <ProjectListHeader projectCount={initialProjects.length} />
+        <AccordionProjectList initialProjects={initialProjects} />
+        <div className="mb-[15rem] p-5">
+          {session?.user.uuid == userUUID && <AddProjectButton />}
+        </div>
       </div>
     </div>
   );
