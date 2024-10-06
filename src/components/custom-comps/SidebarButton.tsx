@@ -25,6 +25,8 @@ import { Session } from 'next-auth';
 import ProfileMenuDropdownButton from '../ProfileMenuDropdownButton';
 import SidebarMenuLink from '../SidebarMenuLink';
 import SignOutButton from '../SignOutButton';
+import * as Portal from '@radix-ui/react-portal';
+
 import ReactDOM from 'react-dom';
 
 type Props = {
@@ -108,15 +110,14 @@ function SidebarButton({ position, session }: Props) {
 
         <SignOutButton />
       </div>
-      {ReactDOM.createPortal(
+      <Portal.Root>
         <div
           className={` fixed left-0 top-0 right-0 bottom-0 bg-violet-a13  ${
             !visible && 'hidden'
           }`}
           onClick={() => setVisible(false)}
-        />,
-        document.body
-      )}
+        />
+      </Portal.Root>
     </div>
   );
 }

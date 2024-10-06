@@ -23,8 +23,10 @@ import {
   SizeIcon,
   StarFilledIcon,
 } from '@radix-ui/react-icons';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
+import { set } from 'lodash';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   project?: Project;
@@ -34,6 +36,12 @@ type SelectItemProps = {
   children: React.ReactNode;
   className?: string;
 } & React.ComponentPropsWithoutRef<typeof Select.Item>;
+
+type History = {
+  back: string[];
+  current: string;
+  forward: string[];
+};
 
 const SelectItem = React.forwardRef<HTMLDivElement, SelectItemProps>(
   ({ children, className, ...props }, forwardedRef) => {
@@ -56,12 +64,67 @@ const SelectItem = React.forwardRef<HTMLDivElement, SelectItemProps>(
 );
 
 function ProjectFrame({ project }: Props) {
-  const iframeRef = React.useRef<HTMLIFrameElement>(null);
-  const [url, setUrl] = React.useState(project!.url);
-  const [dimensions, setDimensions] = React.useState({
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [history, setHistory] = useState<History>({
+    back: [],
+    current: project?.url!,
+    forward: [],
+  });
+
+  const [dimensions, setDimensions] = useState({
     width: 0,
     height: 0,
   });
+  const [error, setError] = useState<boolean>(false); // Error state for iframe
+  const router = useRouter();
+
+  console.log(history);
+
+  useEffect(() => {
+    const iframe = iframeRef.current;
+
+    if (!iframe) return;
+
+    // Listen for messages from the iframe
+    const handleMessage = (event: MessageEvent) => {
+      // Ensure the message comes from the correct iframe origin
+      if (event.origin !== 'http://localhost:5050') return;
+
+      if (event.data.type === 'navigate') {
+        if (history.forward[history.forward.length - 1] !== event.data.url) {
+          setHistory((prev) => ({
+            back: [...prev.back, prev.current],
+            current: event.data.url,
+            forward: prev.forward.slice(1),
+          }));
+        }
+      }
+    };
+    // Listen for postMessage events
+    window.addEventListener('message', handleMessage);
+
+    // Send a message to the iframe when it loads
+    const handleIframeLoad = () => {
+      try {
+        iframe.contentWindow?.postMessage(
+          'initial-url',
+          'http://localhost:5050' // Ensure the correct target origin
+        );
+        console.log('Initial URL requested');
+      } catch (error) {
+        console.error('Error posting message to iframe:', error);
+        setError(true); // Set error state if the message fails
+      }
+    };
+    // Add the load event listener to the iframe
+    iframe.addEventListener('load', handleIframeLoad);
+
+    // Clean up event listeners when the component unmounts
+    return () => {
+      iframe.removeEventListener('load', handleIframeLoad);
+      window.removeEventListener('message', handleMessage);
+    };
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -92,7 +155,7 @@ function ProjectFrame({ project }: Props) {
           </Text>
           <Select.Root defaultValue="banana">
             <Select.Trigger
-              className="m-1  inline-flex h-[2.2rem] max-w-[10rem] items-center justify-between gap-[5px] rounded-full bg-gray-0 hover:bg-gray-1 px-[15px] text-xs leading-none text-violet-11  outline-none"
+              className="m-1  inline-flex h-[2.2rem] max-w-[15rem] items-center justify-between gap-[5px] rounded-full bg-gray-0 hover:bg-gray-1 px-[15px] text-xs leading-none text-violet-11  outline-none"
               aria-label="pages"
             >
               <div className="w-9/10 truncate">
@@ -126,13 +189,56 @@ function ProjectFrame({ project }: Props) {
           </Select.Root>
           <div className="flex w-full justify-between  items-center px-5">
             <div className="flex items-center gap-4">
-              <IconButton variant="ghost" radius="full">
+              <IconButton
+                variant="ghost"
+                radius="full"
+                disabled={history.back.length === 0}
+                onClick={() => {
+                  iframeRef.current?.contentWindow?.postMessage(
+                    {
+                      type: 'back',
+                      url: history.back[history.back.length - 1],
+                    },
+                    history.current
+                  );
+                  setHistory((prev) => ({
+                    back: prev.back.slice(0, -1),
+                    current: prev.back[prev.back.length - 1],
+                    forward: [prev.current, ...prev.forward],
+                  }));
+                }}
+              >
                 <ArrowLeftIcon />
               </IconButton>
-              <IconButton variant="ghost" radius="full">
+              <IconButton
+                variant="ghost"
+                radius="full"
+                onClick={() => {
+                  router.refresh();
+                  iframeRef.current?.contentWindow?.postMessage(
+                    'reload',
+                    history.current
+                  );
+                }}
+              >
                 <ReloadIcon />
               </IconButton>
-              <IconButton variant="ghost" radius="full">
+              <IconButton
+                variant="ghost"
+                radius="full"
+                disabled={history.forward.length === 0}
+                onClick={() => {
+                  iframeRef.current?.contentWindow?.postMessage(
+                    { type: 'forward', url: history.forward[0] },
+                    history.current
+                  );
+                  setHistory((prev) => ({
+                    back: [...prev.back, prev.current],
+                    current: prev.forward[0],
+                    forward: prev.forward.slice(1),
+                  }));
+                }}
+              >
                 <ArrowRightIcon />
               </IconButton>
             </div>
@@ -170,7 +276,7 @@ function ProjectFrame({ project }: Props) {
         <div className="text-gray-10 mx-5 text-xs">
           <Text>
             <Link1Icon className="h-4 w-4 inline-block mr-2" />
-            {url}
+            {history.current}
           </Text>
           <Text className="float-right">
             <DimensionsIcon className="h-4 w-4 inline-block mr-2" />
@@ -180,19 +286,20 @@ function ProjectFrame({ project }: Props) {
       </div>
       <div className="rounded border border-gray-4 overflow-hidden flex-grow mx-5 mb-5">
         <iframe
-          onClick={(e) => {
-            e.preventDefault();
-            console.log(e);
-          }}
           ref={iframeRef}
           height={'100%'}
           width={'100%'}
-          src={project!.url}
+          src={history.current}
           key={project!.uuid}
         />
       </div>
 
       <ProjectConsole project={project!} />
+      {error && (
+        <p style={{ color: 'red' }}>
+          Error: Unable to communicate with the iframe.
+        </p>
+      )}
     </div>
   );
 }
