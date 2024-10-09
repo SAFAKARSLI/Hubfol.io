@@ -30,7 +30,9 @@ function SignOutButton({}: Props) {
               Cancel
             </Button>
           </AlertDialog.Cancel>
-          <AlertDialog.Action onClick={() => signOut({ callbackUrl: `/` })}>
+          <AlertDialog.Action
+            onClick={() => signOut({ callbackUrl: `/login` })}
+          >
             <Button variant="solid" color="red">
               Sign Out
             </Button>

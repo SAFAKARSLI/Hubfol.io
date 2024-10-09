@@ -26,10 +26,9 @@ export default function RootLayout({
           <Theme
             accentColor={preferredColorOptions.accentColor}
             appearance={preferredColorOptions.appearance}
+            panelBackground="translucent"
           >
-            <div className="h-screen w-screen flex justify-center items-center">
-              {children}
-            </div>
+            <div>{children}</div>
           </Theme>
         </SessionProvider>
       </body>
