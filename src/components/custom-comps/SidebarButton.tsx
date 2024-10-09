@@ -58,6 +58,14 @@ function SidebarButton({ position, session }: Props) {
           src={session?.user.image}
         />
       </div>
+      <Portal.Root>
+        <div
+          className={` fixed left-0 top-0 right-0 bottom-0 bg-violet-a13  ${
+            !visible && 'hidden'
+          }`}
+          onClick={() => setVisible(false)}
+        />
+      </Portal.Root>
 
       <Portal.Root>
         <div
@@ -96,14 +104,6 @@ function SidebarButton({ position, session }: Props) {
 
           <SignOutButton />
         </div>
-      </Portal.Root>
-      <Portal.Root>
-        <div
-          className={` fixed left-0 top-0 right-0 bottom-0 bg-violet-a13  ${
-            !visible && 'hidden'
-          }`}
-          onClick={() => setVisible(false)}
-        />
       </Portal.Root>
     </div>
   );
