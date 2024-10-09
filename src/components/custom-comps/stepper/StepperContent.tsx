@@ -27,8 +27,8 @@ function StepperContent({ steps, activeStepIndex }: Props) {
   const { userUUID, projectUUID } = useParams();
   const activeStep = steps[activeStepIndex];
   const [formAction, editFormData] = usePreloadedFormData(
-    activeStep.onComplete,
-    activeStep.callback
+    activeStep.onComplete, // server action
+    activeStep.callback // callback URL
   );
 
   if (!projectUUID || !validateUUID(projectUUID as string)) {

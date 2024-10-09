@@ -2,7 +2,13 @@
 
 import Project from '@/types/project';
 import ProjectConsole from './ProjectConsole';
-import { DropdownMenu, IconButton, Separator, Text } from '@radix-ui/themes';
+import {
+  DropdownMenu,
+  IconButton,
+  Separator,
+  Spinner,
+  Text,
+} from '@radix-ui/themes';
 import * as Select from '@radix-ui/react-select';
 
 import {
@@ -77,13 +83,15 @@ function ProjectFrame({ project }: Props) {
   });
   const [error, setError] = useState<boolean>(false); // Error state for iframe
   const router = useRouter();
-
-  console.log(history);
+  const [showFrame, setShowFrame] = useState(true);
 
   useEffect(() => {
     const iframe = iframeRef.current;
 
-    if (!iframe) return;
+    if (!iframe) {
+      console.log('iframe not found');
+      return;
+    }
 
     // Listen for messages from the iframe
     const handleMessage = (event: MessageEvent) => {
@@ -107,13 +115,13 @@ function ProjectFrame({ project }: Props) {
     const handleIframeLoad = () => {
       try {
         iframe.contentWindow?.postMessage(
-          'initial-url',
-          'http://localhost:5050' // Ensure the correct target origin
+          'initialize',
+          'http://localhost:5050'
         );
-        console.log('Initial URL requested');
+        // console.log('Initialization successfully handled');
       } catch (error) {
         console.error('Error posting message to iframe:', error);
-        setError(true); // Set error state if the message fails
+        setError(true);
       }
     };
     // Add the load event listener to the iframe
@@ -144,6 +152,11 @@ function ProjectFrame({ project }: Props) {
       width: iframeRef.current?.clientWidth!,
       height: iframeRef.current?.clientHeight!,
     });
+  }, []);
+
+  useEffect(() => {
+    iframeRef.current?.contentWindow?.postMessage('reload', history.current);
+    // setShowFrame(true);
   }, []);
 
   return (
@@ -284,7 +297,8 @@ function ProjectFrame({ project }: Props) {
           </Text>
         </div>
       </div>
-      <div className="rounded border border-gray-4 overflow-hidden flex-grow mx-5 mb-5">
+
+      <div className="rounded border border-gray-4 overflow-hidden flex-grow mx-5 mb-5 relative">
         <iframe
           ref={iframeRef}
           height={'100%'}
@@ -292,11 +306,15 @@ function ProjectFrame({ project }: Props) {
           src={history.current}
           key={project!.uuid}
         />
+        {!showFrame && (
+          <div className="absolute inset-0 bg-gray-0 flex items-center justify-center">
+            <Spinner />
+          </div>
+        )}
       </div>
-
       <ProjectConsole project={project!} />
       {error && (
-        <p style={{ color: 'red' }}>
+        <p className=" absolute top-0 w-full bg-red-300 h-[3rem]">
           Error: Unable to communicate with the iframe.
         </p>
       )}

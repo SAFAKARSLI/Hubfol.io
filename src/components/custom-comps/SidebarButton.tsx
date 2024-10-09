@@ -28,6 +28,7 @@ import SignOutButton from '../SignOutButton';
 import * as Portal from '@radix-ui/react-portal';
 
 import ReactDOM from 'react-dom';
+import SidebarProfileOverview from '../SidebarProfileOverview';
 
 type Props = {
   position: 'left' | 'right';
@@ -48,7 +49,7 @@ function SidebarButton({ position, session }: Props) {
   return (
     <div>
       <div
-        className="hover:border-gray-6 border border-gray-1 rounded-md overflow-hidden hover:cursor-pointer mr-5"
+        className="hover:border-gray-6 border border-gray-1 rounded-md overflow-hidden hover:cursor-pointer"
         onClick={() => setVisible(!visible)}
       >
         <Avatar
@@ -58,58 +59,44 @@ function SidebarButton({ position, session }: Props) {
         />
       </div>
 
-      <div
-        className={`flex flex-col p-5 fixed bottom-0 ${menuPosition} ${menuSlideAnimation} h-full bg-gray-2 border border-gray-4 w-[18rem] duration-300 `}
-        style={{ zIndex: 1 }}
-      >
-        <div className="flex justify-end">
-          <Cross2Icon
-            onClick={() => setVisible(false)}
-            className="hover:bg-gray-3 p-[3px] h-6 w-6 rounded-md hover:cursor-pointer"
-            color="gray"
-          />
-        </div>
+      <Portal.Root>
         <div
-          // onClick={() => setVisible(false)}
-          className="flex h-10"
+          className={`flex flex-col p-5 fixed bottom-0 ${menuPosition} ${menuSlideAnimation} h-full bg-gray-2 border border-gray-4 w-[18rem] duration-300 `}
         >
-          <Avatar
-            className="h-full w-auto mr-3"
-            fallback={session?.user.name[0]}
-            src={session?.user.image}
-          />
-          <div className="flex flex-col justify-between">
-            <Heading size={'3'}>{session?.user.name}</Heading>
-            <Text color="gray" size={'2'}>
-              {session?.user.username ?? 'safakarsli'}
-            </Text>
+          <div className="flex justify-end">
+            <Cross2Icon
+              onClick={() => setVisible(false)}
+              className="hover:bg-gray-3 p-[3px] h-6 w-6 rounded-md hover:cursor-pointer"
+              color="gray"
+            />
           </div>
-        </div>
-        <Separator size={'4'} className="my-5" />
-        <div className="flex flex-col gap-1">
-          <SidebarMenuLink
-            icon={<PersonIcon color="gray" className="w-5 h-5" />}
-            text="My Profile"
-            link={`${baseUrl}/u/${session?.user.uuid}/profile`}
-            onClick={() => setVisible(false)}
-          />
-          <SidebarMenuLink
-            icon={<RocketIcon color="gray" className="w-5 h-5" />}
-            text="My Projects"
-            link={`${baseUrl}/u/${session?.user.uuid}/projects`}
-            onClick={() => setVisible(false)}
-          />
-          <SidebarMenuLink
-            icon={<StarIcon color="gray" className="w-5 h-5" />}
-            text="My Reviews"
-            link={`${baseUrl}/u/${session?.user.uuid}/reviews`}
-            onClick={() => setVisible(false)}
-          />
-        </div>
-        <Separator size={'4'} className="my-5" />
+          <SidebarProfileOverview session={session} />
+          <Separator size={'4'} className="my-5" />
+          <div className="flex flex-col gap-1">
+            <SidebarMenuLink
+              icon={<PersonIcon color="gray" className="w-5 h-5" />}
+              text="My Profile"
+              link={`${baseUrl}/u/${session?.user.uuid}/profile`}
+              onClick={() => setVisible(false)}
+            />
+            <SidebarMenuLink
+              icon={<RocketIcon color="gray" className="w-5 h-5" />}
+              text="My Projects"
+              link={`${baseUrl}/u/${session?.user.uuid}/projects`}
+              onClick={() => setVisible(false)}
+            />
+            <SidebarMenuLink
+              icon={<StarIcon color="gray" className="w-5 h-5" />}
+              text="My Reviews"
+              link={`${baseUrl}/u/${session?.user.uuid}/reviews`}
+              onClick={() => setVisible(false)}
+            />
+          </div>
+          <Separator size={'4'} className="my-5" />
 
-        <SignOutButton />
-      </div>
+          <SignOutButton />
+        </div>
+      </Portal.Root>
       <Portal.Root>
         <div
           className={` fixed left-0 top-0 right-0 bottom-0 bg-violet-a13  ${
