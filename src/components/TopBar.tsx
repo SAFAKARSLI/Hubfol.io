@@ -1,43 +1,48 @@
 import React from 'react';
-import { Flex, Separator } from '@radix-ui/themes';
+import { Flex, Progress, Separator, Spinner } from '@radix-ui/themes';
 import { Params } from '@/types/slug';
 import NavigationLinks from './NavigationLinks';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import SidebarButton from './custom-comps/SidebarButton';
-import SignInButton from './SignInButton';
-import SignUpButton from './SignUpButton';
+import { auth } from '@clerk/nextjs/server';
+import { getUser } from '@/app/actions/user';
+import { ClerkLoaded, ClerkLoading } from '@clerk/nextjs';
+import AuthenticationButtonsWrapper from './AuthenticationButtonsWrapper';
 
 interface TopBarProps {
   params: Params;
 }
 
 async function TopBar({ params }: TopBarProps) {
-  const { userUUID, projectUUID } = params;
-  const session = await getServerSession(authOptions);
+  const { username, projectUUID } = params;
+  const { userId } = auth();
+  const clerkUser = await getUser(userId as string);
 
   return (
-    <Flex className="border-b border-gray-5 bg-gray-0 justify-end items-center h-[3.5rem]">
-      <div className="flex  justify-between w-full items-center">
-        <NavigationLinks authenticated={session?.user.uuid == userUUID} />
-        <Flex align={'center'} className="mr-5">
-          {session ? (
-            <>
-              <Separator orientation="vertical" size="1" className="mx-5" />
-              <div>
-                <SidebarButton session={session} position="right" />
-              </div>
-            </>
-          ) : (
-            <>
-              <SignInButton />
-              <Separator orientation="vertical" size="1" className="mx-5" />
-              <SignUpButton />
-            </>
-          )}
-        </Flex>
-      </div>
-    </Flex>
+    <>
+      <Flex className="border-b border-gray-5 bg-gray-0 justify-end items-center h-[3.5rem]">
+        <div className="flex  justify-between w-full items-center">
+          <NavigationLinks authenticated={clerkUser?.username == username} />
+          <Flex align={'center'} className="mr-5">
+            <ClerkLoading>
+              <Spinner />
+            </ClerkLoading>
+            <ClerkLoaded>
+              {clerkUser ? (
+                <>
+                  <Separator orientation="vertical" size="1" className="mx-5" />
+                  <div>
+                    <SidebarButton position="right" />
+                  </div>
+                </>
+              ) : (
+                <AuthenticationButtonsWrapper />
+              )}
+            </ClerkLoaded>
+          </Flex>
+        </div>
+      </Flex>
+      <Progress value={10} />
+    </>
   );
 }
 

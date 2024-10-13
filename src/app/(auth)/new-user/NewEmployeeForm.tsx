@@ -19,12 +19,20 @@ type Props = {
 
 function NewEmployeeForm({}: Props) {
   const session = useUser();
+  console.log(session);
   const router = useRouter();
+
+  const [isUsernameValid, setIsUsernameValid] = React.useState<boolean>(false);
+
   return (
     <Form.Root
       action={createEmployee}
-      onSubmit={() => {
-        router.push(`/fully-signed-up`);
+      onSubmit={(e) => {
+        if (!isUsernameValid) {
+          e.preventDefault();
+          return;
+        }
+        router.push(`/account-successfully-created`);
       }}
     >
       <input
@@ -32,6 +40,7 @@ function NewEmployeeForm({}: Props) {
         name="email"
         value={session.user?.primaryEmailAddress?.emailAddress}
       />
+      <input type="hidden" name="userId" value={session.user?.id} />
       <Flex direction={`column`} gap={'6'} justify={'between'} py={'6'}>
         <FormInput
           label="Email"
@@ -45,14 +54,14 @@ function NewEmployeeForm({}: Props) {
 
         <FormInput
           label="Full Name"
-          defaultValue={session.user?.fullName!}
+          defaultValue={session.user?.fullName as string}
           type="text"
           name="name"
           charLimit={50}
           required
         />
 
-        <UsernameInput />
+        <UsernameInput setUserNameValid={setIsUsernameValid} />
 
         <FormInput
           label="Title"

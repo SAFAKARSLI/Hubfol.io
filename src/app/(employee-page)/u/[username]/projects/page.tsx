@@ -5,10 +5,10 @@ import { SlugProps } from '@/types/slug';
 import NoActiveProjectBanner from '@/components/NoActiveProjectBanner';
 
 export default async function page({ params, searchParams }: SlugProps) {
-  const { userUUID } = params;
+  const { username } = params;
 
   return (
-    <Projects userUUID={userUUID}>
+    <Projects username={username}>
       <NoActiveProjectBanner error={searchParams!.error} />
     </Projects>
   );

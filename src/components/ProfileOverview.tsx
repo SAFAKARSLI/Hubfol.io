@@ -15,11 +15,11 @@ import Employee from '@/types/employee';
 import Image from 'next/image';
 
 interface ProfileOverviewProps {
-  userUUID: string;
+  username: string;
 }
 
-const ProfileOverview = async ({ userUUID }: ProfileOverviewProps) => {
-  const user = (await fetch(`${baseUrl}/api/users/${userUUID}`, {
+const ProfileOverview = async ({ username }: ProfileOverviewProps) => {
+  const user = (await fetch(`${baseUrl}/api/users/${username}`, {
     cache: 'force-cache',
     next: { tags: ['users'] },
   }).then((r) => r.json())) as Employee;

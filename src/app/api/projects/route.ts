@@ -3,17 +3,20 @@ import { prisma } from '@/db';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const userUUID = searchParams.get('userUUID');
-  if (!validateUUID(userUUID!)) {
-    return new Response(
-      'Bad request. Invalid or no user identifier provided.',
-      { status: 400 }
-    );
+  const username = searchParams.get('username');
+
+  if (!username) {
+    return new Response('Bad Request. Missing username', { status: 400 });
   }
 
   try {
+    const owner = await prisma.employee.findUnique({
+      where: { username },
+      select: { uuid: true },
+    });
+
     const projects = await prisma.project.findMany({
-      where: { ownerId: userUUID as string },
+      where: { ownerId: owner?.uuid },
       orderBy: { createdAt: 'asc' },
       include: {
         sections: {

@@ -29,13 +29,15 @@ import * as Portal from '@radix-ui/react-portal';
 
 import ReactDOM from 'react-dom';
 import SidebarProfileOverview from '../SidebarProfileOverview';
+import { useUser } from '@clerk/clerk-react';
 
 type Props = {
   position: 'left' | 'right';
-  session: Session | null;
 };
 
-function SidebarButton({ position, session }: Props) {
+function SidebarButton({ position }: Props) {
+  const { user } = useUser();
+
   const [visible, setVisible] = React.useState(false);
   const menuPosition = position === 'left' ? `left-0` : 'right-0';
   const menuSlideAnimation =
@@ -54,8 +56,8 @@ function SidebarButton({ position, session }: Props) {
       >
         <Avatar
           className="h-8 w-8"
-          fallback={session?.user.name[0]}
-          src={session?.user.image}
+          fallback={user?.fullName![0]!}
+          src={user?.imageUrl}
         />
       </div>
       <Portal.Root>
@@ -78,25 +80,25 @@ function SidebarButton({ position, session }: Props) {
               color="gray"
             />
           </div>
-          <SidebarProfileOverview session={session} />
+          <SidebarProfileOverview />
           <Separator size={'4'} className="my-5" />
           <div className="flex flex-col gap-1">
             <SidebarMenuLink
               icon={<PersonIcon color="gray" className="w-5 h-5" />}
               text="My Profile"
-              link={`${baseUrl}/u/${session?.user.uuid}/profile`}
+              link={`${baseUrl}/u/${user?.username}/profile`}
               onClick={() => setVisible(false)}
             />
             <SidebarMenuLink
               icon={<RocketIcon color="gray" className="w-5 h-5" />}
               text="My Projects"
-              link={`${baseUrl}/u/${session?.user.uuid}/projects`}
+              link={`${baseUrl}/u/${user?.username}/projects`}
               onClick={() => setVisible(false)}
             />
             <SidebarMenuLink
               icon={<StarIcon color="gray" className="w-5 h-5" />}
               text="My Reviews"
-              link={`${baseUrl}/u/${session?.user.uuid}/reviews`}
+              link={`${baseUrl}/u/${user?.username}/reviews`}
               onClick={() => setVisible(false)}
             />
           </div>

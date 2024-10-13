@@ -1,11 +1,8 @@
 'use client';
 import { Button, Text, AlertDialog, Flex } from '@radix-ui/themes';
 import React, { useState } from 'react';
-import { signIn, signOut } from 'next-auth/react';
-import { FaSignOutAlt } from 'react-icons/fa';
-import { useParams } from 'next/navigation';
 import { ExitIcon } from '@radix-ui/react-icons';
-import SidebarMenuLink from './SidebarMenuLink';
+import { SignOutButton as ClerkSignOutButton } from '@clerk/nextjs';
 
 type Props = {};
 
@@ -30,12 +27,12 @@ function SignOutButton({}: Props) {
               Cancel
             </Button>
           </AlertDialog.Cancel>
-          <AlertDialog.Action
-            onClick={() => signOut({ callbackUrl: `/login` })}
-          >
-            <Button variant="solid" color="red">
-              Sign Out
-            </Button>
+          <AlertDialog.Action>
+            <ClerkSignOutButton>
+              <Button variant="solid" color="red">
+                Sign Out
+              </Button>
+            </ClerkSignOutButton>
           </AlertDialog.Action>
         </Flex>
       </AlertDialog.Content>

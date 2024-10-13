@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import {
   Text,
@@ -19,14 +21,13 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import Employee from '@/types/employee';
 import { FaDollarSign, FaMailBulk, FaPhone, FaPhoneAlt } from 'react-icons/fa';
 import { IconBase } from 'react-icons';
+import { formatPhoneNumberIntl } from 'react-phone-number-input';
 
 type Props = {
   user: Employee;
 };
 
-async function ViewContactInfo({ user }: Props) {
-  const session = await getServerSession(authOptions);
-
+function ViewContactInfo({ user }: Props) {
   const renderUserInfo = async () => {
     return (
       <DataList.Root>
@@ -56,7 +57,9 @@ async function ViewContactInfo({ user }: Props) {
         </DataList.Item>
         <DataList.Item>
           <DataList.Label minWidth="88px">Phone Number</DataList.Label>
-          <DataList.Value>{user.phoneNumber}</DataList.Value>
+          <DataList.Value>
+            {formatPhoneNumberIntl(user.phoneNumber)}
+          </DataList.Value>
         </DataList.Item>
       </DataList.Root>
     );

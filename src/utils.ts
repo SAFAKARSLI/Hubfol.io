@@ -2,7 +2,7 @@ import { dark } from '@clerk/themes';
 import { Brand } from './types/brand';
 import { PersonIcon } from '@radix-ui/react-icons';
 
-export const extractUUID = (url: string, identifier: string) => {
+export const extractSlug = (url: string, identifier: string) => {
   const index = url.split('/').indexOf(identifier) + 1; // returns -1 if not found. Hence checking for 0 at the bottom.
 
   if (index == 0) {

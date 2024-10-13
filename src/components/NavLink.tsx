@@ -13,10 +13,10 @@ type Props = {
 };
 
 function NavLink({ link, onClick, active }: Props) {
-  const { userUUID } = useParams();
+  const { username } = useParams();
   return (
     <Link
-      href={`/u/${userUUID}/${link.url}`}
+      href={`/u/${username}/${link.url}`}
       className={` ${active ? 'text-sm' : 'text-xs'}`}
       onClick={onClick}
     >

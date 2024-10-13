@@ -1,38 +1,18 @@
 'use server';
 
 import { prisma } from '@/db';
-import { Employee, User } from '@prisma/client';
-import { getServerSession } from 'next-auth';
-import { signIn, signOut } from 'next-auth/react';
-import { cookies } from 'next/headers';
-import { permanentRedirect, redirect } from 'next/navigation';
+import { Employee } from '@prisma/client';
+import { cache } from 'react';
+
+import { redirect, RedirectType } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
-import { authOptions } from '../api/auth/[...nextauth]/route';
 import { baseUrl } from '@/utils';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { clerkClient, User } from '@clerk/nextjs/server';
 
-export const logIn = async (userUUID: string) => {
-  cookies().set('uid', userUUID);
-  await signIn('google', { callbackUrl: `/users/${userUUID}/projects` });
-};
-
-export const logOut = async (userUUID: string) => {
-  cookies().delete('uid');
-  await signOut({ callbackUrl: `/users/${userUUID}/projects` });
-};
-
-export const employeeSectionsRedirect = async (
-  userUUID: string,
-  projectUUID: string
-) => {
-  redirect(`${baseUrl}/u/${userUUID}/projects/${projectUUID}/sections`);
-};
-
-export const checkExistingUser = async (email: string) => {
+export const checkExistingUser = async (userId: string) => {
   try {
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
+    const user = await clerkClient().users.getUser(userId);
     if (!user) {
       return null;
     }
@@ -45,18 +25,17 @@ export const checkExistingUser = async (email: string) => {
 };
 
 export const createEmployee = async (formData: FormData) => {
-  const email = formData.get('email') as string;
-  const user = await checkExistingUser(email);
+  const userId = formData.get('userId') as string;
+  const username = formData.get('username') as string;
+  const user = await checkExistingUser(userId);
 
   if (user) {
-    const uuid = user.uuid;
-    const username = formData.get('username') as string;
     const employee = {
-      name: user.name,
-      email: user.email,
       userId: user.id,
-      uuid,
       username,
+      uuid: uuidv4(),
+      name: formData.get('name') as string,
+      email: formData.get('email') as string,
       title: formData.get('title') as string,
       phoneNumber: formData.get('phoneNumber') as string,
       hourlyRate: parseFloat(formData.get('hourlyRate') as string),
@@ -64,23 +43,28 @@ export const createEmployee = async (formData: FormData) => {
     } as Employee;
 
     try {
-      await prisma.employee.create({
-        data: employee,
-      });
+      await prisma.employee
+        .create({
+          data: employee,
+        })
+        .then(async () => {
+          await clerkClient().users.updateUser(userId, {
+            username,
+            privateMetadata: {
+              hubfolioUsername: username,
+            },
+          });
+        });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          console.error('Error creating employee:', error);
-          redirect('/signup?error=account-already-exists-or-username-taken');
-        }
+        console.error('Error creating employee:', error);
+        redirect(
+          baseUrl + '/signup?error=account-already-exists-or-username-taken'
+        );
       }
-
-      console.error('Error creating employee:', error);
     } finally {
       prisma.$disconnect();
     }
-    // console.log('redirect from createEmployee');
-    // redirect(`/u/${uuid}/projects`);
   } else {
     throw new Error(
       'Invalid email provided or user does not exist. There was an error creating the accont. Please try again.'
@@ -88,15 +72,11 @@ export const createEmployee = async (formData: FormData) => {
   }
 };
 
-export const getUser = async (userUUID: string) => {
+export const getUser = cache(async (userId: string) => {
   try {
-    const user = await prisma.user.findUnique({
-      where: { uuid: userUUID },
-    });
+    const user = (await clerkClient().users.getUser(userId)) as User;
     return user;
   } catch (error) {
-    console.error('Error fetching user:', error);
-  } finally {
-    prisma.$disconnect();
+    return null;
   }
-};
+});

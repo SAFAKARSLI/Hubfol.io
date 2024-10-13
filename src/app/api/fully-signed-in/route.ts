@@ -1,8 +1,4 @@
-import { prisma } from '@/db';
-import { Brand } from '@/types/brand';
-import { NextApiRequest, NextApiResponse } from 'next';
 import { auth, clerkClient } from '@clerk/nextjs/server';
-import { baseUrl } from '@/utils';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {

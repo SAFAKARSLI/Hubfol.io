@@ -1,18 +1,18 @@
 import { validateUUID } from '@/app/actions/utils';
 import { prisma } from '@/db';
-import { extractUUID } from '@/utils';
+import { extractSlug } from '@/utils';
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const userUUID = extractUUID(url.pathname, 'users');
+  const username = url.pathname.split('/').pop();
 
-  if (!userUUID || !validateUUID(userUUID)) {
-    return new Response('User UUID is required', { status: 400 });
+  if (!username) {
+    return new Response('Username is not provided.', { status: 400 });
   }
 
   try {
     const user = await prisma.employee.findUnique({
-      where: { uuid: userUUID as string },
+      where: { username },
     });
 
     if (!user) {

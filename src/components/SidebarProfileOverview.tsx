@@ -1,13 +1,14 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { useUser } from '@clerk/nextjs';
 import { Avatar, Heading, Text } from '@radix-ui/themes';
 import { Session } from 'next-auth';
 import React from 'react';
 
-type Props = {
-  session: Session | null;
-};
+type Props = {};
 
-function SidebarProfileOverview({ session }: Props) {
+function SidebarProfileOverview({}: Props) {
+  const { user } = useUser();
+
   return (
     <div
       // onClick={() => setVisible(false)}
@@ -17,13 +18,13 @@ function SidebarProfileOverview({ session }: Props) {
         className="mr-3"
         height={32}
         width={32}
-        fallback={session?.user.name[0]}
-        src={session?.user.image}
+        fallback={user?.fullName![0]!}
+        src={user?.imageUrl}
       />
       <div className="flex flex-col justify-between">
-        <Heading size={'3'}>{session?.user.name}</Heading>
+        <Heading size={'3'}>{user?.fullName}</Heading>
         <Text color="gray" size={'2'}>
-          {session?.user.username ?? 'safakarsli'}
+          {user?.username}
         </Text>
       </div>
     </div>

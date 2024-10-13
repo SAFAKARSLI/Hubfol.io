@@ -18,7 +18,7 @@ export default function GlobalError({
   const { userUUID } = useParams();
 
   return (
-    <div className="flex justify-center items-center w-full h-full">
+    <div className="flex justify-center items-center w-full h-screen">
       <div className="text-center flex flex-col justify-center items-center">
         <h2 className="text-xl">Something went wrong!</h2>
         <p className="text-red-10 text-lg text-center">{error.message}</p>

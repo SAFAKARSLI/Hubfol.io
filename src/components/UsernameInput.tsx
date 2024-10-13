@@ -6,9 +6,11 @@ import { CheckIcon, Cross1Icon, Cross2Icon } from '@radix-ui/react-icons';
 import { Spinner } from '@radix-ui/themes';
 import React, { useEffect } from 'react';
 
-type Props = {};
+type Props = {
+  setUserNameValid: (value: boolean) => void;
+};
 
-function UsernameInput({}: Props) {
+function UsernameInput({ setUserNameValid }: Props) {
   const [username, setUsername] = React.useState<string | undefined>('');
   const [usernameBounce, setUsernameBounce] = React.useState<
     string | undefined
@@ -22,6 +24,7 @@ function UsernameInput({}: Props) {
     }
 
     setStatus('loading');
+    setUserNameValid(false);
     const timeout = setTimeout(() => {
       setUsernameBounce(username);
     }, 800);
@@ -39,6 +42,7 @@ function UsernameInput({}: Props) {
     const isValid = validateUsername(usernameBounce);
     if (!isValid) {
       setStatus('invalid');
+      setUserNameValid(false);
       return;
     }
 
@@ -46,12 +50,19 @@ function UsernameInput({}: Props) {
       try {
         const response = await fetch(`/api/employee/${usernameBounce}`).then(
           (r) => {
-            r.status == 404 ? setStatus('valid') : setStatus('username-taken');
+            if (r.status == 404) {
+              setStatus('valid');
+              setUserNameValid(true);
+            } else {
+              setStatus('username-taken');
+              setUserNameValid(false);
+            }
           }
         );
       } catch (error) {
         console.error(error);
         setStatus('invalid');
+        setUserNameValid(false);
       }
     }
 

@@ -13,7 +13,8 @@ interface NavigationLinksProps {
 }
 
 function NavigationLinks({ onClick, authenticated }: NavigationLinksProps) {
-  const { userUUID } = useParams();
+  const { username } = useParams();
+
   const url = usePathname();
   const active = activeLink(url);
 
@@ -34,7 +35,7 @@ function NavigationLinks({ onClick, authenticated }: NavigationLinksProps) {
           <Separator orientation="vertical" size="1" />
           {highlightedLinks.map(({ title, url }, index) => (
             <Link
-              href={`/u/${userUUID}/${url}`}
+              href={`/u/${username}/${url}`}
               key={index}
               className={`header-link header-highlighted-link ${
                 active == url && 'header-link-active'

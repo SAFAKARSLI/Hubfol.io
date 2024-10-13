@@ -1,25 +1,22 @@
 import React, { cloneElement } from 'react';
-
 import Project from '@/types/project';
 import ProjectsSidePanel from '../ProjectsSidePanel';
-import next from 'next';
-import { notFound, redirect } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { baseUrl } from '@/utils';
-import NoActiveProjectBanner from '../NoActiveProjectBanner';
 
 interface ProjectsProps {
-  userUUID: string;
+  username: string;
   children?: React.ReactNode;
   activeProjectId?: string;
 }
 
 const Projects = async ({
-  userUUID,
+  username,
   children,
   activeProjectId,
 }: ProjectsProps) => {
   const projects = (await fetch(
-    `${baseUrl}/api/projects?userUUID=${userUUID}`,
+    `${baseUrl}/api/projects?username=${username}`,
     {
       next: {
         tags: ['projects', 'sections'],
@@ -31,13 +28,13 @@ const Projects = async ({
   if (activeProjectId) {
     project = projects.find((project) => project.uuid === activeProjectId);
 
-    if (!project) redirect(`/u/${userUUID}/projects?error=project-not-found`);
+    if (!project) redirect(`/u/${username}/projects?error=project-not-found`);
   }
 
   return (
     <div className="flex ">
       <div className="flex-none">
-        <ProjectsSidePanel initialProjects={projects} userUUID={userUUID} />
+        <ProjectsSidePanel initialProjects={projects} username={username} />
       </div>
 
       <div className="flex-1 bg-gray-0 relative">
