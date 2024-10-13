@@ -6,6 +6,7 @@ import { Adapter } from 'next-auth/adapters';
 import { v4 as uuidv4 } from 'uuid';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { prisma } from '@/db';
+import { redirect } from 'next/navigation';
 
 const authOptions: NextAuthOptions = {
   session: {
@@ -14,27 +15,25 @@ const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/login',
     // signOut: '/auth/signout',
-    error: '/login?error=true',
+    // error: '/login?error=true',
     // verifyRequest: '/auth/verify-request',
-    newUser: '/auth/new-user',
+    newUser: '/new-user',
   },
   adapter: PrismaAdapter(prisma) as Adapter,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      authorization: {
-        params: {
-          scope: 'openid profile email', // No "prompt=consent" here
-          prompt: 'select_account', // Only ask users to select an account
-        },
-      },
     }),
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
       authorization: {
-        params: { scope: 'read:user user:email' },
+        params: {
+          prompt: 'consent',
+          access_type: 'offline',
+          response_type: 'code',
+        },
       },
     }),
   ],
@@ -49,11 +48,17 @@ const authOptions: NextAuthOptions = {
 
       return true;
     },
+
     async session({ session, user, trigger, newSession }) {
       // Add the UUID to the session object
       session.user.uuid = user.uuid;
 
       return session;
+    },
+  },
+  events: {
+    async createUser(message) {
+      redirect(`/new-user`);
     },
   },
 };

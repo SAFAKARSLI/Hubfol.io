@@ -1,3 +1,4 @@
+import { dark } from '@clerk/themes';
 import { Brand } from './types/brand';
 import { PersonIcon } from '@radix-ui/react-icons';
 
@@ -128,4 +129,16 @@ export const highlightedLinks = [
 
 export const activeLink = (url: string) => {
   return url.split('/')[3];
+};
+
+export const customThemeClerkAuthenticationComponents = {
+  baseTheme: dark,
+  variables: {
+    colorInputBackground: '#111113',
+    colorInputText: 'white',
+    colorPrimary: '#3f53cf',
+    colorTextOnPrimaryBackground: 'white',
+    colorText: 'white',
+    colorBackground: '#19191b',
+  },
 };

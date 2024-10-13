@@ -5,10 +5,11 @@ import { Employee, User } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { signIn, signOut } from 'next-auth/react';
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+import { permanentRedirect, redirect } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import { baseUrl } from '@/utils';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 export const logIn = async (userUUID: string) => {
   cookies().set('uid', userUUID);
@@ -18,10 +19,6 @@ export const logIn = async (userUUID: string) => {
 export const logOut = async (userUUID: string) => {
   cookies().delete('uid');
   await signOut({ callbackUrl: `/users/${userUUID}/projects` });
-};
-
-export const employeeHomeRedirect = async (userUUID: string) => {
-  redirect(`${baseUrl}/u/${userUUID}/projects`);
 };
 
 export const employeeSectionsRedirect = async (
@@ -47,23 +44,22 @@ export const checkExistingUser = async (email: string) => {
   }
 };
 
-export const createEmployee = async (email: string, data: FormData) => {
-  const user: User | null = await prisma.user.findUnique({
-    where: { email },
-  });
+export const createEmployee = async (formData: FormData) => {
+  const email = formData.get('email') as string;
+  const user = await checkExistingUser(email);
 
   if (user) {
     const uuid = user.uuid;
-
+    const username = formData.get('username') as string;
     const employee = {
       name: user.name,
       email: user.email,
       userId: user.id,
       uuid,
-      title: data.get('title') as string,
-      location: data.get('location') as string,
-      phoneNumber: data.get('phoneNumber') as string,
-      hourlyRate: parseFloat(data.get('hourlyRate') as string),
+      username,
+      title: formData.get('title') as string,
+      phoneNumber: formData.get('phoneNumber') as string,
+      hourlyRate: parseFloat(formData.get('hourlyRate') as string),
       createdAt: new Date(),
     } as Employee;
 
@@ -72,11 +68,19 @@ export const createEmployee = async (email: string, data: FormData) => {
         data: employee,
       });
     } catch (error) {
-      console.error('Error updating user:', error);
+      if (error instanceof PrismaClientKnownRequestError) {
+        if (error.code === 'P2002') {
+          console.error('Error creating employee:', error);
+          redirect('/signup?error=account-already-exists-or-username-taken');
+        }
+      }
+
+      console.error('Error creating employee:', error);
     } finally {
       prisma.$disconnect();
-      redirect('/u/' + uuid);
     }
+    // console.log('redirect from createEmployee');
+    // redirect(`/u/${uuid}/projects`);
   } else {
     throw new Error(
       'Invalid email provided or user does not exist. There was an error creating the accont. Please try again.'

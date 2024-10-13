@@ -1,0 +1,47 @@
+import React, { useEffect } from 'react';
+
+import { Box, Heading, Text, Separator } from '@radix-ui/themes';
+
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { getServerSession } from 'next-auth';
+
+import Image from 'next/image';
+import { preferredColorOptions } from '@/utils';
+
+import NewEmployeeForm from './NewEmployeeForm';
+
+type Props = {};
+
+async function page({}: Props) {
+  const session = await getServerSession(authOptions);
+
+  return (
+    <div className="bg-gray-2 w-3/5 max-w-[1500px] border-x border-gray-4  m-auto -lg:w-full min-h-full p-4">
+      <Image
+        alt="hubfolio-banner"
+        src={'/hubfolio-banner.png'}
+        width={500}
+        height={250}
+        className="m-auto w-[8rem]"
+      />
+      <div className="w-3/5 m-auto flex flex-col ">
+        <Box width={'100%'} className="flex flex-col items-center gap-1 pt-3">
+          <Heading size={'6'}>Complete Sign Up</Heading>
+          <Separator
+            orientation={'horizontal'}
+            size={'4'}
+            color={preferredColorOptions.accentColor}
+          />
+          <div className="flex flex-col items-center pt-2">
+            <Text size={'3'}>Welcome to the community!</Text>
+
+            <Text size={'3'}>Please complete the form below to sign up.</Text>
+          </div>
+        </Box>
+        <NewEmployeeForm session={session} />
+      </div>
+    </div>
+  );
+}
+
+export default page;

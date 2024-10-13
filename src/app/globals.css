@@ -1,10 +1,16 @@
 @import '@radix-ui/themes/styles.css';
+@import 'react-phone-number-input/style.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
+  --PhoneInputCountryFlag-aspectRatio: 1.333;
+}
+
+input {
+  outline: none;
 }
 
 .dark,
@@ -71,6 +77,13 @@ input[type='file'] {
 
   transform: scaleX(0);
   transition: transform 0.3s;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .header-link {

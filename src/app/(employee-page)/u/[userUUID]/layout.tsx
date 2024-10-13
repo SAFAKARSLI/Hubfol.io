@@ -8,6 +8,7 @@ import { Theme } from '@radix-ui/themes';
 import React from 'react';
 import { SlugProps } from '@/types/slug';
 import { preferredColorOptions } from '@/utils';
+import { ClerkProvider } from '@clerk/nextjs';
 
 export const metadata: Metadata = {
   title: 'Hubfolio',
@@ -23,25 +24,27 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children, params }: Readonly<SlugProps>) {
   return (
-    <html lang="en">
-      <Head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
-      <Theme
-        accentColor={preferredColorOptions.accentColor}
-        appearance={preferredColorOptions.appearance}
-        asChild
-      >
-        <body>
-          <div className="h-[100dvh] ">
-            <TopBar params={params} />
-            <div>{children}</div>
-          </div>
-        </body>
-      </Theme>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <Head>
+          <link
+            href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap"
+            rel="stylesheet"
+          />
+        </Head>
+        <Theme
+          accentColor={preferredColorOptions.accentColor}
+          appearance={preferredColorOptions.appearance}
+          asChild
+        >
+          <body>
+            <div className="h-[100dvh] ">
+              <TopBar params={params} />
+              <div>{children}</div>
+            </div>
+          </body>
+        </Theme>
+      </html>
+    </ClerkProvider>
   );
 }

@@ -13,7 +13,9 @@ type Props = {
 
 function OAuthSignUpButton({ logo, label, OAuthType, variant, color }: Props) {
   const handleSignUpButtonClick = async () => {
-    signIn(OAuthType, { callbackUrl: '/fully-signed-in' });
+    const response = await signIn(OAuthType, {
+      callbackUrl: '/fully-signed-up',
+    });
   };
 
   return (

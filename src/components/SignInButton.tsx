@@ -6,13 +6,10 @@ type Props = {};
 
 function SignInButton({}: Props) {
   return (
-    <Link
-      href={'/login'}
-      className="text-sm text-violet-11 flex gap-2 items-center"
-    >
+    <div className="text-sm text-violet-11 flex gap-2 items-center hover:cursor-pointer">
       <EnterIcon />
       Log in
-    </Link>
+    </div>
   );
 }
 

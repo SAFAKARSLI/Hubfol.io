@@ -1,6 +1,7 @@
 'use client';
 import { Button, Text } from '@radix-ui/themes';
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 type Props = {
@@ -12,8 +13,12 @@ type Props = {
 };
 
 function OAuthSignInButton({ logo, label, OAuthType, variant, color }: Props) {
+  const router = useRouter();
+
   const handleSignInButtonClick = async () => {
-    signIn(OAuthType, { callbackUrl: '/fully-signed-in' });
+    const response = await signIn(OAuthType, {
+      callbackUrl: '/fully-signed-in',
+    });
   };
 
   return (

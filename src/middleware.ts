@@ -1,11 +1,13 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import { baseUrl } from './utils';
-import { getServerSession } from 'next-auth';
-import { authOptions } from './app/api/auth/[...nextauth]/route';
+import { clerkMiddleware, getAuth } from '@clerk/nextjs/server';
+import { NextRequest } from 'next/server';
 
-export async function middleware(request: NextRequest) {}
+export default clerkMiddleware((auth, req) => {});
 
 export const config = {
-  matcher: ['/u/:path*/projects/:path*/:path*'],
+  matcher: [
+    // Skip Next.js internals and all static files, unless found in search params
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Always run for API routes
+    '/(api|trpc)(.*)',
+  ],
 };

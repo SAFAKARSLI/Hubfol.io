@@ -6,13 +6,9 @@ type Props = {};
 
 function SignUpButton({}: Props) {
   return (
-    <Link
-      href={'/signup'}
-      type="button"
-      className="border border-gray-4 p-1 px-2 bg-violet-7 rounded-md hover:bg-violet-8 text-sm"
-    >
-      Create Account
-    </Link>
+    <div className="border border-gray-4 p-1 px-2 bg-violet-7 rounded-md hover:bg-violet-8 text-sm flex h-full hover:cursor-pointer">
+      <p>Create Account</p>
+    </div>
   );
 }
 

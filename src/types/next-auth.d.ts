@@ -9,12 +9,14 @@ interface Preferences {
 declare module 'next-auth' {
   interface User {
     uuid?: string;
+    username?: string;
     // preferences?: Preferences;
   }
 
   interface Session {
     user: {
       uuid?: string;
+      username?: string;
     } & DefaultSession['user'];
   }
 }

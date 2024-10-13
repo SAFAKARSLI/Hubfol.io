@@ -1,3 +1,4 @@
+'use client';
 import { buttonVariants, colorOptions } from '@/utils';
 import { Button } from '@radix-ui/themes';
 import React from 'react';
