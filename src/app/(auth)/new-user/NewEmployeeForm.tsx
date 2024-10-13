@@ -11,12 +11,14 @@ import SubmitButton from '@/components/SubmitButton';
 import CustomPhoneInput from './CustomPhoneInput';
 import { useRouter } from 'next/navigation';
 import UsernameInput from '@/components/UsernameInput';
+import { useUser } from '@clerk/nextjs';
 
 type Props = {
   session: Session | null;
 };
 
-function NewEmployeeForm({ session }: Props) {
+function NewEmployeeForm({}: Props) {
+  const session = useUser();
   const router = useRouter();
   return (
     <Form.Root
@@ -25,13 +27,17 @@ function NewEmployeeForm({ session }: Props) {
         router.push(`/fully-signed-up`);
       }}
     >
-      <input type="hidden" name="email" value={session?.user.email} />
-      <Flex direction={`column`} gap={'5'} justify={'between'} py={'6'}>
+      <input
+        type="hidden"
+        name="email"
+        value={session.user?.primaryEmailAddress?.emailAddress}
+      />
+      <Flex direction={`column`} gap={'6'} justify={'between'} py={'6'}>
         <FormInput
           label="Email"
           type="text"
           description="You have selected the following email address to sign up."
-          defaultValue={session?.user.email}
+          value={session.user?.primaryEmailAddress?.emailAddress}
           name="email"
           disabled
           required
@@ -39,7 +45,7 @@ function NewEmployeeForm({ session }: Props) {
 
         <FormInput
           label="Full Name"
-          defaultValue={session?.user.name}
+          defaultValue={session.user?.fullName!}
           type="text"
           name="name"
           charLimit={50}

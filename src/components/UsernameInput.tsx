@@ -46,7 +46,7 @@ function UsernameInput({}: Props) {
       try {
         const response = await fetch(`/api/employee/${usernameBounce}`).then(
           (r) => {
-            r.status == 404 ? setStatus('valid') : setStatus('invalid');
+            r.status == 404 ? setStatus('valid') : setStatus('username-taken');
           }
         );
       } catch (error) {
@@ -61,17 +61,25 @@ function UsernameInput({}: Props) {
   return (
     <>
       <FormInput
+        forceMatch={status == 'invalid' || status == 'username-taken'}
         label="Username"
         type="text"
         value={username}
         setValue={setUsername}
         description={`This will be your unique identifier on the platform. Usernames can only contain [A-Z, a-z, 0-9, -, _], must be 3-50 characters long, and cannot start, end, or have consecutive dashes or underscores.`}
         name="username"
+        message={
+          status === 'invalid'
+            ? 'Invalid username. Please read the description for the criteria.'
+            : status === 'username-taken'
+            ? 'Username is already taken.'
+            : ''
+        }
         style={`italic ${
           status == 'valid' &&
           'text-green-11 border-green-800 focus:border-green-800'
         } ${
-          status == 'invalid' &&
+          (status == 'invalid' || status == 'username-taken') &&
           'text-red-300 border-red-300 focus:border-red-300'
         }`}
         logo={
@@ -80,7 +88,7 @@ function UsernameInput({}: Props) {
               https://www.hubfol.io/u/
             </p>
             {status == 'loading' && <Spinner className="mx-1 " />}
-            {status == 'invalid' && (
+            {(status == 'invalid' || status == 'username-taken') && (
               <Cross2Icon className="mx-1 h-8 w-8" color="red" />
             )}
             {status == 'valid' && (

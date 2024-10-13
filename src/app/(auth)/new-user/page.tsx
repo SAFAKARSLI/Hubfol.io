@@ -16,7 +16,7 @@ async function page({}: Props) {
   const session = await getServerSession(authOptions);
 
   return (
-    <div className="bg-gray-2 w-3/5 max-w-[1500px] border-x border-gray-4  m-auto -lg:w-full min-h-full p-4">
+    <div className="bg-gray-2 w-4/5 max-w-[1500px] border-x border-gray-4  m-auto -lg:w-full min-h-full p-4">
       <Image
         alt="hubfolio-banner"
         src={'/hubfolio-banner.png'}

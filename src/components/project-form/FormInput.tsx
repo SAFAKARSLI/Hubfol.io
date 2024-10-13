@@ -22,6 +22,7 @@ type Props = {
   charLimit?: number;
   disabled?: boolean;
   step?: number;
+  forceMatch?: boolean;
 };
 
 function FormInput({
@@ -40,6 +41,7 @@ function FormInput({
   disabled,
   step,
   style,
+  forceMatch,
 }: Props) {
   const [currentValue, setCurrentValue] = React.useState<
     string | number | undefined
@@ -87,17 +89,18 @@ function FormInput({
       <Form.Message
         match={'typeMismatch'}
         name={name}
-        className="text-sm text-red-300"
+        className="text-xs text-red-500"
+        forceMatch={forceMatch}
       >
         {message}
       </Form.Message>
-      <Form.Message match={'valueMissing'} className="text-xs text-red-300">
+      <Form.Message match={'valueMissing'} className="text-xs text-red-500">
         You must provide response.
       </Form.Message>
-      <Form.Message match={'rangeOverflow'} className="text-xs text-red-300">
+      <Form.Message match={'rangeOverflow'} className="text-xs text-red-500">
         You must provide a number less than 9999.
       </Form.Message>
-      <Form.Message match={'rangeUnderflow'} className="text-xs text-red-300">
+      <Form.Message match={'rangeUnderflow'} className="text-xs text-red-500">
         Your hourly rate cannot t be less than 0.
       </Form.Message>
     </Form.Field>
