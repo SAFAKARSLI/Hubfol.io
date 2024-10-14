@@ -9,10 +9,10 @@ import React from 'react';
 type Props = {};
 
 export default function page({ params }: SlugProps) {
-  const { userUUID, projectUUID } = params;
+  const { username, projectUUID } = params;
 
   return (
-    <Projects userUUID={userUUID} activeProjectId={projectUUID}>
+    <Projects username={username} activeProjectId={projectUUID}>
       <ProjectFrame />
     </Projects>
   );

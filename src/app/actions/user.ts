@@ -52,6 +52,7 @@ export const createEmployee = async (formData: FormData) => {
             username,
             privateMetadata: {
               hubfolioUsername: username,
+              hubfolioUserId: employee.uuid,
             },
           });
         });

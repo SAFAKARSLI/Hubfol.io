@@ -15,7 +15,7 @@ type Props = {
 function ProjectForm({ activeStepIndex }: Props) {
   // Will allow me to set the initialize query param such that in the intial form, we get around with the initial fethcing of the data.
   const searchParams = useSearchParams();
-  const { userUUID, projectUUID } = useParams();
+  const { username, projectUUID } = useParams();
   return (
     <Stepper
       activeStepIndex={activeStepIndex}
@@ -27,7 +27,7 @@ function ProjectForm({ activeStepIndex }: Props) {
           content: <ProjectInfoForm editFormData={null} />,
           onComplete: upsertGeneralInfo,
           fetchResource: '',
-          callback: `${baseUrl}/u/${userUUID}/projects/${projectUUID}/sections?${searchParams.toString()}`,
+          callback: `${baseUrl}/u/${username}/projects/${projectUUID}/sections?${searchParams.toString()}`,
           slug: 'general-information',
           index: 0,
         },
@@ -38,7 +38,7 @@ function ProjectForm({ activeStepIndex }: Props) {
           content: <SectionsTable />,
           onComplete: () => console.log('skip'),
           fetchResource: '',
-          callback: `${baseUrl}/u/${userUUID}/projects/${projectUUID}/frame-options?${searchParams.toString()}`,
+          callback: `${baseUrl}/u/${username}/projects/${projectUUID}/frame-options?${searchParams.toString()}`,
           slug: 'sections',
           index: 1,
         },
@@ -48,7 +48,7 @@ function ProjectForm({ activeStepIndex }: Props) {
           content: <FrameOptionsForm />,
           onComplete: () => console.log('Skipped General Information'),
           fetchResource: '',
-          callback: `${baseUrl}/u/${userUUID}/projects/${projectUUID}/review?${searchParams.toString()}`,
+          callback: `${baseUrl}/u/${username}/projects/${projectUUID}/review?${searchParams.toString()}`,
           slug: 'frame-options',
           index: 2,
         },
@@ -58,7 +58,7 @@ function ProjectForm({ activeStepIndex }: Props) {
           content: <div>Review your project details here.</div>,
           onComplete: () => console.log('Skipped General Information'),
           fetchResource: '',
-          callback: `${baseUrl}/u/${userUUID}/projects`,
+          callback: `${baseUrl}/u/${username}/projects`,
           slug: 'review',
           index: 3,
         },

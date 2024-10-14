@@ -24,7 +24,7 @@ function SectionsTable({}: Props) {
   const [sections, setSections] = useState<Section[]>([]);
   const init = useSearchParams().get('initialize');
   const router = useRouter();
-  const { userUUID, projectUUID } = useParams();
+  const { username, projectUUID } = useParams();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ function SectionsTable({}: Props) {
   }, []);
 
   useEffect(() => {
-    if (sections || init) setLoading(false);
+    if (sections.length == 0 || init) setLoading(false);
   }, [sections]);
 
   return (
@@ -69,12 +69,7 @@ function SectionsTable({}: Props) {
         loading={loading}
         onClick={() => {
           setLoading(true);
-          // const newSection = await initiateSection(projectUUID as string);
-          // if (!newSection || newSection.status != 200) {
-          //   router.push(`/u/${userUUID}/projects?error=section-failure`);
-          // }
-          router.push(`/u/${userUUID}/projects/${projectUUID}/sections/new`);
-          // setSections([...sections, newSection.data!]);
+          router.push(`/u/${username}/projects/${projectUUID}/sections/new`);
         }}
       >
         <PlusIcon />

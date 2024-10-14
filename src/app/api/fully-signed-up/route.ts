@@ -12,12 +12,9 @@ export async function GET(req: NextRequest) {
       `${process.env.NEXT_PUBLIC_BASE_URL}/new-user`,
       303
     );
-  } else {
-    return NextResponse.redirect(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/signup?error=internal-error`,
-      303
-    );
   }
-
-  return {};
+  return NextResponse.redirect(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/signup?error=internal-error`,
+    303
+  );
 }

@@ -13,20 +13,11 @@ type Props = {
 };
 
 function AddProjectButton({ variant = 'soft' }: Props) {
-  const { userUUID } = useParams();
-  const router = useRouter();
-
-  async function handleAddButtonClick() {
-    // router.push(
-    //   `/u/${userUUID}/projects/${
-    //     initiatedProject.data!.uuid
-    //   }/general-information?initialize=true`
-    // );
-  }
+  const { username } = useParams();
 
   return (
     <form action={initiateProject}>
-      <input type="hidden" name="userUUID" value={userUUID} />
+      <input type="hidden" name="username" value={username} />
       <SubmitButton
         variant={variant}
         style="cursor-pointer rounded h-12 w-full mb-3"

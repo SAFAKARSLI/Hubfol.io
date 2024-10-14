@@ -5,6 +5,7 @@ import { extractSlug } from '@/utils';
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const username = url.pathname.split('/').pop();
+  console.log('username recieved from u/username route ', username);
 
   if (!username) {
     return new Response('Username is not provided.', { status: 400 });

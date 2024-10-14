@@ -26,10 +26,10 @@ type Props = {
 function SectionForm({ initial = false }: Props) {
   const [section, setSection] = React.useState<Section>();
   const router = useRouter();
-  const { sectionUUID, userUUID, projectUUID } = useParams();
+  const { sectionUUID, username, projectUUID } = useParams();
   const [formAction, editFormData] = usePreloadedFormData(
     upsertSections,
-    `${baseUrl}/u/${userUUID}/projects/${projectUUID}/sections`
+    `${baseUrl}/u/${username}/projects/${projectUUID}/sections`
   );
   const [contentType, setContentType] = React.useState<Content>(Content.TEXT);
   const [loading, setLoading] = React.useState(true);
@@ -100,7 +100,7 @@ function SectionForm({ initial = false }: Props) {
           required
           defaultValue={section?.title}
           name="title"
-          placerholder='Enter the section title here. (e.g "Project Description")'
+          placeholder='Enter the section title here. (e.g "Project Description")'
           type={'text'}
           charLimit={50}
         />
@@ -110,7 +110,7 @@ function SectionForm({ initial = false }: Props) {
           description='Use descriptions to provide a brief overview of the section content. Although there is no character limit for the description, we recommend using "TEXT" section for lengthy texts.'
           defaultValue={section?.description!}
           name="description"
-          placerholder="Enter the section description"
+          placeholder="Enter the section description"
           type={'text'}
         />
 

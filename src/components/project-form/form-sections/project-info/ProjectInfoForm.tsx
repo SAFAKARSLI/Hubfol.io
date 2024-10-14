@@ -51,7 +51,8 @@ function ProjectInfoForm({ editFormData }: Props) {
         <FormInput
           label="Name"
           name="name"
-          placerholder="Enter your project name"
+          placeholder="Enter your project name"
+          charLimit={30}
           message="You must provide a valid project name"
           defaultValue={project?.name}
           type="text"
@@ -60,14 +61,15 @@ function ProjectInfoForm({ editFormData }: Props) {
         <FormInput
           label="Tagline"
           name="tagline"
-          placerholder="Describe your project in one sentence"
+          charLimit={50}
+          placeholder="Describe your project in one sentence"
           defaultValue={project?.tagline}
           type="text"
         />
         <FormInput
           label="URL"
           name="url"
-          placerholder="Enter the project URL"
+          placeholder="Enter the project URL"
           message="You must provide a valid URL. (must include http:// or https://)"
           defaultValue={project?.url}
           type="url"

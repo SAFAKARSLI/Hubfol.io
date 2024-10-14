@@ -14,84 +14,31 @@ import { validateUUID } from './utils';
 import { getServerSession, Session } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import { prisma } from '@/db';
-import { Content, Employee } from '@prisma/client';
-import { InputJsonValue } from '@prisma/client/runtime/library';
-import { baseUrl } from '@/utils';
-import { Section } from '@/types/section';
+import { auth, User } from '@clerk/nextjs/server';
 import { revalidateTag } from 'next/cache';
-import { cookies } from 'next/headers';
+import { getUser } from './user';
 
 const bucketName = process.env.AWS_PROJECT_ICONS_BUCKET_NAME as string;
 
-export const createProject = async (formData: FormData) => {
-  const session = await getServerSession(authOptions);
-  if (!session || !session.user) {
-    throw new Error('You must be signed in to do that.');
-  }
-
-  const iconLink = (await uploadProjectIcon(formData.get('iconLink') as File))
-    .data as string;
-
-  const projectFromFormData = {
-    name: formData.get('name') as string,
-    url: formData.get('url') as string,
-    iconLink,
-    tagline: formData.get('tagline') as string,
-    createdAt: new Date(),
-    ownerId: session.user.uuid,
-    uuid: uuidv4(),
-  };
-
-  // const schema = z.object({
-  //   name: z.string().min(1, { message: 'Name is required.' }),
-  //   url: z.string().url({ message: 'Invalid URL.' }),
-  //   tagline: z.string().optional(),
-  //   iconLink: z.string().url().optional(),
-  // });
-
-  // const parse = schema.safeParse(projectFromFormData);
-
-  // const errors = [] as string[];
-
-  // if (!parse.success) {
-  //   parse.error.errors.forEach((err) => {
-  //     errors.push(`${err.path.join(' -> ')}: ${err.message}`);
-  //   });
-  //   return { errors };
-  // }
-
-  try {
-    await prisma.project.create({
-      data: projectFromFormData,
-    });
-  } catch (error) {
-    // errors.push('Failed to create project');
-  } finally {
-    await prisma.$disconnect();
-  }
-
-  revalidateTag('projects');
-  redirect(`/u/${session.user.uuid}/projects/${projectFromFormData.uuid}`);
-};
-
 export const initiateProject = async (formData: FormData) => {
-  const session = await getServerSession(authOptions);
-  if (!session || !session.user) {
-    return { status: 401, message: 'You must be signed in to do that.' };
-  }
+  const session = auth();
+  session.protect();
+  const { userId } = session;
+  const user = await getUser(userId!);
 
-  const userUUID = formData.get('userUUID') as string;
+  const username = formData.get('username') as string;
 
-  if (session.user.uuid != userUUID)
+  if (user?.username != username)
     return { status: 403, message: 'Not authorized.' };
 
   const date = new Date();
   const projectUUID = uuidv4();
+  const { hubfolioUserId } = user.privateMetadata;
   try {
     const initiatedProject = await prisma.project.create({
       data: {
         uuid: projectUUID,
-        ownerId: session.user.uuid,
+        ownerId: hubfolioUserId as string,
         createdAt: date,
         name: 'New Project',
         url: '',
@@ -108,22 +55,18 @@ export const initiateProject = async (formData: FormData) => {
     await prisma.$disconnect();
     revalidateTag('projects');
     redirect(
-      `/u/${session.user.uuid}/projects/${projectUUID}/general-information?initialize=true`
+      `/u/${username}/projects/${projectUUID}/general-information?initialize=true`
     );
   }
 };
 
 export const checkForAuthority = async (
   projectUUID: string,
-  session: Session | null
+  userUUID: string
 ) => {
-  if (!session || !session.user) {
-    return { status: 401, message: 'You must be signed in to do that.' };
-  }
-
   try {
     const project = await prisma.project.findUnique({
-      where: { uuid: projectUUID, ownerId: session.user.uuid },
+      where: { uuid: projectUUID, ownerId: userUUID },
     });
     if (!project) {
       return { status: 403, message: 'Not authorized.' };
@@ -137,6 +80,9 @@ export const checkForAuthority = async (
 };
 
 export const upsertGeneralInfo = async (formData: FormData) => {
+  const session = auth();
+  session.protect();
+
   const iconLink = (await uploadProjectIcon(formData.get('iconLink') as File))
     .data as string;
   const projectFromFormData = {
@@ -165,12 +111,16 @@ export const upsertGeneralInfo = async (formData: FormData) => {
     }
   }
 
-  const session = await getServerSession(authOptions);
-
   if (projectUUID != null && !validateUUID(projectUUID))
     return { status: 400, message: 'Invalid project identifier provided.' };
 
-  const authorityCheck = await checkForAuthority(projectUUID, session);
+  const user = await getUser(session.userId!);
+  const { hubfolioUserId } = user?.privateMetadata!;
+
+  const authorityCheck = await checkForAuthority(
+    projectUUID,
+    hubfolioUserId as string
+  );
   if (authorityCheck.status != 200) return authorityCheck;
 
   try {
@@ -193,15 +143,11 @@ export const upsertGeneralInfo = async (formData: FormData) => {
 };
 
 export const deleteProject = async (projectUUID: string) => {
-  const session = await getServerSession(authOptions);
-  if (!session || !session.user)
-    return {
-      status: 401,
-      message: 'You must be signed in to do that.',
-    };
+  const session = auth();
+  session.protect();
 
   let userUUID: string | undefined;
-
+  const user = (await getUser(session.userId!)) as User;
   try {
     const projectFromDb = await prisma.project.findUnique({
       where: { uuid: projectUUID },
@@ -211,7 +157,9 @@ export const deleteProject = async (projectUUID: string) => {
       return { status: 404, message: 'Project not found.' };
     }
 
-    if (projectFromDb.ownerId !== session.user.uuid) {
+    const { hubfolioUserId } = user.privateMetadata;
+
+    if (projectFromDb.ownerId !== hubfolioUserId) {
       return { status: 403, message: 'Not authorized.' };
     }
 
@@ -226,7 +174,7 @@ export const deleteProject = async (projectUUID: string) => {
     );
   } finally {
     revalidateTag('projects');
-    redirect(`/u/${userUUID}/projects`);
+    redirect(`/u/${user.username}/projects`);
   }
 };
 

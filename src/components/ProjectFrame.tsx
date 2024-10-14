@@ -154,10 +154,10 @@ function ProjectFrame({ project }: Props) {
     });
   }, []);
 
-  useEffect(() => {
-    iframeRef.current?.contentWindow?.postMessage('reload', history.current);
-    // setShowFrame(true);
-  }, []);
+  // useEffect(() => {
+  //   iframeRef.current?.contentWindow?.postMessage('reload', history.current);
+  //   // setShowFrame(true);
+  // }, []);
 
   return (
     <div className="h-full flex flex-col">

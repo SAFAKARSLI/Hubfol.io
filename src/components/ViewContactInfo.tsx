@@ -45,16 +45,20 @@ function ViewContactInfo({ user }: Props) {
           <DataList.Value>{user.name}</DataList.Value>
         </DataList.Item>
         <DataList.Item>
+          <DataList.Label minWidth="88px">Title</DataList.Label>
+          <DataList.Value>{user.title}</DataList.Value>
+        </DataList.Item>
+        <DataList.Item>
           <DataList.Label minWidth="88px">Email</DataList.Label>
           <DataList.Value>
             <Link href={`mailto:${user.email}`}>{user.email}</Link>
           </DataList.Value>
         </DataList.Item>
 
-        <DataList.Item>
+        {/* <DataList.Item>
           <DataList.Label minWidth="88px">Location</DataList.Label>
           <DataList.Value>{user.location}</DataList.Value>
-        </DataList.Item>
+        </DataList.Item> */}
         <DataList.Item>
           <DataList.Label minWidth="88px">Phone Number</DataList.Label>
           <DataList.Value>

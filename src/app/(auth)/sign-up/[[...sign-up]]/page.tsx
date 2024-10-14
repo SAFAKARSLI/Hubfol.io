@@ -25,7 +25,7 @@ type Props = {};
 
 function page({}: Props) {
   return (
-    <div className="flex -lg:flex-col w-full lg:min-h-screen">
+    <div className="flex -lg:flex-col w-full min-h-screen">
       {/* <Card className="w-[30rem] p-8 text-center flex flex-col justify-between">
           <div>
             <Heading className="mb-4">Welcome to Hubfolio</Heading>
@@ -92,7 +92,7 @@ function page({}: Props) {
               with their projects and reach out to potential clients.
             </Text>
           </div>
-          <div className="flex flex-col gap-[4rem] items-center grow justify-center">
+          <div className="flex flex-col gap-[4rem] items-center grow justify-center border rounded border-gray-5 bg-gray-1 p-6 max-h-[900px] shadow-lg">
             <ListItem
               title="Showcase Your Projects"
               text={
@@ -113,7 +113,7 @@ function page({}: Props) {
           </div>
         </div>
       </div>
-      <div className="lg:w-1/2 -lg:h-screen min-h-[50rem] flex items-center justify-center">
+      <div className="lg:w-1/2 -lg:h-screen max-h-[80rem] min-h-[50rem] flex items-center justify-center">
         <Suspense fallback={<Spinner />}>
           <SignUp
             appearance={customThemeClerkAuthenticationComponents}

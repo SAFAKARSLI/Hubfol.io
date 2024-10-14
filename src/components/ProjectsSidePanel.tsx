@@ -1,11 +1,9 @@
 import React from 'react';
 import AccordionProjectList from './AccordionProjectList';
 import Project from '@/types/project';
-import { Flex } from '@radix-ui/themes';
 import ProjectListHeader from './ProjectListHeader';
 import AddProjectButton from './AddProjectButton';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import { getServerSession } from 'next-auth';
+
 import { auth, User } from '@clerk/nextjs/server';
 import ProfileOverview from './ProfileOverview';
 import { getUser } from '@/app/actions/user';

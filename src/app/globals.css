@@ -130,6 +130,7 @@ input::-webkit-inner-spin-button {
 ::-webkit-scrollbar {
   width: 6px;
   background: var(--gray-1);
+  /* display: none; */
 }
 
 /* Track */

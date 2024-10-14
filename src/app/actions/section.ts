@@ -6,14 +6,12 @@ import { z } from 'zod';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import { getServerSession } from 'next-auth';
 import { validateUUID } from './utils';
-import { extractUUID } from '@/utils';
 import { checkForAuthority } from './project';
 import { revalidateTag } from 'next/cache';
-import { Section } from '@/types/section';
+import { auth } from '@clerk/nextjs/server';
+import { getUser } from './user';
 
 export const upsertSections = async (formData: FormData) => {
-  console.log('formData received from upsertSections:', formData);
-
   const sectionInfo = {
     title: formData.get('title') as string,
     description: formData.get('description') as string,
@@ -26,8 +24,6 @@ export const upsertSections = async (formData: FormData) => {
       formData.get('content') as string
     ) as Prisma.InputJsonValue;
   }
-
-  console.log('SECTIONINFO', sectionInfo);
 
   const sectionUUID = formData.get('uuid') as string;
   const projectId = formData.get('projectId') as string;
@@ -49,16 +45,15 @@ export const upsertSections = async (formData: FormData) => {
   //   }
   // }
 
-  const session = await getServerSession(authOptions);
+  const session = auth();
+  session.protect();
 
-  if (!session || !session.user) {
-    return {
-      status: 401,
-      message: 'You must be logged in to create a section.',
-    };
-  }
-
-  const authorityCheck = await checkForAuthority(projectId, session);
+  const user = await getUser(session.userId!);
+  const hubfolioUserId = user?.privateMetadata?.hubfolioUserId;
+  const authorityCheck = await checkForAuthority(
+    projectId,
+    hubfolioUserId as string
+  );
   if (authorityCheck.status !== 200) {
     return authorityCheck;
   }
@@ -175,21 +170,10 @@ export const createSection = async (
   formData: FormData,
   { request }: { request: Request }
 ) => {
-  const session = await getServerSession(authOptions);
-
   if (request.method !== 'POST') throw new Error('Invalid request method.');
 
-  if (!session || !session.user) {
-    throw new Error('You must be logged in to create a section.');
-  }
-
-  const userUUID = extractUUID(request.url, 'users');
-  if (!userUUID || !validateUUID(userUUID))
-    throw new Error('Invalid user identifier provided: ' + userUUID);
-
-  if (userUUID !== session.user.uuid) {
-    throw new Error('Not authorized to create a section for this user.');
-  }
+  const session = auth();
+  session.protect();
 
   const section = {
     uuid: uuidv4(),
