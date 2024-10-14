@@ -3,6 +3,7 @@
 import Project from '@/types/project';
 import ProjectConsole from './ProjectConsole';
 import {
+  Box,
   DropdownMenu,
   IconButton,
   Separator,
@@ -33,6 +34,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
 import { set } from 'lodash';
 import { useRouter } from 'next/navigation';
+import { TbDeviceIpad } from 'react-icons/tb';
 
 type Props = {
   project?: Project;
@@ -71,6 +73,10 @@ const SelectItem = React.forwardRef<HTMLDivElement, SelectItemProps>(
 
 function ProjectFrame({ project }: Props) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [iframeDimensions, setIframeDimensions] = useState({
+    width: '100%',
+    height: '100%',
+  });
   const [history, setHistory] = useState<History>({
     back: [],
     current: project?.url!,
@@ -152,7 +158,7 @@ function ProjectFrame({ project }: Props) {
       width: iframeRef.current?.clientWidth!,
       height: iframeRef.current?.clientHeight!,
     });
-  }, []);
+  }, [iframeDimensions]);
 
   // useEffect(() => {
   //   iframeRef.current?.contentWindow?.postMessage('reload', history.current);
@@ -160,7 +166,7 @@ function ProjectFrame({ project }: Props) {
   // }, []);
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col border-l border-gray-4">
       <div className="h-[6rem] mx-5 ship flex-none flex flex-col justify-between py-3">
         <div className=" bg-gray-2  rounded-full flex items-center border border-gray-4 ">
           <Text className="text-gray-10 flex  items-center ml-5">
@@ -260,13 +266,40 @@ function ProjectFrame({ project }: Props) {
                 <Text size={'1'} className="text-gray-9">
                   Viewport Options:
                 </Text>
-                <IconButton variant="ghost" radius="full">
+                <IconButton
+                  variant="ghost"
+                  radius="full"
+                  onClick={() => {
+                    setIframeDimensions({
+                      width: '100%',
+                      height: '100%',
+                    });
+                  }}
+                >
                   <DesktopIcon />
                 </IconButton>
-                <IconButton variant="ghost" radius="full">
-                  <LaptopIcon />
+                <IconButton
+                  variant="ghost"
+                  radius="full"
+                  onClick={() => {
+                    setIframeDimensions({
+                      width: '50%',
+                      height: '75%',
+                    });
+                  }}
+                >
+                  <TbDeviceIpad />
                 </IconButton>
-                <IconButton variant="ghost" radius="full">
+                <IconButton
+                  variant="ghost"
+                  radius="full"
+                  onClick={() => {
+                    setIframeDimensions({
+                      width: '25%',
+                      height: '75%',
+                    });
+                  }}
+                >
                   <MobileIcon />
                 </IconButton>
               </div>
@@ -297,21 +330,21 @@ function ProjectFrame({ project }: Props) {
           </Text>
         </div>
       </div>
-
-      <div className="rounded border border-gray-4 overflow-hidden flex-grow mx-5 mb-5 relative">
+      <Box className="flex-grow mx-5 mb-5 relative  ">
         <iframe
           ref={iframeRef}
-          height={'100%'}
-          width={'100%'}
+          width={iframeDimensions.width}
+          height={iframeDimensions.height}
           src={history.current}
           key={project!.uuid}
+          className="min-w-[400px] min-h-[600px] rounded border border-gray-4 overflow-hidden m-auto"
         />
         {!showFrame && (
           <div className="absolute inset-0 bg-gray-0 flex items-center justify-center">
             <Spinner />
           </div>
         )}
-      </div>
+      </Box>
       <ProjectConsole project={project!} />
       {error && (
         <p className=" absolute top-0 w-full bg-red-300 h-[3rem]">
