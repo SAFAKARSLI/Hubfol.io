@@ -283,7 +283,7 @@ function ProjectFrame({ project }: Props) {
                   radius="full"
                   onClick={() => {
                     setIframeDimensions({
-                      width: '50%',
+                      width: '70%',
                       height: '75%',
                     });
                   }}
@@ -309,7 +309,13 @@ function ProjectFrame({ project }: Props) {
                 <Text size={'1'} className="text-gray-9">
                   Links:
                 </Text>
-                <IconButton variant="ghost" radius="full">
+                <IconButton
+                  variant="ghost"
+                  radius="full"
+                  onClick={() => {
+                    window.open(history.current, '_blank');
+                  }}
+                >
                   <ExternalLinkIcon />
                 </IconButton>
                 <IconButton variant="ghost" radius="full">
