@@ -43,7 +43,7 @@ export default function RootLayout({
               </div>
             </ClerkLoading>
             <ClerkLoaded>
-              <div className="flex h-screen">{children}</div>
+              <div>{children}</div>
             </ClerkLoaded>
           </body>
         </Theme>

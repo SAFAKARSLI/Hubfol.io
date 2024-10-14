@@ -9,6 +9,7 @@ import React from 'react';
 import { SlugProps } from '@/types/slug';
 import { preferredColorOptions } from '@/utils';
 import { ClerkProvider } from '@clerk/nextjs';
+import NextTopLoader from 'nextjs-toploader';
 
 export const metadata: Metadata = {
   title: 'Hubfolio',
@@ -40,6 +41,7 @@ export default function RootLayout({ children, params }: Readonly<SlugProps>) {
           <body>
             <div className="h-[100dvh] ">
               <TopBar params={params} />
+              <NextTopLoader color="#2D3B9B" />
               <div>{children}</div>
             </div>
           </body>

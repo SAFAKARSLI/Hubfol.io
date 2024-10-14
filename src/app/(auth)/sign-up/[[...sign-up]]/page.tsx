@@ -25,7 +25,7 @@ type Props = {};
 
 function page({}: Props) {
   return (
-    <div className="flex">
+    <div className="flex -lg:flex-col w-full lg:min-h-screen">
       {/* <Card className="w-[30rem] p-8 text-center flex flex-col justify-between">
           <div>
             <Heading className="mb-4">Welcome to Hubfolio</Heading>
@@ -77,22 +77,22 @@ function page({}: Props) {
             </Link>
           </Text>
         </Card> */}
-      <div className="w-1/2 border-r border-violet-8 bg-gray-2  rounded-r  shadow-[0_0_30px_8px_rgba(44,20,219,1)]  flex flex-col items-center">
-        <Box py={'4'}>
+      <div className="lg:w-1/2 -lg:min-h-[75vh] lg:border-r -lg:border-b border-violet-8 bg-gray-2 lg:rounded-r -lg:rounded-b shadow-[0_0_30px_8px_rgba(44,20,219,1)] flex flex-col items-center">
+        <Box pt={'4'}>
           <HubfolioBanner width={10} />
         </Box>
-        <div className="w-3/5  flex flex-col gap-3  justify-between items-center ">
-          <div className="my-8 text-center">
-            <Heading className="mb-3" size={'8'}>
+        <div className="grow w-3/5 -md:w-4/5 max-w-[700px]  flex flex-col  items-center my-10">
+          <div className="text-center my-6">
+            <Heading className="mb-3 " size={'8'}>
               Welcome to{' '}
               <Text className="font-serif text-violet-9">Hubfolio</Text>
             </Heading>
             <Text className="text-center text-sm text-gray-10">
               Hubfolio is a social media platform that allows developers to flex
-              with their projects.
+              with their projects and reach out to potential clients.
             </Text>
           </div>
-          <div className="flex flex-col gap-7">
+          <div className="flex flex-col gap-[4rem] items-center grow justify-center">
             <ListItem
               title="Showcase Your Projects"
               text={
@@ -113,7 +113,7 @@ function page({}: Props) {
           </div>
         </div>
       </div>
-      <div className="w-1/2 flex items-center justify-center h-full">
+      <div className="lg:w-1/2 -lg:h-screen min-h-[50rem] flex items-center justify-center">
         <Suspense fallback={<Spinner />}>
           <SignUp
             appearance={customThemeClerkAuthenticationComponents}

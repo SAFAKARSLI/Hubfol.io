@@ -7,6 +7,8 @@ import { auth } from '@clerk/nextjs/server';
 import { getUser } from '@/app/actions/user';
 import { ClerkLoaded, ClerkLoading } from '@clerk/nextjs';
 import AuthenticationButtonsWrapper from './AuthenticationButtonsWrapper';
+import NextNProgress from 'nextjs-progressbar';
+import ProgressLoadingBar from './ProgressLoadingBar';
 
 interface TopBarProps {
   params: Params;
@@ -41,7 +43,6 @@ async function TopBar({ params }: TopBarProps) {
           </Flex>
         </div>
       </Flex>
-      <Progress value={10} />
     </>
   );
 }
