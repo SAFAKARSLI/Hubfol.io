@@ -22,7 +22,7 @@ async function TopBar({ params }: TopBarProps) {
   return (
     <>
       <Flex className="border-b border-gray-5 bg-gray-0 justify-end items-center h-[3.5rem]">
-        <div className="flex  justify-between w-full items-center">
+        <div className="flex justify-between w-full items-center">
           <NavigationLinks authenticated={clerkUser?.username == username} />
           <Flex align={'center'} className="mr-5">
             <ClerkLoading>

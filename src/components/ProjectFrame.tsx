@@ -22,7 +22,6 @@ import {
   DesktopIcon,
   DimensionsIcon,
   DotsHorizontalIcon,
-  EnterFullScreenIcon,
   ExternalLinkIcon,
   LaptopIcon,
   Link1Icon,
@@ -33,6 +32,7 @@ import {
 } from '@radix-ui/react-icons';
 import React, { useEffect, useRef, useState } from 'react';
 import classnames from 'classnames';
+import { set } from 'lodash';
 import { useRouter } from 'next/navigation';
 import { TbDeviceIpad } from 'react-icons/tb';
 
@@ -190,7 +190,7 @@ function ProjectFrame({ project }: Props) {
                 side="right"
                 className="overflow-hidden w-[15rem] rounded border border-gray-4 m-1 bg-gray-0 shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)]"
               >
-                <Select.Viewport className="p-[5px] z-10">
+                <Select.Viewport className="p-[5px]">
                   <Select.Group>
                     <Select.Label className="px-[25px] text-xs font-medium leading-[25px] text-gray-9">
                       Highlighted Routes
@@ -276,18 +276,6 @@ function ProjectFrame({ project }: Props) {
                     });
                   }}
                 >
-                  <EnterFullScreenIcon />
-                </IconButton>
-                <IconButton
-                  variant="ghost"
-                  radius="full"
-                  onClick={() => {
-                    setIframeDimensions({
-                      width: '1920px',
-                      height: '1080px',
-                    });
-                  }}
-                >
                   <DesktopIcon />
                 </IconButton>
                 <IconButton
@@ -307,8 +295,6 @@ function ProjectFrame({ project }: Props) {
                   radius="full"
                   onClick={() => {
                     setIframeDimensions({
-                      // width: '20%',
-                      // height: '75%',
                       width: '375px',
                       height: '720px',
                     });
@@ -350,15 +336,14 @@ function ProjectFrame({ project }: Props) {
           </Text>
         </div>
       </div>
-      <Box className="flex-grow mx-5 mb-5 relative  ">
+      <Box className="flex-grow mx-5 mb-5 relative">
         <iframe
           ref={iframeRef}
           width={iframeDimensions.width}
           height={iframeDimensions.height}
-          // style={{ maxHeight: '1080px', maxWidth: '1920px' }}
           src={history.current}
-          key={project?.uuid}
-          className="min-w-[375px] min-h-[600px] rounded  border-gray-5 overflow-hidden m-auto"
+          key={project!.uuid}
+          className="min-w-[375px] min-h-[600px] rounded m-auto"
         />
         {!showFrame && (
           <div className="absolute inset-0 bg-gray-0 flex items-center justify-center">
