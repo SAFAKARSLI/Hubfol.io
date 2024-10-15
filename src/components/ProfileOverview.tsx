@@ -27,7 +27,7 @@ const ProfileOverview = async ({ username }: ProfileOverviewProps) => {
 
   return (
     <div
-      className="flex bg-gray-1 h-[6rem] -sm:hidden items-center p-5  shadow-[-5px_8px_20px_1px_rgba(0,0,0,1)] "
+      className="flex bg-gray-1 h-[6rem] -sm:hidden items-center p-5  shadow-[-5px_4px_15px_1px_rgba(0,0,0,1)] "
       style={{ zIndex: 0 }}
     >
       <Image

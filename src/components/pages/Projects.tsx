@@ -26,7 +26,7 @@ const Projects = async ({
 
   let project: Project | undefined;
   if (activeProjectId) {
-    project = projects.find((project) => project.uuid === activeProjectId);
+    project = projects.find((project) => project.slug === activeProjectId);
 
     if (!project) redirect(`/u/${username}/projects?error=project-not-found`);
   }

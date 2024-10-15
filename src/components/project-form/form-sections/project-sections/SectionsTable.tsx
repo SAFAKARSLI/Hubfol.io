@@ -69,7 +69,7 @@ function SectionsTable({}: Props) {
         loading={loading}
         onClick={() => {
           setLoading(true);
-          router.push(`/u/${username}/projects/${projectUUID}/sections/new`);
+          router.push(`sections/new`);
         }}
       >
         <PlusIcon />

@@ -20,16 +20,15 @@ import { useParams } from 'next/navigation';
 
 import DeleteProjectDialog from './dialogs/DeleteProjectDialog';
 import { useRouter } from 'next/navigation';
+import Project from '@/types/project';
 
 type Props = {
-  projectUUID: string;
-  title: string;
-  // initialProject: Project;
+  project: Project;
 };
 
-function ProjectMenu({ projectUUID, title }: Props) {
+function ProjectMenu({ project }: Props) {
   const router = useRouter();
-  const { userUUID } = useParams<{ userUUID: string }>();
+  const { username, projectSlug } = useParams();
 
   const [deleteDialogeOpen, setDeleteDialogeOpen] = useState(false);
 
@@ -47,7 +46,11 @@ function ProjectMenu({ projectUUID, title }: Props) {
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
           <DropdownMenu.Item
-            onClick={() => router.push(`${projectUUID}/general-information`)}
+            onClick={() =>
+              router.push(
+                `${process.env.NEXT_PUBLIC_BASE_URL}/u/${username}/projects/edit/${project.uuid}/general-information`
+              )
+            }
           >
             <Pencil2Icon />
             Edit
@@ -72,7 +75,7 @@ function ProjectMenu({ projectUUID, title }: Props) {
           }
         }}
       >
-        <DeleteProjectDialog title={title} projectUUID={projectUUID} />
+        <DeleteProjectDialog project={project} />
       </AlertDialog.Root>
     </>
   );

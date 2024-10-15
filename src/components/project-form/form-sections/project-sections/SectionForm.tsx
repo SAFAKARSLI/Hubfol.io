@@ -29,7 +29,7 @@ function SectionForm({ initial = false }: Props) {
   const { sectionUUID, username, projectUUID } = useParams();
   const [formAction, editFormData] = usePreloadedFormData(
     upsertSections,
-    `${baseUrl}/u/${username}/projects/${projectUUID}/sections`
+    `${baseUrl}/u/${username}/projects/edit/${projectUUID}/sections`
   );
   const [contentType, setContentType] = React.useState<Content>(Content.TEXT);
   const [loading, setLoading] = React.useState(true);
@@ -102,7 +102,7 @@ function SectionForm({ initial = false }: Props) {
           name="title"
           placeholder='Enter the section title here. (e.g "Project Description")'
           type={'text'}
-          charLimit={50}
+          charLimit={45}
         />
 
         <FormInput

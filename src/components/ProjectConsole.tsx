@@ -29,7 +29,7 @@ function ProjectConsole({ project }: Props) {
         className={`xl:hidden w-[25rem] absolute right-0  
          -sm:w-full bottom-0  flex flex-col justify-end duration-300 overflow-hidden rounded`}
       >
-        <Accordion.Item value={project!.uuid!}>
+        <Accordion.Item value={project.uuid!}>
           <Accordion.Trigger asChild>
             <Button
               color={preferredColorOptions.accentColor}

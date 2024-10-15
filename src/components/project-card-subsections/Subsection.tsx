@@ -32,11 +32,11 @@ const Subsection = ({
 
   return (
     <div className="p-5 flex flex-col gap-2">
-      <Heading as="h4" className="text-lg -2xl:text-md">
+      <Heading as="h4" className="text-lg -2xl:text-md text-wrap">
         {title}
       </Heading>
       {description && (
-        <Text as="p" className="text-gray-9 text-md mb-1">
+        <Text as="p" className="text-gray-9 mb-1">
           {description}
         </Text>
       )}

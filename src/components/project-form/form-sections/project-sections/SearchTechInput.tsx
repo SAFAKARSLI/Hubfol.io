@@ -19,6 +19,8 @@ function SearchTechInput({ initialValue = [] }: Props) {
     result: [] as Brand[],
   });
   const [techStack, setTechStack] = React.useState<Brand[]>(initialValue);
+  console.log(search);
+  console.log(techStack);
 
   const handleAddTechStack = (brandName: string, slug: string) => {
     setQueryBounce('');
@@ -110,30 +112,6 @@ function SearchTechInput({ initialValue = [] }: Props) {
       {techStack.length > 0 && (
         <div className="flex flex-wrap gap-2 p-2 mt-2 rounded-md border border-gray-4 bg-[#000] justify-center">
           {techStack.map((tech) => (
-            // <Tooltip content={tech.brand_name} key={tech.slug}>
-            //   <Badge
-            //     color="gray"
-            //     variant="soft"
-            //     highContrast
-            //     className="flex flex-col items-center justify-center gap-2 w-[6rem] h-[6rem] p-3 relative text-center"
-            //   >
-            //     <img
-            //       src={`https://cdn.simpleicons.org/${tech.slug}?viewbox=auto`}
-            //       alt={tech.brand_name}
-            //       className="h-8"
-            //     />
-
-            //     <p className="text-xs truncate w-full text-gray-11">
-            //       {tech.brand_name}
-            //     </p>
-            //     <Cross2Icon
-            //       className="cursor-pointer hover:bg-gray-6 absolute top-1 right-1"
-            //       onClick={() =>
-            //         setTechStack(techStack.filter((t) => t.slug !== tech.slug))
-            //       }
-            //     />
-            //   </Badge>
-            // </Tooltip>
             <TechCard
               tech={tech}
               key={tech.slug}

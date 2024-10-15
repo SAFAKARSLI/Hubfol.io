@@ -114,6 +114,7 @@ model Employee {
 model Project {
   id          Int        @default(autoincrement())
   uuid        String     @id @db.Uuid @unique
+  slug        String     @unique
   name        String
   tagline     String?
   url         String?

@@ -17,6 +17,8 @@ import { prisma } from '@/db';
 import { auth, User } from '@clerk/nextjs/server';
 import { revalidateTag } from 'next/cache';
 import { getUser } from './user';
+import { nanoid } from 'nanoid';
+import { generateProjectSlug } from '@/utils';
 
 const bucketName = process.env.AWS_PROJECT_ICONS_BUCKET_NAME as string;
 
@@ -33,14 +35,16 @@ export const initiateProject = async (formData: FormData) => {
 
   const date = new Date();
   const projectUUID = uuidv4();
+  const name = 'New Project';
   const { hubfolioUserId } = user.privateMetadata;
   try {
     const initiatedProject = await prisma.project.create({
       data: {
+        slug: generateProjectSlug(name),
         uuid: projectUUID,
         ownerId: hubfolioUserId as string,
         createdAt: date,
-        name: 'New Project',
+        name,
         url: '',
         tagline: '',
         iconLink: '',
@@ -55,7 +59,7 @@ export const initiateProject = async (formData: FormData) => {
     await prisma.$disconnect();
     revalidateTag('projects');
     redirect(
-      `/u/${username}/projects/${projectUUID}/general-information?initialize=true`
+      `/u/${username}/projects/edit/${projectUUID}/general-information?initialize=true`
     );
   }
 };
@@ -90,6 +94,7 @@ export const upsertGeneralInfo = async (formData: FormData) => {
     url: formData.get('url') as string,
     tagline: formData.get('tagline') as string,
     iconLink,
+    slug: generateProjectSlug(formData.get('name') as string),
   };
   const projectUUID = formData.get('uuid') as string;
 

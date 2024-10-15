@@ -50,10 +50,11 @@ function ProjectInfoForm({ editFormData }: Props) {
         />
         <FormInput
           label="Name"
+          pattern="^[a-zA-Z0-9 ]+$"
           name="name"
           placeholder="Enter your project name"
-          charLimit={30}
-          message="You must provide a valid project name"
+          charLimit={24}
+          message="Cannot contain special characters"
           defaultValue={project?.name}
           type="text"
           required
@@ -61,7 +62,7 @@ function ProjectInfoForm({ editFormData }: Props) {
         <FormInput
           label="Tagline"
           name="tagline"
-          charLimit={50}
+          charLimit={38}
           placeholder="Describe your project in one sentence"
           defaultValue={project?.tagline}
           type="text"

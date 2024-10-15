@@ -6,27 +6,17 @@ import { useEffect, useRef } from 'react';
 import { defaultIconLink } from '@/utils';
 import { Section } from '@/types/section';
 import Subsection from './project-card-subsections/Subsection';
+import Project from '@/types/project';
 
 interface AccordionProjectItemProps {
-  uuid: string;
-  name: string;
-  tagline: string;
-  iconLink: string | ArrayBuffer;
-  sections: Section[];
   activeProjectId: string;
-  ownerId: string;
-  url: string;
+  project: Project;
 }
 
 const AccordionProjectItem = ({
-  uuid,
-  name,
-  tagline,
-  iconLink,
-  sections,
   activeProjectId,
-  ownerId,
-  url,
+  project,
+  project: { name, tagline, iconLink, sections, uuid, slug },
 }: AccordionProjectItemProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -40,7 +30,7 @@ const AccordionProjectItem = ({
     }
   }, [activeProjectId]);
   return (
-    <Accordion.Item value={uuid} asChild>
+    <Accordion.Item value={slug} asChild>
       <div
         className={`rounded border overflow-hidden data-[state=open]:shadow-gray-0 border-gray-4 shadow-lg w-full m-auto`}
       >
@@ -78,9 +68,7 @@ const AccordionProjectItem = ({
             </div>
 
             <div className="h-full py-3">
-              {uuid === activeProjectId && (
-                <ProjectMenu title={name} projectUUID={uuid} />
-              )}
+              {slug === activeProjectId && <ProjectMenu project={project} />}
             </div>
           </div>
         </Accordion.Trigger>

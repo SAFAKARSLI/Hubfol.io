@@ -13,16 +13,16 @@ type Props = {
 };
 
 function AccordionProjectList({ initialProjects }: Props) {
-  const { projectUUID, username } = useParams();
+  const { projectSlug, username } = useParams();
   const [accordionValue, setAccordionValue] = useState<string>('');
   const router = useRouter();
 
   useEffect(() => {
-    if (projectUUID) setAccordionValue(projectUUID as string);
+    if (projectSlug) setAccordionValue(projectSlug as string);
   }, []);
 
-  function onChangeActiveProject(projectUUID: string) {
-    router.push(`/u/${username}/projects/${projectUUID}`);
+  function onChangeActiveProject(slug: string) {
+    router.push(`/u/${username}/projects/${slug}`);
   }
 
   return (
@@ -37,14 +37,8 @@ function AccordionProjectList({ initialProjects }: Props) {
           return (
             <AccordionProjectItem
               key={i}
-              uuid={p.uuid as string}
-              name={p.name!}
-              tagline={p.tagline!}
-              iconLink={p.iconLink!}
-              sections={p.sections!}
-              activeProjectId={projectUUID as string}
-              ownerId={p.ownerId!}
-              url={p.url!}
+              activeProjectId={projectSlug as string}
+              project={p}
             />
           );
         })}

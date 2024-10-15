@@ -129,6 +129,7 @@ input::-webkit-inner-spin-button {
 /* width */
 ::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
   background: var(--gray-1);
   /* display: none; */
 }

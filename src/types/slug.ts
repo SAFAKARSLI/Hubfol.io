@@ -1,5 +1,6 @@
 export interface Params {
   username: string;
+  projectSlug: string;
   projectUUID: string;
   sectionUUID: string;
 }

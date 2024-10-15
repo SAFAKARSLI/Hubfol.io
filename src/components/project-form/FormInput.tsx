@@ -7,6 +7,7 @@ import { InputType } from '@/utils';
 import InputLabel from './InputLabel';
 
 type Props = {
+  pattern?: string;
   label: string;
   type: string;
   style?: string;
@@ -26,6 +27,7 @@ type Props = {
 };
 
 function FormInput({
+  pattern,
   label,
   type,
   logo,
@@ -61,6 +63,7 @@ function FormInput({
         <Form.Control asChild>
           <input
             disabled={disabled}
+            pattern={pattern}
             min={0}
             value={value}
             step={step}
@@ -96,6 +99,9 @@ function FormInput({
 
       <Form.Message match={'valueMissing'} className="text-xs text-red-500">
         You must provide a response.
+      </Form.Message>
+      <Form.Message match={'patternMismatch'} className="text-xs text-red-500">
+        {message}
       </Form.Message>
       <Form.Message match={'rangeOverflow'} className="text-xs text-red-500">
         You must provide a number less than 9999.

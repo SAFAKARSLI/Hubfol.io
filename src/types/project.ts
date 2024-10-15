@@ -7,6 +7,7 @@ export default interface Project {
   iconLink?: string;
   sections: Section[];
   ownerId: string;
+  slug: string;
   url: string;
 }
 
