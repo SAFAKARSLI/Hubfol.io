@@ -1,5 +1,7 @@
 @import '@radix-ui/themes/styles.css';
 @import 'react-phone-number-input/style.css';
+@import 'slick-carousel/slick/slick.css';
+@import 'slick-carousel/slick/slick-theme.css';
 
 @tailwind base;
 @tailwind components;
@@ -40,7 +42,7 @@ input {
   --violet-a10: #4000ffaf;
   --violet-a11: #97aeff;
   --violet-a12: #d4e0ff;
-  --violet-a13: color(display-p3 0 0 0 / 0.4);
+  --violet-a13: color(display-p3 0 0 0 / 0.6);
 
   --violet-contrast: #fff;
   --violet-surface: #101b4580;

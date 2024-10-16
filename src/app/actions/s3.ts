@@ -50,9 +50,6 @@ export const eliminateUnusedFiles = async (
   newFileList: Image[],
   bucketName: string
 ) => {
-  console.log('Previous file list:', prevFileList);
-  console.log('New file list:', newFileList);
-
   const newUrlList = newFileList
     .filter((file) => file.url)
     .map((file) => file.url);
@@ -60,7 +57,6 @@ export const eliminateUnusedFiles = async (
   const filesToDelete = prevFileList.filter(
     (file) => !newUrlList.includes(file.url as string)
   );
-  console.log('Files to delete:', filesToDelete);
   for (const file of filesToDelete) {
     await deleteFile(file.url?.split('/').pop() as string, bucketName);
   }

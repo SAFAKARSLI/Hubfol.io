@@ -5,6 +5,7 @@ import TechStack from './TechStack';
 
 import { Box, Heading, Text } from '@radix-ui/themes';
 import { Content } from '@prisma/client';
+import Carousel from './Carousel';
 
 type Props = {
   title: string;
@@ -27,6 +28,8 @@ const Subsection = ({
         return <TextSection text={content} />;
       case Content.BRAND_STACK:
         return <TechStack techStack={content} />;
+      case Content.CAROUSEL:
+        return <Carousel images={content} />;
     }
   };
 
