@@ -45,7 +45,7 @@ const AccordionProjectItem = ({
       }}
     >
       <div
-        className={`rounded border overflow-hidden data-[state=open]:shadow-gray-0 border-gray-4 shadow-lg w-full m-auto`}
+        className={`rounded  data-[state=open]:border overflow-hidden data-[state=open]:shadow-gray-0 border-gray-3 data-[state=open]:shadow-lg w-full m-auto`}
       >
         <Accordion.Trigger asChild>
           <div

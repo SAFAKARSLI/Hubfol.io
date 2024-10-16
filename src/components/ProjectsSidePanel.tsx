@@ -20,7 +20,7 @@ async function ProjectsSidePanel({ initialProjects, username }: Props) {
   return (
     <div className="flex flex-col h-[100dvh] bg-gray-1 w-[27rem]">
       <ProfileOverview username={username} />
-      <div className="overflow-y-scroll flex-1  scroll-smooth border-t border-gray-4">
+      <div className="overflow-y-scroll flex-1  scroll-smooth ">
         <ProjectListHeader projectCount={initialProjects.length} />
         <AccordionProjectList initialProjects={initialProjects} />
         <div className="mb-[15rem] p-5">

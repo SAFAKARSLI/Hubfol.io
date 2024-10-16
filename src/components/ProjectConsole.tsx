@@ -54,14 +54,8 @@ function ProjectConsole({ project }: Props) {
                 className={` bg-gray-1  border-x border-violet-a3 duration-300  `}
               >
                 <AccordionProjectItem
-                  uuid={project.uuid}
-                  name={project.name}
-                  tagline={project.tagline!}
-                  iconLink={project.iconLink!}
-                  sections={project.sections}
-                  activeProjectId={project.uuid}
-                  ownerId={project.ownerId}
-                  url={project.url!}
+                  project={project}
+                  activeProjectId={project.slug}
                 />
               </div>
             </Accordion.Root>

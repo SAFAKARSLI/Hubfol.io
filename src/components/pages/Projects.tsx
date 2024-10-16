@@ -33,7 +33,7 @@ const Projects = async ({
 
   return (
     <div className="flex ">
-      <div className="flex-none">
+      <div className="flex-none border-r border-gray-4 bg-gray-1">
         <ProjectsSidePanel initialProjects={projects} username={username} />
       </div>
 

@@ -21,6 +21,7 @@ import { useParams } from 'next/navigation';
 import DeleteProjectDialog from './dialogs/DeleteProjectDialog';
 import { useRouter } from 'next/navigation';
 import Project from '@/types/project';
+import Link from 'next/link';
 
 type Props = {
   project: Project;
@@ -41,13 +42,11 @@ function ProjectMenu({ project }: Props) {
           </IconButton>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
-          <DropdownMenu.Item
-            onClick={() =>
-              router.push(`edit/${project.uuid}/general-information`)
-            }
-          >
-            <Pencil2Icon />
-            Edit
+          <DropdownMenu.Item asChild>
+            <Link href={`edit/${project.uuid}/general-information`}>
+              <Pencil2Icon />
+              Edit
+            </Link>
           </DropdownMenu.Item>
           <DropdownMenu.Separator />
 

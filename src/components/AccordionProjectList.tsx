@@ -7,6 +7,7 @@ import * as Accordion from '@radix-ui/react-accordion';
 
 import AccordionProjectItem from './AccordionProjectItem';
 import Project from '@/types/project';
+import { Separator } from '@radix-ui/themes';
 
 type Props = {
   initialProjects: Project[];

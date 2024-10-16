@@ -166,7 +166,7 @@ function ProjectFrame({ project }: Props) {
   // }, []);
 
   return (
-    <div className="h-full flex flex-col border-l border-gray-4">
+    <div className="h-full flex flex-col">
       <div className="h-[6rem] mx-5 ship flex-none flex flex-col justify-between py-3">
         <div className=" bg-gray-2  rounded-full flex items-center border border-gray-4 ">
           <Text className="text-gray-10 flex  items-center ml-5">
