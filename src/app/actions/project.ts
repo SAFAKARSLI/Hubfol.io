@@ -20,8 +20,7 @@ import { getUser } from './user';
 import { nanoid } from 'nanoid';
 import { generateProjectSlug } from '@/utils';
 import _ from 'lodash';
-
-const bucketName = process.env.AWS_PROJECT_ICONS_BUCKET_NAME as string;
+import { uploadFile } from './s3';
 
 export const initiateProject = async (formData: FormData) => {
   const session = auth();
@@ -88,8 +87,16 @@ export const upsertGeneralInfo = async (formData: FormData) => {
   const session = auth();
   session.protect();
 
-  const iconLink = (await uploadProjectIcon(formData.get('iconLink') as File))
-    .data as string;
+  var iconLink = '';
+  if ((formData.get('iconLink') as File).size != 0) {
+    iconLink = (
+      await uploadFile(
+        formData.get('iconLink') as File,
+        process.env.AWS_PROJECT_ICONS_BUCKET_NAME as string
+      )
+    ).data as string;
+  }
+
   const projectFromFormData = {
     name: formData.get('name') as string,
     url: formData.get('url') as string,
@@ -185,65 +192,3 @@ export const deleteProject = async (projectUUID: string) => {
     redirect(`/u/${user.username}/projects`);
   }
 };
-
-export const uploadProjectIcon = async (file: File) => {
-  if (typeof file == 'string') return { status: 200, data: file }; // Icon is already set
-
-  // Empty icon check
-  if (file.size != 0) {
-    try {
-      const arrayBuffer = await file.arrayBuffer();
-      const body = Buffer.from(arrayBuffer);
-
-      const uniqueKey = `${uuidv4()}-${new Date().getTime()}`;
-
-      const uploadParams = {
-        Bucket: bucketName,
-        Key: uniqueKey,
-        Body: body,
-      };
-
-      await s3Client.send(new PutObjectCommand(uploadParams));
-      return {
-        status: 200,
-        data: `https://s3.amazonaws.com/${bucketName}/${uniqueKey}`,
-      };
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      return { status: 500, message: 'Error uploading file.' };
-    } finally {
-      await s3Client.destroy();
-    }
-  } else {
-    return { status: 201, data: '' };
-  }
-};
-
-export const deleteProjectIcon = async (iconLink: string) => {
-  if (iconLink) {
-    const key = iconLink.split('/').slice(-1)[0];
-
-    const deleteParams = {
-      Bucket: bucketName,
-      Key: key,
-    };
-
-    await s3Client.send(new DeleteObjectCommand(deleteParams));
-  }
-};
-
-// export const getProjectIcon = async (iconLink: string) => {
-//   const key = iconLink.split('/').slice(-1)[0];
-
-//   const getParams = {
-//     Bucket: bucketName,
-//     Key: '1123',
-//   };
-
-//   try {
-//     const data = await s3Client.send(new GetObjectCommand(getParams));
-//     return data.Body;
-//   } catch (error) {
-//     return 'Icon not found';
-//   }
-// };

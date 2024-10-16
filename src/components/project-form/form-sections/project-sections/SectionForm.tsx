@@ -16,8 +16,6 @@ import SubmitButton from '@/components/SubmitButton';
 import { useRouter } from 'next/navigation';
 import CarouselForm from './CarouselForm';
 import TextSectionInput from './TextSectionInput';
-import { Brand } from '@/types/brand';
-import { parse } from 'path';
 
 type Props = {
   initial?: boolean;
@@ -77,10 +75,6 @@ function SectionForm({ initial = false }: Props) {
       // case Content.ATTACHMENT:
       //   return <></>;
       // case Content.VIDEO:
-      //   return <></>;
-      // case Content.ANALYTICS:
-      //   return <></>;
-      // case Content.TESTIOMONIALS:
       //   return <></>;
     }
   }

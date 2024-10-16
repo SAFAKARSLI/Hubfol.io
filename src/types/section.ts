@@ -15,6 +15,13 @@ export interface Section {
   // tags: string[];
 }
 
+// Carousel Section content
+export type Image = {
+  name: string;
+  url?: string;
+  blob?: Blob;
+};
+
 export interface SectionFormData {
   title: string;
   contentType: string;

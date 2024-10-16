@@ -49,9 +49,8 @@ function SectionsTable({}: Props) {
       <Table.Root size={'1'}>
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell>Header</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Title</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Type</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Tags</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Actions</Table.ColumnHeaderCell>
           </Table.Row>
         </Table.Header>

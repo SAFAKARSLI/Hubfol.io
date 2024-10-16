@@ -13,6 +13,8 @@ import { defaultIconLink } from '@/utils';
 import { Section } from '@/types/section';
 import Subsection from './project-card-subsections/Subsection';
 import Project from '@/types/project';
+import { useUser } from '@clerk/nextjs';
+import { useParams } from 'next/navigation';
 
 interface AccordionProjectItemProps {
   activeProjectId: string;
@@ -24,6 +26,9 @@ const AccordionProjectItem = ({
   project,
   project: { name, tagline, iconLink, sections, uuid, slug },
 }: AccordionProjectItemProps) => {
+  const { user } = useUser();
+
+  const { username } = useParams();
   const cardRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
 
@@ -81,7 +86,10 @@ const AccordionProjectItem = ({
             </div>
 
             <div className="h-full flex items-center">
-              {slug === activeProjectId && <ProjectMenu project={project} />}
+              {slug === activeProjectId && (
+                // user?.username == username &&
+                <ProjectMenu project={project} />
+              )}
               {loading && <Spinner />}
             </div>
           </div>

@@ -31,11 +31,10 @@ function ProjectsTableItem({ section }: Props) {
           {section.title}
         </Link>
       </Table.RowHeaderCell>
-      <Table.Cell className="text-gray-11">
+      <Table.Cell className="text-gray-11 w-[9rem]">
         <p>{section.contentType.replaceAll('_', ' ')}</p>
       </Table.Cell>
-      <Table.Cell className="text-gray-11">[Tags]</Table.Cell>
-      <Table.Cell>
+      <Table.Cell className="w-10">
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <IconButton variant="ghost" color="gray" className="m-auto">

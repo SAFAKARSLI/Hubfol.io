@@ -10,22 +10,73 @@ import { checkForAuthority } from './project';
 import { revalidateTag } from 'next/cache';
 import { auth } from '@clerk/nextjs/server';
 import { getUser } from './user';
-import { Section } from '@/types/section';
+import { Image, Section } from '@/types/section';
 import _ from 'lodash';
+import { eliminateUnusedFiles, uploadFile } from './s3';
+import { redirect } from 'next/navigation';
+import { InputJsonArray, InputJsonValue } from '@prisma/client/runtime/library';
+
+const processContent = async (formData: FormData) => {
+  console.log(formData);
+  const contentType = formData.get('contentType') as Content;
+
+  if (contentType == Content.TEXT) {
+    return formData.get('content') as string;
+  } else if (contentType === Content.BRAND_STACK) {
+    const content = formData.get('content') as string;
+    return JSON.parse(content) as Prisma.InputJsonValue;
+  } else if (contentType === Content.CAROUSEL) {
+    const images = formData
+      .keys()
+      .filter((key) => key.startsWith('images'))
+      .toArray();
+
+    const result = [];
+    for (let i = 0; i < images.length / 2; i++) {
+      if (formData.get(`images[${i}][url]`)) {
+        result.push({
+          name: formData.get(`images[${i}][name]`) as string,
+          url: formData.get(`images[${i}][url]`) as string,
+        });
+        continue;
+      }
+
+      const uploadedFile = await uploadFile(
+        formData.get(`images[${i}][blob]`) as File,
+        'hubfol.io.gallery'
+      );
+
+      if (uploadedFile.status !== 200) {
+        throw new Error('Failed to upload image.');
+      }
+
+      result.push({
+        name: formData.get(`images[${i}][name]`) as string,
+        url: uploadedFile.data,
+      });
+    }
+    return result as InputJsonValue;
+  } else {
+    return {};
+  }
+};
 
 export const upsertSections = async (formData: FormData) => {
+  var content: InputJsonValue;
+  try {
+    content = await processContent(formData)!;
+  } catch (error) {
+    console.error('Error processing content:', error);
+    // TODO: Implement the error page.
+    redirect('?error=failed-to-process-content');
+  }
+
   const sectionInfo = {
     title: formData.get('title') as string,
     description: formData.get('description') as string,
     contentType: formData.get('contentType') as Content,
-    content: formData.get('content') as Prisma.InputJsonValue,
+    content,
   };
-
-  if (sectionInfo.contentType === Content.BRAND_STACK) {
-    sectionInfo['content'] = JSON.parse(
-      formData.get('content') as string
-    ) as Prisma.InputJsonValue;
-  }
 
   const sectionUUID = formData.get('uuid') as string;
   const projectId = formData.get('projectId') as string;
@@ -34,6 +85,16 @@ export const upsertSections = async (formData: FormData) => {
     const prevSection = JSON.parse(
       formData.get('prev-section') as string
     ) as Section;
+
+    // Deletes any files that are no longer in use after the update
+    if (sectionInfo.contentType === Content.CAROUSEL) {
+      await eliminateUnusedFiles(
+        prevSection.content as unknown as Image[],
+        sectionInfo.content as unknown as Image[],
+        'hubfol.io.gallery'
+      );
+    }
+
     const keys = Object.keys(sectionInfo) as (keyof typeof sectionInfo)[];
 
     const noChange = keys.every((key) =>
