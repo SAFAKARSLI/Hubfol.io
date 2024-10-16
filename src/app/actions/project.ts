@@ -19,6 +19,7 @@ import { revalidateTag } from 'next/cache';
 import { getUser } from './user';
 import { nanoid } from 'nanoid';
 import { generateProjectSlug } from '@/utils';
+import _ from 'lodash';
 
 const bucketName = process.env.AWS_PROJECT_ICONS_BUCKET_NAME as string;
 
@@ -101,18 +102,20 @@ export const upsertGeneralInfo = async (formData: FormData) => {
   // If the project previously created, check if any of the field have changed.
   // If not, bypass the update
   if (formData.get('prev-project')) {
-    const prevProject = JSON.parse(formData.get('prev-project') as string);
+    const prevProject = JSON.parse(
+      formData.get('prev-project') as string
+    ) as typeof projectFromFormData;
+
     const keys = Object.keys(
       projectFromFormData
     ) as (keyof typeof projectFromFormData)[];
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i];
-      if (projectFromFormData[key] !== prevProject[key]) {
-        break;
-      }
-      if (i === keys.length - 1) {
-        return { status: 200, message: 'No changes detected.' };
-      }
+
+    const noChange = keys.every((key) =>
+      _.isEqual(projectFromFormData[key], prevProject[key])
+    );
+
+    if (noChange) {
+      return { status: 200, message: 'No changes detected.' };
     }
   }
 
