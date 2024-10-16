@@ -18,7 +18,7 @@ async function ProjectsSidePanel({ initialProjects, username }: Props) {
 
   const user = (await getUser(userId!)) as User;
   return (
-    <div className="flex flex-col h-[100dvh] bg-gray-1 w-[27rem]">
+    <div className="flex flex-col h-[100dvh]  w-[27rem]">
       <ProfileOverview username={username} />
       <div className="overflow-y-scroll flex-1  scroll-smooth ">
         <ProjectListHeader projectCount={initialProjects.length} />

@@ -48,6 +48,7 @@ function ProjectsTableItem({ section }: Props) {
             >
               <FaEdit /> Edit
             </DropdownMenu.Item>
+            <DropdownMenu.Separator />
             <DropdownMenu.Item asChild>
               <DeleteDialogWithoutHardConfirm
                 title={`Delete "${section.title}"`}

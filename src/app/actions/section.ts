@@ -10,6 +10,8 @@ import { checkForAuthority } from './project';
 import { revalidateTag } from 'next/cache';
 import { auth } from '@clerk/nextjs/server';
 import { getUser } from './user';
+import { Section } from '@/types/section';
+import _ from 'lodash';
 
 export const upsertSections = async (formData: FormData) => {
   const sectionInfo = {
@@ -28,22 +30,20 @@ export const upsertSections = async (formData: FormData) => {
   const sectionUUID = formData.get('uuid') as string;
   const projectId = formData.get('projectId') as string;
 
-  // if (formData.get('prev-section')) {
-  //   const prevSection = JSON.parse(
-  //     formData.get('prev-section') as string
-  //   ) as Section;
-  //   const keys = Object.keys(sectionInfo) as (keyof typeof sectionInfo)[];
-  //   for (let i = 0; i < keys.length; i++) {
-  //     const key = keys[i];
+  if (formData.get('prev-section')) {
+    const prevSection = JSON.parse(
+      formData.get('prev-section') as string
+    ) as Section;
+    const keys = Object.keys(sectionInfo) as (keyof typeof sectionInfo)[];
 
-  //     if (sectionInfo[key] !== prevSection[key]) {
-  //       break;
-  //     }
-  //     if (i === keys.length - 1) {
-  //       return { status: 200, message: 'No changes detected.' };
-  //     }
-  //   }
-  // }
+    const noChange = keys.every((key) =>
+      _.isEqual(sectionInfo[key], prevSection[key])
+    );
+
+    if (noChange) {
+      return { status: 200, message: 'No changes detected.' };
+    }
+  }
 
   const session = auth();
   session.protect();

@@ -12,7 +12,7 @@ function FormSection({ title, description, children }: Props) {
     <div className="flex flex-col gap-4 ">
       <Heading>{title}</Heading>
       {description && (
-        <Text size="3" as="p" className="text-sm">
+        <Text size="3" as="p" className="text-sm text-gray-11">
           {description}
         </Text>
       )}
