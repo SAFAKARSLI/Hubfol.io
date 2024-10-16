@@ -1,8 +1,14 @@
 'use client';
 import * as Accordion from '@radix-ui/react-accordion';
-import { Text, Heading, ScrollArea, Separator } from '@radix-ui/themes';
+import {
+  Text,
+  Heading,
+  ScrollArea,
+  Separator,
+  Spinner,
+} from '@radix-ui/themes';
 import ProjectMenu from './ProjectMenu';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { defaultIconLink } from '@/utils';
 import { Section } from '@/types/section';
 import Subsection from './project-card-subsections/Subsection';
@@ -19,9 +25,10 @@ const AccordionProjectItem = ({
   project: { name, tagline, iconLink, sections, uuid, slug },
 }: AccordionProjectItemProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (activeProjectId === uuid) {
+    if (activeProjectId === slug) {
       cardRef.current?.scrollIntoView({
         behavior: 'instant',
         block: 'start',
@@ -30,14 +37,20 @@ const AccordionProjectItem = ({
     }
   }, [activeProjectId]);
   return (
-    <Accordion.Item value={slug} asChild>
+    <Accordion.Item
+      value={slug}
+      asChild
+      onClick={() => {
+        activeProjectId !== slug && setLoading(true);
+      }}
+    >
       <div
         className={`rounded border overflow-hidden data-[state=open]:shadow-gray-0 border-gray-4 shadow-lg w-full m-auto`}
       >
         <Accordion.Trigger asChild>
           <div
             className={`flex sm:px-7 px-4 
-          ${activeProjectId == uuid && 'bg-gray-2'} bg-gray-1 hover:bg-gray-2
+          ${activeProjectId == slug && 'bg-gray-2'} bg-gray-1 hover:bg-gray-2
           data-[state=closed]:cursor-pointer w-full items-center h-[4.5rem]`}
             ref={cardRef}
           >
@@ -67,8 +80,9 @@ const AccordionProjectItem = ({
               )}
             </div>
 
-            <div className="h-full py-3">
+            <div className="h-full flex items-center">
               {slug === activeProjectId && <ProjectMenu project={project} />}
+              {loading && <Spinner />}
             </div>
           </div>
         </Accordion.Trigger>

@@ -36,20 +36,14 @@ function ProjectMenu({ project }: Props) {
     <>
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-          <IconButton
-            variant="ghost"
-            color="gray"
-            className="mt-1 h-4 w-4 -md:h-6 -md:w-6"
-          >
+          <IconButton variant="ghost" color="gray">
             <DotsHorizontalIcon />
           </IconButton>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
           <DropdownMenu.Item
             onClick={() =>
-              router.push(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/u/${username}/projects/edit/${project.uuid}/general-information`
-              )
+              router.push(`edit/${project.uuid}/general-information`)
             }
           >
             <Pencil2Icon />
