@@ -41,7 +41,7 @@ export default function RootLayout({ children, params }: Readonly<SlugProps>) {
           <body>
             <div className="h-[100dvh] ">
               <TopBar params={params} />
-              <NextTopLoader color="#2D3B9B" />
+              <NextTopLoader color="#2D3B9B" showSpinner={false} />
               <div>{children}</div>
             </div>
           </body>

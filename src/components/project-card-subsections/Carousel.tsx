@@ -9,7 +9,7 @@ import {
   Text,
   TextField,
 } from '@radix-ui/themes';
-import React from 'react';
+import React, { lazy } from 'react';
 import Slider from 'react-slick';
 import * as Portal from '@radix-ui/react-portal';
 import { set } from 'lodash';
@@ -20,13 +20,13 @@ type Props = {
 };
 
 function Carousel({ images }: Props) {
-  console.log(images);
   const settings = {
     infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
     draggable: false,
+    lazyLoad: 'ondemand' as 'ondemand' | 'progressive',
   };
 
   return (

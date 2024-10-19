@@ -11,9 +11,14 @@ import { getUser } from '@/app/actions/user';
 type Props = {
   initialProjects: Project[];
   username: string;
+  projectSlug: string;
 };
 
-async function ProjectsSidePanel({ initialProjects, username }: Props) {
+async function ProjectsSidePanel({
+  initialProjects,
+  username,
+  projectSlug,
+}: Props) {
   const { userId } = auth();
 
   const user = (await getUser(userId!)) as User;
@@ -22,7 +27,10 @@ async function ProjectsSidePanel({ initialProjects, username }: Props) {
       <ProfileOverview username={username} />
       <div className="overflow-y-scroll flex-1  scroll-smooth ">
         <ProjectListHeader projectCount={initialProjects.length} />
-        <AccordionProjectList initialProjects={initialProjects} />
+        <AccordionProjectList
+          initialProjects={initialProjects}
+          activeProjectId={projectSlug}
+        />
         <div className="mb-[15rem] p-5">
           {user?.username == username && <AddProjectButton />}
         </div>

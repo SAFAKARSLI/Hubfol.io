@@ -4,6 +4,7 @@ import { prisma } from '@/db';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const username = searchParams.get('username');
+  const init = searchParams.get('init');
 
   if (!username) {
     return new Response('Bad Request. Missing username', { status: 400 });
@@ -15,14 +16,18 @@ export async function GET(request: Request) {
       select: { uuid: true },
     });
 
+    if (!owner) {
+      return new Response('Not Found. User not found', { status: 404 });
+    }
+
     const projects = await prisma.project.findMany({
       where: { ownerId: owner?.uuid },
       orderBy: { createdAt: 'asc' },
-      include: {
-        sections: {
-          orderBy: { createdAt: 'asc' },
-        },
-      },
+      // include: {
+      //   sections: {
+      //     orderBy: { createdAt: 'asc' },
+      //   },
+      // },
     });
 
     if (!projects) {

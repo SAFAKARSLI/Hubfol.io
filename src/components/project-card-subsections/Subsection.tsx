@@ -34,7 +34,7 @@ const Subsection = ({
   };
 
   return (
-    <div className="p-5 flex flex-col gap-2">
+    <div className="flex flex-col gap-2">
       <Heading as="h4" className="text-lg -2xl:text-md text-wrap">
         {title}
       </Heading>

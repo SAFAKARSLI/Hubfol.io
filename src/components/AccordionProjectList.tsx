@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
@@ -7,30 +5,17 @@ import * as Accordion from '@radix-ui/react-accordion';
 
 import AccordionProjectItem from './AccordionProjectItem';
 import Project from '@/types/project';
-import { Separator } from '@radix-ui/themes';
 
 type Props = {
   initialProjects: Project[];
+  activeProjectId: string;
 };
 
-function AccordionProjectList({ initialProjects }: Props) {
-  const { projectSlug, username } = useParams();
-  const [accordionValue, setAccordionValue] = useState<string>('');
-  const router = useRouter();
-
-  useEffect(() => {
-    if (projectSlug) setAccordionValue(projectSlug as string);
-  }, []);
-
-  function onChangeActiveProject(slug: string) {
-    router.push(`/u/${username}/projects/${slug}`);
-  }
-
+function AccordionProjectList({ initialProjects, activeProjectId }: Props) {
   return (
     <Accordion.Root
       type="single"
-      onValueChange={onChangeActiveProject}
-      value={accordionValue}
+      value={activeProjectId ?? 'NO_ACTIVE_PROJECT'}
       asChild
     >
       <div className="px-5 flex flex-col gap-4">
@@ -38,7 +23,7 @@ function AccordionProjectList({ initialProjects }: Props) {
           return (
             <AccordionProjectItem
               key={i}
-              activeProjectId={projectSlug as string}
+              activeProjectId={activeProjectId}
               project={p}
             />
           );
