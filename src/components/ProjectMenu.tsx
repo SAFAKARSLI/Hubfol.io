@@ -43,7 +43,7 @@ function ProjectMenu({ project }: Props) {
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
           <DropdownMenu.Item asChild>
-            <Link href={`edit/${project.uuid}/general-information`}>
+            <Link href={`edit/${project.uuid}`}>
               <Pencil2Icon />
               Edit
             </Link>

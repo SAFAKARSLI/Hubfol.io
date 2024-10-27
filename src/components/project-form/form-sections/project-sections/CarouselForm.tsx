@@ -1,4 +1,4 @@
-import { Image } from '@/types/section';
+import { Image as ImageType } from '@/types/section';
 import { allowedIconTypes } from '@/utils';
 import {
   Cross1Icon,
@@ -8,6 +8,7 @@ import {
 } from '@radix-ui/react-icons';
 import { Button, Text, Tooltip } from '@radix-ui/themes';
 import _ from 'lodash';
+import Image from 'next/image';
 import React, { useEffect } from 'react';
 
 type Props = {
@@ -23,7 +24,7 @@ const supportedFileTypes = [
 ];
 
 function CarouselForm({ editFormData, initialValue }: Props) {
-  const [images, setImages] = React.useState<Image[]>(initialValue ?? []);
+  const [images, setImages] = React.useState<ImageType[]>(initialValue ?? []);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -56,10 +57,12 @@ function CarouselForm({ editFormData, initialValue }: Props) {
                 >
                   <Cross2Icon />
                 </div>
-                <img
+                <Image
+                  width={100}
+                  height={100}
                   src={(img.url as string) ?? URL.createObjectURL(imgBinary)}
                   alt={img.name}
-                  className="object-cover h-full"
+                  className="object-contain w-full h-full"
                 />
               </div>
               <div className="flex items-center">
@@ -117,7 +120,7 @@ function CarouselForm({ editFormData, initialValue }: Props) {
                   const newImage = {
                     name: img.name,
                     blob: blob,
-                  } as Image;
+                  } as ImageType;
                   editFormData(
                     `images[${images.length}][blob]`,
                     newImage.blob as Blob
