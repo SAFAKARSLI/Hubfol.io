@@ -61,7 +61,7 @@ const ProfileOverview = async ({ username }: ProfileOverviewProps) => {
         </div>
         <div>
           <Badge variant="soft" className="max-w-full truncate">
-            {user.status.replaceAll('_', ' ')}
+            {user.status}
           </Badge>
         </div>
       </Flex>

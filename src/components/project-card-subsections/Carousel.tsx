@@ -44,7 +44,7 @@ function Carousel({ images }: Props) {
                   />
                 </Dialog.Trigger>
 
-                <Dialog.Content className="max-w-[70vw] max-h-[90vh]">
+                <Dialog.Content className="max-w-[60vw] max-h-[80vh]">
                   <Flex
                     style={{
                       justifyContent: 'space-between',
@@ -61,7 +61,7 @@ function Carousel({ images }: Props) {
                       </IconButton>
                     </Dialog.Close>
                   </Flex>
-                  <img src={e.url} alt={e.name} className="m-auto" />
+                  <img src={e.url} alt={e.name} className="rounded-md w-full" />
                 </Dialog.Content>
               </Dialog.Root>
             );
