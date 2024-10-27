@@ -23,19 +23,28 @@ function TextInput({
   charLimit,
   setValue,
 }: Props) {
+  const [text, setText] = React.useState(defaultValue);
   return (
-    <input
-      required={required}
-      name={name}
-      onChange={(e) => {
-        setValue!(e.target.value);
-      }}
-      placeholder={placeholder}
-      maxLength={charLimit}
-      className={`text-gray-12 w-full bg-gray-1 rounded border border-gray-6 p-2 focus:shadow-outline focus:border-violet-7`}
-      defaultValue={defaultValue}
-      disabled={disabled}
-    />
+    <div className="flex gap-2 items-center">
+      <input
+        required={required}
+        name={name}
+        onChange={(e) => {
+          setText(e.target.value);
+          setValue!(e.target.value);
+        }}
+        placeholder={placeholder}
+        maxLength={charLimit}
+        className={`text-gray-12 w-full bg-gray-1 rounded border border-gray-6 p-2 focus:shadow-outline focus:border-violet-7`}
+        defaultValue={defaultValue}
+        disabled={disabled}
+      />
+      {charLimit && (
+        <p className="float-right text-gray-10 text-xs">
+          {text?.length}/{charLimit}
+        </p>
+      )}
+    </div>
   );
 }
 

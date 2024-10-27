@@ -67,6 +67,7 @@ function SingleInputWithEditButton({
         >
           <div className="flex-grow">
             {cloneElement(children as React.ReactElement, {
+              charLimit,
               defaultValue,
               setValue,
             })}

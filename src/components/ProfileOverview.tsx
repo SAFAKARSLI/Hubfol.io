@@ -45,18 +45,24 @@ const ProfileOverview = async ({ username }: ProfileOverviewProps) => {
         style={{ objectFit: 'cover' }}
         className="mr-5"
       />
-      <Flex direction="column" className="flex-grow" justify={'between'}>
+      <Flex
+        direction="column"
+        className="flex-grow w-[10rem]"
+        justify={'between'}
+      >
         <div>
-          <Text as="p" size="2" weight="bold">
+          <Text as="p" size="2" weight="bold" className="truncate">
             {user.name}{' '}
           </Text>
 
-          <Text size="1" color="gray" as="p">
+          <Text size="1" color="gray" as="p" className="truncate">
             {user.title}
           </Text>
         </div>
         <div>
-          <Badge variant="soft">{user.status.replaceAll('_', ' ')}</Badge>
+          <Badge variant="soft" className="max-w-full truncate">
+            {user.status.replaceAll('_', ' ')}
+          </Badge>
         </div>
       </Flex>
       <Flex

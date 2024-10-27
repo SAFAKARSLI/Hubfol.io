@@ -48,6 +48,7 @@ async function page({ params }: SlugProps) {
 
           <SingleInputWithEditButton
             title="Full Name"
+            charLimit={50}
             name="name"
             defaultValue={user.name}
             onSubmit={updateUserInfo}
@@ -58,6 +59,7 @@ async function page({ params }: SlugProps) {
           <SingleInputWithEditButton
             title="Title"
             name="title"
+            charLimit={50}
             defaultValue={user.title}
             onSubmit={updateUserInfo}
           >
@@ -67,6 +69,7 @@ async function page({ params }: SlugProps) {
           <SingleInputWithEditButton
             title="Status"
             name="status"
+            charLimit={50}
             defaultValue={user.status}
             onSubmit={updateUserInfo}
           >

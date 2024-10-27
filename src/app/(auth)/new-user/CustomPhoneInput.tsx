@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import PhoneInput from 'react-phone-number-input';
 import { E164Number } from 'libphonenumber-js';
 import { StringifyOptions } from 'querystring';
+import { isPossiblePhoneNumber } from 'react-phone-number-input';
 
 type Props = {
   setValue?: (value: E164Number) => void;
@@ -21,8 +22,13 @@ function CustomPhoneInput({ setValue: onChange }: Props) {
   return (
     <div>
       <PhoneInput
-        onChange={setValue}
+        onChange={(e) => {
+          if (e && isPossiblePhoneNumber(e as string)) {
+            setValue(e as E164Number);
+          }
+        }}
         value={value}
+        limitMaxLength={true}
         defaultCountry="US"
         placeholder="Enter phone number"
         className="w-full h-[2rem] p-2 mt-1 outline-none bg-gray-1 focus:shadow-outline focus:border-violet-7 rounded-md text-sm border border-gray-6 -md:text-xs data-[invalid]:placeholder-red-400 data-[invalid]:border-red-300"

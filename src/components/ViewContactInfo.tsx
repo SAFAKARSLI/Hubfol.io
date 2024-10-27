@@ -34,8 +34,12 @@ function ViewContactInfo({ user }: Props) {
         <DataList.Item align="center">
           <DataList.Label minWidth="88px">Status</DataList.Label>
           <DataList.Value>
-            <Badge variant="soft" radius="full">
-              {user.status.replaceAll('_', ' ')}
+            <Badge
+              variant="soft"
+              radius="full"
+              className="max-w-[15rem] text-wrap"
+            >
+              {user.status}
             </Badge>
           </DataList.Value>
         </DataList.Item>
