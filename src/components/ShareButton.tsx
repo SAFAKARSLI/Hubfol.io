@@ -1,0 +1,29 @@
+'use client';
+
+import { Share1Icon, Share2Icon } from '@radix-ui/react-icons';
+import { Button } from '@radix-ui/themes';
+import React from 'react';
+import * as Portal from '@radix-ui/react-portal';
+
+type Props = {};
+
+function ShareButton({}: Props) {
+  return (
+    <>
+      <Portal.Root>
+        <div className="absolute right-0 bottom-0">Hello</div>
+      </Portal.Root>
+
+      <div
+        className="m-0 font-medium flex gap-1"
+        onClick={() => {
+          navigator.clipboard.writeText(window.location.href);
+        }}
+      >
+        <Share1Icon /> Share
+      </div>
+    </>
+  );
+}
+
+export default ShareButton;

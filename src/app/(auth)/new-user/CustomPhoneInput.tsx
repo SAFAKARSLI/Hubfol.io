@@ -1,13 +1,23 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PhoneInput from 'react-phone-number-input';
 import { E164Number } from 'libphonenumber-js';
+import { StringifyOptions } from 'querystring';
 
-type Props = {};
+type Props = {
+  setValue?: (value: E164Number) => void;
+};
 
-function CustomPhoneInput({}: Props) {
+function CustomPhoneInput({ setValue: onChange }: Props) {
   const [value, setValue] = useState<E164Number>();
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(value as E164Number);
+    }
+  }, [value]);
+
   return (
     <div>
       <PhoneInput

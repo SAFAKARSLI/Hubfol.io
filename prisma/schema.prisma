@@ -99,7 +99,7 @@ model Employee {
   email        String          @unique
   username     String          @unique
   title        String
-  status       EMPLOYEE_STATUS @default(OPEN_TO_WORK)
+  status       String         @default("OPEN TO WORK")
   hourlyRate   Float?
   phoneNumber  String?
   location     String?

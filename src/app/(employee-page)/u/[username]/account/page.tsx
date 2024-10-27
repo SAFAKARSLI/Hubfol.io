@@ -1,6 +1,15 @@
-import { Button, Heading, IconButton } from '@radix-ui/themes';
+import { Button, Heading, IconButton, Separator, Text } from '@radix-ui/themes';
 import React from 'react';
 import { FaEdit } from 'react-icons/fa';
+import SingleInputWithEditButton from './(components)/SingleInputWithEditButton';
+import { Employee } from '@prisma/client';
+import { baseUrl } from '@/utils';
+import { SlugProps } from '@/types/slug';
+import { updateUserInfo } from '@/app/actions/user';
+import TextInput from './(components)/TextInput';
+import UneditableField from './(components)/UneditableField';
+import PhoneInputWithCountrySelect from 'react-phone-number-input';
+import CustomPhoneInput from '@/app/(auth)/new-user/CustomPhoneInput';
 
 type Props = {};
 
@@ -13,25 +22,65 @@ type Props = {};
   Phone Number
 /*/
 
-function page({}: Props) {
+async function page({ params }: SlugProps) {
+  const { username } = params;
+  const user = (await fetch(`${baseUrl}/api/users/${username}`, {
+    next: { tags: ['users'] },
+  }).then((r) => r.json())) as Employee;
+
   return (
-    <div className="max-w-[900px] m-auto py-8">
-      <Heading as="h1" className="text-center -2xl:text-md text-wrap">
-        Account Information
-      </Heading>
+    <div className="max-w-[900px] m-auto py-8 px-5">
+      <div className="text-center flex flex-col gap-3">
+        <Heading as="h1" className="text-center -2xl:text-md text-wrap">
+          Account Information
+        </Heading>
+        <Text className="text-center text-gray-11 mt-2 ">
+          Update your account information below. Editing for username and email
+          are currently disabled.
+        </Text>
+      </div>
       <div>
         <div className="flex flex-col gap-2 mt-8">
-          <div className="flex items-center gap-2">
-            <Heading as="h4" className="text-lg -2xl:text-md text-wrap">
-              Username
-            </Heading>
-            <IconButton variant="ghost" className="hover:cursor-pointer">
-              <FaEdit />
-            </IconButton>
-          </div>
-          <div className="bg-gray-1 p-4 rounded">
-            <p className="text-gray-9">username</p>
-          </div>
+          <UneditableField title="Username" value={user.username} />
+          <UneditableField title="Email" value={user.email} />
+
+          <Separator size={'4'} className="my-4" />
+
+          <SingleInputWithEditButton
+            title="Full Name"
+            name="name"
+            defaultValue={user.name}
+            onSubmit={updateUserInfo}
+          >
+            <TextInput />
+          </SingleInputWithEditButton>
+
+          <SingleInputWithEditButton
+            title="Title"
+            name="title"
+            defaultValue={user.title}
+            onSubmit={updateUserInfo}
+          >
+            <TextInput />
+          </SingleInputWithEditButton>
+
+          <SingleInputWithEditButton
+            title="Status"
+            name="status"
+            defaultValue={user.status}
+            onSubmit={updateUserInfo}
+          >
+            <TextInput />
+          </SingleInputWithEditButton>
+
+          <SingleInputWithEditButton
+            title="Phone Number"
+            name="phoneNumber"
+            defaultValue={user?.phoneNumber!}
+            onSubmit={updateUserInfo}
+          >
+            <CustomPhoneInput />
+          </SingleInputWithEditButton>
         </div>
       </div>
     </div>

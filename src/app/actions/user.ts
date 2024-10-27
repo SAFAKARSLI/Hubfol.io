@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { baseUrl } from '@/utils';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { clerkClient, User } from '@clerk/nextjs/server';
+import { revalidateTag } from 'next/cache';
 
 export const checkExistingUser = async (userId: string) => {
   try {
@@ -21,6 +22,43 @@ export const checkExistingUser = async (userId: string) => {
     console.error('Error checking existing user:', error);
   } finally {
     prisma.$disconnect();
+  }
+};
+
+export const updateUserInfo = async (formData: FormData) => {
+  const userId = formData.get('userId') as string;
+  const fieldName = formData.get('fieldName') as string;
+
+  const data = formData.get(fieldName) as string;
+  const user = await checkExistingUser(userId);
+
+  console.log(fieldName);
+  console.log(formData);
+
+  if (user) {
+    if (fieldName === 'username') {
+      const username = data;
+      await clerkClient().users.updateUser(userId, {
+        username,
+        privateMetadata: {
+          hubfolioUsername: username,
+        },
+      });
+    }
+
+    await prisma.employee.update({
+      where: {
+        userId: user.id,
+      },
+      data: {
+        [fieldName]: data,
+      },
+    });
+    revalidateTag('users');
+  } else {
+    throw new Error(
+      'Invalid email provided or user does not exist. There was an error updating the username. Please try again.'
+    );
   }
 };
 

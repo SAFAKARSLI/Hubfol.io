@@ -8,12 +8,17 @@ import {
   Box,
   Separator,
   Portal,
+  Button,
 } from '@radix-ui/themes';
 import React, { cache } from 'react';
 import ViewContactInfo from './ViewContactInfo';
 import { baseUrl } from '@/utils';
 import Employee from '@/types/employee';
 import Image from 'next/image';
+import { FaEdit } from 'react-icons/fa';
+import { currentUser } from '@clerk/nextjs/server';
+import Link from 'next/link';
+import ShareButton from './ShareButton';
 
 interface ProfileOverviewProps {
   username: string;
@@ -24,6 +29,8 @@ const ProfileOverview = async ({ username }: ProfileOverviewProps) => {
     cache: 'force-cache',
     next: { tags: ['users'] },
   }).then((r) => r.json())) as Employee;
+
+  const clerkUser = await currentUser();
 
   return (
     <div
@@ -66,13 +73,24 @@ const ProfileOverview = async ({ username }: ProfileOverviewProps) => {
             </IconButton>
           </DropdownMenu.Trigger>
           <DropdownMenu.Content size="1">
-            <DropdownMenu.Item>Share</DropdownMenu.Item>
-            <DropdownMenu.Item>View full profile</DropdownMenu.Item>
+            <DropdownMenu.Item>
+              <ShareButton />
+            </DropdownMenu.Item>
+            {username == clerkUser?.username && (
+              <>
+                <DropdownMenu.Separator />
+                <DropdownMenu.Item asChild>
+                  <Link href={`/u/${username}/account`}>
+                    <div className="flex items-center gap-1">
+                      <FaEdit /> Edit Profile
+                    </div>
+                  </Link>
+                </DropdownMenu.Item>
+              </>
+            )}
           </DropdownMenu.Content>
         </DropdownMenu.Root>
-        {/* <Badge size="2" variant="soft" radius="medium">
-          ${user.hourlyRate}/hr
-        </Badge> */}
+
         <ViewContactInfo user={user} />
       </Flex>
     </div>

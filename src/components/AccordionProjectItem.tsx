@@ -71,9 +71,10 @@ const AccordionProjectItem = ({
           data-[state=closed]:cursor-pointer w-full items-center h-[4.5rem]`}
             ref={cardRef}
             onClick={() => {
-              setLoading(true);
-              activeProjectId !== slug &&
+              if (activeProjectId !== slug) {
+                setLoading(true);
                 router.push(`/u/${username}/projects/${slug}`);
+              }
             }}
           >
             <img
