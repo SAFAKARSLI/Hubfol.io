@@ -15,6 +15,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import { initiateSection } from '@/app/actions/section';
 import next from 'next';
+import { toast, Toaster } from 'sonner';
 
 type Props = {
   // sections: Section[];
@@ -67,6 +68,10 @@ function SectionsTable({}: Props) {
         className="w-1/4  h-[2.5rem] float-right"
         loading={loading}
         onClick={() => {
+          if (sections.length >= 10) {
+            toast.error("You've reached the maximum number of sections.");
+            return;
+          }
           setLoading(true);
           router.push(`sections/new`);
         }}
@@ -74,6 +79,7 @@ function SectionsTable({}: Props) {
         <PlusIcon />
         New Section
       </Button>
+      <Toaster richColors duration={3000} position="bottom-left" theme="dark" />
     </>
   );
 }

@@ -32,7 +32,9 @@ async function ProjectsSidePanel({
           activeProjectId={projectSlug}
         />
         <div className="mb-[15rem] p-5">
-          {user?.username == username && <AddProjectButton />}
+          {user?.username == username && (
+            <AddProjectButton projectCount={initialProjects.length} />
+          )}
         </div>
       </div>
     </div>

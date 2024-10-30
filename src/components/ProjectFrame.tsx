@@ -35,6 +35,7 @@ import classnames from 'classnames';
 import { set } from 'lodash';
 import { useRouter } from 'next/navigation';
 import { TbDeviceIpad } from 'react-icons/tb';
+import { FaTabletAlt } from 'react-icons/fa';
 
 type Props = {
   project?: Project;
@@ -288,7 +289,7 @@ function ProjectFrame({ project }: Props) {
                     });
                   }}
                 >
-                  <TbDeviceIpad />
+                  <FaTabletAlt />
                 </IconButton>
                 <IconButton
                   variant="ghost"

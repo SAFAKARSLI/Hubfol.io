@@ -34,7 +34,7 @@ function ProjectForm({ activeStepIndex }: Props) {
         {
           title: 'Sections',
           description:
-            'Sections are different ways by which you can flex your project. This information is visible when the project is active.',
+            'Sections are different ways by which you can flex your project. This information is visible when the project is active. The maximum number of sections you can have is 10 per project.',
           content: <SectionsTable />,
           onComplete: () => console.log('skip'),
           fetchResource: '',

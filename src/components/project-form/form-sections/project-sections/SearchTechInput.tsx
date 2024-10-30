@@ -1,5 +1,12 @@
 import React from 'react';
-import { Flex, TextField, Spinner, Badge, Tooltip } from '@radix-ui/themes';
+import {
+  Flex,
+  TextField,
+  Spinner,
+  Badge,
+  Tooltip,
+  Text,
+} from '@radix-ui/themes';
 import { MagnifyingGlassIcon, Cross2Icon } from '@radix-ui/react-icons';
 import SearchResultList from './SearchResultList';
 import { useEffect, useState } from 'react';
@@ -19,8 +26,6 @@ function SearchTechInput({ initialValue = [] }: Props) {
     result: [] as Brand[],
   });
   const [techStack, setTechStack] = React.useState<Brand[]>(initialValue);
-  console.log(search);
-  console.log(techStack);
 
   const handleAddTechStack = (brandName: string, slug: string) => {
     setQueryBounce('');
@@ -72,8 +77,13 @@ function SearchTechInput({ initialValue = [] }: Props) {
     <div>
       <div className="flex flex-col w-full relative flex-none ">
         <input type="hidden" name="content" value={JSON.stringify(techStack)} />
-
+        {techStack.length >= 20 && (
+          <Text className="text-center  h-10 bg-gray-1 text-red-500 font-medium">
+            Maxiumum amount of technologies reached
+          </Text>
+        )}
         <TextField.Root
+          disabled={techStack.length >= 20}
           onFocus={() => setSearch({ ...search, resultVisible: true })}
           onBlur={(e) => {
             setSearch({ ...search, resultVisible: false });

@@ -3,9 +3,15 @@ import {
   createRouteMatcher,
   getAuth,
 } from '@clerk/nextjs/server';
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import rateLimitMiddleware from './rateLimiter';
+import { baseUrl } from './utils';
 
-export default clerkMiddleware((auth, req) => {});
+export default clerkMiddleware(async (auth, req) => {
+  const { userId } = await auth();
+
+  return rateLimitMiddleware(req, userId!);
+});
 
 export const config = {
   matcher: [

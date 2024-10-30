@@ -1,29 +1,39 @@
 'use client';
 import React from 'react';
-import { Button } from '@radix-ui/themes';
-import { buttonVariants } from '@/utils';
 import { PlusIcon } from '@radix-ui/react-icons';
-import { useParams, useRouter } from 'next/navigation';
-import { v4 as v4uuid } from 'uuid';
+import { useParams } from 'next/navigation';
 import { initiateProject } from '@/app/actions/project';
 import SubmitButton from './SubmitButton';
+import { Toaster, toast } from 'sonner';
 
 type Props = {
-  variant?: buttonVariants;
+  projectCount: number;
 };
 
-function AddProjectButton({ variant = 'soft' }: Props) {
+function AddProjectButton({ projectCount }: Props) {
   const { username } = useParams();
 
+  console.log('projectCount', projectCount);
+
   return (
-    <form action={initiateProject}>
+    <form
+      action={initiateProject}
+      onSubmit={(e) => {
+        if (projectCount >= 10) {
+          e.preventDefault();
+          toast.error("You've reached the maximum number of projects.");
+        }
+      }}
+    >
       <input type="hidden" name="username" value={username} />
       <SubmitButton
-        variant={variant}
+        size="2"
+        variant={'soft'}
         style="cursor-pointer rounded h-12 w-full mb-3"
       >
         <PlusIcon /> Add Project
       </SubmitButton>
+      <Toaster richColors duration={3000} position="bottom-left" theme="dark" />
     </form>
   );
 }
