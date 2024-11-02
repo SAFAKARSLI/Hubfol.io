@@ -31,14 +31,14 @@ export const usePreloadedFormData = (
   const editFormData = (key: string, value: string | Blob) => {
     setFormData((prev) => {
       const existingValue = prev[key];
-      if (Array.isArray(existingValue) && key === 'content') {
-        return { ...prev, [key]: [...existingValue, value] };
-      }
-      // If the key exists and the value is not an array, convert it to an array
-      else if (existingValue !== undefined && key === 'content') {
-        return { ...prev, [key]: [existingValue, value] };
-      }
-      // If the key does not exist, simply set it with the new value
+      // if (Array.isArray(existingValue) && key === 'content') {
+      //   return { ...prev, [key]: [...existingValue, value] };
+      // }
+      // // If the key exists and the value is not an array, convert it to an array
+      // else if (existingValue !== undefined && key === 'content') {
+      //   return { ...prev, [key]: [existingValue, value] };
+      // }
+      // // If the key does not exist, simply set it with the new value
       return { ...prev, [key]: value };
     });
   };

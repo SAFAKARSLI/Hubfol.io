@@ -7,7 +7,7 @@ import {
   GetObjectCommand,
   PutObjectCommand,
 } from '@aws-sdk/client-s3';
-import { redirect } from 'next/navigation';
+import { permanentRedirect, redirect } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
 import { validateUUID } from './utils';
@@ -18,9 +18,10 @@ import { auth, User } from '@clerk/nextjs/server';
 import { revalidateTag } from 'next/cache';
 import { getUser } from './user';
 import { nanoid } from 'nanoid';
-import { generateProjectSlug } from '@/utils';
+import { baseUrl, generateProjectSlug } from '@/utils';
 import _ from 'lodash';
 import { uploadFile } from './s3';
+import { PROJECT_CONTENT_TYPE } from '@prisma/client';
 
 export const initiateProject = async (formData: FormData) => {
   const session = auth();
@@ -45,7 +46,8 @@ export const initiateProject = async (formData: FormData) => {
         ownerId: hubfolioUserId as string,
         createdAt: date,
         name,
-        url: '',
+        content: '',
+        type: 'URL',
         tagline: '',
         iconLink: '',
       },
@@ -108,11 +110,11 @@ export const upsertGeneralInfo = async (formData: FormData) => {
 
   // If the project previously created, check if any of the field have changed.
   // If not, bypass the update
+
   if (formData.get('prev-project')) {
     const prevProject = JSON.parse(
       formData.get('prev-project') as string
     ) as typeof projectFromFormData;
-
     const keys = Object.keys(
       projectFromFormData
     ) as (keyof typeof projectFromFormData)[];
@@ -143,6 +145,9 @@ export const upsertGeneralInfo = async (formData: FormData) => {
       where: { uuid: projectUUID },
       data: {
         ...projectFromFormData,
+        // ...(projectFromFormData.name != prevProject.name && {
+        //   slug: generateProjectSlug(projectFromFormData.name),
+        // }),
       },
     });
     return { status: 200, data: resultingProject };
@@ -190,5 +195,68 @@ export const deleteProject = async (projectUUID: string) => {
   } finally {
     revalidateTag('projects');
     redirect(`/u/${user.username}/projects`);
+  }
+};
+
+export const upsertFrameOptions = async (formData: FormData) => {
+  auth().protect();
+
+  console.log(formData);
+
+  const projectUUID = formData.get('projectId') as string;
+
+  // Security checks
+  const user = await getUser(auth().userId!);
+  if (!user) return { status: 403, message: 'Unauthenticated' };
+  const { hubfolioUserId } = user?.privateMetadata;
+  const authorityCheck = await checkForAuthority(
+    projectUUID,
+    hubfolioUserId as string
+  );
+  if (authorityCheck.status != 200) {
+    permanentRedirect(baseUrl + 'sign-in');
+  }
+
+  // If the content is a file, upload it to S3
+
+  const frameOptionsFormData = {
+    type: formData.get('type') as PROJECT_CONTENT_TYPE,
+    content: formData.get('content') as File | string,
+  };
+
+  var content = '';
+  if (
+    typeof formData.get('content') === 'object' &&
+    frameOptionsFormData.type === 'FILE'
+  ) {
+    const file = formData.get('content') as File;
+
+    content = (
+      await uploadFile(
+        file,
+        process.env.AWS_FILE_PROJECTS_BUCKET_NAME as string
+      )
+    ).data as string;
+  } else {
+    // The content is URL
+    content = formData.get('content') as string;
+  }
+
+  try {
+    const project = await prisma.project.update({
+      where: { uuid: projectUUID },
+      data: {
+        type: frameOptionsFormData.type,
+        content,
+      },
+    });
+
+    return { status: 200, data: project };
+  } catch (error) {
+    console.error('Error updating frame options:', error);
+    throw new Error('Internal Server Error. Failed to update frame options.');
+  } finally {
+    await prisma.$disconnect();
+    revalidateTag('projects');
   }
 };

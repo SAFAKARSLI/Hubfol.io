@@ -36,6 +36,7 @@ export async function GET(request: Request) {
 
     return new Response(JSON.stringify(projects), { status: 200 });
   } catch (error) {
+    console.error(error);
     return new Response('Internal Server Error. Failed to fetch projects', {
       status: 500,
     });

@@ -36,6 +36,7 @@ import { set } from 'lodash';
 import { useRouter } from 'next/navigation';
 import { TbDeviceIpad } from 'react-icons/tb';
 import { FaTabletAlt } from 'react-icons/fa';
+import { baseUrl } from '@/utils';
 
 type Props = {
   project?: Project;
@@ -73,6 +74,7 @@ const SelectItem = React.forwardRef<HTMLDivElement, SelectItemProps>(
 );
 
 function ProjectFrame({ project }: Props) {
+  const [file, setFile] = useState<File>();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [iframeDimensions, setIframeDimensions] = useState({
     width: '100%',
@@ -80,7 +82,7 @@ function ProjectFrame({ project }: Props) {
   });
   const [history, setHistory] = useState<History>({
     back: [],
-    current: project?.url!,
+    current: project?.content!,
     forward: [],
   });
 
@@ -90,7 +92,30 @@ function ProjectFrame({ project }: Props) {
   });
   const [error, setError] = useState<boolean>(false); // Error state for iframe
   const router = useRouter();
-  const [showFrame, setShowFrame] = useState(true);
+  const [showFrame, setShowFrame] = useState(false);
+
+  useEffect(() => {
+    if (project?.type == 'FILE') {
+      const fetchProjectFile = async () => {
+        const response = await fetch(
+          baseUrl + '/api/static-file-provider?key=' + project.content
+        );
+        const buffer = await response.arrayBuffer();
+        const fileName = response.headers.get('Content-Disposition')
+          ? response.headers.get('Content-Disposition')?.split('=')[1]
+          : 'pdf' + '.pdf';
+        const blob = new Blob([buffer], {
+          type: 'application/octet-stream',
+        });
+        const file = new File([blob], fileName as string, {
+          type: 'application/pdf',
+        });
+        setFile(file);
+      };
+
+      fetchProjectFile();
+    }
+  }, []);
 
   useEffect(() => {
     const iframe = iframeRef.current;
@@ -166,11 +191,11 @@ function ProjectFrame({ project }: Props) {
   //   // setShowFrame(true);
   // }, []);
 
-  return (
+  return project?.type == 'URL' ? (
     <div className="h-full flex flex-col">
-      <div className="h-[6rem] mx-5 ship flex-none flex flex-col justify-between py-3">
-        <div className=" bg-gray-2  rounded-full flex items-center border border-gray-4 ">
-          <Text className="text-gray-10 flex  items-center ml-5">
+      <div className="h-[6rem] mx-5 ship flex-none justify-center flex flex-col justify-between py-3">
+        <div className=" bg-gray-2 h-[2.5rem] rounded-full flex items-center border border-gray-4 ">
+          {/* <Text className="text-gray-10 flex  items-center ml-5">
             <StarFilledIcon />:
           </Text>
           <Select.Root defaultValue="banana">
@@ -206,7 +231,7 @@ function ProjectFrame({ project }: Props) {
                 </Select.Viewport>
               </Select.Content>
             </Select.Portal>
-          </Select.Root>
+          </Select.Root> */}
           <div className="flex w-full justify-between  items-center px-5">
             <div className="flex items-center gap-4">
               <IconButton
@@ -308,7 +333,7 @@ function ProjectFrame({ project }: Props) {
 
               <div className="flex items-center gap-4">
                 <Text size={'1'} className="text-gray-9">
-                  Links:
+                  External Links:
                 </Text>
                 <IconButton
                   variant="ghost"
@@ -319,9 +344,9 @@ function ProjectFrame({ project }: Props) {
                 >
                   <ExternalLinkIcon />
                 </IconButton>
-                <IconButton variant="ghost" radius="full">
+                {/* <IconButton variant="ghost" radius="full">
                   <CodeIcon />
-                </IconButton>
+                </IconButton> */}
               </div>
             </div>
           </div>
@@ -359,6 +384,15 @@ function ProjectFrame({ project }: Props) {
         </p>
       )}
     </div>
+  ) : (
+    file && (
+      <div className="p-5 h-full w-full">
+        <iframe
+          src={URL.createObjectURL(file as File)}
+          className="rounded h-full w-full border border-gray-6"
+        />
+      </div>
+    )
   );
 }
 

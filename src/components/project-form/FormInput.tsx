@@ -8,7 +8,7 @@ import InputLabel from './InputLabel';
 
 type Props = {
   pattern?: string;
-  label: string;
+  label?: string;
   type: string;
   style?: string;
   value?: string;
@@ -52,7 +52,7 @@ function FormInput({
   return (
     <Form.Field name={name} serverInvalid={forceMatch}>
       <InputLabel
-        label={label}
+        label={label as string}
         required={required}
         charLimit={charLimit}
         currentCharCount={currentValue ? String(currentValue).length : 0}

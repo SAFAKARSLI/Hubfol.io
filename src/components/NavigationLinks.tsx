@@ -30,7 +30,7 @@ function NavigationLinks({ onClick, authenticated }: NavigationLinksProps) {
           onClick={onClick}
         />
       ))}
-      {authenticated && (
+      {/* {authenticated && (
         <>
           <Separator orientation="vertical" size="1" />
           {highlightedLinks.map(({ title, url }, index) => (
@@ -45,7 +45,7 @@ function NavigationLinks({ onClick, authenticated }: NavigationLinksProps) {
             </Link>
           ))}
         </>
-      )}
+      )} */}
     </div>
   );
 }

@@ -4,7 +4,7 @@ import FormInput from '@/components/project-form/FormInput';
 import * as Form from '@radix-ui/react-form';
 import InputLabel from '../../InputLabel';
 import FileInput from './FileInput';
-import { baseUrl } from '@/utils';
+import { allowedIconTypes, baseUrl } from '@/utils';
 import { useParams, useSearchParams } from 'next/navigation';
 import Project from '@/types/project';
 import { Spinner } from '@radix-ui/themes';
@@ -67,17 +67,12 @@ function ProjectInfoForm({ editFormData }: Props) {
           defaultValue={project?.tagline}
           type="text"
         />
-        <FormInput
-          label="URL"
-          name="url"
-          placeholder="Enter the project URL"
-          message="You must provide a valid URL. (must include http:// or https://)"
-          defaultValue={project?.url}
-          type="url"
-        />
+
         <Form.Field name="project-icon">
           <InputLabel label="Project Icon" />
           <FileInput
+            formDataSlug="iconLink"
+            accept={allowedIconTypes}
             editFormData={editFormData!}
             defaultValue={project?.iconLink}
           />

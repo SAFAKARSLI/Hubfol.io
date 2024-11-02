@@ -143,7 +143,7 @@ export type InputType =
   | undefined;
 
 export const allowedIconTypes =
-  'image/png, image/jpeg, image/jpg, image/svg+xml';
+  'image/png, image/jpeg, image/jpg, image/svg+xml, application/pdf';
 
 export const links = [
   {

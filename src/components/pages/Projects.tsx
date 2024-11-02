@@ -22,7 +22,9 @@ const Projects = async ({
         tags: ['projects', 'sections'],
       },
     }
-  ).then((r) => r.json())) as Project[];
+  ).then((r) => {
+    if (r.body) return r.json();
+  })) as Project[];
 
   let project: Project | undefined;
   if (activeProjectId) {

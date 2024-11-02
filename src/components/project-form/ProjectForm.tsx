@@ -2,7 +2,7 @@
 import React from 'react';
 import ProjectInfoForm from './form-sections/project-info/ProjectInfoForm';
 import SectionsTable from './form-sections/project-sections/SectionsTable';
-import { upsertGeneralInfo } from '@/app/actions/project';
+import { upsertGeneralInfo, upsertFrameOptions } from '@/app/actions/project';
 import Stepper from '../custom-comps/stepper/Stepper';
 import FrameOptionsForm from './form-sections/frame-options/FrameOptionsForm';
 import { useParams, useSearchParams } from 'next/navigation';
@@ -44,9 +44,10 @@ function ProjectForm({ activeStepIndex }: Props) {
         },
         {
           title: 'Frame Options',
-          description: 'Choose your frame options.',
+          description:
+            'Frame options are the different ways by which you can present your projects. Unlike sections which helps users to understand what the project is about, the project frame is the project itself. Please specify below how you would like your project to be viewed.',
           content: <FrameOptionsForm />,
-          onComplete: () => console.log('Skipped General Information'),
+          onComplete: upsertFrameOptions,
           fetchResource: '',
           callback: `review?${searchParams.toString()}`,
           slug: 'frame-options',
