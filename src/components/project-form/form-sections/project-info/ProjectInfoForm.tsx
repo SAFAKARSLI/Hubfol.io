@@ -71,10 +71,11 @@ function ProjectInfoForm({ editFormData }: Props) {
         <Form.Field name="project-icon">
           <InputLabel label="Project Icon" />
           <FileInput
+            bucketName="hubfol.io.project-icons"
             formDataSlug="iconLink"
             accept={allowedIconTypes}
             editFormData={editFormData!}
-            defaultValue={project?.iconLink}
+            defaultValue={project?.iconLink as string}
           />
         </Form.Field>
       </div>

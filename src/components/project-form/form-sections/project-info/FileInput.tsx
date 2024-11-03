@@ -12,9 +12,11 @@ type Props = {
   formDataSlug: string;
   defaultValue?: string;
   accept: string;
+  bucketName: string;
 };
 
 function FileInput({
+  bucketName,
   editFormData,
   defaultValue,
   accept,
@@ -23,22 +25,22 @@ function FileInput({
   const [file, setFile] = useState<File | null>();
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
-  console.log(file);
-
   useEffect(() => {
     const fetchFileFromS3 = async () => {
-      if (defaultValue) {
+      if (defaultValue?.length! > 0) {
         const response = await fetch(
-          baseUrl + '/api/static-file-provider?key=' + defaultValue
+          baseUrl +
+            '/api/static-file-provider?key=' +
+            defaultValue +
+            '&bucketName=' +
+            bucketName
         );
+        console.log(response);
         const buffer = await response.arrayBuffer();
         const fileName = response.headers.get('Content-Disposition')
           ? response.headers.get('Content-Disposition')?.split('=')[1]
           : defaultValue + '.pdf';
-        const blob = new Blob([buffer], {
-          type: 'application/octet-stream',
-        });
-        const file = new File([blob], fileName as string, {
+        const file = new File([buffer], fileName as string, {
           type: 'application/pdf',
         });
         setFile(file);
@@ -63,9 +65,9 @@ function FileInput({
     editFormData(formDataSlug, file);
   };
 
-  // useEffect(() => {
-  //   // editFormData(formDataSlug, defaultValue!);
-  // }, []);
+  useEffect(() => {
+    editFormData(formDataSlug, defaultValue!);
+  }, []);
 
   return (
     <div className="mt-1">
@@ -76,7 +78,8 @@ function FileInput({
               <img
                 src={URL.createObjectURL(file)}
                 alt="project-icon"
-                sizes="100px"
+                width={10}
+                height={10}
                 style={{ objectFit: 'contain' }}
                 className="bg-gray-1 border border-gray-5 w-full h-full rounded p-2"
               />

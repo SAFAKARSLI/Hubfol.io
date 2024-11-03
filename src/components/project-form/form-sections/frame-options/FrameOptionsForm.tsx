@@ -17,9 +17,7 @@ type Props = {
 function FrameOptionsForm({ editFormData }: Props) {
   const [projectType, setProjectType] = React.useState('URL');
   const [project, setProject] = React.useState<Project>();
-
   const { projectUUID } = useParams();
-  console.log(project);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -77,6 +75,7 @@ function FrameOptionsForm({ editFormData }: Props) {
       ) : (
         <Form.Field name="project-icon">
           <FileInput
+            bucketName="hubfol.io.file-projects"
             formDataSlug="content"
             accept=".pdf"
             editFormData={editFormData!}

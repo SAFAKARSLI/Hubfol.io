@@ -4,15 +4,13 @@ import { GetObjectCommand } from '@aws-sdk/client-s3';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const key = searchParams.get('key');
+  const bucketName = searchParams.get('bucketName');
 
-  if (!key) {
-    return new Response('Key not found', { status: 400 });
+  if (!key || !bucketName) {
+    return new Response('Bad Request', { status: 400 });
   }
 
-  const file = await getObject(
-    key,
-    process.env.AWS_FILE_PROJECTS_BUCKET_NAME as string
-  );
+  const file = await getObject(key, bucketName);
 
   return new Response(file, {
     headers: {

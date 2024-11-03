@@ -101,7 +101,6 @@ export const upsertGeneralInfo = async (formData: FormData) => {
 
   const projectFromFormData = {
     name: formData.get('name') as string,
-    url: formData.get('url') as string,
     tagline: formData.get('tagline') as string,
     iconLink,
     slug: generateProjectSlug(formData.get('name') as string),

@@ -15,20 +15,19 @@ const Projects = async ({
   children,
   activeProjectId,
 }: ProjectsProps) => {
-  const projects = (await fetch(
-    `${baseUrl}/api/projects?username=${username}`,
-    {
-      next: {
-        tags: ['projects', 'sections'],
-      },
-    }
-  ).then((r) => {
+  var projects = await fetch(`${baseUrl}/api/projects?username=${username}`, {
+    next: {
+      tags: ['projects', 'sections'],
+    },
+  }).then((r) => {
     if (r.body) return r.json();
-  })) as Project[];
+  });
 
   let project: Project | undefined;
   if (activeProjectId) {
-    project = projects.find((project) => project.slug === activeProjectId);
+    project = projects.find(
+      (project: Project) => project.slug === activeProjectId
+    );
 
     if (!project) redirect(`/u/${username}/projects?error=project-not-found`);
   }

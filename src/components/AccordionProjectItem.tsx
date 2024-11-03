@@ -78,10 +78,15 @@ const AccordionProjectItem = ({
             }}
           >
             <img
-              className="h-[2.3rem] w-[2.3rem] "
+              className="h-[2.3rem] w-[2.3rem] rounded-sm "
               style={{ objectFit: 'contain' }}
               alt={`${name}-icon`}
-              src={iconLink ? (iconLink as string) : defaultIconLink}
+              src={
+                iconLink
+                  ? 'https://s3.us-east-1.amazonaws.com/hubfol.io.project-icons/' +
+                    (iconLink as string)
+                  : defaultIconLink
+              }
             />
 
             <div className="min-w-[5rem] sm:mx-7 mx-4 flex-1">

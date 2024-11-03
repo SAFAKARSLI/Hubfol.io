@@ -92,13 +92,14 @@ function ProjectFrame({ project }: Props) {
   });
   const [error, setError] = useState<boolean>(false); // Error state for iframe
   const router = useRouter();
-  const [showFrame, setShowFrame] = useState(false);
 
   useEffect(() => {
     if (project?.type == 'FILE') {
       const fetchProjectFile = async () => {
         const response = await fetch(
-          baseUrl + '/api/static-file-provider?key=' + project.content
+          baseUrl +
+            '/api/static-file-provider?bucketName=hubfol.io.file-projects&key=' +
+            project.content
         );
         const buffer = await response.arrayBuffer();
         const fileName = response.headers.get('Content-Disposition')
@@ -371,11 +372,6 @@ function ProjectFrame({ project }: Props) {
           key={project!.uuid}
           className="min-w-[375px] min-h-[600px] rounded m-auto"
         />
-        {!showFrame && (
-          <div className="absolute inset-0 bg-gray-0 flex items-center justify-center">
-            <Spinner />
-          </div>
-        )}
       </Box>
       <ProjectConsole project={project!} />
       {error && (
