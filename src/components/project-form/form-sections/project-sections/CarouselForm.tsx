@@ -121,6 +121,8 @@ function CarouselForm({ editFormData, initialValue }: Props) {
                     name: img.name,
                     blob: blob,
                   } as ImageType;
+
+                  // The new image is sent to server as blob as opposed to url because it has not yet been uploaded in the S3 bucket
                   editFormData(
                     `images[${images.length}][blob]`,
                     newImage.blob as Blob

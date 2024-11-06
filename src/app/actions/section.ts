@@ -52,7 +52,7 @@ const processContent = async (formData: FormData) => {
 
       result.push({
         name: formData.get(`images[${i}][name]`) as string,
-        url: uploadedFile.data,
+        url: 'https://s3.amazonaws.com/hubfol.io.gallery/' + uploadedFile.data,
       });
     }
     return result as InputJsonValue;

@@ -102,13 +102,11 @@ function ProjectFrame({ project }: Props) {
             project.content
         );
         const buffer = await response.arrayBuffer();
-        const fileName = response.headers.get('Content-Disposition')
-          ? response.headers.get('Content-Disposition')?.split('=')[1]
-          : 'pdf' + '.pdf';
-        const blob = new Blob([buffer], {
-          type: 'application/octet-stream',
-        });
-        const file = new File([blob], fileName as string, {
+        const fileName = response.headers
+          .get('Content-Disposition')
+          ?.split('=')[1];
+
+        const file = new File([buffer], fileName as string, {
           type: 'application/pdf',
         });
         setFile(file);
@@ -128,10 +126,19 @@ function ProjectFrame({ project }: Props) {
 
     // Listen for messages from the iframe
     const handleMessage = (event: MessageEvent) => {
+      console.log(event);
+
       // Ensure the message comes from the correct iframe origin
       if (event.origin !== 'http://localhost:5050') return;
 
-      if (event.data.type === 'navigate') {
+      if (event.data.type == 'current-url') {
+        setHistory((prev) => ({
+          ...prev,
+          current: event.data.url,
+        }));
+      }
+
+      if (event.data.type == 'navigate') {
         if (history.forward[history.forward.length - 1] !== event.data.url) {
           setHistory((prev) => ({
             back: [...prev.back, prev.current],
@@ -151,7 +158,7 @@ function ProjectFrame({ project }: Props) {
           'initialize',
           'http://localhost:5050'
         );
-        // console.log('Initialization successfully handled');
+        console.log('Initialization successfully handled');
       } catch (error) {
         console.error('Error posting message to iframe:', error);
         setError(true);
@@ -186,11 +193,6 @@ function ProjectFrame({ project }: Props) {
       height: iframeRef.current?.clientHeight!,
     });
   }, [iframeDimensions]);
-
-  // useEffect(() => {
-  //   iframeRef.current?.contentWindow?.postMessage('reload', history.current);
-  //   // setShowFrame(true);
-  // }, []);
 
   return project?.type == 'URL' ? (
     <div className="h-full flex flex-col">
@@ -370,7 +372,7 @@ function ProjectFrame({ project }: Props) {
           height={iframeDimensions.height}
           src={history.current}
           key={project!.uuid}
-          className="min-w-[375px] min-h-[600px] rounded m-auto"
+          className="min-w-[375px] min-h-[600px] rounded m-auto border border-gray-3"
         />
       </Box>
       <ProjectConsole project={project!} />
