@@ -1,3 +1,3 @@
 export function GET() {
-  return new Response('', { status: 200 });
+  return new Response("", { status: 200 });
 }
