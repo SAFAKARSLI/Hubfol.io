@@ -33,7 +33,7 @@ export default function ContactPage() {
       </Heading>
       <Text size="5" className="block text-center mb-10 text-gray-11">
         Have a question, feedback, or want to get in touch? Fill out the form
-        below and we'll get back to you as soon as possible.
+        below and we&apos;ll get back to you as soon as possible.
       </Text>
       <form
         ref={formRef}

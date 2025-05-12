@@ -1,9 +1,9 @@
-'use client';
-import Project from '@/types/project';
-import { defaultIconLink, preferredColorOptions } from '@/utils';
-import { Heading, Text } from '@radix-ui/themes';
-import { useParams, useRouter } from 'next/navigation';
-import React, { forwardRef } from 'react';
+"use client";
+import Project from "@/types/project";
+import { defaultIconLink, preferredColorOptions } from "@/utils";
+import { Heading, Text } from "@radix-ui/themes";
+import { useParams, useRouter } from "next/navigation";
+import React, { forwardRef } from "react";
 
 type Props = {
   project: Project;
@@ -21,7 +21,7 @@ const ProjectCard = forwardRef<HTMLDivElement, Props>(
       ${
         params.projectUUID === project.uuid
           ? `bg-${preferredColorOptions.accentColor}-4 hover:bg-${preferredColorOptions.accentColor}-4`
-          : 'hover:bg-gray-4'
+          : "hover:bg-gray-4"
       }`}
         onClick={() => {
           router.push(`/u/${userUUID}/projects/${project.uuid}`);
@@ -34,7 +34,7 @@ const ProjectCard = forwardRef<HTMLDivElement, Props>(
               : defaultIconLink
           }
           alt={project.name!}
-          style={{ objectFit: 'contain' }}
+          style={{ objectFit: "contain" }}
           className="w-[1.8rem] h-[1.8rem]"
         />
         <div className="flex flex-col ">
@@ -46,4 +46,5 @@ const ProjectCard = forwardRef<HTMLDivElement, Props>(
   }
 );
 
+ProjectCard.displayName = "ProjectCard";
 export default ProjectCard;

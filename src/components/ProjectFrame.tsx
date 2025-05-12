@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import Project from '@/types/project';
-import ProjectConsole from './ProjectConsole';
+import Project from "@/types/project";
+import ProjectConsole from "./ProjectConsole";
 import {
   Box,
   DropdownMenu,
@@ -9,8 +9,8 @@ import {
   Separator,
   Spinner,
   Text,
-} from '@radix-ui/themes';
-import * as Select from '@radix-ui/react-select';
+} from "@radix-ui/themes";
+import * as Select from "@radix-ui/react-select";
 
 import {
   ArrowLeftIcon,
@@ -29,14 +29,14 @@ import {
   ReloadIcon,
   SizeIcon,
   StarFilledIcon,
-} from '@radix-ui/react-icons';
-import React, { useEffect, useRef, useState } from 'react';
-import classnames from 'classnames';
-import { set } from 'lodash';
-import { useRouter } from 'next/navigation';
-import { TbDeviceIpad } from 'react-icons/tb';
-import { FaTabletAlt } from 'react-icons/fa';
-import { baseUrl } from '@/utils';
+} from "@radix-ui/react-icons";
+import React, { useEffect, useRef, useState } from "react";
+import classnames from "classnames";
+import { set } from "lodash";
+import { useRouter } from "next/navigation";
+import { TbDeviceIpad } from "react-icons/tb";
+import { FaTabletAlt } from "react-icons/fa";
+import { baseUrl } from "@/utils";
 
 type Props = {
   project?: Project;
@@ -58,7 +58,7 @@ const SelectItem = React.forwardRef<HTMLDivElement, SelectItemProps>(
     return (
       <Select.Item
         className={classnames(
-          'relative flex h-[2.5rem] truncate select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-gray-11 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet-9 data-[disabled]:text-mauve-8 data-[highlighted]:text-violet1 data-[highlighted]:outline-none',
+          "relative flex h-[2.5rem] truncate select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-gray-11 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet-9 data-[disabled]:text-mauve-8 data-[highlighted]:text-violet1 data-[highlighted]:outline-none",
           className
         )}
         {...props}
@@ -77,8 +77,8 @@ function ProjectFrame({ project }: Props) {
   const [file, setFile] = useState<File>();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [iframeDimensions, setIframeDimensions] = useState({
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   });
   const [history, setHistory] = useState<History>({
     back: [],
@@ -94,20 +94,20 @@ function ProjectFrame({ project }: Props) {
   const router = useRouter();
 
   useEffect(() => {
-    if (project?.type == 'FILE') {
+    if (project?.type == "FILE") {
       const fetchProjectFile = async () => {
         const response = await fetch(
           baseUrl +
-            '/api/static-file-provider?bucketName=hubfol.io.file-projects&key=' +
+            "/api/static-file-provider?bucketName=hubfol.io.file-projects&key=" +
             project.content
         );
         const buffer = await response.arrayBuffer();
         const fileName = response.headers
-          .get('Content-Disposition')
-          ?.split('=')[1];
+          .get("Content-Disposition")
+          ?.split("=")[1];
 
         const file = new File([buffer], fileName as string, {
-          type: 'application/pdf',
+          type: "application/pdf",
         });
         setFile(file);
       };
@@ -120,7 +120,7 @@ function ProjectFrame({ project }: Props) {
     const iframe = iframeRef.current;
 
     if (!iframe) {
-      console.log('iframe not found');
+      console.log("iframe not found");
       return;
     }
 
@@ -129,16 +129,16 @@ function ProjectFrame({ project }: Props) {
       console.log(event);
 
       // Ensure the message comes from the correct iframe origin
-      if (event.origin !== 'http://localhost:5050') return;
+      if (event.origin !== "http://localhost:5050") return;
 
-      if (event.data.type == 'current-url') {
+      if (event.data.type == "current-url") {
         setHistory((prev) => ({
           ...prev,
           current: event.data.url,
         }));
       }
 
-      if (event.data.type == 'navigate') {
+      if (event.data.type == "navigate") {
         if (history.forward[history.forward.length - 1] !== event.data.url) {
           setHistory((prev) => ({
             back: [...prev.back, prev.current],
@@ -149,28 +149,28 @@ function ProjectFrame({ project }: Props) {
       }
     };
     // Listen for postMessage events
-    window.addEventListener('message', handleMessage);
+    window.addEventListener("message", handleMessage);
 
     // Send a message to the iframe when it loads
     const handleIframeLoad = () => {
       try {
         iframe.contentWindow?.postMessage(
-          'initialize',
-          'http://localhost:5050'
+          "initialize",
+          "http://localhost:5050"
         );
-        console.log('Initialization successfully handled');
+        console.log("Initialization successfully handled");
       } catch (error) {
-        console.error('Error posting message to iframe:', error);
+        console.error("Error posting message to iframe:", error);
         setError(true);
       }
     };
     // Add the load event listener to the iframe
-    iframe.addEventListener('load', handleIframeLoad);
+    iframe.addEventListener("load", handleIframeLoad);
 
     // Clean up event listeners when the component unmounts
     return () => {
-      iframe.removeEventListener('load', handleIframeLoad);
-      window.removeEventListener('message', handleMessage);
+      iframe.removeEventListener("load", handleIframeLoad);
+      window.removeEventListener("message", handleMessage);
     };
   }, []);
 
@@ -181,9 +181,9 @@ function ProjectFrame({ project }: Props) {
         height: iframeRef.current?.clientHeight!,
       });
     };
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -194,7 +194,7 @@ function ProjectFrame({ project }: Props) {
     });
   }, [iframeDimensions]);
 
-  return project?.type == 'URL' ? (
+  return project?.type == "URL" ? (
     <div className="h-full flex flex-col">
       <div className="h-[6rem] mx-5 ship flex-none justify-center flex flex-col justify-between py-3">
         <div className=" bg-gray-2 h-[2.5rem] rounded-full flex items-center border border-gray-4 ">
@@ -244,7 +244,7 @@ function ProjectFrame({ project }: Props) {
                 onClick={() => {
                   iframeRef.current?.contentWindow?.postMessage(
                     {
-                      type: 'back',
+                      type: "back",
                       url: history.back[history.back.length - 1],
                     },
                     history.current
@@ -264,7 +264,7 @@ function ProjectFrame({ project }: Props) {
                 onClick={() => {
                   router.refresh();
                   iframeRef.current?.contentWindow?.postMessage(
-                    'reload',
+                    "reload",
                     history.current
                   );
                 }}
@@ -277,7 +277,7 @@ function ProjectFrame({ project }: Props) {
                 disabled={history.forward.length === 0}
                 onClick={() => {
                   iframeRef.current?.contentWindow?.postMessage(
-                    { type: 'forward', url: history.forward[0] },
+                    { type: "forward", url: history.forward[0] },
                     history.current
                   );
                   setHistory((prev) => ({
@@ -292,7 +292,7 @@ function ProjectFrame({ project }: Props) {
             </div>
             <div className="flex gap-10">
               <div className="flex items-center gap-4">
-                <Text size={'1'} className="text-gray-9">
+                <Text size={"1"} className="text-gray-9">
                   Viewport Options:
                 </Text>
                 <IconButton
@@ -300,8 +300,8 @@ function ProjectFrame({ project }: Props) {
                   radius="full"
                   onClick={() => {
                     setIframeDimensions({
-                      width: '100%',
-                      height: '100%',
+                      width: "100%",
+                      height: "100%",
                     });
                   }}
                 >
@@ -312,8 +312,8 @@ function ProjectFrame({ project }: Props) {
                   radius="full"
                   onClick={() => {
                     setIframeDimensions({
-                      width: '1024px',
-                      height: '768px',
+                      width: "1024px",
+                      height: "768px",
                     });
                   }}
                 >
@@ -324,8 +324,8 @@ function ProjectFrame({ project }: Props) {
                   radius="full"
                   onClick={() => {
                     setIframeDimensions({
-                      width: '375px',
-                      height: '720px',
+                      width: "375px",
+                      height: "720px",
                     });
                   }}
                 >
@@ -335,14 +335,14 @@ function ProjectFrame({ project }: Props) {
               <Separator orientation="vertical" size="1" />
 
               <div className="flex items-center gap-4">
-                <Text size={'1'} className="text-gray-9">
+                <Text size={"1"} className="text-gray-9">
                   External Links:
                 </Text>
                 <IconButton
                   variant="ghost"
                   radius="full"
                   onClick={() => {
-                    window.open(history.current, '_blank');
+                    window.open(history.current, "_blank");
                   }}
                 >
                   <ExternalLinkIcon />
@@ -394,4 +394,5 @@ function ProjectFrame({ project }: Props) {
   );
 }
 
+ProjectFrame.displayName = "ProjectFrame";
 export default ProjectFrame;

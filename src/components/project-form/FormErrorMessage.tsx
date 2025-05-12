@@ -1,6 +1,6 @@
-import { InfoCircledIcon } from '@radix-ui/react-icons';
-import { Callout, Flex } from '@radix-ui/themes';
-import React from 'react';
+import { InfoCircledIcon } from "@radix-ui/react-icons";
+import { Callout, Flex } from "@radix-ui/themes";
+import React from "react";
 
 type Props = {
   errors: string[];
@@ -15,8 +15,8 @@ function FormErrorMessage({ errors }: Props) {
         </Callout.Icon>
         <Callout.Text>
           The following errors occurred while creating the project:
-          {errors.map((e) => (
-            <p>{e}</p>
+          {errors.map((e, idx) => (
+            <p key={idx}>{e}</p>
           ))}
         </Callout.Text>
       </Callout.Root>
