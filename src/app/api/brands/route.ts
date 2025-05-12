@@ -1,6 +1,8 @@
 import { prisma } from "@/db";
 import { Brand } from "@/types/brand";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: Request) {
   try {
     const url = request?.url ? new URL(request.url) : null;
