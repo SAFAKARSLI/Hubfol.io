@@ -7,11 +7,13 @@ import { NextRequest, NextResponse } from "next/server";
 import rateLimitMiddleware from "./rateLimiter";
 import { baseUrl } from "./utils";
 
-export default clerkMiddleware(async (auth, req) => {
-  const { userId } = await auth();
+// export default clerkMiddleware(async (auth, req) => {
+//   const { userId } = await auth();
 
-  return rateLimitMiddleware(req, userId!);
-});
+//   return rateLimitMiddleware(req, userId!);
+// });
+
+export default clerkMiddleware();
 
 export const config = {
   matcher: [
