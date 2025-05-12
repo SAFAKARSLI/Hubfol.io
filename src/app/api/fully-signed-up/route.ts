@@ -1,11 +1,12 @@
-import { prisma } from '@/db';
-import { Brand } from '@/types/brand';
-import { NextApiRequest, NextApiResponse } from 'next';
-import { auth, clerkClient } from '@clerk/nextjs/server';
-import { baseUrl } from '@/utils';
-import { NextRequest, NextResponse } from 'next/server';
-import { getUser } from '@/app/actions/user';
+import { prisma } from "@/db";
+import { Brand } from "@/types/brand";
+import { NextApiRequest, NextApiResponse } from "next";
+import { auth, clerkClient } from "@clerk/nextjs/server";
+import { baseUrl } from "@/utils";
+import { NextRequest, NextResponse } from "next/server";
+import { getUser } from "@/app/actions/user";
 
+export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest) {
   const user = auth();
   const clerkUser = await getUser(user.userId!);
