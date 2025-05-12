@@ -1,27 +1,27 @@
-'use server';
+"use server";
 
-import { s3Client } from '@/aws/s3';
-import Project from '@/types/project';
+import { s3Client } from "@/aws/s3";
+import Project from "@/types/project";
 import {
   DeleteObjectCommand,
   GetObjectCommand,
   PutObjectCommand,
-} from '@aws-sdk/client-s3';
-import { permanentRedirect, redirect } from 'next/navigation';
-import { v4 as uuidv4 } from 'uuid';
-import { z } from 'zod';
-import { validateUUID } from './utils';
-import { getServerSession, Session } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]/route';
-import { prisma } from '@/db';
-import { auth, User } from '@clerk/nextjs/server';
-import { revalidateTag } from 'next/cache';
-import { getUser } from './user';
-import { nanoid } from 'nanoid';
-import { baseUrl, generateProjectSlug } from '@/utils';
-import _ from 'lodash';
-import { uploadFile } from './s3';
-import { PROJECT_CONTENT_TYPE } from '@prisma/client';
+} from "@aws-sdk/client-s3";
+import { permanentRedirect, redirect } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
+import { z } from "zod";
+import { validateUUID } from "./utils";
+import { getServerSession, Session } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+import { prisma } from "@/db";
+import { auth, User } from "@clerk/nextjs/server";
+import { revalidateTag } from "next/cache";
+import { getUser } from "./user";
+import { nanoid } from "nanoid";
+import { baseUrl, generateProjectSlug } from "@/utils";
+import _ from "lodash";
+import { uploadFile } from "./s3";
+import { PROJECT_CONTENT_TYPE } from "@prisma/client";
 
 export const initiateProject = async (formData: FormData) => {
   const session = auth();
@@ -29,14 +29,14 @@ export const initiateProject = async (formData: FormData) => {
   const { userId } = session;
   const user = await getUser(userId!);
 
-  const username = formData.get('username') as string;
+  const username = formData.get("username") as string;
 
   if (user?.username != username)
-    return { status: 403, message: 'Not authorized.' };
+    return { status: 403, message: "Not authorized." };
 
   const date = new Date();
   const projectUUID = uuidv4();
-  const name = 'New Project';
+  const name = "New Project";
   const { hubfolioUserId } = user.privateMetadata;
   try {
     const initiatedProject = await prisma.project.create({
@@ -46,20 +46,20 @@ export const initiateProject = async (formData: FormData) => {
         ownerId: hubfolioUserId as string,
         createdAt: date,
         name,
-        content: '',
-        type: 'URL',
-        tagline: '',
-        iconLink: '',
+        content: "",
+        type: "URL",
+        tagline: "",
+        iconLink: "",
       },
     });
 
     return { status: 200, data: initiatedProject };
   } catch (error) {
-    console.error('Error creating sections:', error);
-    throw new Error('Internal Server Error. Failed to create project.');
+    console.error("Error creating sections:", error);
+    throw new Error("Internal Server Error. Failed to create project.");
   } finally {
     await prisma.$disconnect();
-    revalidateTag('projects');
+    revalidateTag("projects");
     redirect(
       `/u/${username}/projects/edit/${projectUUID}/general-information?initialize=true`
     );
@@ -75,11 +75,11 @@ export const checkForAuthority = async (
       where: { uuid: projectUUID, ownerId: userUUID },
     });
     if (!project) {
-      return { status: 403, message: 'Not authorized.' };
+      return { status: 403, message: "Not authorized." };
     }
     return { status: 200 };
   } catch (error) {
-    return { status: 500, message: 'Internal Server Error.' };
+    return { status: 500, message: "Internal Server Error." };
   } finally {
     await prisma.$disconnect();
   }
@@ -89,46 +89,47 @@ export const upsertGeneralInfo = async (formData: FormData) => {
   const session = auth();
   session.protect();
 
-  var iconLink = '';
-  if ((formData.get('iconLink') as File).size != 0) {
+  var iconLink = "";
+  if ((formData.get("iconLink") as File).size != 0) {
     iconLink = (
       await uploadFile(
-        formData.get('iconLink') as File,
+        formData.get("iconLink") as File,
         process.env.AWS_PROJECT_ICONS_BUCKET_NAME as string
       )
     ).data as string;
   }
 
   const projectFromFormData = {
-    name: formData.get('name') as string,
-    tagline: formData.get('tagline') as string,
+    name: formData.get("name") as string,
+    tagline: formData.get("tagline") as string,
     iconLink,
-    slug: generateProjectSlug(formData.get('name') as string),
+    slug: generateProjectSlug(formData.get("name") as string),
   };
-  const projectUUID = formData.get('uuid') as string;
+  const projectUUID = formData.get("uuid") as string;
 
   // If the project previously created, check if any of the field have changed.
   // If not, bypass the update
 
-  if (formData.get('prev-project')) {
+  if (formData.get("prev-project")) {
     const prevProject = JSON.parse(
-      formData.get('prev-project') as string
+      formData.get("prev-project") as string
     ) as typeof projectFromFormData;
-    const keys = Object.keys(
-      projectFromFormData
-    ) as (keyof typeof projectFromFormData)[];
+    const keys = [...formData.keys()].filter((key) => key !== "prev-project");
 
     const noChange = keys.every((key) =>
-      _.isEqual(projectFromFormData[key], prevProject[key])
+      _.isEqual(
+        projectFromFormData[key as keyof typeof projectFromFormData],
+        prevProject[key as keyof typeof prevProject]
+      )
     );
 
     if (noChange) {
-      return { status: 200, message: 'No changes detected.' };
+      return { status: 200, message: "No changes detected." };
     }
   }
 
   if (projectUUID != null && !validateUUID(projectUUID))
-    return { status: 400, message: 'Invalid project identifier provided.' };
+    return { status: 400, message: "Invalid project identifier provided." };
 
   const user = await getUser(session.userId!);
   const { hubfolioUserId } = user?.privateMetadata!;
@@ -151,13 +152,13 @@ export const upsertGeneralInfo = async (formData: FormData) => {
     });
     return { status: 200, data: resultingProject };
   } catch (error) {
-    console.error('Error updating project:', error);
+    console.error("Error updating project:", error);
     throw new Error(
-      'Internal Server Error. An error occurred while updating the project.'
+      "Internal Server Error. An error occurred while updating the project."
     );
   } finally {
     await prisma.$disconnect();
-    revalidateTag('projects');
+    revalidateTag("projects");
   }
 };
 
@@ -173,13 +174,13 @@ export const deleteProject = async (projectUUID: string) => {
     });
 
     if (!projectFromDb) {
-      return { status: 404, message: 'Project not found.' };
+      return { status: 404, message: "Project not found." };
     }
 
     const { hubfolioUserId } = user.privateMetadata;
 
     if (projectFromDb.ownerId !== hubfolioUserId) {
-      return { status: 403, message: 'Not authorized.' };
+      return { status: 403, message: "Not authorized." };
     }
 
     userUUID = projectFromDb.ownerId;
@@ -189,10 +190,10 @@ export const deleteProject = async (projectUUID: string) => {
     });
   } catch (error) {
     throw new Error(
-      'Internal Server Error. An error occured while deleting the project.'
+      "Internal Server Error. An error occured while deleting the project."
     );
   } finally {
-    revalidateTag('projects');
+    revalidateTag("projects");
     redirect(`/u/${user.username}/projects`);
   }
 };
@@ -202,33 +203,36 @@ export const upsertFrameOptions = async (formData: FormData) => {
 
   console.log(formData);
 
-  const projectUUID = formData.get('projectId') as string;
+  const projectUUID = formData.get("projectId") as string;
 
   // Security checks
   const user = await getUser(auth().userId!);
-  if (!user) return { status: 403, message: 'Unauthenticated' };
+  if (!user) return { status: 403, message: "Unauthenticated" };
   const { hubfolioUserId } = user?.privateMetadata;
   const authorityCheck = await checkForAuthority(
     projectUUID,
     hubfolioUserId as string
   );
   if (authorityCheck.status != 200) {
-    permanentRedirect(baseUrl + 'sign-in');
+    permanentRedirect(baseUrl + "sign-in");
   }
 
   // If the content is a file, upload it to S3
 
   const frameOptionsFormData = {
-    type: formData.get('type') as PROJECT_CONTENT_TYPE,
-    content: formData.get('content') as File | string,
+    type: formData.get("type") as PROJECT_CONTENT_TYPE,
+    content: formData.get("content") as File | string,
   };
 
-  var content = '';
+  var content = "";
+
+  console.log("!! FormData", formData);
+  console.log("!! Frame Options Form Data", frameOptionsFormData);
   if (
-    typeof formData.get('content') === 'object' &&
-    frameOptionsFormData.type === 'FILE'
+    typeof formData.get("content") === "object" &&
+    frameOptionsFormData.type === "FILE"
   ) {
-    const file = formData.get('content') as File;
+    const file = formData.get("content") as File;
 
     content = (
       await uploadFile(
@@ -238,7 +242,7 @@ export const upsertFrameOptions = async (formData: FormData) => {
     ).data as string;
   } else {
     // The content is URL
-    content = formData.get('content') as string;
+    content = formData.get("content") as string;
   }
 
   try {
@@ -252,10 +256,10 @@ export const upsertFrameOptions = async (formData: FormData) => {
 
     return { status: 200, data: project };
   } catch (error) {
-    console.error('Error updating frame options:', error);
-    throw new Error('Internal Server Error. Failed to update frame options.');
+    console.error("Error updating frame options:", error);
+    throw new Error("Internal Server Error. Failed to update frame options.");
   } finally {
     await prisma.$disconnect();
-    revalidateTag('projects');
+    revalidateTag("projects");
   }
 };

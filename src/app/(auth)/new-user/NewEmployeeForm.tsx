@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Flex } from '@radix-ui/themes';
-import * as Form from '@radix-ui/react-form';
-import { FaDollarSign } from 'react-icons/fa';
-import FormInput from '@/components/project-form/FormInput';
-import { Session } from 'next-auth';
-import { createEmployee } from '@/app/actions/user';
-import SubmitButton from '@/components/SubmitButton';
-import CustomPhoneInput from './CustomPhoneInput';
-import { useRouter } from 'next/navigation';
-import UsernameInput from '@/components/UsernameInput';
-import { useUser } from '@clerk/nextjs';
+import React from "react";
+import { Flex } from "@radix-ui/themes";
+import * as Form from "@radix-ui/react-form";
+import { FaDollarSign } from "react-icons/fa";
+import FormInput from "@/components/project-form/FormInput";
+import { Session } from "next-auth";
+import { createEmployee } from "@/app/actions/user";
+import SubmitButton from "@/components/SubmitButton";
+import CustomPhoneInput from "./CustomPhoneInput";
+import { useRouter } from "next/navigation";
+import UsernameInput from "@/components/UsernameInput";
+import { useUser } from "@clerk/nextjs";
 
 type Props = {
   session: Session | null;
@@ -19,7 +19,6 @@ type Props = {
 
 function NewEmployeeForm({}: Props) {
   const session = useUser();
-  console.log(session);
   const router = useRouter();
 
   const [isUsernameValid, setIsUsernameValid] = React.useState<boolean>(false);
@@ -41,7 +40,7 @@ function NewEmployeeForm({}: Props) {
         value={session.user?.primaryEmailAddress?.emailAddress}
       />
       <input type="hidden" name="userId" value={session.user?.id} />
-      <Flex direction={`column`} gap={'6'} justify={'between'} py={'6'}>
+      <Flex direction={`column`} gap={"6"} justify={"between"} py={"6"}>
         <FormInput
           label="Email"
           type="text"
@@ -89,7 +88,7 @@ function NewEmployeeForm({}: Props) {
           <CustomPhoneInput />
         </Form.Field>
       </Flex>
-      <SubmitButton style="w-full">Sign Up</SubmitButton>
+      <SubmitButton style="w-full">Create Account</SubmitButton>
     </Form.Root>
   );
 }

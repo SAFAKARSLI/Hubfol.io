@@ -1,5 +1,5 @@
-'use client';
-import React from 'react';
+"use client";
+import React from "react";
 import {
   Avatar,
   Button,
@@ -7,7 +7,7 @@ import {
   IconButton,
   Separator,
   Text,
-} from '@radix-ui/themes';
+} from "@radix-ui/themes";
 import {
   Cross1Icon,
   Cross2Icon,
@@ -16,38 +16,40 @@ import {
   PersonIcon,
   RocketIcon,
   StarIcon,
-} from '@radix-ui/react-icons';
-import { baseUrl, preferredColorOptions } from '@/utils';
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import NavLink from '../NavLink';
-import { Session } from 'next-auth';
-import ProfileMenuDropdownButton from '../ProfileMenuDropdownButton';
-import SidebarMenuLink from '../SidebarMenuLink';
-import SignOutButton from '../SignOutButton';
-import * as Portal from '@radix-ui/react-portal';
+} from "@radix-ui/react-icons";
+import { baseUrl, preferredColorOptions } from "@/utils";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import NavLink from "../NavLink";
+import { Session } from "next-auth";
+import ProfileMenuDropdownButton from "../ProfileMenuDropdownButton";
+import SidebarMenuLink from "../SidebarMenuLink";
+import SignOutButton from "../SignOutButton";
+import * as Portal from "@radix-ui/react-portal";
 
-import ReactDOM from 'react-dom';
-import SidebarProfileOverview from '../SidebarProfileOverview';
-import { useUser } from '@clerk/clerk-react';
+import ReactDOM from "react-dom";
+import SidebarProfileOverview from "../SidebarProfileOverview";
+import { useUser } from "@clerk/clerk-react";
 
 type Props = {
-  position: 'left' | 'right';
+  position: "left" | "right";
 };
 
 function SidebarButton({ position }: Props) {
   const { user } = useUser();
 
+  console.log(user?.username);
+
   const [visible, setVisible] = React.useState(false);
-  const menuPosition = position === 'left' ? `left-0` : 'right-0';
+  const menuPosition = position === "left" ? `left-0` : "right-0";
   const menuSlideAnimation =
-    position === 'left'
+    position === "left"
       ? visible
-        ? 'translate-x-0'
-        : '-translate-x-full'
+        ? "translate-x-0"
+        : "-translate-x-full"
       : visible
-      ? 'translate-x-0'
-      : 'translate-x-full';
+      ? "translate-x-0"
+      : "translate-x-full";
   return (
     <div>
       <div
@@ -56,14 +58,14 @@ function SidebarButton({ position }: Props) {
       >
         <Avatar
           className="h-8 w-8"
-          fallback={user?.fullName![0]!}
+          fallback={user?.username!}
           src={user?.imageUrl}
         />
       </div>
       <Portal.Root>
         <div
           className={` fixed left-0 top-0 right-0 bottom-0 bg-violet-a13  ${
-            !visible && 'hidden'
+            !visible && "hidden"
           }`}
           onClick={() => setVisible(false)}
         />
@@ -81,28 +83,16 @@ function SidebarButton({ position }: Props) {
             />
           </div>
           <SidebarProfileOverview />
-          <Separator size={'4'} className="my-5" />
+          <Separator size={"4"} className="my-5" />
           <div className="flex flex-col gap-1">
-            <SidebarMenuLink
-              icon={<PersonIcon color="gray" className="w-5 h-5" />}
-              text="My Profile"
-              link={`${baseUrl}/u/${user?.username}/profile`}
-              onClick={() => setVisible(false)}
-            />
             <SidebarMenuLink
               icon={<RocketIcon color="gray" className="w-5 h-5" />}
               text="My Projects"
               link={`${baseUrl}/u/${user?.username}/projects`}
               onClick={() => setVisible(false)}
             />
-            <SidebarMenuLink
-              icon={<StarIcon color="gray" className="w-5 h-5" />}
-              text="My Reviews"
-              link={`${baseUrl}/u/${user?.username}/reviews`}
-              onClick={() => setVisible(false)}
-            />
           </div>
-          <Separator size={'4'} className="my-5" />
+          <Separator size={"4"} className="my-5" />
 
           <SignOutButton />
         </div>

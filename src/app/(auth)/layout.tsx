@@ -1,9 +1,18 @@
-import '@/app/globals.css';
-import { preferredColorOptions } from '@/utils';
-import { ClerkLoaded, ClerkLoading, ClerkProvider } from '@clerk/nextjs';
-import { Spinner, Theme } from '@radix-ui/themes';
+import "@/app/globals.css";
+import { preferredColorOptions } from "@/utils";
+import { ClerkLoaded, ClerkLoading, ClerkProvider } from "@clerk/nextjs";
+import { Spinner, Theme } from "@radix-ui/themes";
+import { Metadata } from "next";
 
-import { SessionProvider } from 'next-auth/react';
+import { SessionProvider } from "next-auth/react";
+
+export const metadata: Metadata = {
+  title: "Hubfolio",
+  description: "Showcase your portfolio",
+  icons: {
+    icon: "/hubfolio-dark-logo.png",
+  },
+};
 
 export default function RootLayout({
   children,
@@ -32,7 +41,7 @@ export default function RootLayout({
         </head>
         <Theme
           accentColor={preferredColorOptions.accentColor}
-          appearance={'dark'}
+          appearance={"dark"}
           panelBackground="translucent"
           asChild
         >

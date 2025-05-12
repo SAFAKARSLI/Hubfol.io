@@ -1,15 +1,15 @@
-'use server';
+"use server";
 
-import { prisma } from '@/db';
-import { Employee } from '@prisma/client';
-import { cache } from 'react';
+import { prisma } from "@/db";
+import { Employee } from "@prisma/client";
+import { cache } from "react";
 
-import { redirect, RedirectType } from 'next/navigation';
-import { v4 as uuidv4 } from 'uuid';
-import { baseUrl } from '@/utils';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { clerkClient, User } from '@clerk/nextjs/server';
-import { revalidateTag } from 'next/cache';
+import { redirect, RedirectType } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
+import { baseUrl } from "@/utils";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { clerkClient, User } from "@clerk/nextjs/server";
+import { revalidateTag } from "next/cache";
 
 export const checkExistingUser = async (userId: string) => {
   try {
@@ -19,15 +19,15 @@ export const checkExistingUser = async (userId: string) => {
     }
     return user;
   } catch (error) {
-    console.error('Error checking existing user:', error);
+    console.error("Error checking existing user:", error);
   } finally {
     prisma.$disconnect();
   }
 };
 
 export const updateUserInfo = async (formData: FormData) => {
-  const userId = formData.get('userId') as string;
-  const fieldName = formData.get('fieldName') as string;
+  const userId = formData.get("userId") as string;
+  const fieldName = formData.get("fieldName") as string;
 
   const data = formData.get(fieldName) as string;
   const user = await checkExistingUser(userId);
@@ -36,7 +36,7 @@ export const updateUserInfo = async (formData: FormData) => {
   console.log(formData);
 
   if (user) {
-    if (fieldName === 'username') {
+    if (fieldName === "username") {
       const username = data;
       await clerkClient().users.updateUser(userId, {
         username,
@@ -54,17 +54,17 @@ export const updateUserInfo = async (formData: FormData) => {
         [fieldName]: data,
       },
     });
-    revalidateTag('users');
+    revalidateTag("users");
   } else {
     throw new Error(
-      'Invalid email provided or user does not exist. There was an error updating the username. Please try again.'
+      "Invalid email provided or user does not exist. There was an error updating the username. Please try again."
     );
   }
 };
 
 export const createEmployee = async (formData: FormData) => {
-  const userId = formData.get('userId') as string;
-  const username = formData.get('username') as string;
+  const userId = formData.get("userId") as string;
+  const username = formData.get("username") as string;
   const user = await checkExistingUser(userId);
 
   if (user) {
@@ -72,11 +72,11 @@ export const createEmployee = async (formData: FormData) => {
       userId: user.id,
       username,
       uuid: uuidv4(),
-      name: formData.get('name') as string,
-      email: formData.get('email') as string,
-      title: formData.get('title') as string,
-      phoneNumber: formData.get('phoneNumber') as string,
-      hourlyRate: parseFloat(formData.get('hourlyRate') as string),
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      title: formData.get("title") as string,
+      phoneNumber: formData.get("phoneNumber") as string,
+      hourlyRate: parseFloat(formData.get("hourlyRate") as string),
       createdAt: new Date(),
     } as Employee;
 
@@ -88,6 +88,16 @@ export const createEmployee = async (formData: FormData) => {
         .then(async () => {
           await clerkClient().users.updateUser(userId, {
             username,
+            firstName: formData
+              .get("name")
+              ?.toString()
+              .split(" ")
+              .shift() as string,
+            lastName: formData
+              .get("name")
+              ?.toString()
+              .split(" ")
+              .pop() as string,
             privateMetadata: {
               hubfolioUsername: username,
               hubfolioUserId: employee.uuid,
@@ -96,9 +106,9 @@ export const createEmployee = async (formData: FormData) => {
         });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
-        console.error('Error creating employee:', error);
+        console.error("Error creating employee:", error);
         redirect(
-          baseUrl + '/signup?error=account-already-exists-or-username-taken'
+          baseUrl + "/signup?error=account-already-exists-or-username-taken"
         );
       }
     } finally {
@@ -106,7 +116,7 @@ export const createEmployee = async (formData: FormData) => {
     }
   } else {
     throw new Error(
-      'Invalid email provided or user does not exist. There was an error creating the accont. Please try again.'
+      "Invalid email provided or user does not exist. There was an error creating the accont. Please try again."
     );
   }
 };

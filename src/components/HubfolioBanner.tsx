@@ -1,22 +1,31 @@
-import { Box, Link } from '@radix-ui/themes';
-import Image from 'next/image';
-import React from 'react';
-
+import { Box, Flex, Link, Text } from "@radix-ui/themes";
+import Image from "next/image";
+import React from "react";
+import { Nunito } from "next/font/google";
 type Props = {
   width: number;
 };
 
-function HubfolioBanner({ width }: Props) {
+const nunito = Nunito({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
+
+function HubfolioBanner({ width = 50 }: Props) {
   return (
-    <Link href="/">
-      <Box width={`${width}rem`}>
+    <Link href="/" className="hover:no-underline text-white ">
+      <Flex width={`${width}px`} align="center" justify="center" gap={"1"}>
         <Image
           alt="hubfolio-banner"
-          src={'/hubfolio-banner.png'}
-          width={500}
-          height={250}
+          src={"/icon.png"}
+          className="w-10 h-10 rounded-md"
+          width={width}
+          height={width}
         />
-      </Box>
+        <Text size="5" className={`text-center font-bold  `}>
+          Hubfolio
+        </Text>
+      </Flex>
     </Link>
   );
 }

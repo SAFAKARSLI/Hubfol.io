@@ -12,6 +12,7 @@ export interface SlugProps {
     error: string;
     initial: string;
     initialize: string;
+    message: string;
   };
   children: React.ReactNode;
 }

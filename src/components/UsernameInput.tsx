@@ -1,29 +1,30 @@
-'use client';
+"use client";
 
-import FormInput from '@/components/project-form/FormInput';
-import Employee from '@/types/employee';
-import { CheckIcon, Cross1Icon, Cross2Icon } from '@radix-ui/react-icons';
-import { Spinner } from '@radix-ui/themes';
-import React, { useEffect } from 'react';
+import FormInput from "@/components/project-form/FormInput";
+import Employee from "@/types/employee";
+import { CheckIcon, Cross1Icon, Cross2Icon } from "@radix-ui/react-icons";
+import { Spinner } from "@radix-ui/themes";
+import React, { useEffect } from "react";
 
 type Props = {
   setUserNameValid: (value: boolean) => void;
 };
 
 function UsernameInput({ setUserNameValid }: Props) {
-  const [username, setUsername] = React.useState<string | undefined>('');
+  const [username, setUsername] = React.useState<string | undefined>("");
   const [usernameBounce, setUsernameBounce] = React.useState<
     string | undefined
-  >('');
+  >("");
   const [status, setStatus] = React.useState<string | undefined>();
 
   useEffect(() => {
     if (!username) {
-      setStatus('');
+      setStatus("");
+      setUsernameBounce("");
       return;
     }
 
-    setStatus('loading');
+    setStatus("loading");
     setUserNameValid(false);
     const timeout = setTimeout(() => {
       setUsernameBounce(username);
@@ -41,7 +42,7 @@ function UsernameInput({ setUserNameValid }: Props) {
 
     const isValid = validateUsername(usernameBounce);
     if (!isValid) {
-      setStatus('invalid');
+      setStatus("invalid");
       setUserNameValid(false);
       return;
     }
@@ -51,17 +52,17 @@ function UsernameInput({ setUserNameValid }: Props) {
         const response = await fetch(`/api/employee/${usernameBounce}`).then(
           (r) => {
             if (r.status == 404) {
-              setStatus('valid');
+              setStatus("valid");
               setUserNameValid(true);
             } else {
-              setStatus('username-taken');
+              setStatus("username-taken");
               setUserNameValid(false);
             }
           }
         );
       } catch (error) {
         console.error(error);
-        setStatus('invalid');
+        setStatus("invalid");
         setUserNameValid(false);
       }
     }
@@ -72,7 +73,7 @@ function UsernameInput({ setUserNameValid }: Props) {
   return (
     <>
       <FormInput
-        forceMatch={status == 'invalid' || status == 'username-taken'}
+        forceMatch={status == "invalid" || status == "username-taken"}
         label="Username"
         type="text"
         value={username}
@@ -80,29 +81,29 @@ function UsernameInput({ setUserNameValid }: Props) {
         description={`This will be your unique identifier on the platform. Usernames can only contain [A-Z, a-z, 0-9, -, _], must be 3-50 characters long, and cannot start, end, or have consecutive dashes or underscores.`}
         name="username"
         message={
-          status === 'invalid'
-            ? 'Invalid username. Please read the description for the criteria.'
-            : status === 'username-taken'
-            ? 'Username is already taken.'
-            : ''
+          status === "invalid"
+            ? "Invalid username. Please read the description for the criteria."
+            : status === "username-taken"
+            ? "Username is already taken."
+            : ""
         }
         style={`italic ${
-          status == 'valid' &&
-          'text-green-11 border-green-800 focus:border-green-800'
+          status == "valid" &&
+          "text-green-11 border-green-800 focus:border-green-800"
         } ${
-          (status == 'invalid' || status == 'username-taken') &&
-          'text-red-300 border-red-300 focus:border-red-300'
+          (status == "invalid" || status == "username-taken") &&
+          "text-red-300 border-red-300 focus:border-red-300"
         }`}
         logo={
           <>
             <p className="text-xs text-violet-11 font-medium italic">
               https://www.hubfol.io/u/
             </p>
-            {status == 'loading' && <Spinner className="mx-1 " />}
-            {(status == 'invalid' || status == 'username-taken') && (
+            {status == "loading" && <Spinner className="mx-1 " />}
+            {(status == "invalid" || status == "username-taken") && (
               <Cross2Icon className="mx-1 h-8 w-8" color="red" />
             )}
-            {status == 'valid' && (
+            {status == "valid" && (
               <CheckIcon className="mx-1 h-8 w-8" color="green" />
             )}
           </>

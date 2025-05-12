@@ -1,8 +1,9 @@
-import React, { cloneElement } from 'react';
-import Project from '@/types/project';
-import ProjectsSidePanel from '../ProjectsSidePanel';
-import { redirect } from 'next/navigation';
-import { baseUrl } from '@/utils';
+import React, { cloneElement } from "react";
+import Project from "@/types/project";
+import ProjectsSidePanel from "../ProjectsSidePanel";
+import { redirect } from "next/navigation";
+import { baseUrl } from "@/utils";
+import { baseMenuRadioItemPropDefs } from "@radix-ui/themes/dist/cjs/components/base-menu.props";
 
 interface ProjectsProps {
   username: string;
@@ -15,9 +16,13 @@ const Projects = async ({
   children,
   activeProjectId,
 }: ProjectsProps) => {
+  if (!username) {
+    redirect(`${baseUrl}/u/new-user`);
+  }
+
   var projects = await fetch(`${baseUrl}/api/projects?username=${username}`, {
     next: {
-      tags: ['projects', 'sections'],
+      tags: ["projects", "sections"],
     },
   }).then((r) => {
     if (r.body) return r.json();

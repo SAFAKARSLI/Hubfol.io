@@ -1,5 +1,5 @@
-'use client';
-import { Image } from '@/types/section';
+"use client";
+import { Image } from "@/types/section";
 import {
   Box,
   Button,
@@ -8,12 +8,12 @@ import {
   IconButton,
   Text,
   TextField,
-} from '@radix-ui/themes';
-import React, { lazy } from 'react';
-import Slider from 'react-slick';
-import * as Portal from '@radix-ui/react-portal';
-import { set } from 'lodash';
-import { Cross1Icon } from '@radix-ui/react-icons';
+} from "@radix-ui/themes";
+import React, { lazy } from "react";
+import Slider from "react-slick";
+import * as Portal from "@radix-ui/react-portal";
+import { set } from "lodash";
+import { Cross1Icon } from "@radix-ui/react-icons";
 
 type Props = {
   images: Image[];
@@ -21,13 +21,15 @@ type Props = {
 
 function Carousel({ images }: Props) {
   const settings = {
-    infinite: true,
+    infinite: images.length > 1,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
     draggable: false,
-    lazyLoad: 'ondemand' as 'ondemand' | 'progressive',
+    lazyLoad: "ondemand" as "ondemand" | "progressive",
   };
+
+  console.log("!! Images", images);
 
   return (
     <>
@@ -47,8 +49,8 @@ function Carousel({ images }: Props) {
                 <Dialog.Content className="max-w-[60vw] max-h-[80vh]">
                   <Flex
                     style={{
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
+                      justifyContent: "space-between",
+                      alignItems: "center",
                       marginBottom: 10,
                     }}
                   >

@@ -1,36 +1,35 @@
-'use server';
-import { prisma } from '@/db';
-import { Content, Prisma } from '@prisma/client';
-import { v4 as uuidv4 } from 'uuid';
-import { z } from 'zod';
-import { authOptions } from '../api/auth/[...nextauth]/route';
-import { getServerSession } from 'next-auth';
-import { validateUUID } from './utils';
-import { checkForAuthority } from './project';
-import { revalidateTag } from 'next/cache';
-import { auth } from '@clerk/nextjs/server';
-import { getUser } from './user';
-import { Image, Section } from '@/types/section';
-import _ from 'lodash';
-import { eliminateUnusedFiles, uploadFile } from './s3';
-import { redirect } from 'next/navigation';
-import { InputJsonArray, InputJsonValue } from '@prisma/client/runtime/library';
+"use server";
+import { prisma } from "@/db";
+import { Content, Prisma } from "@prisma/client";
+import { v4 as uuidv4 } from "uuid";
+import { z } from "zod";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth";
+import { validateUUID } from "./utils";
+import { checkForAuthority } from "./project";
+import { revalidateTag } from "next/cache";
+import { auth } from "@clerk/nextjs/server";
+import { getUser } from "./user";
+import { Image, Section } from "@/types/section";
+import _ from "lodash";
+import { eliminateUnusedFiles, uploadFile } from "./s3";
+import { redirect } from "next/navigation";
+import { InputJsonArray, InputJsonValue } from "@prisma/client/runtime/library";
 
 const processContent = async (formData: FormData) => {
   console.log(formData);
-  const contentType = formData.get('contentType') as Content;
+  const contentType = formData.get("contentType") as Content;
 
   if (contentType == Content.TEXT) {
-    return formData.get('content') as string;
+    return formData.get("content") as string;
   } else if (contentType === Content.BRAND_STACK) {
-    const content = formData.get('content') as string;
+    const content = formData.get("content") as string;
     return JSON.parse(content) as Prisma.InputJsonValue;
   } else if (contentType === Content.CAROUSEL) {
-    const images = formData
-      .keys()
-      .filter((key) => key.startsWith('images'))
-      .toArray();
-
+    console.log("!! FormData Keys", Array.from(formData.keys()));
+    const images = Array.from(formData.keys()).filter((key) =>
+      key.startsWith("images")
+    );
     const result = [];
     for (let i = 0; i < images.length / 2; i++) {
       if (formData.get(`images[${i}][url]`)) {
@@ -43,16 +42,16 @@ const processContent = async (formData: FormData) => {
 
       const uploadedFile = await uploadFile(
         formData.get(`images[${i}][blob]`) as File,
-        'hubfol.io.gallery'
+        "hubfol.io.gallery"
       );
 
       if (uploadedFile.status !== 200) {
-        throw new Error('Failed to upload image.');
+        throw new Error("Failed to upload image.");
       }
 
       result.push({
         name: formData.get(`images[${i}][name]`) as string,
-        url: 'https://s3.amazonaws.com/hubfol.io.gallery/' + uploadedFile.data,
+        url: "https://s3.amazonaws.com/hubfol.io.gallery/" + uploadedFile.data,
       });
     }
     return result as InputJsonValue;
@@ -66,24 +65,24 @@ export const upsertSections = async (formData: FormData) => {
   try {
     content = await processContent(formData)!;
   } catch (error) {
-    console.error('Error processing content:', error);
+    console.error("Error processing content:", error);
     // TODO: Implement the error page.
-    redirect('?error=failed-to-process-content');
+    redirect("?error=failed-to-process-content");
   }
 
   const sectionInfo = {
-    title: formData.get('title') as string,
-    description: formData.get('description') as string,
-    contentType: formData.get('contentType') as Content,
+    title: formData.get("title") as string,
+    description: formData.get("description") as string,
+    contentType: formData.get("contentType") as Content,
     content,
   };
 
-  const sectionUUID = formData.get('uuid') as string;
-  const projectId = formData.get('projectId') as string;
+  const sectionUUID = formData.get("uuid") as string;
+  const projectId = formData.get("projectId") as string;
 
-  if (formData.get('prev-section')) {
+  if (formData.get("prev-section")) {
     const prevSection = JSON.parse(
-      formData.get('prev-section') as string
+      formData.get("prev-section") as string
     ) as Section;
 
     // Deletes any files that are no longer in use after the update
@@ -91,7 +90,7 @@ export const upsertSections = async (formData: FormData) => {
       await eliminateUnusedFiles(
         prevSection.content as unknown as Image[],
         sectionInfo.content as unknown as Image[],
-        'hubfol.io.gallery'
+        "hubfol.io.gallery"
       );
     }
 
@@ -102,7 +101,7 @@ export const upsertSections = async (formData: FormData) => {
     );
 
     if (noChange) {
-      return { status: 200, message: 'No changes detected.' };
+      return { status: 200, message: "No changes detected." };
     }
   }
 
@@ -137,14 +136,14 @@ export const upsertSections = async (formData: FormData) => {
         },
       });
   } catch (error) {
-    console.error('Error updating section:', error);
+    console.error("Error updating section:", error);
     return {
       status: 500,
-      message: 'Failed to update/create section',
+      message: "Failed to update/create section",
     };
   } finally {
     await prisma.$disconnect;
-    revalidateTag('sections');
+    revalidateTag("sections");
     return { status: 200, data: resultingSection };
   }
 };
@@ -155,7 +154,7 @@ export const initiateSection = async (projectUUID: string) => {
   if (!session || !session.user) {
     return {
       status: 401,
-      message: 'You must be logged in to initiate a section.',
+      message: "You must be logged in to initiate a section.",
     };
   }
 
@@ -165,10 +164,10 @@ export const initiateSection = async (projectUUID: string) => {
     });
 
     if (!project) {
-      return { status: 404, message: 'Project not found.' };
+      return { status: 404, message: "Project not found." };
     }
   } catch (error) {
-    console.error('Error initiating section:', error);
+    console.error("Error initiating section:", error);
   }
 
   try {
@@ -176,14 +175,14 @@ export const initiateSection = async (projectUUID: string) => {
       data: {
         uuid: uuidv4(),
         projectId: projectUUID,
-        title: 'New Section',
+        title: "New Section",
         contentType: Content.TEXT,
-        content: '',
+        content: "",
       },
     });
     return { status: 200, data: section };
   } catch (error) {
-    console.error('Error initiating section:', error);
+    console.error("Error initiating section:", error);
   } finally {
     prisma.$disconnect();
   }
@@ -197,7 +196,7 @@ export const getSections = async (projectUUID: string) => {
     });
     return JSON.parse(JSON.stringify(sections));
   } catch (error) {
-    console.error('Error fetching sections:', error);
+    console.error("Error fetching sections:", error);
   } finally {
     prisma.$disconnect();
   }
@@ -210,7 +209,7 @@ export const getSection = async (sectionUUID: string) => {
     });
     return JSON.parse(JSON.stringify(section));
   } catch (error) {
-    console.error('Error fetching section:', error);
+    console.error("Error fetching section:", error);
   } finally {
     prisma.$disconnect();
   }
@@ -221,7 +220,7 @@ export const getSectionCount = async () => {
     const count = await prisma.section.count();
     return count;
   } catch (error) {
-    console.error('Error fetching section count:', error);
+    console.error("Error fetching section count:", error);
   } finally {
     prisma.$disconnect();
   }
@@ -231,23 +230,23 @@ export const createSection = async (
   formData: FormData,
   { request }: { request: Request }
 ) => {
-  if (request.method !== 'POST') throw new Error('Invalid request method.');
+  if (request.method !== "POST") throw new Error("Invalid request method.");
 
   const session = auth();
   session.protect();
 
   const section = {
     uuid: uuidv4(),
-    title: formData.get('title') as string,
-    projectId: formData.get('projectUUID') as string,
-    contentType: formData.get('contentType') as Content,
-    content: formData.get('content') as Prisma.InputJsonValue,
+    title: formData.get("title") as string,
+    projectId: formData.get("projectUUID") as string,
+    contentType: formData.get("contentType") as Content,
+    content: formData.get("content") as Prisma.InputJsonValue,
   };
 
   const schema = z.object({
     title: z
       .string()
-      .min(1, { message: 'Title must be at least 1 character long.' }),
+      .min(1, { message: "Title must be at least 1 character long." }),
     projectUUID: z.string(),
   });
 
@@ -265,8 +264,8 @@ export const createSection = async (
   try {
     await prisma.section.create({ data: section });
   } catch (error) {
-    console.error('Error creating section:', error);
-    errors.push('Failed to create section');
+    console.error("Error creating section:", error);
+    errors.push("Failed to create section");
   } finally {
     await prisma.$disconnect;
     return section;
@@ -274,7 +273,7 @@ export const createSection = async (
 };
 
 export const deleteSection = async (formData: FormData) => {
-  const sectionUUID = formData.get('uuid') as string;
+  const sectionUUID = formData.get("uuid") as string;
 
   const session = auth();
   session.protect();
@@ -285,7 +284,7 @@ export const deleteSection = async (formData: FormData) => {
   });
 
   if (!section) {
-    return { status: 404, message: 'Section not found.' };
+    return { status: 404, message: "Section not found." };
   }
 
   const user = await getUser(session.userId!);
@@ -304,9 +303,9 @@ export const deleteSection = async (formData: FormData) => {
       where: { uuid: sectionUUID },
     });
   } catch (error) {
-    console.error('Error deleting section:', error);
+    console.error("Error deleting section:", error);
   } finally {
-    revalidateTag('sections');
+    revalidateTag("sections");
     await prisma.$disconnect;
   }
 };

@@ -1,8 +1,8 @@
-import HubfolioBanner from '@/components/HubfolioBanner';
-import OAuthSignInButton from '@/components/OAuthSignInButton';
-import { customThemeClerkAuthenticationComponents } from '@/utils';
-import { SignIn } from '@clerk/nextjs';
-import { auth } from '@clerk/nextjs/server';
+import HubfolioBanner from "@/components/HubfolioBanner";
+import OAuthSignInButton from "@/components/OAuthSignInButton";
+import { customThemeClerkAuthenticationComponents } from "@/utils";
+import { SignIn } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 
 function page() {
   const session = auth();
@@ -11,13 +11,11 @@ function page() {
   if (session)
     return (
       <div className="w-screen h-screen flex flex-col  justify-center p-4">
-        <div className="shrink">
-          <HubfolioBanner width={8} />
-        </div>
+        <HubfolioBanner width={100} />
         <div className="flex-1 flex items-center w-full justify-center">
           <SignIn
             appearance={customThemeClerkAuthenticationComponents}
-            forceRedirectUrl={'/api/fully-signed-in'}
+            forceRedirectUrl={"/api/fully-signed-in"}
           />
         </div>
       </div>

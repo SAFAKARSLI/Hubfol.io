@@ -1,11 +1,10 @@
-import React from 'react';
-import StepperHeader from './StepperHeader';
-import { Step } from './step';
-import StepperContent from './StepperContent';
-import FormWrapper from '@/components/FormWrapper';
-import { baseUrl } from '@/utils';
-import { useParams } from 'next/navigation';
-import { useUser } from '@clerk/nextjs';
+import React from "react";
+import StepperHeader from "./StepperHeader";
+import { Step } from "./step";
+import StepperContent from "./StepperContent";
+import FormWrapper from "@/components/FormWrapper";
+import { baseUrl } from "@/utils";
+import { useUser } from "@clerk/nextjs";
 
 type Props = {
   steps: Step[];
