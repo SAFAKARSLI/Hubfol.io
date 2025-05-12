@@ -1,6 +1,6 @@
-import { validateUUID } from '@/app/actions/utils';
-import { prisma } from '@/db';
-import { NextRequest } from 'next/server';
+import { validateUUID } from "@/app/actions/utils";
+import { prisma } from "@/db";
+import { NextRequest } from "next/server";
 
 // GET /api/projects/[projectUUID]
 export async function GET(
@@ -10,7 +10,7 @@ export async function GET(
   const { projectUUID } = params;
 
   if (!validateUUID(projectUUID as string)) {
-    return new Response('Invalid project identifier provided: ' + projectUUID, {
+    return new Response("Invalid project identifier provided: " + projectUUID, {
       status: 400,
     });
   }
@@ -20,12 +20,12 @@ export async function GET(
     });
 
     if (!projects) {
-      return new Response('Project not found', { status: 404 });
+      return new Response("Project not found", { status: 404 });
     }
 
     return new Response(JSON.stringify(projects), { status: 200 });
   } catch (error) {
-    return new Response('Failed to fetch projects', { status: 500 });
+    return new Response("Failed to fetch projects", { status: 500 });
   } finally {
     await prisma.$disconnect();
   }
