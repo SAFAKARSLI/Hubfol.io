@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import React, { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
 
-import * as Accordion from '@radix-ui/react-accordion';
+import * as Accordion from "@radix-ui/react-accordion";
 
-import AccordionProjectItem from './AccordionProjectItem';
-import Project from '@/types/project';
-
+import AccordionProjectItem from "./AccordionProjectItem";
+import { Project } from "@prisma/client";
 type Props = {
   initialProjects: Project[];
   activeProjectId: string;
@@ -15,7 +14,7 @@ function AccordionProjectList({ initialProjects, activeProjectId }: Props) {
   return (
     <Accordion.Root
       type="single"
-      value={activeProjectId ?? 'NO_ACTIVE_PROJECT'}
+      value={activeProjectId ?? "NO_ACTIVE_PROJECT"}
       asChild
     >
       <div className="px-5 flex flex-col gap-4">

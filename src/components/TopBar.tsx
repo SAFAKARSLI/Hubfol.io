@@ -1,30 +1,47 @@
-import React from 'react';
-import { Flex, Progress, Separator, Spinner } from '@radix-ui/themes';
-import { Params } from '@/types/slug';
-import NavigationLinks from './NavigationLinks';
-import SidebarButton from './custom-comps/SidebarButton';
-import { auth } from '@clerk/nextjs/server';
-import { getUser } from '@/app/actions/user';
-import { ClerkLoaded, ClerkLoading } from '@clerk/nextjs';
-import AuthenticationButtonsWrapper from './AuthenticationButtonsWrapper';
-import NextNProgress from 'nextjs-progressbar';
-import ProgressLoadingBar from './ProgressLoadingBar';
+import React from "react";
+import { Flex, Progress, Separator, Spinner } from "@radix-ui/themes";
+import { Params } from "@/types/slug";
+import NavigationLinks from "./NavigationLinks";
+import { auth } from "@clerk/nextjs/server";
+import { getUser } from "@/app/actions/user";
+import { ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
+import AuthenticationButtonsWrapper from "./AuthenticationButtonsWrapper";
+import ProfileSidebarButton from "./custom-comps/ProfileSidebarButton";
+import ProfileSidebarContent from "./ProfileSidebarContent";
+import EmployeeSidebarButton from "./custom-comps/EmployeeSidebarButton";
+import { baseUrl, isValidUsername } from "@/utils";
+import { Employee, Project } from "@prisma/client";
+import ProfileOverview from "./ProfileOverview";
 
 interface TopBarProps {
   params: Params;
 }
 
 async function TopBar({ params }: TopBarProps) {
-  const { username, projectUUID } = params;
+  const { username, projectSlug } = params;
   const { userId } = auth();
   const clerkUser = await getUser(userId as string);
 
+  const projects = (await fetch(
+    `${baseUrl}/api/projects?username=${clerkUser?.username as string}`,
+    { cache: "force-cache", next: { tags: ["projects"] } }
+  ).then((r) => r.json())) as Project[];
+
+  const user = (await fetch(`${baseUrl}/api/users/${username}`, {
+    cache: "force-cache",
+    next: { tags: ["users"] },
+  }).then((r) => r.json())) as Employee;
+
   return (
     <>
-      <Flex className="border-b border-gray-5 bg-gray-0 justify-end items-center h-[3.5rem]">
+      <Flex className="border-b border-gray-5 bg-gray-0 justify-end items-center h-[3.5rem] px-2">
         <div className="flex justify-between w-full items-center">
-          <NavigationLinks authenticated={clerkUser?.username == username} />
-          <Flex align={'center'} className="mr-5">
+          <div className="hidden xl:flex">
+            <NavigationLinks authenticated={clerkUser?.username == username} />
+          </div>
+          <EmployeeSidebarButton projects={projects} user={user} />
+
+          <Flex align={"center"}>
             <ClerkLoading>
               <Spinner />
             </ClerkLoading>
@@ -32,9 +49,8 @@ async function TopBar({ params }: TopBarProps) {
               {clerkUser ? (
                 <>
                   <Separator orientation="vertical" size="1" className="mx-5" />
-                  <div>
-                    <SidebarButton position="right" />
-                  </div>
+
+                  <ProfileSidebarButton />
                 </>
               ) : (
                 <AuthenticationButtonsWrapper />

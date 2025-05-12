@@ -9,22 +9,13 @@ import * as Portal from "@radix-ui/react-portal";
 import SidebarProfileOverview from "../SidebarProfileOverview";
 import { useUser } from "@clerk/nextjs";
 
-type Props = {
-  position: "left" | "right";
-};
+type Props = {};
 
-function SidebarButton({ position }: Props) {
+function ProfileSidebarButton({}: Props) {
   const { user } = useUser();
   const [visible, setVisible] = React.useState(false);
-  const menuPosition = position === "left" ? `left-0` : "right-0";
-  const menuSlideAnimation =
-    position === "left"
-      ? visible
-        ? "translate-x-0"
-        : "-translate-x-full"
-      : visible
-      ? "translate-x-0"
-      : "translate-x-full";
+  const menuPosition = "right-0";
+  const menuSlideAnimation = visible ? "translate-x-0" : "translate-x-full";
   return (
     <div>
       <div
@@ -76,4 +67,4 @@ function SidebarButton({ position }: Props) {
   );
 }
 
-export default SidebarButton;
+export default ProfileSidebarButton;

@@ -291,7 +291,7 @@ function ProjectFrame({ project }: Props) {
               </IconButton>
             </div>
             <div className="flex gap-10">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 hidden lg:flex">
                 <Text size={"1"} className="text-gray-9">
                   Viewport Options:
                 </Text>

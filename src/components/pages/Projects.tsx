@@ -4,6 +4,7 @@ import ProjectsSidePanel from "../ProjectsSidePanel";
 import { notFound, redirect } from "next/navigation";
 import { baseUrl, isValidUsername } from "@/utils";
 import { baseMenuRadioItemPropDefs } from "@radix-ui/themes/dist/cjs/components/base-menu.props";
+import ProjectConsole from "../ProjectConsole";
 
 interface ProjectsProps {
   username: string;
@@ -40,7 +41,7 @@ const Projects = async ({
 
   return (
     <div className="flex ">
-      <div className="flex-none border-r border-gray-4 bg-gray-1">
+      <div className="flex-none border-r border-gray-4 bg-gray-1 hidden xl:block">
         <ProjectsSidePanel
           initialProjects={projects}
           username={username}

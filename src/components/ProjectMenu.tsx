@@ -1,27 +1,27 @@
-'use client';
-import React, { useState } from 'react';
+"use client";
+import React, { useState } from "react";
 
 import {
   DropdownMenu,
   IconButton,
   AlertDialog,
   Dialog,
-} from '@radix-ui/themes';
+} from "@radix-ui/themes";
 
-import * as DialogPrimitive from '@radix-ui/react-dialog';
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 
 import {
   TrashIcon,
   Pencil2Icon,
   DotsHorizontalIcon,
-} from '@radix-ui/react-icons';
+} from "@radix-ui/react-icons";
 
-import { useParams } from 'next/navigation';
+import { useParams } from "next/navigation";
 
-import DeleteProjectDialog from './dialogs/DeleteProjectDialog';
-import { useRouter } from 'next/navigation';
-import Project from '@/types/project';
-import Link from 'next/link';
+import DeleteProjectDialog from "./dialogs/DeleteProjectDialog";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Project } from "@prisma/client";
 
 type Props = {
   project: Project;

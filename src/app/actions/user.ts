@@ -75,8 +75,10 @@ export const createEmployee = async (formData: FormData) => {
       name: formData.get("name") as string,
       email: formData.get("email") as string,
       title: formData.get("title") as string,
-      phoneNumber: formData.get("phoneNumber") as string,
-      hourlyRate: parseFloat(formData.get("hourlyRate") as string),
+      phoneNumber: (formData.get("phoneNumber") as string) || null,
+      hourlyRate: parseFloat(formData.get("hourlyRate") as string) || null,
+      status: "OPEN_TO_WORK",
+      location: null,
       createdAt: new Date(),
     } as Employee;
 
@@ -108,7 +110,7 @@ export const createEmployee = async (formData: FormData) => {
       if (error instanceof PrismaClientKnownRequestError) {
         console.error("Error creating employee:", error);
         redirect(
-          baseUrl + "/signup?error=account-already-exists-or-username-taken"
+          baseUrl + "/sign-up?error=account-already-exists-or-username-taken"
         );
       }
     } finally {

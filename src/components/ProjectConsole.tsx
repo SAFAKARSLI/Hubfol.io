@@ -1,11 +1,11 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import Project from '@/types/project';
-import * as Accordion from '@radix-ui/react-accordion';
-import AccordionProjectItem from './AccordionProjectItem';
-import { Button, IconButton } from '@radix-ui/themes';
-import { ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
-import { preferredColorOptions } from '@/utils';
+"use client";
+import React, { useEffect, useState } from "react";
+import Project from "@/types/project";
+import * as Accordion from "@radix-ui/react-accordion";
+import AccordionProjectItem from "./AccordionProjectItem";
+import { Button, IconButton } from "@radix-ui/themes";
+import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
+import { preferredColorOptions } from "@/utils";
 
 type Props = {
   project: Project;
@@ -22,19 +22,19 @@ function ProjectConsole({ project }: Props) {
   };
 
   return (
-    <div key={project.uuid}>
+    <div key={project.slug}>
       <Accordion.Root
         type="single"
-        value={isConsoleOpen ? project.uuid : ''}
+        value={isConsoleOpen ? project.slug : ""}
         className={`xl:hidden w-[25rem] absolute right-0  
          -sm:w-full bottom-0  flex flex-col justify-end duration-300 overflow-hidden rounded`}
       >
-        <Accordion.Item value={project.uuid!}>
+        <Accordion.Item value={project.slug!}>
           <Accordion.Trigger asChild>
             <Button
               color={preferredColorOptions.accentColor}
               className="rounded-t rounded-b-none h-[1.8rem] w-full"
-              size={'1'}
+              size={"1"}
               onClick={handleConsoleOpen}
             >
               {isConsoleOpen ? (
@@ -49,7 +49,7 @@ function ProjectConsole({ project }: Props) {
             </Button>
           </Accordion.Trigger>
           <Accordion.Content className="bg-gray-1 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp overflow-hidden">
-            <Accordion.Root type="single" value={project.uuid} asChild>
+            <Accordion.Root type="single" value={project.slug} asChild>
               <div
                 className={` bg-gray-1  border-x border-violet-a3 duration-300  `}
               >

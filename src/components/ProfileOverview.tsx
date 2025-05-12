@@ -1,37 +1,25 @@
-import { DotsHorizontalIcon } from '@radix-ui/react-icons';
-import {
-  Badge,
-  DropdownMenu,
-  IconButton,
-  Text,
-  Flex,
-  Box,
-  Separator,
-  Portal,
-  Button,
-} from '@radix-ui/themes';
-import React, { cache } from 'react';
-import ViewContactInfo from './ViewContactInfo';
-import { baseUrl } from '@/utils';
-import Employee from '@/types/employee';
-import Image from 'next/image';
-import { FaEdit } from 'react-icons/fa';
-import { currentUser } from '@clerk/nextjs/server';
-import Link from 'next/link';
-import ShareButton from './ShareButton';
+"use client";
+
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { Badge, DropdownMenu, IconButton, Text, Flex } from "@radix-ui/themes";
+import React from "react";
+import ViewContactInfo from "./ViewContactInfo";
+import { baseUrl } from "@/utils";
+import { Employee } from "@prisma/client";
+import Image from "next/image";
+import { FaEdit } from "react-icons/fa";
+import Link from "next/link";
+import ShareButton from "./ShareButton";
+import { useUser } from "@clerk/nextjs";
+import { useParams } from "next/navigation";
 
 interface ProfileOverviewProps {
-  username: string;
+  user: Employee;
 }
 
-const ProfileOverview = async ({ username }: ProfileOverviewProps) => {
-  const user = (await fetch(`${baseUrl}/api/users/${username}`, {
-    cache: 'force-cache',
-    next: { tags: ['users'] },
-  }).then((r) => r.json())) as Employee;
-
-  const clerkUser = await currentUser();
-
+const ProfileOverview = ({ user }: ProfileOverviewProps) => {
+  const { user: clerkUser } = useUser();
+  const { username } = useParams();
   return (
     <div
       className="flex bg-gray-1 h-[6rem] -sm:hidden items-center p-5  shadow-[-5px_4px_15px_1px_rgba(0,0,0,1)] "
@@ -39,20 +27,20 @@ const ProfileOverview = async ({ username }: ProfileOverviewProps) => {
     >
       <Image
         alt="pp"
-        src={'/hubfolio-dark-logo.png'}
+        src={"/hubfolio-dark-logo.png"}
         width={60}
         height={60}
-        style={{ objectFit: 'cover' }}
+        style={{ objectFit: "cover" }}
         className="mr-5"
       />
       <Flex
         direction="column"
         className="flex-grow w-[10rem]"
-        justify={'between'}
+        justify={"between"}
       >
         <div>
           <Text as="p" size="2" weight="bold" className="truncate">
-            {user.name}{' '}
+            {user.name}{" "}
           </Text>
 
           <Text size="1" color="gray" as="p" className="truncate">
@@ -67,14 +55,14 @@ const ProfileOverview = async ({ username }: ProfileOverviewProps) => {
       </Flex>
       <Flex
         className="flex-grow"
-        direction={'column'}
-        justify={'between'}
-        align={'end'}
-        height={'100%'}
+        direction={"column"}
+        justify={"between"}
+        align={"end"}
+        height={"100%"}
       >
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
-            <IconButton variant="ghost" color="gray" size={'1'}>
+            <IconButton variant="ghost" color="gray" size={"1"}>
               <DotsHorizontalIcon />
             </IconButton>
           </DropdownMenu.Trigger>

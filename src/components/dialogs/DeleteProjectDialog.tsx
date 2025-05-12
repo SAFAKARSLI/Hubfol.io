@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   AlertDialog,
   TextField,
@@ -6,24 +6,24 @@ import {
   Button,
   IconButton,
   Em,
-} from '@radix-ui/themes';
-import { deleteProject } from '@/app/actions/project';
-import { Cross1Icon } from '@radix-ui/react-icons';
-import Project from '@/types/project';
+} from "@radix-ui/themes";
+import { deleteProject } from "@/app/actions/project";
+import { Cross1Icon } from "@radix-ui/react-icons";
+import { Project } from "@prisma/client";
 
 type Props = {
   project: Project;
 };
 
 function DeleteProjectDialog({ project: { name, uuid } }: Props) {
-  const [confirmDelete, setConfirmDelete] = useState('');
+  const [confirmDelete, setConfirmDelete] = useState("");
   const [isDeleting, setIsDeleting] = useState<true | undefined>(undefined);
 
   return (
     <>
       <AlertDialog.Content maxWidth="500px" forceMount={isDeleting}>
         <Flex className="w-full justify-between h-[3rem]">
-          <AlertDialog.Title size={'5'} className="truncate">
+          <AlertDialog.Title size={"5"} className="truncate">
             Delete <p className="inline text-violet-11">{name}</p>
           </AlertDialog.Title>
           <AlertDialog.Cancel disabled={isDeleting}>
@@ -37,17 +37,17 @@ function DeleteProjectDialog({ project: { name, uuid } }: Props) {
           permanent and cannot be undone. All of the associated sections will
           also be deleted.
           <br /> <br />
-          To confirm deletion, type{' '}
+          To confirm deletion, type{" "}
           <b>
             <i>{name}</i>
-          </b>{' '}
+          </b>{" "}
           in the input below.
         </AlertDialog.Description>
         <TextField.Root
           value={confirmDelete}
           onChange={(e) => setConfirmDelete(e.target.value)}
           placeholder={name}
-          size={'3'}
+          size={"3"}
           className="w-full text-m my-3"
         />
         <Flex gap="3" justify="end">

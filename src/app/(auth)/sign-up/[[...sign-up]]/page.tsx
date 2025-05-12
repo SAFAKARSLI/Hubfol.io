@@ -6,20 +6,20 @@ import {
   Link,
   Spinner,
   Text,
-} from '@radix-ui/themes';
-import Image from 'next/image';
-import React, { Suspense } from 'react';
-import ListItem from '../ListItem';
-import { FaGithub, FaGoogle } from 'react-icons/fa';
-import OAuthSignInButton from '@/components/OAuthSignInButton';
-import * as Form from '@radix-ui/react-form';
-import OAuthSignUpButton from '@/components/OAuthSignUpButton';
-import FormInput from '@/components/project-form/FormInput';
-import NewEmployeeForm from '../../new-user/NewEmployeeForm';
-import SubmitButton from '@/components/SubmitButton';
-import { SignUp } from '@clerk/nextjs';
-import { customThemeClerkAuthenticationComponents } from '@/utils';
-import HubfolioBanner from '@/components/HubfolioBanner';
+} from "@radix-ui/themes";
+import Image from "next/image";
+import React, { Suspense } from "react";
+import ListItem from "../ListItem";
+import { FaGithub, FaGoogle } from "react-icons/fa";
+import OAuthSignInButton from "@/components/OAuthSignInButton";
+import * as Form from "@radix-ui/react-form";
+import OAuthSignUpButton from "@/components/OAuthSignUpButton";
+import FormInput from "@/components/project-form/FormInput";
+import NewEmployeeForm from "../../new-user/NewEmployeeForm";
+import SubmitButton from "@/components/SubmitButton";
+import { SignUp } from "@clerk/nextjs";
+import { customThemeClerkAuthenticationComponents } from "@/utils";
+import HubfolioBanner from "@/components/HubfolioBanner";
 
 type Props = {};
 
@@ -78,13 +78,13 @@ function page({}: Props) {
           </Text>
         </Card> */}
       <div className="lg:w-1/2 -lg:min-h-[75vh] lg:border-r -lg:border-b border-violet-8 bg-gray-2 lg:rounded-r -lg:rounded-b shadow-[0_0_30px_8px_rgba(44,20,219,1)] flex flex-col items-center">
-        <Box pt={'4'}>
-          <HubfolioBanner width={10} />
+        <Box pt={"4"}>
+          <HubfolioBanner width={160} />
         </Box>
         <div className="grow w-3/5 -md:w-4/5 max-w-[700px]  flex flex-col  items-center my-10">
           <div className="text-center my-6">
-            <Heading className="mb-3 " size={'8'}>
-              Welcome to{' '}
+            <Heading className="mb-3 " size={"8"}>
+              Welcome to{" "}
               <Text className="font-serif text-violet-9">Hubfolio</Text>
             </Heading>
             <Text className="text-center text-sm text-gray-10">
@@ -96,7 +96,7 @@ function page({}: Props) {
             <ListItem
               title="Showcase Your Projects"
               text={
-                'List your projects on your profile and get discovered by other developers and employers. There is no project limit! You can list as many projects as you want.'
+                "List your projects on your profile and get discovered by other developers and employers. There is no project limit! You can list as many projects as you want."
               }
             />
             <ListItem
@@ -107,7 +107,7 @@ function page({}: Props) {
             <ListItem
               title="Attract More Employers"
               text={
-                'Employers can discover your projects and hire you directly from your profile. You can use your Hubfolio account as your digital resume to apply for jobs.'
+                "Employers can discover your projects and hire you directly from your profile. You can use your Hubfolio account as your digital resume to apply for jobs."
               }
             />
           </div>
@@ -117,7 +117,7 @@ function page({}: Props) {
         <Suspense fallback={<Spinner />}>
           <SignUp
             appearance={customThemeClerkAuthenticationComponents}
-            forceRedirectUrl={'/api/fully-signed-up'}
+            forceRedirectUrl={"/api/fully-signed-up"}
           />
         </Suspense>
       </div>

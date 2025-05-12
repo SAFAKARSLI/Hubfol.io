@@ -1,32 +1,32 @@
-'use client';
-import React, { useState } from 'react';
-import { Button, DropdownMenu, IconButton, ScrollArea } from '@radix-ui/themes';
-import { CardStackIcon } from '@radix-ui/react-icons';
-import ProjectListHeader from './ProjectListHeader';
-import AddProjectButton from './AddProjectButton';
-import Project from '@/types/project';
-import * as Accordion from '@radix-ui/react-accordion';
-import AccordionProjectItem from './AccordionProjectItem';
-import { useRouter } from 'next/navigation';
+"use client";
+import React, { useState } from "react";
+import { Button, DropdownMenu, IconButton, ScrollArea } from "@radix-ui/themes";
+import { CardStackIcon } from "@radix-ui/react-icons";
+import ProjectListHeader from "./ProjectListHeader";
+import AddProjectButton from "./AddProjectButton";
+import Project from "@/types/project";
+import * as Accordion from "@radix-ui/react-accordion";
+import AccordionProjectItem from "./AccordionProjectItem";
+import { useParams, useRouter } from "next/navigation";
 
 type Props = {
   projects: Project[];
-  userUUID: string;
 };
 
-function HamburgerProjectMenu({ projects, userUUID }: Props) {
+function HamburgerProjectMenu({ projects }: Props) {
+  const { username } = useParams();
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
   const handleHamburgerProjectClick = (p: Project) => {
     setOpen(false);
-    router.push(`/u/${userUUID}/projects/${p.uuid}`);
+    router.push(`/u/${username}/projects/${p.slug}`);
   };
 
   return (
     <DropdownMenu.Root open={open}>
       <DropdownMenu.Trigger onClick={() => setOpen(true)}>
-        <Button variant="soft" size={'3'} className="-xl:flex hidden text-xs">
+        <Button variant="soft" size={"3"} className="-xl:flex hidden text-xs">
           <CardStackIcon /> <div className="-xs:hidden">Projects</div>
         </Button>
       </DropdownMenu.Trigger>
@@ -38,22 +38,13 @@ function HamburgerProjectMenu({ projects, userUUID }: Props) {
               {projects.map((p, i) => {
                 return (
                   <div key={i} onClick={() => handleHamburgerProjectClick(p)}>
-                    <AccordionProjectItem
-                      uuid={p.uuid as string}
-                      name={p.name!}
-                      tagline={p.tagline!}
-                      iconLink={p.iconLink!}
-                      sections={p.sections!}
-                      activeProjectId={''}
-                      ownerId={p.ownerId!}
-                      url={p.url!}
-                    />
+                    <AccordionProjectItem activeProjectId={""} project={p} />
                   </div>
                 );
               })}
             </div>
           </Accordion.Root>
-          <AddProjectButton variant="solid" />
+          <AddProjectButton projectCount={projects.length} />
         </div>
       </DropdownMenu.Content>
     </DropdownMenu.Root>

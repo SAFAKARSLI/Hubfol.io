@@ -1,12 +1,11 @@
-import React from 'react';
-import AccordionProjectList from './AccordionProjectList';
-import Project from '@/types/project';
-import ProjectListHeader from './ProjectListHeader';
-import AddProjectButton from './AddProjectButton';
+import React from "react";
+import AccordionProjectList from "./AccordionProjectList";
+import ProjectListHeader from "./ProjectListHeader";
+import AddProjectButton from "./AddProjectButton";
 
-import { auth, User } from '@clerk/nextjs/server';
-import ProfileOverview from './ProfileOverview';
-import { getUser } from '@/app/actions/user';
+import ProfileOverview from "./ProfileOverview";
+import { Employee, Project } from "@prisma/client";
+import { baseUrl } from "@/utils";
 
 type Props = {
   initialProjects: Project[];
@@ -19,17 +18,19 @@ async function ProjectsSidePanel({
   username,
   projectSlug,
 }: Props) {
-  const { userId } = auth();
+  const user = (await fetch(`${baseUrl}/api/users/${username}`, {
+    cache: "force-cache",
+    next: { tags: ["users"] },
+  }).then((r) => r.json())) as Employee;
 
-  const user = (await getUser(userId!)) as User;
   return (
-    <div className="flex flex-col h-[100dvh]  w-[27rem]">
-      <ProfileOverview username={username} />
+    <div className="flex flex-col h-[100dvh] hidden lg:flex lg:w-[27rem] ">
+      <ProfileOverview user={user} />
       <div className="overflow-y-scroll flex-1  scroll-smooth ">
         <ProjectListHeader projectCount={initialProjects.length} />
         <AccordionProjectList
           initialProjects={initialProjects}
-          activeProjectId={projectSlug}
+          activeProjectId={projectSlug as string}
         />
         <div className="mb-[15rem] p-5">
           {user?.username == username && (

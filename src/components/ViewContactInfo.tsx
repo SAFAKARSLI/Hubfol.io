@@ -11,14 +11,8 @@ import {
   Separator,
   IconButton,
 } from "@radix-ui/themes";
-import {
-  Cross1Icon,
-  EnvelopeClosedIcon,
-  PersonIcon,
-} from "@radix-ui/react-icons";
-import Employee from "@/types/employee";
-import { FaDollarSign, FaMailBulk, FaPhone, FaPhoneAlt } from "react-icons/fa";
-import { IconBase } from "react-icons";
+import { Cross1Icon, EnvelopeClosedIcon } from "@radix-ui/react-icons";
+import { Employee } from "@prisma/client";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
 
 type Props = {
@@ -64,7 +58,7 @@ function ViewContactInfo({ user }: Props) {
         <DataList.Item>
           <DataList.Label minWidth="88px">Phone Number</DataList.Label>
           <DataList.Value>
-            {formatPhoneNumberIntl(user.phoneNumber)}
+            {formatPhoneNumberIntl(user.phoneNumber as string)}
           </DataList.Value>
         </DataList.Item>
       </DataList.Root>
