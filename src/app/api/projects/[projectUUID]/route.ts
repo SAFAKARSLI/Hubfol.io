@@ -2,6 +2,7 @@ import { validateUUID } from "@/app/actions/utils";
 import { prisma } from "@/db";
 import { NextRequest } from "next/server";
 
+export const dynamic = "force-dynamic";
 // GET /api/projects/[projectUUID]
 export async function GET(
   request: NextRequest,
