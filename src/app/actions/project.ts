@@ -21,7 +21,7 @@ import { nanoid } from "nanoid";
 import { baseUrl, generateProjectSlug } from "@/utils";
 import _ from "lodash";
 import { uploadFile } from "./s3";
-import { PROJECT_CONTENT_TYPE } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 export const initiateProject = async (formData: FormData) => {
   const session = auth();
@@ -220,7 +220,7 @@ export const upsertFrameOptions = async (formData: FormData) => {
   // If the content is a file, upload it to S3
 
   const frameOptionsFormData = {
-    type: formData.get("type") as PROJECT_CONTENT_TYPE,
+    type: formData.get("type") as any,
     content: formData.get("content") as File | string,
   };
 
@@ -249,7 +249,7 @@ export const upsertFrameOptions = async (formData: FormData) => {
     const project = await prisma.project.update({
       where: { uuid: projectUUID },
       data: {
-        type: frameOptionsFormData.type,
+        type: frameOptionsFormData.type as any,
         content,
       },
     });
