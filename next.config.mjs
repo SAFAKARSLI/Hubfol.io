@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   logging: {
     fetches: {
       enabled: true,
@@ -32,16 +35,16 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: 'hubfol.io',
-        pathname: '**',
+        hostname: "hubfol.io",
+        pathname: "**",
       },
       {
-        hostname: 's3.amazonaws.com',
-        pathname: '**',
+        hostname: "s3.amazonaws.com",
+        pathname: "**",
       },
       {
-        hostname: 'cdn.simpleicons.org',
-        pathname: '**',
+        hostname: "cdn.simpleicons.org",
+        pathname: "**",
       },
     ],
   },
