@@ -94,7 +94,7 @@ export const upsertGeneralInfo = async (formData: FormData) => {
     iconLink = (
       await uploadFile(
         formData.get("iconLink") as File,
-        process.env.AWS_PROJECT_ICONS_BUCKET_NAME as string
+        process.env.NEXT_AWS_PROJECT_ICONS_BUCKET_NAME as string
       )
     ).data as string;
   }
@@ -237,7 +237,7 @@ export const upsertFrameOptions = async (formData: FormData) => {
     content = (
       await uploadFile(
         file,
-        process.env.AWS_FILE_PROJECTS_BUCKET_NAME as string
+        process.env.NEXT_AWS_FILE_PROJECTS_BUCKET_NAME as string
       )
     ).data as string;
   } else {

@@ -16,10 +16,6 @@ const Projects = async ({
   children,
   activeProjectId,
 }: ProjectsProps) => {
-  if (!username) {
-    redirect(`${baseUrl}/u/new-user`);
-  }
-
   var projects = await fetch(`${baseUrl}/api/projects?username=${username}`, {
     next: {
       tags: ["projects", "sections"],
