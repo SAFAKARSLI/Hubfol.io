@@ -1,21 +1,23 @@
-import { s3Client } from '@/aws/s3';
-import { GetObjectCommand } from '@aws-sdk/client-s3';
+import { s3Client } from "@/aws/s3";
+import { GetObjectCommand } from "@aws-sdk/client-s3";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const key = searchParams.get('key');
-  const bucketName = searchParams.get('bucketName');
+  const key = searchParams.get("key");
+  const bucketName = searchParams.get("bucketName");
 
   if (!key || !bucketName) {
-    return new Response('Bad Request', { status: 400 });
+    return new Response("Bad Request", { status: 400 });
   }
 
   const file = await getObject(key, bucketName);
 
   return new Response(file, {
     headers: {
-      'Content-Disposition': `attachment; filename="${file?.name}"`,
-      'Content-Type': 'application/octet-stream',
+      "Content-Disposition": `attachment; filename="${file?.name}"`,
+      "Content-Type": "application/octet-stream",
     },
   });
 }
@@ -32,7 +34,7 @@ const getObject = async (key: string, bucketName: string) => {
     return;
   }
   const file = new File([byteArray], Metadata?.filename as string, {
-    type: 'application/pdf',
+    type: "application/pdf",
   });
   return file;
 };

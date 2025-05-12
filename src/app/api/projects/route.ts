@@ -1,13 +1,15 @@
-import { validateUUID } from '@/app/actions/utils';
-import { prisma } from '@/db';
+import { validateUUID } from "@/app/actions/utils";
+import { prisma } from "@/db";
+
+export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const username = searchParams.get('username');
-  const init = searchParams.get('init');
+  const username = searchParams.get("username");
+  const init = searchParams.get("init");
 
   if (!username) {
-    return new Response('Bad Request. Missing username', { status: 400 });
+    return new Response("Bad Request. Missing username", { status: 400 });
   }
 
   try {
@@ -17,12 +19,12 @@ export async function GET(request: Request) {
     });
 
     if (!owner) {
-      return new Response('Not Found. User not found', { status: 404 });
+      return new Response("Not Found. User not found", { status: 404 });
     }
 
     const projects = await prisma.project.findMany({
       where: { ownerId: owner?.uuid },
-      orderBy: { createdAt: 'asc' },
+      orderBy: { createdAt: "asc" },
       // include: {
       //   sections: {
       //     orderBy: { createdAt: 'asc' },
@@ -37,7 +39,7 @@ export async function GET(request: Request) {
     return new Response(JSON.stringify(projects), { status: 200 });
   } catch (error) {
     console.error(error);
-    return new Response('Internal Server Error. Failed to fetch projects', {
+    return new Response("Internal Server Error. Failed to fetch projects", {
       status: 500,
     });
   } finally {
