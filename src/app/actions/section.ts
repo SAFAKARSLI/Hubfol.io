@@ -3,8 +3,6 @@ import { prisma } from "@/db";
 import { Content, Prisma } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
-import { authOptions } from "../api/auth/[...nextauth]/route";
-import { getServerSession } from "next-auth";
 import { validateUUID } from "./utils";
 import { checkForAuthority } from "./project";
 import { revalidateTag } from "next/cache";
@@ -149,18 +147,12 @@ export const upsertSections = async (formData: FormData) => {
 };
 
 export const initiateSection = async (projectUUID: string) => {
-  const session = await getServerSession(authOptions);
-
-  if (!session || !session.user) {
-    return {
-      status: 401,
-      message: "You must be logged in to initiate a section.",
-    };
-  }
+  const session = auth();
+  session.protect();
 
   try {
     const project = await prisma.project.findUnique({
-      where: { uuid: projectUUID, ownerId: session.user.uuid },
+      where: { uuid: projectUUID, ownerId: session.userId! },
     });
 
     if (!project) {

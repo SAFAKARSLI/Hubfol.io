@@ -5,7 +5,6 @@ import { Flex } from "@radix-ui/themes";
 import * as Form from "@radix-ui/react-form";
 import { FaDollarSign } from "react-icons/fa";
 import FormInput from "@/components/project-form/FormInput";
-import { Session } from "next-auth";
 import { createEmployee } from "@/app/actions/user";
 import SubmitButton from "@/components/SubmitButton";
 import CustomPhoneInput from "./CustomPhoneInput";
@@ -13,9 +12,7 @@ import { useRouter } from "next/navigation";
 import UsernameInput from "@/components/UsernameInput";
 import { useUser } from "@clerk/nextjs";
 
-type Props = {
-  session: Session | null;
-};
+type Props = {};
 
 function NewEmployeeForm({}: Props) {
   const session = useUser();

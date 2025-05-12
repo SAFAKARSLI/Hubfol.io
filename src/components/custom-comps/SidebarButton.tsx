@@ -1,35 +1,13 @@
 "use client";
 import React from "react";
-import {
-  Avatar,
-  Button,
-  Heading,
-  IconButton,
-  Separator,
-  Text,
-} from "@radix-ui/themes";
-import {
-  Cross1Icon,
-  Cross2Icon,
-  FileIcon,
-  HamburgerMenuIcon,
-  PersonIcon,
-  RocketIcon,
-  StarIcon,
-} from "@radix-ui/react-icons";
-import { baseUrl, preferredColorOptions } from "@/utils";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import NavLink from "../NavLink";
-import { Session } from "next-auth";
-import ProfileMenuDropdownButton from "../ProfileMenuDropdownButton";
+import { Avatar, Separator } from "@radix-ui/themes";
+import { Cross2Icon, RocketIcon } from "@radix-ui/react-icons";
+import { baseUrl } from "@/utils";
 import SidebarMenuLink from "../SidebarMenuLink";
 import SignOutButton from "../SignOutButton";
 import * as Portal from "@radix-ui/react-portal";
-
-import ReactDOM from "react-dom";
 import SidebarProfileOverview from "../SidebarProfileOverview";
-import { useUser } from "@clerk/clerk-react";
+import { useUser } from "@clerk/nextjs";
 
 type Props = {
   position: "left" | "right";
@@ -37,9 +15,6 @@ type Props = {
 
 function SidebarButton({ position }: Props) {
   const { user } = useUser();
-
-  console.log(user?.username);
-
   const [visible, setVisible] = React.useState(false);
   const menuPosition = position === "left" ? `left-0` : "right-0";
   const menuSlideAnimation =

@@ -2,9 +2,6 @@ import React, { useEffect } from "react";
 
 import { Box, Heading, Text, Separator, Link } from "@radix-ui/themes";
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getServerSession } from "next-auth";
-
 import Image from "next/image";
 import { baseUrl, preferredColorOptions } from "@/utils";
 
@@ -13,8 +10,6 @@ import NewEmployeeForm from "./NewEmployeeForm";
 type Props = {};
 
 async function page({}: Props) {
-  const session = await getServerSession(authOptions);
-
   return (
     <div className="bg-gray-2  max-w-[1200px] border-x border-gray-4  m-auto -lg:w-full min-h-full p-16">
       <Link href={`${baseUrl}/`}>
@@ -40,7 +35,7 @@ async function page({}: Props) {
             <Text size={"3"}>Please complete the form below to sign up.</Text>
           </div>
         </Box>
-        <NewEmployeeForm session={session} />
+        <NewEmployeeForm />
       </div>
     </div>
   );

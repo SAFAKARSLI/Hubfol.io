@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 import {
   Text,
   Dialog,
@@ -10,18 +10,16 @@ import {
   Link,
   Separator,
   IconButton,
-} from '@radix-ui/themes';
+} from "@radix-ui/themes";
 import {
   Cross1Icon,
   EnvelopeClosedIcon,
   PersonIcon,
-} from '@radix-ui/react-icons';
-import { getServerSession, User } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import Employee from '@/types/employee';
-import { FaDollarSign, FaMailBulk, FaPhone, FaPhoneAlt } from 'react-icons/fa';
-import { IconBase } from 'react-icons';
-import { formatPhoneNumberIntl } from 'react-phone-number-input';
+} from "@radix-ui/react-icons";
+import Employee from "@/types/employee";
+import { FaDollarSign, FaMailBulk, FaPhone, FaPhoneAlt } from "react-icons/fa";
+import { IconBase } from "react-icons";
+import { formatPhoneNumberIntl } from "react-phone-number-input";
 
 type Props = {
   user: Employee;
@@ -75,11 +73,11 @@ function ViewContactInfo({ user }: Props) {
 
   return (
     <Dialog.Root>
-      <Flex gap={'2'} align={'center'}>
+      <Flex gap={"2"} align={"center"}>
         <EnvelopeClosedIcon color="gray" />
         <Dialog.Trigger>
           <Text
-            size={'1'}
+            size={"1"}
             className="hover:underline cursor-pointer text-gray-11"
           >
             Contact
@@ -97,7 +95,7 @@ function ViewContactInfo({ user }: Props) {
           </Dialog.Close>
         </Flex>
         <Dialog.Description size="2" mb="4">
-          <Separator size={'4'} />
+          <Separator size={"4"} />
         </Dialog.Description>
         {renderUserInfo()}
       </Dialog.Content>

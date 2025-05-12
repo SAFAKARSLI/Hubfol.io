@@ -11,8 +11,6 @@ import { permanentRedirect, redirect } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { validateUUID } from "./utils";
-import { getServerSession, Session } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import { prisma } from "@/db";
 import { auth, User } from "@clerk/nextjs/server";
 import { revalidateTag } from "next/cache";

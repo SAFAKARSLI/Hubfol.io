@@ -1,7 +1,5 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { useUser } from "@clerk/nextjs";
 import { Avatar, Heading, Text } from "@radix-ui/themes";
-import { Session } from "next-auth";
 import React from "react";
 
 type Props = {};
