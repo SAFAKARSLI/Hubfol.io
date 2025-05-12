@@ -14,15 +14,6 @@ import { notFound } from "next/navigation";
 
 type Props = {};
 
-/*/
-  Username
-  Title
-  Full Name
-  Email
-  Status
-  Phone Number
-/*/
-
 async function page({ params }: SlugProps) {
   const { username } = params;
 
