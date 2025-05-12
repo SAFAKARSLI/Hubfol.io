@@ -1,9 +1,0 @@
-import React from 'react';
-
-type Props = {};
-
-function page({}: Props) {
-  return <div>templates page</div>;
-}
-
-export default page;

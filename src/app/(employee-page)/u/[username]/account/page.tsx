@@ -3,13 +3,14 @@ import React from "react";
 import { FaEdit } from "react-icons/fa";
 import SingleInputWithEditButton from "./(components)/SingleInputWithEditButton";
 import { Employee } from "@prisma/client";
-import { baseUrl } from "@/utils";
+import { baseUrl, isValidUsername } from "@/utils";
 import { SlugProps } from "@/types/slug";
 import { updateUserInfo } from "@/app/actions/user";
 import TextInput from "./(components)/TextInput";
 import UneditableField from "./(components)/UneditableField";
 import PhoneInputWithCountrySelect from "react-phone-number-input";
 import CustomPhoneInput from "@/app/(auth)/new-user/CustomPhoneInput";
+import { notFound } from "next/navigation";
 
 type Props = {};
 
@@ -25,29 +26,17 @@ type Props = {};
 async function page({ params }: SlugProps) {
   const { username } = params;
 
-  if (
-    typeof username !== "string" ||
-    !username.trim() ||
-    ["null", "undefined"].includes(username)
-  ) {
-    return (
-      <div className="max-w-[900px] m-auto py-8 px-5">
-        <div className="text-center flex flex-col gap-3">
-          <Heading as="h1" className="text-center -2xl:text-md text-wrap">
-            Account Information
-          </Heading>
-          <Text className="text-center text-gray-11 mt-2 ">
-            Username not found
-          </Text>
-        </div>
-      </div>
-    );
+  // Check for invalid username values
+  if (!isValidUsername(username)) {
+    notFound();
   }
 
-  const user = (await fetch(`${baseUrl}/api/users/${username}`, {
+  const user = await fetch(`${baseUrl}/api/users/${username}`, {
     next: { tags: ["users"] },
-  }).then((r) => r.json())) as Employee;
-
+  }).then((res) => {
+    if (res.status === 404) notFound();
+    return res.json();
+  });
   return (
     <div className="max-w-[900px] m-auto py-8 px-5">
       <div className="text-center flex flex-col gap-3">

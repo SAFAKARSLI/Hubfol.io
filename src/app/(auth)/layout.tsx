@@ -4,8 +4,6 @@ import { ClerkLoaded, ClerkLoading, ClerkProvider } from "@clerk/nextjs";
 import { Spinner, Theme } from "@radix-ui/themes";
 import { Metadata } from "next";
 
-import { SessionProvider } from "next-auth/react";
-
 export const metadata: Metadata = {
   title: "Hubfolio",
   description: "Showcase your portfolio",

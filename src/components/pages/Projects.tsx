@@ -1,8 +1,8 @@
 import React, { cloneElement } from "react";
 import Project from "@/types/project";
 import ProjectsSidePanel from "../ProjectsSidePanel";
-import { redirect } from "next/navigation";
-import { baseUrl } from "@/utils";
+import { notFound, redirect } from "next/navigation";
+import { baseUrl, isValidUsername } from "@/utils";
 import { baseMenuRadioItemPropDefs } from "@radix-ui/themes/dist/cjs/components/base-menu.props";
 
 interface ProjectsProps {
@@ -16,11 +16,16 @@ const Projects = async ({
   children,
   activeProjectId,
 }: ProjectsProps) => {
+  if (!isValidUsername(username)) {
+    notFound();
+  }
+
   var projects = await fetch(`${baseUrl}/api/projects?username=${username}`, {
     next: {
       tags: ["projects", "sections"],
     },
   }).then((r) => {
+    if (r.status === 404) notFound();
     if (r.body) return r.json();
   });
 

@@ -182,3 +182,13 @@ export const customThemeClerkAuthenticationComponents = {
     colorBackground: "#19191b",
   },
 };
+
+// utils/validators.ts
+
+export function isValidUsername(username: unknown): username is string {
+  return (
+    typeof username === "string" &&
+    username.trim() !== "" &&
+    !["null", "undefined"].includes(username)
+  );
+}
