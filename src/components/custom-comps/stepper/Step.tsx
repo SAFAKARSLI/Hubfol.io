@@ -1,7 +1,7 @@
-import { preferredColorOptions } from '@/utils';
-import { Badge, Box, Button } from '@radix-ui/themes';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React from 'react';
+import { preferredColorOptions } from "@/utils";
+import { Badge, Box, Button } from "@radix-ui/themes";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import React from "react";
 
 type Props = {
   title: string;
@@ -29,16 +29,16 @@ function Step({
 
   return (
     <Badge
-      variant={activeStepIndex === index ? 'solid' : 'outline'}
+      variant={activeStepIndex === index ? "solid" : "outline"}
       color={
         isActive || activeStepIndex > index
           ? preferredColorOptions.accentColor
-          : 'gray'
+          : "gray"
       }
-      className="h-10 w-1/5  rounded-full px-3"
-      size={'1'}
+      className="h-10 w-1/4  rounded-full px-3"
+      size={"1"}
     >
-      <p className="text-xxs truncate text-center w-full">
+      <p className="text-[10px] sm:text-xxs font-semibold line-clamp-2 text-center w-full">
         {index + 1}. {title}
       </p>
     </Badge>

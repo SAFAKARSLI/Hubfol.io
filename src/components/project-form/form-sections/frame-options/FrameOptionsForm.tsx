@@ -1,28 +1,28 @@
-'use client';
-import React, { useEffect } from 'react';
-import { Flex, Radio, Spinner, Text } from '@radix-ui/themes';
-import { set } from 'lodash';
-import FormInput from '../../FormInput';
-import FileInput from '../project-info/FileInput';
-import * as Form from '@radix-ui/react-form';
-import InputLabel from '../../InputLabel';
-import { baseUrl } from '@/utils';
-import { useParams } from 'next/navigation';
-import Project from '@/types/project';
+"use client";
+import React, { useEffect } from "react";
+import { Flex, Radio, Spinner, Text } from "@radix-ui/themes";
+import { set } from "lodash";
+import FormInput from "../../FormInput";
+import FileInput from "../project-info/FileInput";
+import * as Form from "@radix-ui/react-form";
+import InputLabel from "../../InputLabel";
+import { baseUrl } from "@/utils";
+import { useParams } from "next/navigation";
+import Project from "@/types/project";
 
 type Props = {
   editFormData: (key: string, value: string | Blob) => void;
 };
 
 function FrameOptionsForm({ editFormData }: Props) {
-  const [projectType, setProjectType] = React.useState('URL');
+  const [projectType, setProjectType] = React.useState("URL");
   const [project, setProject] = React.useState<Project>();
   const { projectUUID } = useParams();
 
   useEffect(() => {
     const fetchProject = async () => {
       const response = await fetch(`${baseUrl}/api/projects/${projectUUID}`, {
-        next: { tags: ['projects'] },
+        next: { tags: ["projects"] },
       });
       const data = (await response.json()) as Project;
       setProject(data);
@@ -45,8 +45,8 @@ function FrameOptionsForm({ editFormData }: Props) {
             <Radio
               name="type"
               value="URL"
-              onChange={() => setProjectType('URL')}
-              checked={projectType == 'URL'}
+              onChange={() => setProjectType("URL")}
+              checked={projectType == "URL"}
             />
             Web Link
           </Text>
@@ -57,19 +57,19 @@ function FrameOptionsForm({ editFormData }: Props) {
             <Radio
               name="type"
               value="FILE"
-              onChange={() => setProjectType('FILE')}
-              checked={projectType == 'FILE'}
+              onChange={() => setProjectType("FILE")}
+              checked={projectType == "FILE"}
             />
             File
           </Text>
         </Flex>
       </Flex>
-      {projectType === 'URL' ? (
+      {projectType === "URL" ? (
         <FormInput
           name="content"
           placeholder="Enter the URL (e.g. https://hubfol.io)"
           message="You must provide a valid URL. (must include http:// or https://)"
-          defaultValue={project?.type == 'URL' ? project?.content : ''}
+          defaultValue={project?.type == "URL" ? project?.content : ""}
           type="url"
         />
       ) : (
@@ -79,9 +79,7 @@ function FrameOptionsForm({ editFormData }: Props) {
             formDataSlug="content"
             accept=".pdf"
             editFormData={editFormData!}
-            defaultValue={
-              project?.type == 'FILE' ? project?.content : undefined
-            }
+            defaultValue={project?.type == "FILE" ? project?.content : ""}
           />
         </Form.Field>
       )}

@@ -57,8 +57,6 @@ function UsernameInput({ setUserNameValid }: Props) {
             } else if (r.status == 200) {
               setStatus("username-taken");
               setUserNameValid(false);
-            } else {
-              console.log(r);
             }
           }
         );

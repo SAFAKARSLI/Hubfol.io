@@ -3,13 +3,13 @@ import {
   PutObjectCommand,
   DeleteObjectCommand,
   GetObjectCommand,
-} from '@aws-sdk/client-s3';
-import { v4 as uuidv4 } from 'uuid';
-import { s3Client } from '@/aws/s3';
-import { Prisma } from '@prisma/client';
-import { Image } from '@/types/section';
-import { InputJsonArray, InputJsonValue } from '@prisma/client/runtime/library';
-import { Metadata } from 'libphonenumber-js';
+} from "@aws-sdk/client-s3";
+import { v4 as uuidv4 } from "uuid";
+import { s3Client } from "@/aws/s3";
+import { Prisma } from "@prisma/client";
+import { Image } from "@/types/section";
+import { InputJsonArray, InputJsonValue } from "@prisma/client/runtime/library";
+import { Metadata } from "libphonenumber-js";
 
 export const uploadFile = async (file: File, bucketName: string) => {
   try {
@@ -27,14 +27,13 @@ export const uploadFile = async (file: File, bucketName: string) => {
     };
 
     const data = await s3Client.send(new PutObjectCommand(uploadParams));
-    console.log('S3 CLIENT FILE', data);
     return {
       status: 200,
       data: `${uniqueKey}`,
     };
   } catch (error) {
-    console.error('Error uploading file:', error);
-    return { status: 500, message: 'Error uploading file.' };
+    console.error("Error uploading file:", error);
+    return { status: 500, message: "Error uploading file." };
   } finally {
     await s3Client.destroy();
   }
@@ -62,6 +61,6 @@ export const eliminateUnusedFiles = async (
     (file) => !newUrlList.includes(file.url as string)
   );
   for (const file of filesToDelete) {
-    await deleteFile(file.url?.split('/').pop() as string, bucketName);
+    await deleteFile(file.url?.split("/").pop() as string, bucketName);
   }
 };

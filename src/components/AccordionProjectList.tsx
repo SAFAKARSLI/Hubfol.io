@@ -3,13 +3,15 @@ import * as Accordion from "@radix-ui/react-accordion";
 import AccordionProjectItem from "./AccordionProjectItem";
 import Project from "@/types/project";
 import { baseUrl } from "@/utils";
+import Section from "@/types/section";
 
 type Props = {
   projects: Project[];
   activeProjectId: string;
+  sections: Section[] | null;
 };
 
-function AccordionProjectList({ projects, activeProjectId }: Props) {
+function AccordionProjectList({ projects, activeProjectId, sections }: Props) {
   return (
     <Accordion.Root
       type="single"
@@ -23,6 +25,7 @@ function AccordionProjectList({ projects, activeProjectId }: Props) {
               key={i}
               activeProjectId={activeProjectId}
               project={p}
+              sections={sections}
             />
           );
         })}

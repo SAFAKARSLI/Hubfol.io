@@ -6,7 +6,6 @@ import { auth } from "@clerk/nextjs/server";
 
 function page() {
   const session = auth();
-  console.log(session);
 
   if (session)
     return (

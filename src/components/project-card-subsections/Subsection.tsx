@@ -34,16 +34,16 @@ const Subsection = ({
   };
 
   return (
-    <div className="flex flex-col gap-2">
-      <Heading as="h4" className="text-lg -2xl:text-md text-wrap">
+    <div className="flex flex-col gap-1">
+      <Heading as="h4" className="text-md -2xl:text-sm text-wrap">
         {title}
       </Heading>
       {description && (
-        <Text as="p" className="text-gray-9 mb-1">
+        <Text as="p" className="text-gray-9 mb-1 text-xs">
           {description}
         </Text>
       )}
-      <div className={`${width}`}>{renderContent()}</div>
+      <div className={`${width} pt-3`}>{renderContent()}</div>
     </div>
   );
 };

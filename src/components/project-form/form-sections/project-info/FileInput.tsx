@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { allowedIconTypes, baseUrl } from '@/utils';
-import { Cross1Icon, FileIcon, UploadIcon } from '@radix-ui/react-icons';
-import React, { useEffect, useState } from 'react';
-import * as Form from '@radix-ui/react-form';
-import '@/app/globals.css';
-import { IconButton, Spinner } from '@radix-ui/themes';
+import { allowedIconTypes, baseUrl } from "@/utils";
+import { Cross1Icon, FileIcon, UploadIcon } from "@radix-ui/react-icons";
+import React, { useEffect, useState } from "react";
+import * as Form from "@radix-ui/react-form";
+import "@/app/globals.css";
+import { IconButton, Spinner } from "@radix-ui/themes";
 
 type Props = {
   editFormData: (key: string, value: string | Blob) => void;
@@ -30,18 +30,17 @@ function FileInput({
       if (defaultValue?.length! > 0) {
         const response = await fetch(
           baseUrl +
-            '/api/static-file-provider?key=' +
+            "/api/static-file-provider?key=" +
             defaultValue +
-            '&bucketName=' +
+            "&bucketName=" +
             bucketName
         );
-        console.log(response);
         const buffer = await response.arrayBuffer();
-        const fileName = response.headers.get('Content-Disposition')
-          ? response.headers.get('Content-Disposition')?.split('=')[1]
-          : defaultValue + '.pdf';
+        const fileName = response.headers.get("Content-Disposition")
+          ? response.headers.get("Content-Disposition")?.split("=")[1]
+          : defaultValue + ".pdf";
         const file = new File([buffer], fileName as string, {
-          type: 'application/pdf',
+          type: "application/pdf",
         });
         setFile(file);
       }
@@ -72,7 +71,7 @@ function FileInput({
   return (
     <div className="mt-1">
       {file ? (
-        accept != '.pdf' ? (
+        accept != ".pdf" ? (
           <div className="flex items-center gap-1">
             <div className="h-[4rem] w-[4rem] relative">
               <img
@@ -80,7 +79,7 @@ function FileInput({
                 alt="project-icon"
                 width={10}
                 height={10}
-                style={{ objectFit: 'contain' }}
+                style={{ objectFit: "contain" }}
                 className="bg-gray-1 border border-gray-5 w-full h-full rounded p-2"
               />
             </div>
@@ -120,7 +119,7 @@ function FileInput({
             <IconButton
               variant="surface"
               type="button"
-              size={'4'}
+              size={"4"}
               onClick={() => fileInputRef.current?.click()}
             >
               <UploadIcon className="h-5 w-5" />

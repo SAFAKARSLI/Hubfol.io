@@ -2,50 +2,26 @@
 
 import Project from "@/types/project";
 import ProjectConsole from "./ProjectConsole";
-import {
-  Box,
-  DropdownMenu,
-  IconButton,
-  Separator,
-  Spinner,
-  Text,
-} from "@radix-ui/themes";
+import { Box, IconButton, Separator, Text } from "@radix-ui/themes";
 import * as Select from "@radix-ui/react-select";
 
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
   CheckIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-  CodeIcon,
   DesktopIcon,
   DimensionsIcon,
-  DotsHorizontalIcon,
   ExternalLinkIcon,
-  LaptopIcon,
   Link1Icon,
   MobileIcon,
   ReloadIcon,
-  SizeIcon,
-  StarFilledIcon,
 } from "@radix-ui/react-icons";
 import React, { useEffect, useRef, useState } from "react";
 import classnames from "classnames";
-import { set } from "lodash";
 import { useRouter } from "next/navigation";
-import { TbDeviceIpad } from "react-icons/tb";
 import { FaTabletAlt } from "react-icons/fa";
 import { baseUrl } from "@/utils";
-
-type Props = {
-  project?: Project;
-};
-
-type SelectItemProps = {
-  children: React.ReactNode;
-  className?: string;
-} & React.ComponentPropsWithoutRef<typeof Select.Item>;
+import Section from "@/types/section";
 
 type History = {
   back: string[];
@@ -53,27 +29,12 @@ type History = {
   forward: string[];
 };
 
-const SelectItem = React.forwardRef<HTMLDivElement, SelectItemProps>(
-  ({ children, className, ...props }, forwardedRef) => {
-    return (
-      <Select.Item
-        className={classnames(
-          "relative flex h-[2.5rem] truncate select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none text-gray-11 data-[disabled]:pointer-events-none data-[highlighted]:bg-violet-9 data-[disabled]:text-mauve-8 data-[highlighted]:text-violet1 data-[highlighted]:outline-none",
-          className
-        )}
-        {...props}
-        ref={forwardedRef}
-      >
-        <Select.ItemText>{children}</Select.ItemText>
-        <Select.ItemIndicator className="absolute left-0 inline-flex w-[25px] items-center justify-center">
-          <CheckIcon />
-        </Select.ItemIndicator>
-      </Select.Item>
-    );
-  }
-);
+type Props = {
+  project?: Project;
+  sections: Section[];
+};
 
-function ProjectFrame({ project }: Props) {
+function ProjectFrame({ project, sections }: Props) {
   const [file, setFile] = useState<File>();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [iframeDimensions, setIframeDimensions] = useState({
@@ -120,14 +81,11 @@ function ProjectFrame({ project }: Props) {
     const iframe = iframeRef.current;
 
     if (!iframe) {
-      console.log("iframe not found");
       return;
     }
 
     // Listen for messages from the iframe
     const handleMessage = (event: MessageEvent) => {
-      console.log(event);
-
       // Ensure the message comes from the correct iframe origin
       if (event.origin !== "http://localhost:5050") return;
 
@@ -195,7 +153,7 @@ function ProjectFrame({ project }: Props) {
   }, [iframeDimensions]);
 
   return project?.type == "URL" ? (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col" id="project-frame">
       <div className="h-[6rem] mx-5 ship flex-none justify-center flex flex-col justify-between py-3">
         <div className=" bg-gray-2 h-[2.5rem] rounded-full flex items-center border border-gray-4 ">
           {/* <Text className="text-gray-10 flex  items-center ml-5">
@@ -372,10 +330,10 @@ function ProjectFrame({ project }: Props) {
           height={iframeDimensions.height}
           src={history.current}
           key={project!.uuid}
-          className="min-w-[375px] min-h-[600px] rounded m-auto border border-gray-3"
+          className=" min-h-[600px] rounded m-auto border border-gray-3"
         />
       </Box>
-      <ProjectConsole project={project!} />
+      <ProjectConsole project={project!} sections={sections} />
       {error && (
         <p className=" absolute top-0 w-full bg-red-300 h-[3rem]">
           Error: Unable to communicate with the iframe.

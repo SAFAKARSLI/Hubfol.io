@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Flex,
   TextField,
@@ -6,20 +6,20 @@ import {
   Badge,
   Tooltip,
   Text,
-} from '@radix-ui/themes';
-import { MagnifyingGlassIcon, Cross2Icon } from '@radix-ui/react-icons';
-import SearchResultList from './SearchResultList';
-import { useEffect, useState } from 'react';
-import { baseUrl, defultSearchTechValues } from '@/utils';
-import { Brand } from '@/types/brand';
-import TechCard from './TechCard';
+} from "@radix-ui/themes";
+import { MagnifyingGlassIcon, Cross2Icon } from "@radix-ui/react-icons";
+import SearchResultList from "./SearchResultList";
+import { useEffect, useState } from "react";
+import { baseUrl, defultSearchTechValues } from "@/utils";
+import Brand from "@/types/brand";
+import TechCard from "./TechCard";
 type Props = {
   initialValue?: any[];
 };
 
 function SearchTechInput({ initialValue = [] }: Props) {
-  const [query, setQuery] = useState('');
-  const [queryBounce, setQueryBounce] = useState('');
+  const [query, setQuery] = useState("");
+  const [queryBounce, setQueryBounce] = useState("");
   const [search, setSearch] = useState({
     loading: false,
     resultVisible: false,
@@ -28,8 +28,7 @@ function SearchTechInput({ initialValue = [] }: Props) {
   const [techStack, setTechStack] = React.useState<Brand[]>(initialValue);
 
   const handleAddTechStack = (brandName: string, slug: string) => {
-    setQueryBounce('');
-    console.log(techStack);
+    setQueryBounce("");
     // add the tech if not existing already on a single line
     if (!techStack.find((t) => t.slug === slug) && techStack.length < 17) {
       setTechStack([...techStack, { brand_name: brandName, slug }]);
@@ -44,9 +43,9 @@ function SearchTechInput({ initialValue = [] }: Props) {
       }
     }, 700);
 
-    if (queryBounce === '') {
-      setQuery('');
-      setSearch({ ...search, resultVisible: false, result: [] });
+    if (queryBounce === "") {
+      setQuery("");
+      setSearch({ loading: false, resultVisible: false, result: [] });
     }
 
     return () => {
@@ -64,7 +63,7 @@ function SearchTechInput({ initialValue = [] }: Props) {
         )) as Brand[];
         setSearch({ ...search, result: res, resultVisible: true });
       } catch (error) {
-        console.error('Error fetching techs:', error);
+        console.error("Error fetching techs:", error);
       }
     };
 
@@ -88,7 +87,7 @@ function SearchTechInput({ initialValue = [] }: Props) {
           onBlur={(e) => {
             setSearch({ ...search, resultVisible: false });
           }}
-          size={'2'}
+          size={"2"}
           value={queryBounce}
           onChange={(e) => {
             setQueryBounce(e.target.value);
@@ -107,7 +106,7 @@ function SearchTechInput({ initialValue = [] }: Props) {
             <TextField.Slot>
               <Cross2Icon
                 className="cursor-pointer hover:bg-gray-3"
-                onClick={() => setQueryBounce('')}
+                onClick={() => setQueryBounce("")}
               />
             </TextField.Slot>
           )}

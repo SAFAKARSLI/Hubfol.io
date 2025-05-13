@@ -27,29 +27,12 @@ const supabase = createClient(supabaseUrl, supabaseKey, {
   },
 });
 
-// Test the connection
-// supabase
-//   .from("Employee")
-//   .select("count")
-//   .then(({ data, error }) => {
-//     if (error) {
-//       console.error("Supabase connection test failed:", error);
-//     } else {
-//       console.log("Supabase connection successful");
-//     }
-//   });
-
 export class EmployeeRepository implements IEmployeeRepository {
   async findEmployeeByUsername(username: string): Promise<Employee> {
     const { data, error } = await supabase
       .from("Employee")
       .select("*")
       .eq("username", username);
-
-    console.log(
-      `findEmployeeByUsername(): Found employee with username:${username}:`,
-      data
-    );
 
     if (error) {
       throw error;
@@ -220,10 +203,18 @@ export class SectionRepository implements ISectionRepository {
   }
 
   async findSectionsByProjectSlug(projectSlug: string): Promise<Section[]> {
+    const project = await new ProjectRepository().findProjectBySlug(
+      projectSlug
+    );
+
+    if (!project) {
+      return [];
+    }
+
     const { data, error } = await supabase
       .from("Section")
       .select("*")
-      .eq("projectSlug", projectSlug);
+      .eq("projectId", project.uuid);
 
     if (error) {
       throw error;

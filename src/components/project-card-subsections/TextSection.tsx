@@ -1,5 +1,5 @@
-import { Text } from '@radix-ui/themes';
-import React from 'react';
+import { Text } from "@radix-ui/themes";
+import React from "react";
 
 type Props = {
   text: string;
@@ -7,8 +7,8 @@ type Props = {
 
 const TextSection: React.FC<Props> = ({ text }) => {
   return (
-    <Text className="text-gray-11 text-md" as="p">
-      {text.split('\n').map((line, index) => (
+    <Text className="text-gray-11 text-sm" as="p">
+      {text.split("\n").map((line, index) => (
         <React.Fragment key={index}>
           {line}
           <br />

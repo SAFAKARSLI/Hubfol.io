@@ -59,7 +59,7 @@ function SectionsTable({}: Props) {
       <Button
         type="button"
         variant="soft"
-        className="w-1/4  h-[2.5rem] float-right"
+        className="w-full sm:w-1/4 h-[2.5rem]"
         loading={loading}
         onClick={() => {
           if (sections.length >= 10) {

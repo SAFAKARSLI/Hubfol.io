@@ -1,13 +1,12 @@
-import FormWrapper from '@/components/FormWrapper';
-import FormSection from '@/components/project-form/form-sections/FormSection';
-import SectionForm from '@/components/project-form/form-sections/project-sections/SectionForm';
-import { SlugProps } from '@/types/slug';
-import React from 'react';
+import FormWrapper from "@/components/FormWrapper";
+import FormSection from "@/components/project-form/form-sections/FormSection";
+import SectionForm from "@/components/project-form/form-sections/project-sections/SectionForm";
+import { SlugProps } from "@/types/slug";
+import React from "react";
 
 type Props = {};
 
 function page({ params, searchParams }: SlugProps) {
-  console.log(searchParams!.initialize);
   return (
     <FormWrapper>
       <FormSection

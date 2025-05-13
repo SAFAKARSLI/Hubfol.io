@@ -17,7 +17,6 @@ const sectionRepository = new SectionRepository();
 const projectRepository = new ProjectRepository();
 
 const processContent = async (formData: FormData) => {
-  console.log(formData);
   const contentType = formData.get(
     "contentType"
   ) as Database["public"]["Enums"]["Content"];
@@ -28,7 +27,6 @@ const processContent = async (formData: FormData) => {
     const content = formData.get("content") as string;
     return JSON.parse(content);
   } else if (contentType === "CAROUSEL") {
-    console.log("!! FormData Keys", Array.from(formData.keys()));
     const images = Array.from(formData.keys()).filter((key) =>
       key.startsWith("images")
     );

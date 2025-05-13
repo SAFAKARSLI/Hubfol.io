@@ -1,27 +1,15 @@
 import { validateUUID } from "@/utils";
 import { SectionRepository } from "@/db";
-import { revalidateTag } from "next/cache";
 
 const sectionRepository = new SectionRepository();
 
-export const revalidate = 60;
-
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const projectUUID = searchParams.get("projectUUID");
-
-  if (!validateUUID(projectUUID as string)) {
-    return new Response(
-      "Bad request. Invalid project identifier provided: " + projectUUID,
-      {
-        status: 400,
-      }
-    );
-  }
+  const projectSlug = searchParams.get("projectSlug");
 
   try {
-    const sections = await sectionRepository.findSectionsByProjectUuid(
-      projectUUID as string
+    const sections = await sectionRepository.findSectionsByProjectSlug(
+      projectSlug as string
     );
 
     if (!sections) {

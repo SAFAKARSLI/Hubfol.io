@@ -187,8 +187,6 @@ export const deleteProject = async (projectUUID: string) => {
 export const upsertFrameOptions = async (formData: FormData) => {
   auth().protect();
 
-  console.log(formData);
-
   const projectUUID = formData.get("projectId") as string;
 
   // Security checks
@@ -211,9 +209,6 @@ export const upsertFrameOptions = async (formData: FormData) => {
   };
 
   var content = "";
-
-  console.log("!! FormData", formData);
-  console.log("!! Frame Options Form Data", frameOptionsFormData);
   if (
     typeof formData.get("content") === "object" &&
     frameOptionsFormData.type === "FILE"

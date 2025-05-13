@@ -11,13 +11,14 @@ import EmployeeSidebarButton from "./custom-comps/EmployeeSidebarButton";
 import { baseUrl } from "@/utils";
 import Project from "@/types/project";
 import Employee from "@/types/employee";
+import Section from "@/types/section";
 
 interface TopBarProps {
   params: Params;
 }
 
 async function TopBar({ params }: TopBarProps) {
-  const { username, projectSlug } = params;
+  const { username } = params;
   const { userId } = auth();
   const clerkUser = await getUser(userId as string);
 
@@ -32,7 +33,7 @@ async function TopBar({ params }: TopBarProps) {
 
   return (
     <>
-      <Flex className="border-b border-gray-5 bg-gray-0 justify-end items-center h-[3.5rem] px-2">
+      <Flex className="border-b border-gray-5 bg-gray-0 justify-end items-center h-[3.5rem] px-5">
         <div className="flex justify-between w-full items-center">
           <div className="hidden xl:flex">
             <NavigationLinks authenticated={clerkUser?.username == username} />

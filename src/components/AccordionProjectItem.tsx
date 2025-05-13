@@ -19,48 +19,51 @@ import Project from "@/types/project";
 interface AccordionProjectItemProps {
   activeProjectId: string;
   project: Project;
+  sections: Section[] | null;
 }
 
 const AccordionProjectItem = ({
   activeProjectId,
   project,
-  project: { name, tagline, iconLink, uuid, slug },
+  sections,
 }: AccordionProjectItemProps) => {
+  const { name, tagline, iconLink, uuid, slug } = project;
   const { username } = useParams();
   const { user } = useUser();
   const router = useRouter();
   const cardRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
-  const [sections, setSections] = useState<Section[] | undefined>();
-  const [itemValue, setItemValue] = useState<string>("");
 
-  useEffect(() => {
-    const fetchProject = async () => {
-      const res = await fetch(`${baseUrl}/api/sections?projectUUID=${uuid}`, {
-        next: {
-          tags: ["sections"],
-        },
-      });
-      const sections = await res.json();
-      setSections(sections);
-    };
-
-    if (activeProjectId && activeProjectId === slug) {
-      cardRef.current?.scrollIntoView({
-        behavior: "instant",
-        block: "start",
-        inline: "nearest",
-      });
-      fetchProject();
+  function renderSections() {
+    if (sections && sections?.length > 0) {
+      return (
+        <div className="p-6">
+          {sections?.map((s, i) => {
+            return (
+              <Subsection
+                key={i}
+                title={s.title}
+                description={s.description}
+                contentType={s.contentType}
+                content={s.content}
+              />
+            );
+          })}
+        </div>
+      );
+    } else if (sections && sections?.length == 0) {
+      return (
+        <Text size="2" as="p" className="italic text-gray-10 text-sm">
+          No section found
+        </Text>
+      );
+    } else {
+      return null;
     }
-  }, [activeProjectId]);
-
-  useEffect(() => {
-    if (typeof sections == "object") setItemValue(slug);
-  }, [sections]);
+  }
 
   return (
-    <Accordion.Item value={itemValue} asChild>
+    <Accordion.Item value={slug} asChild>
       <div
         className={`rounded data-[state=open]:border overflow-hidden data-[state=open]:shadow-gray-0 border-gray-3 data-[state=open]:shadow-lg w-full m-auto`}
       >
@@ -121,29 +124,7 @@ const AccordionProjectItem = ({
         <Accordion.Content asChild>
           <div className="bg-gray-0 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp">
             <ScrollArea type="auto" className="max-h-[60vh]">
-              <div className="p-6">
-                {sections?.length ? (
-                  sections?.map((s, i) => {
-                    return (
-                      <div key={i}>
-                        <Subsection
-                          title={s.title}
-                          description={s.description}
-                          contentType={s.contentType}
-                          content={s.content}
-                        />
-                        {i == sections.length - 1 ? null : (
-                          <Separator size={"4"} className="my-5" />
-                        )}
-                      </div>
-                    );
-                  })
-                ) : (
-                  <Text size="2" as="p" className="italic text-gray-10 text-sm">
-                    No section found
-                  </Text>
-                )}
-              </div>
+              {renderSections()}
             </ScrollArea>
           </div>
         </Accordion.Content>

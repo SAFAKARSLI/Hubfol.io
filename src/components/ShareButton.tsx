@@ -11,10 +11,6 @@ type Props = {};
 function ShareButton({}: Props) {
   return (
     <>
-      <Portal.Root>
-        <div className="absolute right-0 bottom-0">Hello</div>
-      </Portal.Root>
-
       <div
         className="m-0 font-medium flex gap-1"
         onClick={() => {

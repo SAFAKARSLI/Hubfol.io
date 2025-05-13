@@ -38,31 +38,52 @@ const Projects = async ({
       console.error("Error fetching projects:", e);
     });
 
-  let project: Project | undefined;
+  var sections = null;
   if (activeProjectId) {
-    project = projects.find(
-      (project: Project) => project.slug === activeProjectId
+    sections = await fetch(
+      `${baseUrl}/api/sections?projectSlug=${activeProjectId}`,
+      {
+        next: {
+          tags: ["sections"],
+        },
+      }
+    )
+      .then((r) => {
+        if (r.status === 200) {
+          return r.json();
+        }
+      })
+      .catch((e) => {
+        console.error("Error fetching sections:", e);
+        return null;
+      });
+
+    let project: Project | undefined;
+    if (activeProjectId) {
+      project = projects.find(
+        (project: Project) => project.slug === activeProjectId
+      );
+
+      if (!project) notFound();
+    }
+
+    return (
+      <div className="flex ">
+        <div className="flex-none border-r border-gray-4 bg-gray-1 hidden xl:block">
+          <ProjectsSidePanel
+            username={username}
+            projects={projects}
+            sections={sections}
+            user={user}
+            projectSlug={activeProjectId as string}
+          />
+        </div>
+
+        <div className="flex-1 bg-gray-0 relative">
+          {cloneElement(children as React.ReactElement, { project, sections })}
+        </div>
+      </div>
     );
-
-    if (!project) notFound();
   }
-
-  return (
-    <div className="flex ">
-      <div className="flex-none border-r border-gray-4 bg-gray-1 hidden xl:block">
-        <ProjectsSidePanel
-          username={username}
-          projects={projects}
-          user={user}
-          projectSlug={activeProjectId as string}
-        />
-      </div>
-
-      <div className="flex-1 bg-gray-0 relative">
-        {cloneElement(children as React.ReactElement, { project })}
-      </div>
-    </div>
-  );
 };
-
 export default Projects;

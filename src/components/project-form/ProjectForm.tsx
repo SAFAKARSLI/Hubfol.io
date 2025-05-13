@@ -49,7 +49,7 @@ function ProjectForm({ activeStepIndex }: Props) {
           content: <FrameOptionsForm editFormData={() => {}} />,
           onComplete: upsertFrameOptions,
           fetchResource: "",
-          callback: `${baseUrl}/u/${username}/projects?message=project-success`,
+          callback: `${baseUrl}/u/${username}/projects`,
           slug: "frame-options",
           index: 2,
         },
