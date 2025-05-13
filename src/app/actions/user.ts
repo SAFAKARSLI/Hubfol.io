@@ -42,6 +42,13 @@ export const updateUserInfo = async (formData: FormData) => {
       });
     }
 
+    if (fieldName === "name") {
+      await clerkClient().users.updateUser(userId, {
+        firstName: data.split(" ").slice(0, -1).join(" "),
+        lastName: data.split(" ").pop(),
+      });
+    }
+
     await employeeRepository.updateEmployee(user.id, {
       [fieldName]: data,
     });

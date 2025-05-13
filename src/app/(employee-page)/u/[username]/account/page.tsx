@@ -1,14 +1,13 @@
-import { Button, Heading, IconButton, Separator, Text } from "@radix-ui/themes";
+import { Heading, Separator, Text } from "@radix-ui/themes";
 import React from "react";
-import { FaEdit } from "react-icons/fa";
+
 import SingleInputWithEditButton from "./(components)/SingleInputWithEditButton";
-import { Employee } from "@prisma/client";
 import { baseUrl, isValidUsername } from "@/utils";
 import { SlugProps } from "@/types/slug";
 import { updateUserInfo } from "@/app/actions/user";
 import TextInput from "./(components)/TextInput";
 import UneditableField from "./(components)/UneditableField";
-import PhoneInputWithCountrySelect from "react-phone-number-input";
+
 import CustomPhoneInput from "@/app/(auth)/new-user/CustomPhoneInput";
 import { notFound } from "next/navigation";
 

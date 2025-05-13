@@ -8,10 +8,7 @@ function SidebarProfileOverview({}: Props) {
   const { user } = useUser();
 
   return (
-    <div
-      // onClick={() => setVisible(false)}
-      className="flex h-10"
-    >
+    <div className="flex h-10">
       <Avatar
         className="mr-3"
         height={32}
