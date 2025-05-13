@@ -47,15 +47,15 @@ function ProjectConsole({ project, sections }: Props) {
             <Accordion.Item value={project.slug!}>
               <Accordion.Trigger asChild>
                 <Button
-                  color={preferredColorOptions.accentColor}
-                  className="rounded-t rounded-b-none h-[1.8rem] w-full"
+                  color={"indigo"}
+                  className="rounded-t rounded-b-none h-[1.8rem] w-full font-semibold"
                   size={"1"}
                   onClick={handleConsoleOpen}
                 >
                   {isConsoleOpen ? (
-                    <div className="flex gap-1 m-auto ">
+                    <>
                       <ChevronDownIcon /> Close Console
-                    </div>
+                    </>
                   ) : (
                     <div className="flex gap-1 m-auto">
                       <ChevronUpIcon /> View Project Info

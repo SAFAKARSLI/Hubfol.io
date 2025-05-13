@@ -15,7 +15,7 @@ export default async function page({ params, searchParams }: SlugProps) {
 
   return (
     <Projects username={username}>
-      <NoActiveProjectBanner error={searchParams!.error} />
+      <NoActiveProjectBanner />
     </Projects>
   );
 }

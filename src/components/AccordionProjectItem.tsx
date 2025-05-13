@@ -122,7 +122,7 @@ const AccordionProjectItem = ({
         </Accordion.Trigger>
 
         <Accordion.Content asChild>
-          <div className="bg-gray-0 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp">
+          <div className="bg-gray-1 data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp">
             <ScrollArea type="auto" className="max-h-[60vh]">
               {renderSections()}
             </ScrollArea>

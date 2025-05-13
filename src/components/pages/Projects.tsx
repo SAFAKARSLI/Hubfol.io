@@ -42,7 +42,7 @@ const Projects = async ({
 
   // If there are no projects, show the banner
   if (!projects || projects.length === 0) {
-    return <NoActiveProjectBanner error={"NO_PROJECTS"} />;
+    return <NoActiveProjectBanner />;
   }
 
   var sections = null;
