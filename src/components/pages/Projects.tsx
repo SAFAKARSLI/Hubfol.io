@@ -4,6 +4,7 @@ import ProjectsSidePanel from "../ProjectsSidePanel";
 import { notFound, redirect } from "next/navigation";
 import { baseUrl, isValidUsername } from "@/utils";
 import ProjectConsole from "../ProjectConsole";
+import NoActiveProjectBanner from "../NoActiveProjectBanner";
 
 interface ProjectsProps {
   username: string;
@@ -39,7 +40,13 @@ const Projects = async ({
       console.error("Error fetching projects:", e);
     });
 
+  // If there are no projects, show the banner
+  if (!projects || projects.length === 0) {
+    return <NoActiveProjectBanner error={"NO_PROJECTS"} />;
+  }
+
   var sections = null;
+  let project: Project | undefined;
   if (activeProjectId) {
     sections = await fetch(
       `${baseUrl}/api/sections?projectSlug=${activeProjectId}`,
@@ -59,32 +66,33 @@ const Projects = async ({
         return null;
       });
 
-    let project: Project | undefined;
-    if (activeProjectId) {
-      project = projects.find(
-        (project: Project) => project.slug === activeProjectId
-      );
-
-      if (!project) notFound();
-    }
-
-    return (
-      <div className="flex ">
-        <div className="flex-none border-r border-gray-4 bg-gray-1 hidden xl:block">
-          <ProjectsSidePanel
-            username={username}
-            projects={projects}
-            sections={sections}
-            user={user}
-            projectSlug={activeProjectId as string}
-          />
-        </div>
-        <div className="flex-1 bg-gray-0 relative">
-          {cloneElement(children as React.ReactElement, { project, sections })}
-        </div>
-        <ProjectConsole project={project!} sections={sections} />;
-      </div>
+    project = projects.find(
+      (project: Project) => project.slug === activeProjectId
     );
+
+    // If activeProjectId is provided but not found, show the banner
+    if (!project) {
+      return <NoActiveProjectBanner />;
+    }
   }
+
+  return (
+    <div className="flex">
+      <div className="flex-none border-r border-gray-4 bg-gray-1 hidden xl:block w-[26rem]">
+        <ProjectsSidePanel
+          username={username}
+          projects={projects}
+          sections={sections}
+          user={user}
+          projectSlug={activeProjectId as string}
+        />
+      </div>
+      <div className="flex-1 w-full h-full bg-gray-0 relative">
+        {cloneElement(children as React.ReactElement, { project, sections })}
+      </div>
+      {project && <ProjectConsole project={project} sections={sections} />}
+    </div>
+  );
 };
+
 export default Projects;

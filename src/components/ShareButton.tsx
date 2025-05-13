@@ -11,13 +11,7 @@ type Props = {};
 function ShareButton({}: Props) {
   return (
     <>
-      <div
-        className="m-0 font-medium flex gap-1"
-        onClick={() => {
-          navigator.clipboard.writeText(window.location.href);
-          toast.success("Copied to clipboard");
-        }}
-      >
+      <div className="m-0 font-medium flex gap-1">
         <Share1Icon /> Share
       </div>
     </>

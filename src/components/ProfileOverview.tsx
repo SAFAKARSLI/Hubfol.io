@@ -11,6 +11,8 @@ import ShareButton from "./ShareButton";
 import { useUser } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
 import Employee from "@/types/employee";
+import toast from "react-hot-toast";
+import { baseUrl } from "@/utils";
 
 interface ProfileOverviewProps {
   user: Employee;
@@ -66,7 +68,12 @@ const ProfileOverview = ({ user }: ProfileOverviewProps) => {
             </IconButton>
           </DropdownMenu.Trigger>
           <DropdownMenu.Content size="1">
-            <DropdownMenu.Item>
+            <DropdownMenu.Item
+              onClick={() => {
+                navigator.clipboard.writeText(`${baseUrl}/u/${username}`);
+                toast.success("Copied to clipboard");
+              }}
+            >
               <ShareButton />
             </DropdownMenu.Item>
             {username == clerkUser?.username && (

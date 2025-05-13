@@ -5,29 +5,21 @@ import React from "react";
 import ErrorPopup from "./custom-comps/ErrorPopup";
 import { errorCodes } from "@/utils";
 
-type Props = {
-  error: string;
-};
+type Props = {};
 
-function NoActiveProjectBanner({ error }: Props) {
+function NoActiveProjectBanner({}: Props) {
   return (
     <>
       <Flex
         direction={"column"}
         gap={"3"}
-        className="h-screen w-full items-center justify-center text-center"
+        className="h-screen items-center justify-center text-center"
       >
-        <Image
-          alt="brand-logo"
-          src="/hubfolio-dark-logo.png"
-          width={200}
-          height={200}
-        />
-        <Text weight={"bold"} size={"6"}>
+        <Image alt="brand-logo" src="/icon.png" width={200} height={200} />
+        <Text weight={"bold"} size={"5"}>
           Select a project to view
         </Text>
       </Flex>
-      {errorCodes.find((e) => e.code == error) && <ErrorPopup code={error} />}
     </>
   );
 }

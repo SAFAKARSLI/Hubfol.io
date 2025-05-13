@@ -36,7 +36,7 @@ function EmployeeSidebarButton({ projects, user }: Props) {
         className="hover:border-gray-6 border border-gray-1 rounded-md overflow-hidden hover:cursor-pointer xl:hidden"
         onClick={() => setVisible(!visible)}
       >
-        <IconButton variant="surface" size={"2"}>
+        <IconButton variant="surface" size={"3"}>
           <HamburgerMenuIcon />
         </IconButton>
       </div>

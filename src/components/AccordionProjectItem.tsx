@@ -53,7 +53,7 @@ const AccordionProjectItem = ({
       );
     } else if (sections && sections?.length == 0) {
       return (
-        <Text size="2" as="p" className="italic text-gray-10 text-sm">
+        <Text size="2" as="p" className="italic text-gray-10 text-sm p-6">
           No section found
         </Text>
       );

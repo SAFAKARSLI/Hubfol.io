@@ -24,6 +24,11 @@ function UsernameInput({ setUserNameValid }: Props) {
       return;
     }
 
+    if (username.length <= 3) {
+      setUserNameValid(false);
+      return;
+    }
+
     setStatus("loading");
     setUserNameValid(false);
     const timeout = setTimeout(() => {
@@ -76,9 +81,12 @@ function UsernameInput({ setUserNameValid }: Props) {
         forceMatch={status == "invalid" || status == "username-taken"}
         label="Username"
         type="text"
+        charLimit={64}
+        required
+        minLength={4}
         value={username}
         setValue={setUsername}
-        description={`This will be your unique identifier on the platform. Usernames can only contain [A-Z, a-z, 0-9, -, _], must be 3-50 characters long, and cannot start, end, or have consecutive dashes or underscores.`}
+        description={`This will be your unique identifier on the platform. Usernames can only contain [A-Z, a-z, 0-9, -, _], must be 4-64 characters long, and cannot start, end, or have consecutive dashes or underscores.`}
         name="username"
         message={
           status === "invalid"
@@ -108,8 +116,6 @@ function UsernameInput({ setUserNameValid }: Props) {
             )}
           </>
         }
-        charLimit={50}
-        required
       />
       <input type="hidden" name="username" value={usernameBounce} />
     </>

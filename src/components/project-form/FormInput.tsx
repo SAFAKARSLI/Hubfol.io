@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React from 'react';
-import * as Form from '@radix-ui/react-form';
-import { Heading, Flex, TextField } from '@radix-ui/themes';
-import { InputType } from '@/utils';
-import InputLabel from './InputLabel';
+import React from "react";
+import * as Form from "@radix-ui/react-form";
+import { Heading, Flex, TextField } from "@radix-ui/themes";
+import { InputType } from "@/utils";
+import InputLabel from "./InputLabel";
 
 type Props = {
   pattern?: string;
@@ -21,6 +21,7 @@ type Props = {
   message?: string;
   required?: boolean;
   charLimit?: number;
+  minLength?: number;
   disabled?: boolean;
   step?: number;
   forceMatch?: boolean;
@@ -40,6 +41,7 @@ function FormInput({
   message,
   required = false,
   charLimit,
+  minLength,
   disabled,
   step,
   style,
@@ -58,12 +60,13 @@ function FormInput({
         currentCharCount={currentValue ? String(currentValue).length : 0}
       />
       <p className="text-xs text-gray-11 mb-1">{description}</p>
-      <Flex align={'center'} gap={'1'}>
+      <Flex align={"center"} gap={"1"}>
         {logo}
         <Form.Control asChild>
           <input
             disabled={disabled}
             pattern={pattern}
+            minLength={minLength}
             min={0}
             value={value}
             step={step}
@@ -81,7 +84,7 @@ function FormInput({
             defaultValue={defaultValue}
             className={`w-full h-[2rem] p-2 outline-none bg-gray-1 focus:shadow-outline focus:border-violet-7 rounded-md text-sm border 
             border-gray-6 -md:text-xs data-[invalid]:placeholder-red-400 data-[invalid]:border-red-300 ${
-              disabled ? 'cursor-not-allowed text-gray-11 border-green-800' : ''
+              disabled ? "cursor-not-allowed text-gray-11 border-green-800" : ""
             } ${style}`}
             required={required}
             autoComplete="off"
@@ -90,23 +93,23 @@ function FormInput({
         </Form.Control>
       </Flex>
       <Form.Message
-        match={'typeMismatch'}
+        match={"typeMismatch"}
         className="text-xs text-red-500"
         forceMatch={forceMatch}
       >
         {message}
       </Form.Message>
 
-      <Form.Message match={'valueMissing'} className="text-xs text-red-500">
+      <Form.Message match={"valueMissing"} className="text-xs text-red-500">
         You must provide a response.
       </Form.Message>
-      <Form.Message match={'patternMismatch'} className="text-xs text-red-500">
+      <Form.Message match={"patternMismatch"} className="text-xs text-red-500">
         {message}
       </Form.Message>
-      <Form.Message match={'rangeOverflow'} className="text-xs text-red-500">
+      <Form.Message match={"rangeOverflow"} className="text-xs text-red-500">
         You must provide a number less than 9999.
       </Form.Message>
-      <Form.Message match={'rangeUnderflow'} className="text-xs text-red-500">
+      <Form.Message match={"rangeUnderflow"} className="text-xs text-red-500">
         Your hourly rate cannot be less than 0.
       </Form.Message>
     </Form.Field>
