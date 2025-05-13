@@ -18,65 +18,14 @@ import FormInput from "@/components/project-form/FormInput";
 import NewEmployeeForm from "../../new-user/NewEmployeeForm";
 import SubmitButton from "@/components/SubmitButton";
 import { SignUp } from "@clerk/nextjs";
-import { customThemeClerkAuthenticationComponents } from "@/utils";
+import { baseUrl, customThemeClerkAuthenticationComponents } from "@/utils";
 import HubfolioBanner from "@/components/HubfolioBanner";
 
 type Props = {};
 
 function page({}: Props) {
   return (
-    <div className="flex -lg:flex-col w-full min-h-screen">
-      {/* <Card className="w-[30rem] p-8 text-center flex flex-col justify-between">
-          <div>
-            <Heading className="mb-4">Welcome to Hubfolio</Heading>
-            <Text as="p">
-              Hubfolio is a social media platform that allows developers to flex
-              with their projects.
-            </Text>
-          </div>
-
-          <div className="flex flex-col gap-3 py-5">
-            <OAuthSignUpButton
-              OAuthType="google"
-              color="red"
-              label="Sign up with Google"
-              logo={<FaGoogle className="w-4 h-4" />}
-              variant="solid"
-            />
-            <OAuthSignUpButton
-              OAuthType="github"
-              color="gray"
-              label="Sign up with GitHub"
-              logo={<FaGithub className="w-4 h-4" />}
-              variant="surface"
-            />
-            <Text className="text-gray-10 text-sm text-center">or</Text>
-
-            <Form.Root className="text-left flex flex-col gap-2">
-              <FormInput
-                label="Email"
-                name="emailAddress"
-                type="email"
-                required
-              />
-              <FormInput
-                name="password"
-                label="Password"
-                type="password"
-                required
-              />
-              <SubmitButton style="w-full mt-2" variant="soft">
-                Sign Up
-              </SubmitButton>
-            </Form.Root>
-          </div>
-          <Text className="text-gray-10">
-            Already have an account?{' '}
-            <Link href="/sign-in" className="text-violet-8">
-              Log in
-            </Link>
-          </Text>
-        </Card> */}
+    <div className="flex w-full min-h-screen lg:flex-row flex-col-reverse">
       <div className="lg:w-1/2 -lg:min-h-[75vh] lg:border-r -lg:border-b border-violet-8 bg-gray-2 lg:rounded-r -lg:rounded-b shadow-[0_0_30px_8px_rgba(44,20,219,1)] flex flex-col items-center">
         <Box pt={"4"}>
           <HubfolioBanner width={160} />
@@ -116,6 +65,7 @@ function page({}: Props) {
       <div className="lg:w-1/2 -lg:h-screen max-h-[80rem] min-h-[50rem] flex items-center justify-center">
         <Suspense fallback={<Spinner />}>
           <SignUp
+            signInUrl={`${baseUrl}/sign-in`}
             appearance={customThemeClerkAuthenticationComponents}
             forceRedirectUrl={"/api/fully-signed-up"}
           />

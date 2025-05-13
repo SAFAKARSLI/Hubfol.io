@@ -342,10 +342,10 @@ function ProjectFrame({ project, sections }: Props) {
     </div>
   ) : (
     file && (
-      <div className="p-5 h-full w-full">
+      <div className="p-5 h-screen w-full">
         <iframe
           src={URL.createObjectURL(file as File)}
-          className="rounded h-full w-full border border-gray-6"
+          className="rounded flex-grow h-full w-full border border-gray-6"
         />
       </div>
     )

@@ -13,7 +13,7 @@ export default function page({ params }: SlugProps) {
 
   return (
     <Projects username={username} activeProjectId={projectSlug}>
-      <ProjectFrame />
+      <ProjectFrame sections={[]} />
     </Projects>
   );
 }

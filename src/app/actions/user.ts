@@ -98,6 +98,7 @@ export const createEmployee = async (formData: FormData) => {
         },
       });
       revalidateTag("users");
+      redirect(`${baseUrl}/account-successfully-created`);
     } catch (error) {
       console.error("Error creating employee:", error);
       redirect(
