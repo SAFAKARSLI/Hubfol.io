@@ -1,10 +1,10 @@
-import NoActiveProjectBanner from '@/components/NoActiveProjectBanner';
-import Projects from '@/components/pages/Projects';
-import ProjectFrame from '@/components/ProjectFrame';
-import Project from '@/types/project';
-import { SlugProps } from '@/types/slug';
-import { baseUrl } from '@/utils';
-import React from 'react';
+import NoActiveProjectBanner from "@/components/NoActiveProjectBanner";
+import Projects from "@/components/pages/Projects";
+import ProjectFrame from "@/components/ProjectFrame";
+import Project from "@/types/project";
+import { SlugProps } from "@/types/slug";
+import { baseUrl } from "@/utils";
+import React from "react";
 
 type Props = {};
 

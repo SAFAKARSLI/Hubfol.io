@@ -90,6 +90,7 @@ export const createEmployee = async (formData: FormData) => {
           hubfolioUserId: employee.uuid,
         },
       });
+      revalidateTag("users");
     } catch (error) {
       console.error("Error creating employee:", error);
       redirect(

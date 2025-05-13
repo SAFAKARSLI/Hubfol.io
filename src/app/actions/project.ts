@@ -6,7 +6,7 @@ import { z } from "zod";
 import { validateUUID } from "@/utils";
 import { ProjectRepository } from "@/db";
 import { auth, User } from "@clerk/nextjs/server";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { getUser } from "./user";
 import { baseUrl, generateProjectSlug } from "@/utils";
 import _ from "lodash";
@@ -43,17 +43,16 @@ export const initiateProject = async (formData: FormData) => {
       updatedAt: date.toISOString(),
       id: 0,
     });
-
-    return { status: 200, data: initiatedProject };
   } catch (error) {
     console.error("Error creating sections:", error);
     throw new Error("Internal Server Error. Failed to create project.");
-  } finally {
-    revalidateTag("projects");
-    redirect(
-      `/u/${username}/projects/edit/${projectUUID}/general-information?initialize=true`
-    );
   }
+
+  revalidateTag("projects");
+  revalidatePath(`/u/${username}/projects`, "layout");
+  redirect(
+    `/u/${username}/projects/edit/${projectUUID}/general-information?initialize=true`
+  );
 };
 
 export const checkForAuthority = async (
@@ -140,14 +139,13 @@ export const upsertGeneralInfo = async (formData: FormData) => {
       ownerId: existingProject.ownerId,
       type: existingProject.type,
     });
+    revalidateTag("projects");
     return { status: 200, data: resultingProject };
   } catch (error) {
     console.error("Error updating project:", error);
     throw new Error(
       "Internal Server Error. An error occurred while updating the project."
     );
-  } finally {
-    revalidateTag("projects");
   }
 };
 
@@ -179,10 +177,11 @@ export const deleteProject = async (projectUUID: string) => {
     throw new Error(
       "Internal Server Error. An error occured while deleting the project."
     );
-  } finally {
-    revalidateTag("projects");
-    redirect(`/u/${user.username}/projects`);
   }
+
+  revalidateTag("projects");
+  revalidatePath(`/u/${user.username}/projects`, "layout");
+  redirect(`/u/${user.username}/projects`);
 };
 
 export const upsertFrameOptions = async (formData: FormData) => {
@@ -243,11 +242,10 @@ export const upsertFrameOptions = async (formData: FormData) => {
       updatedAt: new Date().toISOString(),
     });
 
+    revalidateTag("projects");
     return { status: 200, data: project };
   } catch (error) {
     console.error("Error updating frame options:", error);
     throw new Error("Internal Server Error. Failed to update frame options.");
-  } finally {
-    revalidateTag("projects");
   }
 };

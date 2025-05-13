@@ -1,7 +1,5 @@
 import { BrandRepository } from "@/db";
 
-export const dynamic = "force-dynamic";
-
 const brandRepository = new BrandRepository();
 
 export async function GET(request: Request) {

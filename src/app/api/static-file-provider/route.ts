@@ -1,8 +1,6 @@
 import { s3Client } from "@/aws/s3";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 
-export const dynamic = "force-dynamic";
-
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const key = searchParams.get("key");

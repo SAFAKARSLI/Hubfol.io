@@ -3,8 +3,6 @@ import { redirect } from "next/navigation";
 import { baseUrl } from "@/utils";
 import { currentUser } from "@clerk/nextjs/server";
 
-export const dynamic = "force-dynamic";
-
 export async function GET(req: NextRequest) {
   const user = await currentUser();
 

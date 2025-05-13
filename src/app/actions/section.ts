@@ -123,49 +123,40 @@ export const upsertSections = async (formData: FormData) => {
   }
 
   let resultingSection;
-  try {
-    if (!sectionUUID) {
-      resultingSection = await sectionRepository.createSection({
-        uuid: uuidv4(),
-        ...sectionInfo,
-        projectId,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        id: 0,
-        isActive: true,
-        description: sectionInfo.description ?? null,
-        contentType: (
-          sectionInfo.contentType ?? "TEXT"
-        ).toString() as Database["public"]["Enums"]["Content"],
-      });
-    } else {
-      // Fetch the existing section to get all required fields
-      const existingSection = await sectionRepository.findSectionByUuid(
-        sectionUUID
-      );
-      resultingSection = await sectionRepository.updateSection({
-        ...existingSection,
-        ...sectionInfo,
-        updatedAt: new Date().toISOString(),
-        contentType: (
-          sectionInfo.contentType ??
-          existingSection.contentType ??
-          "TEXT"
-        ).toString() as Database["public"]["Enums"]["Content"],
-        description:
-          sectionInfo.description ?? existingSection.description ?? null,
-      });
-    }
-  } catch (error) {
-    console.error("Error updating section:", error);
-    return {
-      status: 500,
-      message: "Failed to update/create section",
-    };
-  } finally {
-    revalidateTag("sections");
-    return { status: 200, data: resultingSection };
+  if (!sectionUUID) {
+    resultingSection = await sectionRepository.createSection({
+      uuid: uuidv4(),
+      ...sectionInfo,
+      projectId,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      id: 0,
+      isActive: true,
+      description: sectionInfo.description ?? null,
+      contentType: (
+        sectionInfo.contentType ?? "TEXT"
+      ).toString() as Database["public"]["Enums"]["Content"],
+    });
+  } else {
+    // Fetch the existing section to get all required fields
+    const existingSection = await sectionRepository.findSectionByUuid(
+      sectionUUID
+    );
+    resultingSection = await sectionRepository.updateSection({
+      ...existingSection,
+      ...sectionInfo,
+      updatedAt: new Date().toISOString(),
+      contentType: (
+        sectionInfo.contentType ??
+        existingSection.contentType ??
+        "TEXT"
+      ).toString() as Database["public"]["Enums"]["Content"],
+      description:
+        sectionInfo.description ?? existingSection.description ?? null,
+    });
   }
+  revalidateTag("sections");
+  return { status: 200, data: resultingSection };
 };
 
 export const initiateSection = async (projectUUID: string) => {
@@ -195,11 +186,10 @@ export const initiateSection = async (projectUUID: string) => {
       id: 0,
       isActive: true,
     });
+    revalidateTag("sections");
     return { status: 200, data: section };
   } catch (error) {
     console.error("Error initiating section:", error);
-  } finally {
-    revalidateTag("sections");
   }
 };
 
@@ -252,10 +242,9 @@ export const createSection = async (
   } catch (error) {
     console.error("Error creating section:", error);
     errors.push("Failed to create section");
-  } finally {
-    revalidateTag("sections");
-    return section;
   }
+  revalidateTag("sections");
+  return section;
 };
 
 export const deleteSection = async (formData: FormData) => {
@@ -283,9 +272,8 @@ export const deleteSection = async (formData: FormData) => {
 
   try {
     await sectionRepository.deleteSection(section);
+    revalidateTag("sections");
   } catch (error) {
     console.error("Error deleting section:", error);
-  } finally {
-    revalidateTag("sections");
   }
 };

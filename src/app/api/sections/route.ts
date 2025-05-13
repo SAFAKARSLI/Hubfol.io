@@ -2,9 +2,9 @@ import { validateUUID } from "@/utils";
 import { SectionRepository } from "@/db";
 import { revalidateTag } from "next/cache";
 
-export const dynamic = "force-dynamic";
-
 const sectionRepository = new SectionRepository();
+
+export const revalidate = 60;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

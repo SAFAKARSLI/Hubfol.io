@@ -2,8 +2,6 @@ import { getUser } from "@/app/actions/user";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
-export const dynamic = "force-dynamic";
-
 export async function GET(req: NextRequest) {
   const user = auth();
   if (user) {

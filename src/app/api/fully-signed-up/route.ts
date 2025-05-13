@@ -3,8 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { getUser } from "@/app/actions/user";
 import { baseUrl } from "@/utils";
 
-export const dynamic = "force-dynamic";
-
 export async function GET(req: NextRequest) {
   const user = auth();
   const clerkUser = await getUser(user.userId!);

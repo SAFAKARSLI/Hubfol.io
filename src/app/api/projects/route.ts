@@ -1,7 +1,5 @@
 import { EmployeeRepository, ProjectRepository } from "@/db";
 
-export const dynamic = "force-dynamic";
-
 const employeeRepository = new EmployeeRepository();
 const projectRepository = new ProjectRepository();
 

@@ -9,7 +9,6 @@ import Project from "@/types/project";
 import Section from "@/types/section";
 
 import { createClient } from "@supabase/supabase-js";
-import { revalidateTag } from "next/cache";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -74,7 +73,6 @@ export class EmployeeRepository implements IEmployeeRepository {
       throw error;
     }
 
-    revalidateTag("users");
     return updatedData as Employee;
   }
 
@@ -89,7 +87,6 @@ export class EmployeeRepository implements IEmployeeRepository {
       throw error;
     }
 
-    revalidateTag("users");
     return data as Employee;
   }
 }
@@ -124,9 +121,8 @@ export class ProjectRepository implements IProjectRepository {
     const { data, error } = await supabase
       .from("Project")
       .select("*")
+      .order("createdAt", { ascending: true })
       .eq("ownerId", ownerId);
-
-    console.trace(data);
 
     if (error) {
       throw error;
@@ -168,8 +164,6 @@ export class ProjectRepository implements IProjectRepository {
     if (error) {
       throw error;
     }
-
-    revalidateTag("projects");
     return data as Project;
   }
 
@@ -184,8 +178,6 @@ export class ProjectRepository implements IProjectRepository {
     if (error) {
       throw error;
     }
-
-    revalidateTag("projects");
     return data as Project;
   }
 
@@ -198,8 +190,6 @@ export class ProjectRepository implements IProjectRepository {
     if (error) {
       throw error;
     }
-
-    revalidateTag("projects");
   }
 }
 export class SectionRepository implements ISectionRepository {
@@ -253,7 +243,6 @@ export class SectionRepository implements ISectionRepository {
       throw error;
     }
 
-    revalidateTag("sections");
     return data as Section;
   }
 
@@ -269,7 +258,6 @@ export class SectionRepository implements ISectionRepository {
       throw error;
     }
 
-    revalidateTag("sections");
     return data as Section;
   }
 
@@ -282,8 +270,6 @@ export class SectionRepository implements ISectionRepository {
     if (error) {
       throw error;
     }
-
-    revalidateTag("sections");
   }
 }
 export class BrandRepository implements IBrandRepository {

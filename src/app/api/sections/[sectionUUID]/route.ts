@@ -3,8 +3,6 @@
 import { validateUUID } from "@/utils";
 import { SectionRepository } from "@/db";
 
-export const dynamic = "force-dynamic";
-
 const sectionRepository = new SectionRepository();
 
 export async function GET(

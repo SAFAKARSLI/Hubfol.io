@@ -1,7 +1,5 @@
 import { EmployeeRepository } from "@/db";
 
-export const dynamic = "force-dynamic";
-
 const employeeRepository = new EmployeeRepository();
 
 export async function GET(request: Request) {

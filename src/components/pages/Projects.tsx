@@ -44,7 +44,7 @@ const Projects = async ({
       (project: Project) => project.slug === activeProjectId
     );
 
-    if (!project) redirect(`/u/${username}/projects?error=project-not-found`);
+    if (!project) notFound();
   }
 
   return (
