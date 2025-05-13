@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   title: "Hubfolio",
   description: "Showcase your portfolio",
   icons: {
-    icon: "/hubfolio-dark-logo.png",
+    icon: "/icon.png",
   },
 };
 
