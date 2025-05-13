@@ -4,14 +4,13 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Badge, DropdownMenu, IconButton, Text, Flex } from "@radix-ui/themes";
 import React from "react";
 import ViewContactInfo from "./ViewContactInfo";
-import { baseUrl } from "@/utils";
-import { Employee } from "@prisma/client";
 import Image from "next/image";
 import { FaEdit } from "react-icons/fa";
 import Link from "next/link";
 import ShareButton from "./ShareButton";
 import { useUser } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
+import Employee from "@/types/employee";
 
 interface ProfileOverviewProps {
   user: Employee;

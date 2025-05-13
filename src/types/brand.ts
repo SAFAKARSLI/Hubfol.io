@@ -1,4 +1,3 @@
-export interface Brand {
-  brand_name: string;
-  slug: string;
-}
+import { Tables } from "./supabase";
+
+export default interface Brand extends Tables<"BrandIcons"> {}

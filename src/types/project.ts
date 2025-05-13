@@ -1,17 +1,6 @@
-import { PROJECT_CONTENT_TYPE } from '@prisma/client';
-import { Section } from './section';
+import { Tables } from "./supabase";
 
-export default interface Project {
-  uuid: string;
-  name: string;
-  tagline?: string;
-  iconLink?: string;
-  sections: Section[];
-  ownerId: string;
-  slug: string;
-  content: string;
-  type: PROJECT_CONTENT_TYPE;
-}
+export default interface Project extends Tables<"Project"> {}
 
 export interface ProjectFormData {
   name: string;

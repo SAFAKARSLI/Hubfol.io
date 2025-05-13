@@ -15,7 +15,7 @@ function NoActiveProjectBanner({ error }: Props) {
       <Flex
         direction={"column"}
         gap={"3"}
-        className="h-full w-full items-center justify-center text-center"
+        className="h-screen w-full items-center justify-center text-center"
       >
         <Image
           alt="brand-logo"

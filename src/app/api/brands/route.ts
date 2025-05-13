@@ -1,7 +1,8 @@
-import { prisma } from "@/db";
-import { Brand } from "@/types/brand";
+import { BrandRepository } from "@/db";
 
 export const dynamic = "force-dynamic";
+
+const brandRepository = new BrandRepository();
 
 export async function GET(request: Request) {
   try {
@@ -12,10 +13,7 @@ export async function GET(request: Request) {
       return new Response("No query provided", { status: 400 });
     }
 
-    const brands = (await prisma.brandIcons.findMany({
-      take: 30,
-      where: { brand_name: { contains: query, mode: "insensitive" } },
-    })) as Brand[];
+    const brands = await brandRepository.findBrandsByQuery(query);
 
     return new Response(JSON.stringify(brands), { status: 200 });
   } catch (error) {
@@ -23,7 +21,5 @@ export async function GET(request: Request) {
     return new Response("Internal Server Error. Failed to fetch sections", {
       status: 500,
     });
-  } finally {
-    await prisma.$disconnect();
   }
 }

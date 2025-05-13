@@ -1,6 +1,8 @@
-import { prisma } from "@/db";
+import { EmployeeRepository } from "@/db";
 
 export const dynamic = "force-dynamic";
+
+const employeeRepository = new EmployeeRepository();
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -13,9 +15,9 @@ export async function GET(request: Request) {
   }
 
   try {
-    const user = await prisma.employee.findFirst({
-      where: { username: username as string },
-    });
+    const user = await employeeRepository.findEmployeeByUsername(
+      username as string
+    );
 
     if (!user) {
       return new Response("User not found", { status: 404 });
@@ -30,7 +32,5 @@ export async function GET(request: Request) {
   } catch (error) {
     console.error("Error fetching user:", error);
     return new Response("Internal Server Error", { status: 500 });
-  } finally {
-    await prisma.$disconnect();
   }
 }

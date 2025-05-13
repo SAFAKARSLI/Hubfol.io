@@ -3,8 +3,6 @@ import Project from "@/types/project";
 import ProjectsSidePanel from "../ProjectsSidePanel";
 import { notFound, redirect } from "next/navigation";
 import { baseUrl, isValidUsername } from "@/utils";
-import { baseMenuRadioItemPropDefs } from "@radix-ui/themes/dist/cjs/components/base-menu.props";
-import ProjectConsole from "../ProjectConsole";
 
 interface ProjectsProps {
   username: string;
@@ -21,14 +19,24 @@ const Projects = async ({
     notFound();
   }
 
+  const user = await fetch(`${baseUrl}/api/users/${username}`, {
+    next: { tags: ["users"] },
+  }).then((r) => r.json());
+
   var projects = await fetch(`${baseUrl}/api/projects?username=${username}`, {
     next: {
       tags: ["projects", "sections"],
     },
-  }).then((r) => {
-    if (r.status === 404) notFound();
-    if (r.body) return r.json();
-  });
+  })
+    .then((r) => {
+      if (r.status === 404) notFound();
+      if (r.status === 200) {
+        return r.json();
+      }
+    })
+    .catch((e) => {
+      console.error("Error fetching projects:", e);
+    });
 
   let project: Project | undefined;
   if (activeProjectId) {
@@ -43,8 +51,8 @@ const Projects = async ({
     <div className="flex ">
       <div className="flex-none border-r border-gray-4 bg-gray-1 hidden xl:block">
         <ProjectsSidePanel
-          initialProjects={projects}
-          username={username}
+          projects={projects}
+          user={user}
           projectSlug={activeProjectId as string}
         />
       </div>

@@ -1,7 +1,11 @@
-import { validateUUID } from "@/app/actions/utils";
-import { prisma } from "@/db";
+import { validateUUID } from "@/utils";
+import { SectionRepository } from "@/db";
+import { revalidateTag } from "next/cache";
 
 export const dynamic = "force-dynamic";
+
+const sectionRepository = new SectionRepository();
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const projectUUID = searchParams.get("projectUUID");
@@ -16,10 +20,9 @@ export async function GET(request: Request) {
   }
 
   try {
-    const sections = await prisma.section.findMany({
-      where: { projectId: projectUUID as string },
-      orderBy: { createdAt: "asc" },
-    });
+    const sections = await sectionRepository.findSectionsByProjectUuid(
+      projectUUID as string
+    );
 
     if (!sections) {
       return new Response("No sections found", { status: 404 });
@@ -30,7 +33,5 @@ export async function GET(request: Request) {
     return new Response("Internal Server Error. Failed to fetch sections", {
       status: 500,
     });
-  } finally {
-    await prisma.$disconnect();
   }
 }

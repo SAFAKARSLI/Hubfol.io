@@ -1,9 +1,11 @@
 // backend api that returns the specifiec section [sectionUUID from useParams()] for a project [projectUUID from useParams()]
 
-import { validateUUID } from "@/app/actions/utils";
-import { prisma } from "@/db";
+import { validateUUID } from "@/utils";
+import { SectionRepository } from "@/db";
 
 export const dynamic = "force-dynamic";
+
+const sectionRepository = new SectionRepository();
 
 export async function GET(
   request: Request,
@@ -21,9 +23,9 @@ export async function GET(
   }
 
   try {
-    const section = await prisma.section.findUnique({
-      where: { uuid: sectionUUID as string },
-    });
+    const section = await sectionRepository.findSectionByUuid(
+      sectionUUID as string
+    );
 
     if (!section) {
       return new Response("No section found", { status: 404 });
@@ -34,7 +36,5 @@ export async function GET(
     return new Response("Internal Server Error. Failed to fetch section", {
       status: 500,
     });
-  } finally {
-    await prisma.$disconnect();
   }
 }

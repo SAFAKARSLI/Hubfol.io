@@ -1,19 +1,6 @@
-import { Content } from '@prisma/client';
-import { Brand } from './brand';
-import { InputJsonValue } from '@prisma/client/runtime/library';
+import { Tables } from "./supabase";
 
-export interface Section {
-  uuid: string;
-  createdAt: Date;
-  updatedAt: Date;
-  title: string;
-  description: string | null;
-  isActive: boolean | null;
-  contentType: Content;
-  content: InputJsonValue;
-  projectId: string;
-  // tags: string[];
-}
+export default interface Section extends Tables<"Section"> {}
 
 // Carousel Section content
 export type Image = {

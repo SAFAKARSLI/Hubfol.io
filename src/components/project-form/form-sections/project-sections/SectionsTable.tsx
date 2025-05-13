@@ -1,21 +1,15 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { Button, Spinner, Table } from '@radix-ui/themes';
+import { Button, Table } from "@radix-ui/themes";
 
-import Project from '@/types/project';
-import ProjectsTableItem from './ProjectsTableItem';
-import { PlusIcon } from '@radix-ui/react-icons';
-import { baseUrl } from '@/utils';
-import { cookies } from 'next/headers';
-import { Section } from '@/types/section';
-import FormSection from '../FormSection';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { usePathname } from 'next/navigation';
-import { initiateSection } from '@/app/actions/section';
-import next from 'next';
-import { toast, Toaster } from 'sonner';
+import ProjectsTableItem from "./ProjectsTableItem";
+import { PlusIcon } from "@radix-ui/react-icons";
+import { baseUrl } from "@/utils";
+import Section from "@/types/section";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { toast, Toaster } from "sonner";
 
 type Props = {
   // sections: Section[];
@@ -23,23 +17,23 @@ type Props = {
 
 function SectionsTable({}: Props) {
   const [sections, setSections] = useState<Section[]>([]);
-  const init = useSearchParams().get('initialize');
+  const init = useSearchParams().get("initialize");
   const router = useRouter();
-  const { username, projectUUID } = useParams();
+  const { projectUUID } = useParams();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSections = async () => {
       const response = await fetch(
         `${baseUrl}/api/sections?projectUUID=${projectUUID}`,
-        { next: { tags: ['sections'] } }
+        { next: { tags: ["sections"] } }
       );
       const data = await response.json();
       setSections(data);
     };
 
     if (!init) fetchSections();
-  }, []);
+  }, [projectUUID]);
 
   useEffect(() => {
     if (sections.length == 0 || init) setLoading(false);
@@ -47,7 +41,7 @@ function SectionsTable({}: Props) {
 
   return (
     <>
-      <Table.Root size={'1'}>
+      <Table.Root size={"1"}>
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeaderCell>Title</Table.ColumnHeaderCell>

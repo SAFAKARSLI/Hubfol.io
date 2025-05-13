@@ -1,7 +1,5 @@
 import { dark } from "@clerk/themes";
-import { Brand } from "./types/brand";
-import { PersonIcon } from "@radix-ui/react-icons";
-import { nanoid } from "nanoid";
+import Brand from "./types/brand";
 
 export const extractSlug = (url: string, identifier: string) => {
   const index = url.split("/").indexOf(identifier) + 1; // returns -1 if not found. Hence checking for 0 at the bottom.
@@ -191,4 +189,18 @@ export function isValidUsername(username: unknown): username is string {
     username.trim() !== "" &&
     !["null", "undefined"].includes(username)
   );
+}
+
+export function validateUUID(uuid: string): boolean {
+  if (!uuid) {
+    return false;
+  }
+
+  const regex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+  if (!uuid || !regex.test(uuid)) {
+    return false;
+  }
+  return true;
 }

@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "Project" ALTER COLUMN "name" DROP NOT NULL,
-ALTER COLUMN "url" DROP NOT NULL;

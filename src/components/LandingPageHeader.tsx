@@ -68,7 +68,7 @@ export default function LandingPageHeader() {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-black border-t border-gray-7 px-6 py-4">
+        <div className="md:hidden bg-black rounded-b shadow-lg border-t border-gray-7 px-6 py-4">
           <Flex direction="column" gap="4">
             <Link
               href="/about"
@@ -89,7 +89,9 @@ export default function LandingPageHeader() {
               Contact
             </Link>
             <SignedOut>
-              <AuthenticationButtonsWrapper />
+              <div className="flex justify-center items-center">
+                <AuthenticationButtonsWrapper />
+              </div>
             </SignedOut>
             <SignedIn>
               <Link href={`/u/${user.user?.username}`}>

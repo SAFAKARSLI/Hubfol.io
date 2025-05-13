@@ -7,11 +7,10 @@ import { getUser } from "@/app/actions/user";
 import { ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
 import AuthenticationButtonsWrapper from "./AuthenticationButtonsWrapper";
 import ProfileSidebarButton from "./custom-comps/ProfileSidebarButton";
-import ProfileSidebarContent from "./ProfileSidebarContent";
 import EmployeeSidebarButton from "./custom-comps/EmployeeSidebarButton";
-import { baseUrl, isValidUsername } from "@/utils";
-import { Employee, Project } from "@prisma/client";
-import ProfileOverview from "./ProfileOverview";
+import { baseUrl } from "@/utils";
+import Project from "@/types/project";
+import Employee from "@/types/employee";
 
 interface TopBarProps {
   params: Params;
@@ -24,11 +23,10 @@ async function TopBar({ params }: TopBarProps) {
 
   const projects = (await fetch(
     `${baseUrl}/api/projects?username=${clerkUser?.username as string}`,
-    { cache: "force-cache", next: { tags: ["projects"] } }
+    { next: { tags: ["projects"] } }
   ).then((r) => r.json())) as Project[];
 
   const user = (await fetch(`${baseUrl}/api/users/${username}`, {
-    cache: "force-cache",
     next: { tags: ["users"] },
   }).then((r) => r.json())) as Employee;
 

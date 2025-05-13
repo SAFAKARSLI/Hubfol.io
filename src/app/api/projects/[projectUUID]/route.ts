@@ -1,8 +1,9 @@
-import { validateUUID } from "@/app/actions/utils";
-import { prisma } from "@/db";
+import { validateUUID } from "@/utils";
+import { ProjectRepository } from "@/db";
 import { NextRequest } from "next/server";
 
-export const dynamic = "force-dynamic";
+const projectRepository = new ProjectRepository();
+
 // GET /api/projects/[projectUUID]
 export async function GET(
   request: NextRequest,
@@ -16,18 +17,16 @@ export async function GET(
     });
   }
   try {
-    const projects = await prisma.project.findUnique({
-      where: { uuid: projectUUID as string },
-    });
+    const project = await projectRepository.findProjectByUuid(
+      projectUUID as string
+    );
 
-    if (!projects) {
+    if (!project) {
       return new Response("Project not found", { status: 404 });
     }
 
-    return new Response(JSON.stringify(projects), { status: 200 });
+    return new Response(JSON.stringify(project), { status: 200 });
   } catch (error) {
     return new Response("Failed to fetch projects", { status: 500 });
-  } finally {
-    await prisma.$disconnect();
   }
 }

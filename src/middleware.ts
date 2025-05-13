@@ -1,11 +1,5 @@
-import {
-  clerkMiddleware,
-  createRouteMatcher,
-  getAuth,
-} from "@clerk/nextjs/server";
-import { NextRequest, NextResponse } from "next/server";
+import { clerkMiddleware } from "@clerk/nextjs/server";
 import rateLimitMiddleware from "./rateLimiter";
-import { baseUrl } from "./utils";
 
 export default clerkMiddleware(async (auth, req) => {
   const { userId } = await auth();

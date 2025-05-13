@@ -10,11 +10,11 @@ import {
 import ProjectMenu from "./ProjectMenu";
 import { useEffect, useRef, useState } from "react";
 import { baseUrl, defaultIconLink } from "@/utils";
-import { Section } from "@/types/section";
+import Section from "@/types/section";
 import Subsection from "./project-card-subsections/Subsection";
 import { useUser } from "@clerk/nextjs";
 import { useParams, useRouter } from "next/navigation";
-import { Project } from "@prisma/client";
+import Project from "@/types/project";
 
 interface AccordionProjectItemProps {
   activeProjectId: string;

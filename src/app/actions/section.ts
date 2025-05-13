@@ -1,29 +1,33 @@
 "use server";
-import { prisma } from "@/db";
-import { Content, Prisma } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
-import { validateUUID } from "./utils";
 import { checkForAuthority } from "./project";
 import { revalidateTag } from "next/cache";
 import { auth } from "@clerk/nextjs/server";
 import { getUser } from "./user";
-import { Image, Section } from "@/types/section";
+import Section, { Image } from "@/types/section";
 import _ from "lodash";
 import { eliminateUnusedFiles, uploadFile } from "./s3";
 import { redirect } from "next/navigation";
-import { InputJsonArray, InputJsonValue } from "@prisma/client/runtime/library";
+import { Database } from "@/types/supabase";
+import { SectionRepository } from "@/db";
+import { ProjectRepository } from "@/db";
+
+const sectionRepository = new SectionRepository();
+const projectRepository = new ProjectRepository();
 
 const processContent = async (formData: FormData) => {
   console.log(formData);
-  const contentType = formData.get("contentType") as Content;
+  const contentType = formData.get(
+    "contentType"
+  ) as Database["public"]["Enums"]["Content"];
 
-  if (contentType == Content.TEXT) {
+  if (contentType == "TEXT") {
     return formData.get("content") as string;
-  } else if (contentType === Content.BRAND_STACK) {
+  } else if (contentType === "BRAND_STACK") {
     const content = formData.get("content") as string;
-    return JSON.parse(content) as Prisma.InputJsonValue;
-  } else if (contentType === Content.CAROUSEL) {
+    return JSON.parse(content);
+  } else if (contentType === "CAROUSEL") {
     console.log("!! FormData Keys", Array.from(formData.keys()));
     const images = Array.from(formData.keys()).filter((key) =>
       key.startsWith("images")
@@ -52,14 +56,14 @@ const processContent = async (formData: FormData) => {
         url: "https://s3.amazonaws.com/hubfol.io.gallery/" + uploadedFile.data,
       });
     }
-    return result as InputJsonValue;
+    return result;
   } else {
     return {};
   }
 };
 
 export const upsertSections = async (formData: FormData) => {
-  var content: InputJsonValue;
+  var content;
   try {
     content = await processContent(formData)!;
   } catch (error) {
@@ -71,7 +75,9 @@ export const upsertSections = async (formData: FormData) => {
   const sectionInfo = {
     title: formData.get("title") as string,
     description: formData.get("description") as string,
-    contentType: formData.get("contentType") as Content,
+    contentType: formData.get(
+      "contentType"
+    ) as Database["public"]["Enums"]["Content"],
     content,
   };
 
@@ -84,7 +90,7 @@ export const upsertSections = async (formData: FormData) => {
     ) as Section;
 
     // Deletes any files that are no longer in use after the update
-    if (sectionInfo.contentType === Content.CAROUSEL) {
+    if (sectionInfo.contentType === "CAROUSEL") {
       await eliminateUnusedFiles(
         prevSection.content as unknown as Image[],
         sectionInfo.content as unknown as Image[],
@@ -119,20 +125,37 @@ export const upsertSections = async (formData: FormData) => {
   let resultingSection;
   try {
     if (!sectionUUID) {
-      resultingSection = await prisma.section.create({
-        data: {
-          uuid: uuidv4(),
-          ...sectionInfo,
-          projectId,
-        },
+      resultingSection = await sectionRepository.createSection({
+        uuid: uuidv4(),
+        ...sectionInfo,
+        projectId,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        id: 0,
+        isActive: true,
+        description: sectionInfo.description ?? null,
+        contentType: (
+          sectionInfo.contentType ?? "TEXT"
+        ).toString() as Database["public"]["Enums"]["Content"],
       });
-    } else
-      resultingSection = await prisma.section.update({
-        where: { uuid: sectionUUID },
-        data: {
-          ...sectionInfo,
-        },
+    } else {
+      // Fetch the existing section to get all required fields
+      const existingSection = await sectionRepository.findSectionByUuid(
+        sectionUUID
+      );
+      resultingSection = await sectionRepository.updateSection({
+        ...existingSection,
+        ...sectionInfo,
+        updatedAt: new Date().toISOString(),
+        contentType: (
+          sectionInfo.contentType ??
+          existingSection.contentType ??
+          "TEXT"
+        ).toString() as Database["public"]["Enums"]["Content"],
+        description:
+          sectionInfo.description ?? existingSection.description ?? null,
       });
+    }
   } catch (error) {
     console.error("Error updating section:", error);
     return {
@@ -140,7 +163,6 @@ export const upsertSections = async (formData: FormData) => {
       message: "Failed to update/create section",
     };
   } finally {
-    await prisma.$disconnect;
     revalidateTag("sections");
     return { status: 200, data: resultingSection };
   }
@@ -151,9 +173,7 @@ export const initiateSection = async (projectUUID: string) => {
   session.protect();
 
   try {
-    const project = await prisma.project.findUnique({
-      where: { uuid: projectUUID, ownerId: session.userId! },
-    });
+    const project = await projectRepository.findProjectByUuid(projectUUID);
 
     if (!project) {
       return { status: 404, message: "Project not found." };
@@ -163,58 +183,23 @@ export const initiateSection = async (projectUUID: string) => {
   }
 
   try {
-    const section = await prisma.section.create({
-      data: {
-        uuid: uuidv4(),
-        projectId: projectUUID,
-        title: "New Section",
-        contentType: Content.TEXT,
-        content: "",
-      },
+    const section = await sectionRepository.createSection({
+      uuid: uuidv4(),
+      projectId: projectUUID,
+      title: "New Section",
+      contentType: "TEXT",
+      content: "",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      description: null,
+      id: 0,
+      isActive: true,
     });
     return { status: 200, data: section };
   } catch (error) {
     console.error("Error initiating section:", error);
   } finally {
-    prisma.$disconnect();
-  }
-};
-
-export const getSections = async (projectUUID: string) => {
-  try {
-    const sections = await prisma.section.findMany({
-      where: { projectId: projectUUID },
-      select: { title: true, content: true, contentType: true },
-    });
-    return JSON.parse(JSON.stringify(sections));
-  } catch (error) {
-    console.error("Error fetching sections:", error);
-  } finally {
-    prisma.$disconnect();
-  }
-};
-
-export const getSection = async (sectionUUID: string) => {
-  try {
-    const section = await prisma.section.findUnique({
-      where: { uuid: sectionUUID },
-    });
-    return JSON.parse(JSON.stringify(section));
-  } catch (error) {
-    console.error("Error fetching section:", error);
-  } finally {
-    prisma.$disconnect();
-  }
-};
-
-export const getSectionCount = async () => {
-  try {
-    const count = await prisma.section.count();
-    return count;
-  } catch (error) {
-    console.error("Error fetching section count:", error);
-  } finally {
-    prisma.$disconnect();
+    revalidateTag("sections");
   }
 };
 
@@ -231,8 +216,17 @@ export const createSection = async (
     uuid: uuidv4(),
     title: formData.get("title") as string,
     projectId: formData.get("projectUUID") as string,
-    contentType: formData.get("contentType") as Content,
-    content: formData.get("content") as Prisma.InputJsonValue,
+    contentType: (
+      formData.get("contentType") ?? "TEXT"
+    ).toString() as Database["public"]["Enums"]["Content"],
+    content: formData.get("content")
+      ? JSON.parse(formData.get("content") as string)
+      : "",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    id: 0,
+    isActive: true,
+    description: null,
   };
 
   const schema = z.object({
@@ -254,12 +248,12 @@ export const createSection = async (
   }
 
   try {
-    await prisma.section.create({ data: section });
+    await sectionRepository.createSection(section);
   } catch (error) {
     console.error("Error creating section:", error);
     errors.push("Failed to create section");
   } finally {
-    await prisma.$disconnect;
+    revalidateTag("sections");
     return section;
   }
 };
@@ -270,10 +264,7 @@ export const deleteSection = async (formData: FormData) => {
   const session = auth();
   session.protect();
 
-  const section = await prisma.section.findUnique({
-    where: { uuid: sectionUUID },
-    select: { projectId: true },
-  });
+  const section = await sectionRepository.findSectionByUuid(sectionUUID);
 
   if (!section) {
     return { status: 404, message: "Section not found." };
@@ -291,13 +282,10 @@ export const deleteSection = async (formData: FormData) => {
   }
 
   try {
-    await prisma.section.delete({
-      where: { uuid: sectionUUID },
-    });
+    await sectionRepository.deleteSection(section);
   } catch (error) {
     console.error("Error deleting section:", error);
   } finally {
     revalidateTag("sections");
-    await prisma.$disconnect;
   }
 };

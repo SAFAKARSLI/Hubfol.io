@@ -1,21 +1,21 @@
-'use client';
+"use client";
 
-import React, { Suspense, useEffect } from 'react';
-import FormInput from '../../FormInput';
-import { Section } from '@/types/section';
-import { useParams, useSearchParams } from 'next/navigation';
-import * as Form from '@radix-ui/react-form';
-import SearchTechInput from './SearchTechInput';
-import InputLabel from '../../InputLabel';
-import { Button, Select, Spinner } from '@radix-ui/themes';
-import { Content } from '@prisma/client';
-import { upsertSections } from '@/app/actions/section';
-import { usePreloadedFormData } from '@/hooks';
-import { baseUrl } from '@/utils';
-import SubmitButton from '@/components/SubmitButton';
-import { useRouter } from 'next/navigation';
-import CarouselForm from './CarouselForm';
-import TextSectionInput from './TextSectionInput';
+import React, { Suspense, useEffect } from "react";
+import FormInput from "../../FormInput";
+import Section from "@/types/section";
+import { useParams } from "next/navigation";
+import * as Form from "@radix-ui/react-form";
+import SearchTechInput from "./SearchTechInput";
+import InputLabel from "../../InputLabel";
+import { Button, Select, Spinner } from "@radix-ui/themes";
+import { upsertSections } from "@/app/actions/section";
+import { usePreloadedFormData } from "@/hooks";
+import { baseUrl } from "@/utils";
+import SubmitButton from "@/components/SubmitButton";
+import { useRouter } from "next/navigation";
+import CarouselForm from "./CarouselForm";
+import TextSectionInput from "./TextSectionInput";
+import { Database } from "@/types/supabase";
 
 type Props = {
   initial?: boolean;
@@ -29,13 +29,14 @@ function SectionForm({ initial = false }: Props) {
     upsertSections,
     `${baseUrl}/u/${username}/projects/edit/${projectUUID}/sections`
   );
-  const [contentType, setContentType] = React.useState<Content>(Content.TEXT);
+  const [contentType, setContentType] =
+    React.useState<Database["public"]["Enums"]["Content"]>("TEXT");
   const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
     const fetchSection = async () => {
       const response = await fetch(`/api/sections/${sectionUUID}`, {
-        next: { tags: ['sections'] },
+        next: { tags: ["sections"] },
       });
       const data = await response.json();
       setSection(data);
@@ -50,7 +51,7 @@ function SectionForm({ initial = false }: Props) {
   }, [section]);
 
   useEffect(() => {
-    editFormData('contentType', contentType);
+    editFormData("contentType", contentType);
   }, [contentType]);
 
   function renderContentInput() {
@@ -58,14 +59,14 @@ function SectionForm({ initial = false }: Props) {
       section?.contentType === contentType ? section.content : undefined;
 
     switch (contentType) {
-      case Content.TEXT:
+      case "TEXT":
         return (
-          <TextSectionInput initialValue={(initialValue as string) ?? ''} />
+          <TextSectionInput initialValue={(initialValue as string) ?? ""} />
         );
 
-      case Content.BRAND_STACK:
+      case "BRAND_STACK":
         return <SearchTechInput initialValue={(initialValue as any[]) ?? []} />;
-      case Content.CAROUSEL: // Can be used to show code snippets (Code Snippet Section)
+      case "CAROUSEL": // Can be used to show code snippets (Code Snippet Section)
         return (
           <CarouselForm
             editFormData={editFormData}
@@ -95,7 +96,7 @@ function SectionForm({ initial = false }: Props) {
           defaultValue={section?.title}
           name="title"
           placeholder='Enter the section title here. (e.g "Project Description")'
-          type={'text'}
+          type={"text"}
           charLimit={45}
         />
 
@@ -105,23 +106,23 @@ function SectionForm({ initial = false }: Props) {
           defaultValue={section?.description!}
           name="description"
           placeholder="Enter the section description"
-          type={'text'}
+          type={"text"}
         />
 
         <Form.FormField name="content-type">
           <InputLabel label="Content" />
           <Select.Root
             value={contentType}
-            onValueChange={(e: keyof typeof Content) => {
-              editFormData!('contentType', e);
-              setContentType(Content[e]);
+            onValueChange={(e: Database["public"]["Enums"]["Content"]) => {
+              editFormData!("contentType", e);
+              setContentType(e);
             }}
           >
             <Select.Trigger />
             <Select.Content>
-              {Object.keys(Content).map((content) => (
+              {["TEXT", "BRAND_STACK", "CAROUSEL"].map((content) => (
                 <Select.Item value={content} key={content}>
-                  {content.replaceAll('_', ' ')}
+                  {content.replaceAll("_", " ")}
                 </Select.Item>
               ))}
             </Select.Content>

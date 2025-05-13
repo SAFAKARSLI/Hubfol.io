@@ -15,7 +15,7 @@ type Props = {
 function ProjectForm({ activeStepIndex }: Props) {
   // Will allow me to set the initialize query param such that in the intial form, we get around with the initial fethcing of the data.
   const searchParams = useSearchParams();
-  const { username, projectUUID } = useParams();
+  const { username } = useParams();
   return (
     <Stepper
       activeStepIndex={activeStepIndex}
@@ -46,23 +46,13 @@ function ProjectForm({ activeStepIndex }: Props) {
           title: "Frame Options",
           description:
             "Frame options are the different ways by which you can present your projects. Unlike sections which helps users to understand what the project is about, the project frame is the project itself. Please specify below how you would like your project to be viewed.",
-          content: <FrameOptionsForm />,
+          content: <FrameOptionsForm editFormData={() => {}} />,
           onComplete: upsertFrameOptions,
           fetchResource: "",
           callback: `${baseUrl}/u/${username}/projects?message=project-success`,
           slug: "frame-options",
           index: 2,
         },
-        // {
-        //   title: 'Review',
-        //   description: 'Review your project details before submission.',
-        //   content: <div>Review your project details here.</div>,
-        //   onComplete: () => console.log('Skipped General Information'),
-        //   fetchResource: '',
-        //   callback: `${baseUrl}/u/${username}/projects`,
-        //   slug: 'review',
-        //   index: 3,
-        // },
       ]}
     />
   );

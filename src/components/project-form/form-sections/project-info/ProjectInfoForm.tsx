@@ -1,20 +1,20 @@
-'use client';
-import React, { useEffect } from 'react';
-import FormInput from '@/components/project-form/FormInput';
-import * as Form from '@radix-ui/react-form';
-import InputLabel from '../../InputLabel';
-import FileInput from './FileInput';
-import { allowedIconTypes, baseUrl } from '@/utils';
-import { useParams, useSearchParams } from 'next/navigation';
-import Project from '@/types/project';
-import { Spinner } from '@radix-ui/themes';
+"use client";
+import React, { useEffect } from "react";
+import FormInput from "@/components/project-form/FormInput";
+import * as Form from "@radix-ui/react-form";
+import InputLabel from "../../InputLabel";
+import FileInput from "./FileInput";
+import { allowedIconTypes, baseUrl } from "@/utils";
+import { useParams, useSearchParams } from "next/navigation";
+import Project from "@/types/project";
+import { Spinner } from "@radix-ui/themes";
 
 type Props = {
   editFormData: ((key: string, value: string | Blob) => void) | null;
 };
 
 function ProjectInfoForm({ editFormData }: Props) {
-  const init = useSearchParams().get('initialize');
+  const init = useSearchParams().get("initialize");
   const { projectUUID } = useParams();
   const [project, setProject] = React.useState<Project>();
   const [loading, setLoading] = React.useState(true);
@@ -22,7 +22,7 @@ function ProjectInfoForm({ editFormData }: Props) {
   useEffect(() => {
     const fetchProject = async () => {
       const response = await fetch(`${baseUrl}/api/projects/${projectUUID}`, {
-        next: { tags: ['projects'] },
+        next: { tags: ["projects"] },
       });
       const data = await response.json();
       setProject(data);
@@ -64,7 +64,7 @@ function ProjectInfoForm({ editFormData }: Props) {
           name="tagline"
           charLimit={38}
           placeholder="Describe your project in one sentence"
-          defaultValue={project?.tagline}
+          defaultValue={project?.tagline ?? ""}
           type="text"
         />
 

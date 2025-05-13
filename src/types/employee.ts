@@ -1,16 +1,3 @@
-import { EMPLOYEE_STATUS } from '@prisma/client';
-import Project from './project';
+import { Tables } from "./supabase";
 
-export default interface Employee {
-  uuid: string;
-  name: string;
-  email: string;
-  title: string;
-  status: EMPLOYEE_STATUS;
-  hourlyRate: number;
-  phoneNumber: string;
-  location: string;
-  createdAt: Date;
-  updatedAt: Date;
-  projects: Project[];
-}
+export default interface Employee extends Tables<"Employee"> {}

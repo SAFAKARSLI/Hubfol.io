@@ -1,25 +1,18 @@
 "use server";
 
-import { s3Client } from "@/aws/s3";
-import Project from "@/types/project";
-import {
-  DeleteObjectCommand,
-  GetObjectCommand,
-  PutObjectCommand,
-} from "@aws-sdk/client-s3";
 import { permanentRedirect, redirect } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
-import { validateUUID } from "./utils";
-import { prisma } from "@/db";
+import { validateUUID } from "@/utils";
+import { ProjectRepository } from "@/db";
 import { auth, User } from "@clerk/nextjs/server";
 import { revalidateTag } from "next/cache";
 import { getUser } from "./user";
-import { nanoid } from "nanoid";
 import { baseUrl, generateProjectSlug } from "@/utils";
 import _ from "lodash";
 import { uploadFile } from "./s3";
-import { Prisma } from "@prisma/client";
+
+const projectRepository = new ProjectRepository();
 
 export const initiateProject = async (formData: FormData) => {
   const session = auth();
@@ -37,18 +30,18 @@ export const initiateProject = async (formData: FormData) => {
   const name = "New Project";
   const { hubfolioUserId } = user.privateMetadata;
   try {
-    const initiatedProject = await prisma.project.create({
-      data: {
-        slug: generateProjectSlug(name),
-        uuid: projectUUID,
-        ownerId: hubfolioUserId as string,
-        createdAt: date,
-        name,
-        content: "",
-        type: "URL",
-        tagline: "",
-        iconLink: "",
-      },
+    const initiatedProject = await projectRepository.createProject({
+      slug: generateProjectSlug(name),
+      uuid: projectUUID,
+      ownerId: hubfolioUserId as string,
+      createdAt: date.toISOString(),
+      name,
+      content: "",
+      type: "URL",
+      tagline: "",
+      iconLink: "",
+      updatedAt: date.toISOString(),
+      id: 0,
     });
 
     return { status: 200, data: initiatedProject };
@@ -56,7 +49,6 @@ export const initiateProject = async (formData: FormData) => {
     console.error("Error creating sections:", error);
     throw new Error("Internal Server Error. Failed to create project.");
   } finally {
-    await prisma.$disconnect();
     revalidateTag("projects");
     redirect(
       `/u/${username}/projects/edit/${projectUUID}/general-information?initialize=true`
@@ -69,17 +61,13 @@ export const checkForAuthority = async (
   userUUID: string
 ) => {
   try {
-    const project = await prisma.project.findUnique({
-      where: { uuid: projectUUID, ownerId: userUUID },
-    });
+    const project = await projectRepository.findProjectByUuid(projectUUID);
     if (!project) {
       return { status: 403, message: "Not authorized." };
     }
     return { status: 200 };
   } catch (error) {
     return { status: 500, message: "Internal Server Error." };
-  } finally {
-    await prisma.$disconnect();
   }
 };
 
@@ -139,14 +127,18 @@ export const upsertGeneralInfo = async (formData: FormData) => {
   if (authorityCheck.status != 200) return authorityCheck;
 
   try {
-    const resultingProject = await prisma.project.update({
-      where: { uuid: projectUUID },
-      data: {
-        ...projectFromFormData,
-        // ...(projectFromFormData.name != prevProject.name && {
-        //   slug: generateProjectSlug(projectFromFormData.name),
-        // }),
-      },
+    const existingProject = await projectRepository.findProjectByUuid(
+      projectUUID
+    );
+    const resultingProject = await projectRepository.updateProject({
+      uuid: projectUUID,
+      ...projectFromFormData,
+      updatedAt: new Date().toISOString(),
+      content: existingProject.content,
+      createdAt: existingProject.createdAt,
+      id: existingProject.id,
+      ownerId: existingProject.ownerId,
+      type: existingProject.type,
     });
     return { status: 200, data: resultingProject };
   } catch (error) {
@@ -155,7 +147,6 @@ export const upsertGeneralInfo = async (formData: FormData) => {
       "Internal Server Error. An error occurred while updating the project."
     );
   } finally {
-    await prisma.$disconnect();
     revalidateTag("projects");
   }
 };
@@ -167,9 +158,9 @@ export const deleteProject = async (projectUUID: string) => {
   let userUUID: string | undefined;
   const user = (await getUser(session.userId!)) as User;
   try {
-    const projectFromDb = await prisma.project.findUnique({
-      where: { uuid: projectUUID },
-    });
+    const projectFromDb = await projectRepository.findProjectByUuid(
+      projectUUID
+    );
 
     if (!projectFromDb) {
       return { status: 404, message: "Project not found." };
@@ -183,9 +174,7 @@ export const deleteProject = async (projectUUID: string) => {
 
     userUUID = projectFromDb.ownerId;
 
-    await prisma.project.delete({
-      where: { uuid: projectUUID },
-    });
+    await projectRepository.deleteProject(projectFromDb);
   } catch (error) {
     throw new Error(
       "Internal Server Error. An error occured while deleting the project."
@@ -244,12 +233,14 @@ export const upsertFrameOptions = async (formData: FormData) => {
   }
 
   try {
-    const project = await prisma.project.update({
-      where: { uuid: projectUUID },
-      data: {
-        type: frameOptionsFormData.type as any,
-        content,
-      },
+    const existingProject = await projectRepository.findProjectByUuid(
+      projectUUID
+    );
+    const project = await projectRepository.updateProject({
+      ...existingProject,
+      type: frameOptionsFormData.type as any,
+      content,
+      updatedAt: new Date().toISOString(),
     });
 
     return { status: 200, data: project };
@@ -257,7 +248,6 @@ export const upsertFrameOptions = async (formData: FormData) => {
     console.error("Error updating frame options:", error);
     throw new Error("Internal Server Error. Failed to update frame options.");
   } finally {
-    await prisma.$disconnect();
     revalidateTag("projects");
   }
 };
