@@ -21,14 +21,14 @@ async function TopBar({ params }: TopBarProps) {
   const { userId } = auth();
   const clerkUser = await getUser(userId as string);
 
-  const projects = (await fetch(
-    `${baseUrl}/api/projects?username=${clerkUser?.username as string}`,
-    { next: { tags: ["projects"] } }
-  ).then((r) => r.json())) as Project[];
-
   const user = (await fetch(`${baseUrl}/api/users/${username}`, {
     next: { tags: ["users"] },
   }).then((r) => r.json())) as Employee;
+
+  const projects = (await fetch(
+    `${baseUrl}/api/projects?username=${username}`,
+    { next: { tags: ["projects"] } }
+  ).then((r) => r.json())) as Project[];
 
   return (
     <>

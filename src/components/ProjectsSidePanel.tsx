@@ -4,17 +4,18 @@ import ProjectListHeader from "./ProjectListHeader";
 import AddProjectButton from "./AddProjectButton";
 
 import ProfileOverview from "./ProfileOverview";
-import { baseUrl } from "@/utils";
+import { currentUser } from "@clerk/nextjs/server";
 import Project from "@/types/project";
 import Employee from "@/types/employee";
 
 type Props = {
   projects: Project[];
   user: Employee;
+  username: string;
   projectSlug: string;
 };
 
-function ProjectsSidePanel({ projects, user, projectSlug }: Props) {
+function ProjectsSidePanel({ projects, user, projectSlug, username }: Props) {
   return (
     <div className="flex flex-col h-[100dvh] hidden lg:flex lg:w-[27rem] ">
       <ProfileOverview user={user} />
@@ -25,9 +26,7 @@ function ProjectsSidePanel({ projects, user, projectSlug }: Props) {
           projects={projects}
         />
         <div className="mb-[15rem] p-5">
-          {user?.username == user?.username && projects.length < 10 && (
-            <AddProjectButton />
-          )}
+          <AddProjectButton />
         </div>
       </div>
     </div>

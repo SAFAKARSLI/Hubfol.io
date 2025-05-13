@@ -16,6 +16,7 @@ type Props = {
 
 function EmployeeSidebarButton({ projects, user }: Props) {
   const [visible, setVisible] = React.useState(false);
+  const { username } = useParams();
   const menuPosition = "left-0";
   const menuSlideAnimation = visible ? "translate-x-0" : "-translate-x-full";
   const { projectSlug } = useParams();
@@ -43,6 +44,7 @@ function EmployeeSidebarButton({ projects, user }: Props) {
           className={`flex flex-col fixed bottom-0 ${menuPosition} ${menuSlideAnimation} h-full bg-gray-2 border border-gray-4 w-[27.1rem] duration-300 `}
         >
           <ProjectsSidePanel
+            username={username as string}
             projects={projects}
             user={user}
             projectSlug={projectSlug as string}

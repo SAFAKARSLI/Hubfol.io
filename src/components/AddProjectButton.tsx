@@ -5,11 +5,18 @@ import { useParams } from "next/navigation";
 import { initiateProject } from "@/app/actions/project";
 import SubmitButton from "./SubmitButton";
 import { Toaster, toast } from "sonner";
+import { useUser } from "@clerk/nextjs";
 
 type Props = {};
 
 function AddProjectButton({}: Props) {
   const { username } = useParams();
+
+  const user = useUser();
+
+  if (!user.isSignedIn || user.user?.username != username) {
+    return null;
+  }
 
   return (
     <form action={initiateProject}>

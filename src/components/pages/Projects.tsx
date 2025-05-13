@@ -51,6 +51,7 @@ const Projects = async ({
     <div className="flex ">
       <div className="flex-none border-r border-gray-4 bg-gray-1 hidden xl:block">
         <ProjectsSidePanel
+          username={username}
           projects={projects}
           user={user}
           projectSlug={activeProjectId as string}
