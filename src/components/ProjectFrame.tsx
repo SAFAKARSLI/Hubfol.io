@@ -333,7 +333,6 @@ function ProjectFrame({ project, sections }: Props) {
           className=" min-h-[600px] rounded m-auto border border-gray-3"
         />
       </Box>
-      <ProjectConsole project={project!} sections={sections} />
       {error && (
         <p className=" absolute top-0 w-full bg-red-300 h-[3rem]">
           Error: Unable to communicate with the iframe.
@@ -350,6 +349,7 @@ function ProjectFrame({ project, sections }: Props) {
       </div>
     )
   );
+  <ProjectConsole project={project!} sections={sections} />;
 }
 
 ProjectFrame.displayName = "ProjectFrame";

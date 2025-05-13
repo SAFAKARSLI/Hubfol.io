@@ -3,6 +3,7 @@ import Project from "@/types/project";
 import ProjectsSidePanel from "../ProjectsSidePanel";
 import { notFound, redirect } from "next/navigation";
 import { baseUrl, isValidUsername } from "@/utils";
+import ProjectConsole from "../ProjectConsole";
 
 interface ProjectsProps {
   username: string;
@@ -78,10 +79,10 @@ const Projects = async ({
             projectSlug={activeProjectId as string}
           />
         </div>
-
         <div className="flex-1 bg-gray-0 relative">
           {cloneElement(children as React.ReactElement, { project, sections })}
         </div>
+        <ProjectConsole project={project!} sections={sections} />;
       </div>
     );
   }
