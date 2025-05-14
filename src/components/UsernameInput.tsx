@@ -86,7 +86,7 @@ function UsernameInput({ setUserNameValid }: Props) {
         minLength={4}
         value={username}
         setValue={setUsername}
-        description={`This will be your unique identifier on the platform. Usernames can only contain [A-Z, a-z, 0-9, -, _], must be 4-64 characters long, and cannot start, end, or have consecutive dashes or underscores.`}
+        description={`This will be your unique identifier on the platform. Usernames can only contain [a-z, 0-9, -, _], must be 4-64 characters long, and cannot start, end, or have consecutive dashes or underscores.`}
         name="username"
         message={
           status === "invalid"
@@ -117,7 +117,11 @@ function UsernameInput({ setUserNameValid }: Props) {
           </>
         }
       />
-      <input type="hidden" name="username" value={usernameBounce} />
+      <input
+        type="hidden"
+        name="username"
+        value={usernameBounce?.toLowerCase()}
+      />
     </>
   );
 }
