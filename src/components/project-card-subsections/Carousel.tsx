@@ -31,7 +31,7 @@ function Carousel({ images }: Props) {
 
   return (
     <>
-      <div className="slider-container w-[15rem] sm:w-[20rem] m-auto px-5 focus:outline-none">
+      <div className="slider-container w-[15rem] m-auto px-5 focus:outline-none">
         <Slider {...settings}>
           {images.map((e) => {
             return (
