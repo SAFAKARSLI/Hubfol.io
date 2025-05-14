@@ -12,6 +12,7 @@ import { baseUrl } from "@/utils";
 import Project from "@/types/project";
 import Employee from "@/types/employee";
 import Section from "@/types/section";
+import { notFound } from "next/navigation";
 
 interface TopBarProps {
   params: Params;
@@ -22,14 +23,24 @@ async function TopBar({ params }: TopBarProps) {
   const { userId } = auth();
   const clerkUser = await getUser(userId as string);
 
-  const user = (await fetch(`${baseUrl}/api/users/${username}`, {
+  const user = (await fetch(`${baseUrl}/api/employee/${username}`, {
     next: { tags: ["users"] },
-  }).then((r) => r.json())) as Employee;
+  }).then((r) => {
+    if (r.ok) {
+      return r.json();
+    }
+    return null;
+  })) as Employee;
 
   const projects = (await fetch(
     `${baseUrl}/api/projects?username=${username}`,
     { next: { tags: ["projects"] } }
-  ).then((r) => r.json())) as Project[];
+  ).then((r) => {
+    if (r.ok) {
+      return r.json();
+    }
+    return null;
+  })) as Project[];
 
   return (
     <>

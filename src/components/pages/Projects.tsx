@@ -41,9 +41,9 @@ const Projects = async ({
     });
 
   // If there are no projects, show the banner
-  if (!projects || projects.length === 0) {
-    return <NoActiveProjectBanner />;
-  }
+  // if (!projects || projects.length === 0) {
+  //   return <NoActiveProjectBanner />;
+  // }
 
   var sections = null;
   let project: Project | undefined;
@@ -71,9 +71,9 @@ const Projects = async ({
     );
 
     // If activeProjectId is provided but not found, show the banner
-    if (!project) {
-      return <NoActiveProjectBanner />;
-    }
+    // if (!project) {
+    //   return <NoActiveProjectBanner />;
+    // }
   }
 
   return (
@@ -87,7 +87,7 @@ const Projects = async ({
           projectSlug={activeProjectId as string}
         />
       </div>
-      <div className="flex-1 w-full h-full bg-gray-0 relative">
+      <div className="flex-1 h-full bg-gray-0 relative">
         {cloneElement(children as React.ReactElement, { project, sections })}
       </div>
       {project && <ProjectConsole project={project} sections={sections} />}

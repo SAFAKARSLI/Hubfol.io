@@ -23,6 +23,10 @@ function EmployeeSidebarButton({ projects, user }: Props) {
   const menuSlideAnimation = visible ? "translate-x-0" : "-translate-x-full";
   const { projectSlug } = useParams();
 
+  if (!user) {
+    return null;
+  }
+
   useEffect(() => {
     const onVisitClosePanel = ["account", "edit", "new", "projects"];
     if (onVisitClosePanel.some((path) => pathname.includes(path))) {

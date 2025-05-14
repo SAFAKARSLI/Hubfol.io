@@ -184,11 +184,7 @@ export const customThemeClerkAuthenticationComponents = {
 // utils/validators.ts
 
 export function isValidUsername(username: unknown): username is string {
-  return (
-    typeof username === "string" &&
-    username.trim() !== "" &&
-    !["null", "undefined"].includes(username)
-  );
+  return typeof username === "string" && username.trim() !== "";
 }
 
 export function validateUUID(uuid: string): boolean {

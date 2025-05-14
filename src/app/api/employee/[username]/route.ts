@@ -7,9 +7,12 @@ export async function GET(request: Request) {
   const username = url.pathname.split("/").pop();
 
   if (!username) {
-    return new Response("Employee identifier (username) required.", {
-      status: 400,
-    });
+    return new Response(
+      JSON.stringify({ error: "Employee identifier (username) required." }),
+      {
+        status: 400,
+      }
+    );
   }
 
   try {
@@ -18,7 +21,9 @@ export async function GET(request: Request) {
     );
 
     if (!user) {
-      return new Response("User not found", { status: 404 });
+      return new Response(JSON.stringify({ error: "User not found" }), {
+        status: 404,
+      });
     }
 
     return new Response(JSON.stringify(user), {
@@ -29,6 +34,8 @@ export async function GET(request: Request) {
     });
   } catch (error) {
     console.error("Error fetching user:", error);
-    return new Response("Internal Server Error", { status: 500 });
+    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+      status: 500,
+    });
   }
 }
