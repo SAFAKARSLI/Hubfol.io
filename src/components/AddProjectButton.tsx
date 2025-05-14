@@ -10,11 +10,14 @@ import { useUser } from "@clerk/nextjs";
 type Props = {};
 
 function AddProjectButton({}: Props) {
-  const { username } = useParams();
+  const { username } = useParams<{ username: string }>();
 
   const user = useUser();
 
-  if (!user.isSignedIn || user.user?.username != username) {
+  if (
+    !user.isSignedIn ||
+    user.user?.username?.toUpperCase() != username?.toUpperCase()
+  ) {
     return null;
   }
 
