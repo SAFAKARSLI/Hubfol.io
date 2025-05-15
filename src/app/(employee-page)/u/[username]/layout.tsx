@@ -55,7 +55,7 @@ export default async function RootLayout({
         >
           <body>
             <ToasterWrapper />
-            <div className="h-[100dvh] ">
+            <div className="h-[100dvh] w-full">
               <TopBar params={params} />
               <NextTopLoader color="#2D3B9B" showSpinner={false} />
               <div>{children}</div>

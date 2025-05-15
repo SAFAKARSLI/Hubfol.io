@@ -1,10 +1,10 @@
-'use client';
-import { activeLink, highlightedLinks, links } from '@/utils';
-import React from 'react';
-import { useParams, usePathname } from 'next/navigation';
-import NavLink from './NavLink';
-import Link from 'next/link';
-import { Separator } from '@radix-ui/themes';
+"use client";
+import { activeLink, highlightedLinks, links } from "@/utils";
+import React from "react";
+import { useParams, usePathname } from "next/navigation";
+import NavLink from "./NavLink";
+import Link from "next/link";
+import { Separator } from "@radix-ui/themes";
 
 interface NavigationLinksProps {
   isCol?: boolean;
@@ -20,7 +20,7 @@ function NavigationLinks({ onClick, authenticated }: NavigationLinksProps) {
 
   return (
     <div
-      className={`flex h-[3rem] flex-wrap text-center items-center justify-center w-[27rem] gap-10 `}
+      className={`flex h-[3rem] flex-wrap text-center items-center justify-center w-[24rem] gap-10 `}
     >
       {links.map((link, i) => (
         <NavLink

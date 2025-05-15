@@ -153,7 +153,7 @@ function ProjectFrame({ project, sections }: Props) {
   }, [iframeDimensions]);
 
   return project?.type == "URL" ? (
-    <div className="h-screen flex flex-col" id="project-frame">
+    <div className="h-full flex flex-col" id="project-frame">
       <div className="h-[6rem] mx-5 ship flex-none justify-center flex flex-col justify-between py-3">
         <div className=" bg-gray-2 h-[2.5rem] rounded-full flex items-center border border-gray-4 ">
           {/* <Text className="text-gray-10 flex  items-center ml-5">
