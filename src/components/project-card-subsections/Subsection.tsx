@@ -32,6 +32,7 @@ const Subsection = ({
         return <Carousel images={content} />;
     }
   };
+  ("");
 
   return (
     <div className="flex flex-col gap-2 bg-gray-0 p-3 rounded-lg border border-gray-2 mb-3">

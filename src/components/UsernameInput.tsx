@@ -84,7 +84,7 @@ function UsernameInput({ setUserNameValid }: Props) {
         charLimit={64}
         required
         minLength={4}
-        value={username}
+        value={username?.toLowerCase()}
         setValue={setUsername}
         description={`This will be your unique identifier on the platform. Usernames can only contain [a-z, 0-9, -, _], must be 4-64 characters long, and cannot start, end, or have consecutive dashes or underscores.`}
         name="username"
